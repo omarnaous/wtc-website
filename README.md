@@ -1,5 +1,7 @@
 # WTC — Watch Trade Chronicles
 
+**Live preview → <https://omarnaous.github.io/wtc-website/>**
+
 Front end for an independent OMEGA × Swatch (Bioceramic MoonSwatch) reseller
 in Beirut. Static for now: the catalogue, filtering and Strap Studio all run
 in the browser, with no backend and no checkout.
@@ -17,6 +19,29 @@ Then open <http://localhost:3000>.
 npm run build && npm start   # production
 npm run palette              # re-sample product colours from the photography
 ```
+
+## Deploying
+
+The site is a static export served from the `gh-pages` branch of this repo.
+
+```bash
+npm run deploy        # build + push to gh-pages; live in ~1 minute
+```
+
+`scripts/deploy-pages.sh` builds with `NEXT_PUBLIC_BASE_PATH=/wtc-website`
+(the repo name — it is the URL prefix on a GitHub project page), stages the
+export, adds `.nojekyll` so Pages does not strip the `_next` directory, and
+force-pushes. There is no Actions workflow because publishing one needs a
+token with the `workflow` scope.
+
+Three things to know while this is a client preview:
+
+- **The repo is public.** GitHub Pages needs that on a free plan. Deleting
+  the repo takes the site down immediately.
+- **It carries `noindex, nofollow`** (`robots` in `src/app/layout.tsx`), so
+  search engines skip it. Remove that when real prices go live.
+- **Moving to a custom domain?** Clear `NEXT_PUBLIC_BASE_PATH` (a domain
+  serves from the root, not `/wtc-website`) and add a `CNAME` file.
 
 ## What is here
 
