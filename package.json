@@ -1,0 +1,29 @@
+{
+  "name": "wtc-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "palette": "node scripts/extract-palettes.mjs",
+    "deploy": "bash scripts/deploy-pages.sh"
+  },
+  "dependencies": {
+    "@remotion/player": "^4.0.360",
+    "framer-motion": "^12.23.12",
+    "next": "15.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "^4.0.360"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "sharp": "^0.34.2",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.8.3"
+  }
+}
