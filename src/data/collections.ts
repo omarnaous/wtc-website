@@ -40,7 +40,8 @@ export const collections: Collection[] = [
   {
     id: "ap-swatch",
     name: "AP × Swatch",
-    blurb: "Arriving soon. Message us to be told first.",
+    blurb: "Royal Pop — the Royal Oak as a Bioceramic pocket watch, in eight colours.",
+    heroSlug: "royal-pop-blaue-acht",
     accent: "#5b8bc5",
   },
 ];

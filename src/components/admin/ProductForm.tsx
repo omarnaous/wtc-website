@@ -24,6 +24,7 @@ const FAMILIES = [
   { value: "earthphase", label: "Earthphase" },
   { value: "mission-on-earth", label: "Mission on Earth" },
   { value: "special", label: "Special Edition" },
+  { value: "royal-pop", label: "Royal Pop" },
 ];
 
 const FAMILY_LABEL: Record<string, string> = Object.fromEntries(

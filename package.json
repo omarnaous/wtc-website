@@ -19,7 +19,8 @@
     "strap-photos": "node scripts/fetch-strap-photos.mjs",
     "instagram": "node scripts/fetch-instagram.mjs",
     "instagram:import": "node scripts/import-instagram.mjs",
-    "thumbs": "node scripts/build-thumbs.mjs"
+    "thumbs": "node scripts/build-thumbs.mjs",
+    "watches": "node scripts/fetch-watch-images.mjs && npm run palette && npm run thumbs && npm run images"
   },
   "dependencies": {
     "@remotion/player": "^4.0.360",

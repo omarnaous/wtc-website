@@ -68,14 +68,18 @@ export async function seedFromFiles(strapPrice = 49): Promise<SeedReport> {
               (slug, sku, name, short_name, collection_id, family, family_label, year,
                price, compare_at, availability, colorway, color_group, strap_type,
                stock_strap_sku, bestseller_rank, tagline, description,
-               image_front, image_angle, image_side, palette, position)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+               image_front, image_angle, image_side, palette, position, specs)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             ON CONFLICT(slug) DO UPDATE SET
               sku = excluded.sku,
               image_front = excluded.image_front,
               image_angle = excluded.image_angle,
               image_side = excluded.image_side,
               palette = excluded.palette,
+              -- Only where nobody has written their own rows yet: the two
+              -- collections no longer share one specification.
+              specs = CASE WHEN products.specs IN ('', '[]') THEN excluded.specs
+                           ELSE products.specs END,
               updated_at = datetime('now')`,
       params: [
         p.slug,
@@ -101,6 +105,7 @@ export async function seedFromFiles(strapPrice = 49): Promise<SeedReport> {
         p.images.side,
         JSON.stringify(p.palette),
         i,
+        JSON.stringify(p.specs ?? []),
       ],
     });
     statements.push({

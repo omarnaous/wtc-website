@@ -10,7 +10,8 @@ export type Family =
   | "moonphase"
   | "earthphase"
   | "mission-on-earth"
-  | "special";
+  | "special"
+  | "royal-pop";
 
 export type Availability = "in-stock" | "low-stock" | "pre-order" | "sold-out";
 

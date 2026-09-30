@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BarChart from "@/components/admin/BarChart";
 import ImportCatalogue from "@/components/admin/ImportCatalogue";
+import { products as fileProducts } from "@/data/products";
 import {
   Card,
   Empty,
@@ -53,15 +54,15 @@ export default async function DashboardPage() {
         >
           <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
             <ul className="space-y-1.5 text-[13px] leading-relaxed text-[var(--admin-mute)]">
-              <li>· 26 watches with their photography, colours and descriptions</li>
+              <li>· {fileProducts.length} watches with their photography, colours and descriptions</li>
               <li>· Every strap reference, and the photographs of each one fitted</li>
               <li>· The four policies, the collections and all section copy</li>
             </ul>
             <ImportCatalogue />
           </div>
           <p className="mt-5 border-t border-[var(--admin-line-soft)] pt-4 text-[12.5px] text-[var(--admin-mute)]">
-            Prices come across as the placeholders they are today, and stock starts at zero with
-            tracking off. Nothing you edit later is overwritten if you run this again.
+            Prices come across from WTC&apos;s price list, and stock starts at zero with tracking
+            off. Nothing you edit later is overwritten if you run this again.
           </p>
         </Card>
       </>

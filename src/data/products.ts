@@ -1,4 +1,5 @@
 import palettes from "./palettes.json";
+import manifest from "./images.json";
 import { asset } from "@/lib/asset";
 import type {
   Availability,
@@ -28,6 +29,25 @@ export const FAMILY_LABEL: Record<Family, string> = {
   earthphase: "Earthphase",
   "mission-on-earth": "Mission on Earth",
   special: "Special Edition",
+  "royal-pop": "Royal Pop",
+};
+
+/**
+ * The specification rows each collection shows on its product pages, as WTC
+ * supplied them. A seed with its own `specs` keeps those instead.
+ */
+export const COLLECTION_SPECS: Record<CollectionId, { label: string; value: string }[]> = {
+  "omega-swatch": [
+    { label: "Case", value: "42 mm" },
+    { label: "Movement", value: "Quartz chronograph" },
+    { label: "Material", value: "Plastic" },
+    { label: "Velcro colour", value: "Matched to the watch" },
+  ],
+  "ap-swatch": [
+    { label: "Case", value: "40 mm" },
+    { label: "Movement", value: "Mechanical movement" },
+    { label: "Material", value: "Bioceramic" },
+  ],
 };
 
 const seeds: Seed[] = [
@@ -39,7 +59,7 @@ const seeds: Seed[] = [
     shortName: "The Sun",
     family: "classics",
     year: 2022,
-    price: 465,
+    price: 60,
     availability: "in-stock",
     colorway: "Solar Yellow / Cream",
     colorGroup: "yellow",
@@ -57,7 +77,7 @@ const seeds: Seed[] = [
     shortName: "Mercury",
     family: "classics",
     year: 2022,
-    price: 445,
+    price: 60,
     availability: "in-stock",
     colorway: "Graphite Grey",
     colorGroup: "grey",
@@ -75,7 +95,7 @@ const seeds: Seed[] = [
     shortName: "Venus",
     family: "classics",
     year: 2022,
-    price: 455,
+    price: 60,
     availability: "in-stock",
     colorway: "Dusty Rose / Cream",
     colorGroup: "pink",
@@ -92,7 +112,7 @@ const seeds: Seed[] = [
     shortName: "On Earth",
     family: "classics",
     year: 2022,
-    price: 475,
+    price: 60,
     availability: "low-stock",
     colorway: "Sage Green / Navy",
     colorGroup: "green",
@@ -110,7 +130,7 @@ const seeds: Seed[] = [
     shortName: "The Moon",
     family: "classics",
     year: 2022,
-    price: 495,
+    price: 60,
     availability: "in-stock",
     colorway: "Moon Black",
     colorGroup: "black",
@@ -128,7 +148,7 @@ const seeds: Seed[] = [
     shortName: "Mars",
     family: "classics",
     year: 2022,
-    price: 470,
+    price: 60,
     availability: "in-stock",
     colorway: "Rocket Red / White",
     colorGroup: "red",
@@ -146,7 +166,7 @@ const seeds: Seed[] = [
     shortName: "Jupiter",
     family: "classics",
     year: 2022,
-    price: 445,
+    price: 60,
     availability: "in-stock",
     colorway: "Cream Beige / Black",
     colorGroup: "brown",
@@ -163,7 +183,7 @@ const seeds: Seed[] = [
     shortName: "Saturn",
     family: "classics",
     year: 2022,
-    price: 445,
+    price: 60,
     availability: "in-stock",
     colorway: "Taupe / Brown",
     colorGroup: "brown",
@@ -180,7 +200,7 @@ const seeds: Seed[] = [
     shortName: "Uranus",
     family: "classics",
     year: 2022,
-    price: 450,
+    price: 60,
     availability: "in-stock",
     colorway: "Ice Blue",
     colorGroup: "blue",
@@ -197,7 +217,7 @@ const seeds: Seed[] = [
     shortName: "Neptune",
     family: "classics",
     year: 2022,
-    price: 465,
+    price: 60,
     availability: "in-stock",
     colorway: "Sky Blue / Deep Navy",
     colorGroup: "blue",
@@ -215,7 +235,7 @@ const seeds: Seed[] = [
     shortName: "Pluto",
     family: "classics",
     year: 2022,
-    price: 455,
+    price: 60,
     availability: "low-stock",
     colorway: "Frost Grey / Cream",
     colorGroup: "grey",
@@ -224,6 +244,40 @@ const seeds: Seed[] = [
     tagline: "Not a planet. Still a favourite.",
     description:
       "A pale frost-grey Bioceramic case with a cream dial and a mid-grey strap. Pluto sold through faster than almost any other mission and rarely comes back onto the secondary market unworn.",
+  },
+  {
+    slug: "mission-to-the-moon-moonshine-gold",
+    sku: "SO33M102",
+    name: "Mission to the Moon — Moonshine Gold",
+    shortName: "Moon Moonshine Gold",
+    family: "classics",
+    year: 2023,
+    price: 60,
+    availability: "in-stock",
+    colorway: "Moon Black / Moonshine Gold",
+    colorGroup: "gold",
+    strapType: "velcro",
+    stockStrapSku: "ACSO33M100",
+    tagline: "The Moon, with a gold seconds hand.",
+    description:
+      "Mission to the Moon with its chronograph seconds hand coated in OMEGA's Moonshine Gold. Black case, black dial, and one flash of gold that sweeps when the chronograph runs — sold only on full-moon nights.",
+  },
+  {
+    slug: "mission-to-neptune-moonshine-gold",
+    sku: "SO33N101",
+    name: "Mission to Neptune — Moonshine Gold",
+    shortName: "Neptune Moonshine Gold",
+    family: "classics",
+    year: 2023,
+    price: 60,
+    availability: "in-stock",
+    colorway: "Sky Blue / Moonshine Gold",
+    colorGroup: "gold",
+    strapType: "velcro",
+    stockStrapSku: "ACSO33N100",
+    tagline: "Neptune's blues, a gold seconds hand.",
+    description:
+      "Mission to Neptune with a Moonshine Gold chronograph seconds hand against the deep navy dial. Released for a single full moon, and the Moonshine Gold edition that suits the gold best.",
   },
 
   // ── Moonphase (2023–2024) ─────────────────────────────────────────────────
@@ -234,8 +288,7 @@ const seeds: Seed[] = [
     shortName: "Moonphase Full Moon",
     family: "moonphase",
     year: 2023,
-    price: 690,
-    compareAt: 760,
+    price: 70,
     availability: "in-stock",
     colorway: "Snow White / Moonshine Gold",
     colorGroup: "white",
@@ -253,8 +306,7 @@ const seeds: Seed[] = [
     shortName: "Moonphase New Moon",
     family: "moonphase",
     year: 2023,
-    price: 690,
-    compareAt: 760,
+    price: 70,
     availability: "in-stock",
     colorway: "Eclipse Black / Moonshine Gold",
     colorGroup: "black",
@@ -272,7 +324,7 @@ const seeds: Seed[] = [
     shortName: "Super Blue Moonphase",
     family: "moonphase",
     year: 2023,
-    price: 720,
+    price: 70,
     availability: "low-stock",
     colorway: "Super Blue / Ivory",
     colorGroup: "blue",
@@ -281,7 +333,7 @@ const seeds: Seed[] = [
     bestsellerRank: 4,
     tagline: "Released for one blue moon.",
     description:
-      "Launched on the super blue moon of August 2023 and never restocked — a blue Bioceramic case around an ivory dial, with a Moonshine Gold moon disc and a navy strap. Genuinely scarce, and priced accordingly everywhere it appears.",
+      "Launched on the super blue moon of August 2023 and never restocked — a blue Bioceramic case around an ivory dial, with a Moonshine Gold moon disc and a navy strap. Genuinely scarce.",
   },
   {
     slug: "mission-to-the-pink-moonphase",
@@ -290,7 +342,7 @@ const seeds: Seed[] = [
     shortName: "Pink Moonphase",
     family: "moonphase",
     year: 2024,
-    price: 705,
+    price: 75,
     availability: "pre-order",
     colorway: "Vivid Pink",
     colorGroup: "pink",
@@ -309,7 +361,7 @@ const seeds: Seed[] = [
     shortName: "Earthphase",
     family: "earthphase",
     year: 2025,
-    price: 640,
+    price: 75,
     availability: "in-stock",
     colorway: "Graphite / Black",
     colorGroup: "black",
@@ -323,79 +375,28 @@ const seeds: Seed[] = [
   {
     slug: "mission-to-earthphase-moonshine-gold-august",
     sku: "SO33N701L",
-    name: "Mission to Earthphase — Moonshine Gold (August)",
-    shortName: "Earthphase Gold · Aug",
+    name: "Mission to Earthphase — Moonshine Gold",
+    shortName: "Earthphase Gold",
     family: "earthphase",
     year: 2025,
-    price: 890,
+    price: 75,
     availability: "low-stock",
     colorway: "Night Blue / Moonshine Gold",
     colorGroup: "gold",
     strapType: "velcro",
     stockStrapSku: "ACSO33M700",
-    tagline: "One month, one release.",
+    tagline: "The Earth disc, in gold.",
     description:
-      "Part of the monthly Moonshine Gold Earthphase series — each reference was sold only during its namesake month, then retired. The August release carries an 18K Moonshine Gold Earth disc on a deep night-blue case.",
-  },
-  {
-    slug: "mission-to-earthphase-moonshine-gold-september",
-    sku: "SO33N702L",
-    name: "Mission to Earthphase — Moonshine Gold (September)",
-    shortName: "Earthphase Gold · Sep",
-    family: "earthphase",
-    year: 2025,
-    price: 890,
-    availability: "in-stock",
-    colorway: "Night Blue / Moonshine Gold",
-    colorGroup: "gold",
-    strapType: "velcro",
-    stockStrapSku: "ACSO33M700",
-    tagline: "September's Earth disc.",
-    description:
-      "The September entry in the monthly Moonshine Gold Earthphase run. Same 18K Moonshine Gold Earth disc, month-specific caseback engraving, and a production window that closed the day the month did.",
-  },
-  {
-    slug: "mission-to-earthphase-moonshine-gold-october",
-    sku: "SO33N703L",
-    name: "Mission to Earthphase — Moonshine Gold (October)",
-    shortName: "Earthphase Gold · Oct",
-    family: "earthphase",
-    year: 2025,
-    price: 890,
-    availability: "in-stock",
-    colorway: "Night Blue / Moonshine Gold",
-    colorGroup: "gold",
-    strapType: "velcro",
-    stockStrapSku: "ACSO33M700",
-    tagline: "October's Earth disc.",
-    description:
-      "October's Moonshine Gold Earthphase. The monthly series has become the most collected sub-line in the whole MoonSwatch catalogue — complete sets are already trading well above issue.",
-  },
-  {
-    slug: "mission-to-earthphase-moonshine-gold-november",
-    sku: "SO33N704L",
-    name: "Mission to Earthphase — Moonshine Gold (November)",
-    shortName: "Earthphase Gold · Nov",
-    family: "earthphase",
-    year: 2025,
-    price: 910,
-    availability: "pre-order",
-    colorway: "Night Blue / Moonshine Gold",
-    colorGroup: "gold",
-    strapType: "velcro",
-    stockStrapSku: "ACSO33M700",
-    tagline: "November's Earth disc.",
-    description:
-      "November's release in the Moonshine Gold Earthphase series. Reserve now — these are allocated on arrival and the month-specific references do not come back.",
+      "Earthphase with a Moonshine Gold Earth disc on a deep night-blue Bioceramic case. The monthly Moonshine Gold series was sold one full moon at a time, then retired.",
   },
   {
     slug: "mission-to-earthphase-moonshine-gold-december",
     sku: "SO33W701L",
-    name: "Mission to Earthphase — Moonshine Gold (December)",
-    shortName: "Earthphase Gold · Dec",
+    name: "Mission to Earthphase — Moonshine Gold, Cold Moon",
+    shortName: "Earthphase Cold Moon",
     family: "earthphase",
     year: 2025,
-    price: 940,
+    price: 75,
     availability: "pre-order",
     colorway: "Snow White / Moonshine Gold",
     colorGroup: "gold",
@@ -403,7 +404,7 @@ const seeds: Seed[] = [
     stockStrapSku: "ACSO33W700",
     tagline: "The white one that closes the year.",
     description:
-      "December breaks the pattern — a snow-white Bioceramic case instead of night blue, with the same 18K Moonshine Gold Earth disc. The most collectable entry of the twelve.",
+      "December's Cold Moon breaks the pattern — a snow-white Bioceramic case instead of night blue, with the same Moonshine Gold Earth disc. The most collectable entry of the series.",
   },
 
   // ── Mission on Earth (2025) ───────────────────────────────────────────────
@@ -414,7 +415,7 @@ const seeds: Seed[] = [
     shortName: "Lava",
     family: "mission-on-earth",
     year: 2025,
-    price: 540,
+    price: 70,
     availability: "in-stock",
     colorway: "Volcanic Red / Black",
     colorGroup: "red",
@@ -431,7 +432,7 @@ const seeds: Seed[] = [
     shortName: "Polar Lights",
     family: "mission-on-earth",
     year: 2025,
-    price: 545,
+    price: 70,
     availability: "in-stock",
     colorway: "Aurora Teal / Black",
     colorGroup: "green",
@@ -448,7 +449,7 @@ const seeds: Seed[] = [
     shortName: "Desert",
     family: "mission-on-earth",
     year: 2025,
-    price: 530,
+    price: 70,
     availability: "in-stock",
     colorway: "Ivory / Dune Brown",
     colorGroup: "brown",
@@ -467,7 +468,7 @@ const seeds: Seed[] = [
     shortName: "1965",
     family: "special",
     year: 2024,
-    price: 620,
+    price: 75,
     availability: "low-stock",
     colorway: "Steel Grey / White",
     colorGroup: "grey",
@@ -484,7 +485,7 @@ const seeds: Seed[] = [
     shortName: "1969",
     family: "special",
     year: 2024,
-    price: 760,
+    price: 75,
     availability: "low-stock",
     colorway: "Apollo Black / Champagne",
     colorGroup: "black",
@@ -494,7 +495,57 @@ const seeds: Seed[] = [
     description:
       "Marking the Apollo 11 landing, with a black Bioceramic case around a champagne-gold dial and a caseback treatment unique to the reference. The rarest piece WTC stocks — availability is genuinely one or two at a time.",
   },
+
+  // ── AP × Swatch · Royal Pop (2026) ────────────────────────────────────────
+  // Each name is "eight" in a different language — the eight sides of the
+  // Royal Oak bezel. strapType is nominal: these are pocket watches on a
+  // calfskin lanyard, and the field is not shown on the storefront.
+  ...royalPop([
+    ["otto-rosso", "SSX03R100N", "Otto Rosso", "Red", "red", "Italian for eight, in red."],
+    ["huit-blanc", "SSX03W100N", "Huit Blanc", "White", "white", "French for eight, in white."],
+    ["green-eight", "SSX03G100N", "Green Eight", "Green", "green", "The English one, in green."],
+    ["blaue-acht", "SSX03L101N", "Blaue Acht", "Blue", "blue", "German for eight, in blue."],
+    [
+      "orenji-hachi",
+      "SSX03L103N",
+      "Orenji Hachi",
+      "Orange",
+      "orange",
+      "Japanese for eight, in orange.",
+    ],
+    ["lan-ba", "SSX03L100N", "Lan Ba", "Blue", "blue", "Chinese for eight, in blue."],
+    ["ocho-negro", "SSX03W101N", "Ocho Negro", "Black", "black", "Spanish for eight, in black."],
+    ["otg-roz", "SSX03J100N", "OTG Roz", "Rose", "pink", "Romansh for eight, in rose."],
+  ]),
 ];
+
+function royalPop(
+  rows: [
+    slug: string,
+    sku: string,
+    name: string,
+    colorway: string,
+    group: ColorGroup,
+    tagline: string,
+  ][],
+): Seed[] {
+  return rows.map(([slug, sku, name, colorway, colorGroup, tagline]) => ({
+    slug: `royal-pop-${slug}`,
+    collection: "ap-swatch",
+    sku,
+    name: `Royal Pop — ${name}`,
+    shortName: name,
+    family: "royal-pop",
+    year: 2026,
+    price: 95,
+    availability: "in-stock",
+    colorway,
+    colorGroup,
+    strapType: "rubber",
+    tagline,
+    description: `Audemars Piguet's Royal Oak, reworked by Swatch as a Bioceramic pocket watch — the octagonal bezel and its eight screws, a hand-wound mechanical movement, and a calfskin lanyard to wear it around the neck, clipped to a bag or in a pocket. ${name} is one of eight.`,
+  }));
+}
 
 const extracted = palettes.watches as Record<string, Partial<Palette>>;
 
@@ -506,21 +557,32 @@ const FALLBACK: Palette = {
   strap: "#8f8f8f",
 };
 
-export const products: Product[] = seeds.map((s) => ({
-  ...s,
-  collection: s.collection ?? "omega-swatch",
-  familyLabel: FAMILY_LABEL[s.family],
-  // asset(): next/image leaves unoptimized sources untouched, so the
-  // GitHub Pages basePath has to be baked in here.
-  images: {
-    front: asset(`/products/watches/${s.sku}_sa200.png`),
-    angle: asset(`/products/watches/${s.sku}_sa300.png`),
-    side: asset(`/products/watches/${s.sku}_sa000.png`),
-  },
-  // Colour comes from the real product photography — see
-  // scripts/extract-palettes.mjs, re-run with `npm run palette`.
-  palette: { ...FALLBACK, ...(extracted[s.sku] ?? {}) },
-}));
+/**
+ * Everything in public/, as `npm run images` last saw it. A reference is only
+ * listed once its front photograph is on disk, so a watch added here before
+ * its photography has been fetched stays off the site instead of rendering a
+ * broken image — and appears on its own once the files land.
+ */
+const onDisk = new Set(manifest.groups.flatMap((g) => g.files.map((f) => f.path)));
+
+export const products: Product[] = seeds
+  .filter((s) => onDisk.has(`/products/watches/${s.sku}_sa200.png`))
+  .map((s) => ({
+    ...s,
+    collection: s.collection ?? "omega-swatch",
+    familyLabel: FAMILY_LABEL[s.family],
+    specs: s.specs ?? COLLECTION_SPECS[s.collection ?? "omega-swatch"],
+    // asset(): next/image leaves unoptimized sources untouched, so the
+    // GitHub Pages basePath has to be baked in here.
+    images: {
+      front: asset(`/products/watches/${s.sku}_sa200.png`),
+      angle: asset(`/products/watches/${s.sku}_sa300.png`),
+      side: asset(`/products/watches/${s.sku}_sa000.png`),
+    },
+    // Colour comes from the real product photography — see
+    // scripts/extract-palettes.mjs, re-run with `npm run palette`.
+    palette: { ...FALLBACK, ...(extracted[s.sku] ?? {}) },
+  }));
 
 export const bestsellers: Product[] = products
   .filter((p) => p.bestsellerRank)
@@ -528,7 +590,10 @@ export const bestsellers: Product[] = products
 
 export const bySlug = (slug: string) => products.find((p) => p.slug === slug);
 
-export const FAMILIES = Object.keys(FAMILY_LABEL) as Family[];
+/** Only the series something is actually listed in — no dead filter chips. */
+export const FAMILIES = (Object.keys(FAMILY_LABEL) as Family[]).filter((f) =>
+  products.some((p) => p.family === f),
+);
 
 export const COLOR_GROUPS: { id: ColorGroup; label: string; swatch: string }[] = [
   { id: "black", label: "Black", swatch: "#1a1a1a" },

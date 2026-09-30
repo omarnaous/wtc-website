@@ -20,7 +20,7 @@ photography.
 
 | File | Source |
 | --- | --- |
-| `products.ts` | 26 references from [swatch.com/en-en/bioceramic-moonswatch-collection.html](https://www.swatch.com/en-en/bioceramic-moonswatch-collection.html) — names and official Swatch references |
+| `products.ts` | WTC's list — 25 MoonSwatch references from [swatch.com](https://www.swatch.com/en-en/bioceramic-moonswatch-collection.html) and the 8 [Royal Pop](https://www.swatch.com/en-us/royal-pop.html) pieces, with WTC's prices and specification rows (`COLLECTION_SPECS`) |
 | `straps.ts` | 37 references from [the MoonSwatch strap listing](https://www.swatch.com/en-en/accessories/watch-straps/moonswatch-straps/) |
 | `palettes.json` | Generated — colours sampled from the product photography by `scripts/extract-palettes.mjs` |
 | `site.ts` | The client's Instagram profile, [@watchtradechronicles](https://www.instagram.com/watchtradechronicles) |
@@ -38,8 +38,9 @@ scraped. These are stand-ins so the UI has realistic numbers to lay out:
    `+961 00 000 000`. WhatsApp is now the only contact channel on the site
    (the email was removed at the client's request), so nothing on the page
    reaches anyone until this is set.
-2. **`price` and `compareAt` on every product** — plausible Beirut resale
-   figures, not WTC's actual pricing.
+2. ~~`price` on every product~~ — now WTC's own list ($60 / $70 / $75
+   MoonSwatch, $95 Royal Pop). `migrations/0008_wtc_price_list.sql` brings an
+   already-imported database into line.
 3. **`price` on every strap** — $58 Velcro, $45 rubber, applied flat, plus
    `STRAP_PRICE` ($49) for everything in the Strap Studio.
 4. **`availability`** — hand-assigned. Real stock belongs in the backend.
@@ -140,15 +141,21 @@ catalogue chip and the footer link all read from that array. A collection with
 no products yet renders as "Coming soon" and links to WhatsApp instead of to an
 empty catalogue.
 
-**`ap-swatch` currently has no products** — it is a placeholder for the house
-the client asked to have ready. Note that Swatch has no Audemars Piguet
-collaboration; confirm what is actually being stocked before this is anything
-more than a tile.
+**`ap-swatch` holds the Royal Pop** — Audemars Piguet × Swatch, eight
+Bioceramic pocket watches released May 2026. Its tile reads "Coming soon"
+until their photography is on disk (see *Adding a product*).
 
 ## Adding a product
 
-1. Drop `SKU_sa200.png`, `SKU_sa300.png`, `SKU_sa000.png` into
-   `public/products/watches/` (the CDN pattern is
-   `https://static.swatch.com/images/product/SKU/sa200/SKU_sa200_er003m.png`).
-2. Add a seed object to `seeds` in `products.ts`.
-3. Run `npm run palette`.
+1. Add a seed object to `seeds` in `products.ts`.
+2. `npm run watches` — downloads the three packshots for any reference that
+   is missing them (`https://static.swatch.com/images/product/SKU/sa200/SKU_sa200_er003m.png`),
+   then re-samples colours, rebuilds thumbnails and the image manifest.
+   Anything the CDN does not have, drop in by hand as
+   `public/products/watches/SKU_sa200.png`, `_sa300.png`, `_sa000.png` and
+   run `npm run images`.
+
+A seed whose `sa200` is not in `images.json` is left off the site entirely,
+so a reference can be added before its photography without showing a broken
+image. The ten added with WTC's price list (the Moon and Neptune Moonshine
+Gold missions and the Royal Pop) are waiting on exactly that.
