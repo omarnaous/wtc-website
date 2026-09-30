@@ -1,8 +1,16 @@
-import type { Availability, ColorGroup, Family, Product } from "@/data/types";
+import type {
+  Availability,
+  CollectionId,
+  ColorGroup,
+  Family,
+  Product,
+} from "@/data/types";
 
 export type Sort = "featured" | "price-asc" | "price-desc" | "newest" | "name";
 
 export interface FilterState {
+  /** Brand partnership — the top level of the catalogue. */
+  collections: CollectionId[];
   families: Family[];
   colors: ColorGroup[];
   availability: Availability[];
@@ -12,6 +20,7 @@ export interface FilterState {
 }
 
 export const EMPTY: FilterState = {
+  collections: [],
   families: [],
   colors: [],
   availability: [],
@@ -21,7 +30,7 @@ export const EMPTY: FilterState = {
 };
 
 export const SORTS: { id: Sort; label: string }[] = [
-  { id: "featured", label: "Featured" },
+  { id: "featured", label: "Our order" },
   { id: "price-asc", label: "Price, low to high" },
   { id: "price-desc", label: "Price, high to low" },
   { id: "newest", label: "Newest first" },
@@ -32,6 +41,7 @@ export function apply(products: Product[], f: FilterState): Product[] {
   const q = f.query.trim().toLowerCase();
 
   const out = products.filter((p) => {
+    if (f.collections.length && !f.collections.includes(p.collection)) return false;
     if (f.families.length && !f.families.includes(p.family)) return false;
     if (f.colors.length && !f.colors.includes(p.colorGroup)) return false;
     if (f.availability.length && !f.availability.includes(p.availability)) return false;
@@ -57,14 +67,18 @@ export function apply(products: Product[], f: FilterState): Product[] {
     case "name":
       return ranked.sort((a, b) => a.name.localeCompare(b.name));
     default:
-      // Featured: bestsellers first in rank order, then everything else.
-      return ranked.sort(
-        (a, b) => (a.bestsellerRank ?? 99) - (b.bestsellerRank ?? 99) || a.name.localeCompare(b.name)
-      );
+      // The order set in the dashboard, under Collections.
+      //
+      // This used to sort bestsellers to the front and then run alphabetically,
+      // which meant the running order curated per collection never reached the
+      // shop at all. The rows arrive from the store in `position` order, so the
+      // curated sort is deliberately no sort.
+      return ranked;
   }
 }
 
 export const activeCount = (f: FilterState) =>
+  f.collections.length +
   f.families.length +
   f.colors.length +
   f.availability.length +

@@ -84,9 +84,3 @@ export const straps: Strap[] = [
 
 export const strapBySku = (sku: string) => straps.find((s) => s.sku === sku);
 
-/** Straps offered in the Strap Studio for a given watch, stock strap first. */
-export function strapsFor(stockStrapSku?: string): Strap[] {
-  if (!stockStrapSku) return straps;
-  const stock = straps.find((s) => s.sku === stockStrapSku);
-  return stock ? [stock, ...straps.filter((s) => s.sku !== stockStrapSku)] : straps;
-}

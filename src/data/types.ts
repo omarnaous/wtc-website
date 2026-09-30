@@ -1,3 +1,10 @@
+/**
+ * A collection is the brand partnership a piece belongs to — the top level of
+ * the catalogue, and what the homepage tiles link into. `Family` sits one
+ * level below it (the series within a collection).
+ */
+export type CollectionId = "omega-swatch" | "ap-swatch";
+
 export type Family =
   | "classics"
   | "moonphase"
@@ -19,6 +26,7 @@ export interface Palette {
 export interface Product {
   /** URL slug, e.g. "mission-to-mercury" */
   slug: string;
+  collection: CollectionId;
   /** Official Swatch reference, e.g. "SO33A100" */
   sku: string;
   name: string;
@@ -42,6 +50,13 @@ export interface Product {
   bestsellerRank?: number;
   tagline: string;
   description: string;
+  /** A line under the buy buttons. Empty falls back to the shared sentence. */
+  footerNote?: string;
+  /** Its own specification rows. Empty falls back to the shared ones. */
+  specs?: { label: string; value: string }[];
+  /** Every photograph, in order. The first one leads everywhere. */
+  photos?: string[];
+  /** The first three photographs, named — what most of the site reads. */
   images: { front: string; angle: string; side: string };
   palette: Palette;
 }

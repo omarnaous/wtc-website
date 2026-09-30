@@ -3,27 +3,49 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
-    "build": "next build",
-    "start": "next start -p 3000",
+    "dev": "vinext dev --port 3000",
+    "dev:next": "next dev -p 3001",
+    "build": "vinext build",
+    "preview": "wrangler dev --config dist/server/wrangler.json --port 8788 --persist-to .wrangler/state",
+    "deploy": "vinext-cloudflare deploy --config dist/server/wrangler.json",
+    "deploy:pages": "bash scripts/deploy-pages.sh",
+    "db:migrate": "wrangler d1 migrations apply wtc-store --local",
+    "db:migrate:remote": "wrangler d1 migrations apply wtc-store --remote",
+    "db:console": "wrangler d1 execute wtc-store --local --command",
+    "types": "wrangler types",
+    "typecheck": "tsc --noEmit",
     "palette": "node scripts/extract-palettes.mjs",
-    "deploy": "bash scripts/deploy-pages.sh"
+    "images": "node scripts/build-image-manifest.mjs",
+    "strap-photos": "node scripts/fetch-strap-photos.mjs",
+    "instagram": "node scripts/fetch-instagram.mjs",
+    "instagram:import": "node scripts/import-instagram.mjs",
+    "thumbs": "node scripts/build-thumbs.mjs"
   },
   "dependencies": {
     "@remotion/player": "^4.0.360",
+    "@vinext/cloudflare": "^1.0.0-beta.9",
     "framer-motion": "^12.23.12",
     "next": "15.5.4",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "remotion": "^4.0.360"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-server-dom-webpack": "^19.3.0",
+    "remotion": "^4.0.360",
+    "server-only": "^0.0.1",
+    "vinext": "^1.0.0-beta.11"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.57.2",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^22.15.3",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-rsc": "^0.5.35",
     "sharp": "^0.34.2",
     "tailwindcss": "^4.1.13",
-    "typescript": "^5.8.3"
-  }
+    "typescript": "^5.8.3",
+    "vite": "^8.3.0",
+    "wrangler": "^4.136.2"
+  },
+  "type": "module"
 }

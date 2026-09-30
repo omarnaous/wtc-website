@@ -1,6 +1,13 @@
 import palettes from "./palettes.json";
 import { asset } from "@/lib/asset";
-import type { ColorGroup, Family, Palette, Product, Availability } from "./types";
+import type {
+  Availability,
+  CollectionId,
+  ColorGroup,
+  Family,
+  Palette,
+  Product,
+} from "./types";
 
 /**
  * Catalogue sourced from swatch.com/en-en/bioceramic-moonswatch-collection.html
@@ -10,7 +17,10 @@ import type { ColorGroup, Family, Palette, Product, Availability } from "./types
  * See src/data/README.md before going live.
  */
 
-type Seed = Omit<Product, "images" | "palette" | "familyLabel">;
+type Seed = Omit<Product, "images" | "palette" | "familyLabel" | "collection"> & {
+  /** Defaults to the Omega × Swatch collection. */
+  collection?: CollectionId;
+};
 
 export const FAMILY_LABEL: Record<Family, string> = {
   classics: "Classics",
@@ -498,6 +508,7 @@ const FALLBACK: Palette = {
 
 export const products: Product[] = seeds.map((s) => ({
   ...s,
+  collection: s.collection ?? "omega-swatch",
   familyLabel: FAMILY_LABEL[s.family],
   // asset(): next/image leaves unoptimized sources untouched, so the
   // GitHub Pages basePath has to be baked in here.

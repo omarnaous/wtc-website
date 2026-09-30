@@ -12,14 +12,22 @@ import { asset } from "@/lib/asset";
  * motion is periodic over HERO.durationInFrames so the loop has no seam.
  */
 
+/** Fallback cast, used when the film is rendered without input props. */
 const RAIL = [
   "SO33W700", "SO33M100", "SO33R100", "SO33L103",
   "SO33N700", "SO33G100", "SO33O100", "SO33J100",
-];
+].map((sku) => asset(`/products/watches/${sku}_sa200.png`));
 
-const CENTREPIECE = "SO33W700";
+const CENTREPIECE = asset("/products/watches/SO33W700_sa200.png");
 
-const src = (sku: string) => asset(`/products/watches/${sku}_sa200.png`);
+/**
+ * Which watches appear, as image paths. Passed in by the host so the film
+ * follows the catalogue — editing the cast in the dashboard re-casts it.
+ */
+export interface HeroFilmProps {
+  rail?: string[];
+  centre?: string;
+}
 
 /**
  * Where the watch sits, and how big.
@@ -79,11 +87,11 @@ function Orbits() {
             r={r}
             fill="none"
             stroke="#c9a227"
-            strokeWidth={2}
+            strokeWidth={3}
             strokeLinecap="round"
-            strokeDasharray={`${Math.round(c * 0.06)} ${Math.round(c)}`}
+            strokeDasharray={`${Math.round(c * 0.08)} ${Math.round(c)}`}
             transform={`rotate(${t * 360 - 90} ${fx} ${fy})`}
-            opacity={0.5}
+            opacity={0.7}
           />
         );
       })()}
@@ -92,30 +100,37 @@ function Orbits() {
 }
 
 /** Watches drifting right-to-left behind the centrepiece. */
-function Rail() {
+function Rail({ rail = RAIL }: { rail?: string[] }) {
   const frame = useCurrentFrame();
-  const { fx, fy, size, width } = useStage();
+  const { fx, fy, size, width, portrait } = useStage();
   const t = frame / HERO.durationInFrames;
-  const gap = width / 3.2;
-  const span = RAIL.length * gap;
+
+  // A phone gets a shorter reel and no blur: an animated blur on eight images
+  // at 30fps is by far the most expensive thing in this composition, and it
+  // is what drops frames on mid-range hardware.
+  const reel = portrait ? rail.slice(0, 5) : rail;
+  const gap = width / (portrait ? 2.2 : 3.2);
+  const span = reel.length * gap;
   const box = size * 0.86;
 
   return (
     <AbsoluteFill>
-      {RAIL.map((sku, i) => {
+      {reel.map((image, i) => {
         const raw = i * gap - t * span;
         const x = (((raw % span) + span) % span) - gap;
         const d = Math.abs(x - fx) / fx; // 0 at the focal point, 1 at the edges
-        const scale = interpolate(d, [0, 1], [0.62, 0.44], { extrapolateRight: "clamp" });
-        const opacity = interpolate(d, [0, 0.55, 1], [0.34, 0.16, 0], {
+        const scale = interpolate(d, [0, 1], [0.66, 0.46], { extrapolateRight: "clamp" });
+        const opacity = interpolate(d, [0, 0.5, 1], [0.62, 0.3, 0], {
           extrapolateRight: "clamp",
         });
-        const bob = Math.sin(t * Math.PI * 2 * 2 + i) * (size * 0.03);
+        // Two cycles per loop: one was slow enough to read as a still image.
+        const bob = Math.sin(t * Math.PI * 4 + i) * (size * 0.05);
+        const spin = Math.sin(t * Math.PI * 4 + i * 0.7) * 5;
 
         return (
           <Img
-            key={sku}
-            src={src(sku)}
+            key={`${image}-${i}`}
+            src={image}
             style={{
               position: "absolute",
               left: x - box / 2,
@@ -123,9 +138,9 @@ function Rail() {
               width: box,
               height: box,
               objectFit: "contain",
-              transform: `scale(${scale})`,
+              transform: `scale(${scale}) rotate(${spin}deg)`,
               opacity,
-              filter: "blur(1.5px) saturate(0.8)",
+              filter: portrait ? "saturate(0.9)" : "blur(1px) saturate(0.9)",
             }}
           />
         );
@@ -135,7 +150,7 @@ function Rail() {
 }
 
 /** The hero watch: breathing scale, a slow tilt, and a warm halo. */
-function Centrepiece() {
+function Centrepiece({ centre = CENTREPIECE }: { centre?: string }) {
   const frame = useCurrentFrame();
   const { fx, fy, size } = useStage();
   const t = frame / HERO.durationInFrames;
@@ -152,9 +167,14 @@ function Centrepiece() {
   );
   const appear = Math.min(entry, exit);
 
-  const breathe = 1 + Math.sin(t * Math.PI * 2) * 0.016;
-  const tilt = Math.sin(t * Math.PI * 2) * 2.4;
-  const lift = Math.cos(t * Math.PI * 2) * (size * 0.02);
+  // Two cycles per loop on the tilt and rise, one on the sway, so the watch
+  // traces a slow figure rather than a metronome — and at amplitudes you can
+  // actually see. The previous values moved it well under a pixel a second.
+  const cycle = t * Math.PI * 2;
+  const breathe = 1 + Math.sin(cycle * 2) * 0.035;
+  const tilt = Math.sin(cycle * 2) * 4;
+  const lift = Math.cos(cycle * 2) * (size * 0.045);
+  const sway = Math.sin(cycle) * (size * 0.03);
   const scale = (0.94 + 0.06 * appear) * breathe;
   const halo = size * 1.45;
 
@@ -174,7 +194,7 @@ function Centrepiece() {
         }}
       />
       <Img
-        src={src(CENTREPIECE)}
+        src={centre}
         style={{
           position: "absolute",
           left: fx - size / 2,
@@ -182,7 +202,7 @@ function Centrepiece() {
           width: size,
           height: size,
           objectFit: "contain",
-          transform: `translateY(${lift}px) rotate(${tilt}deg) scale(${scale})`,
+          transform: `translate(${sway}px, ${lift}px) rotate(${tilt}deg) scale(${scale})`,
           opacity: appear,
           filter: "drop-shadow(0 50px 90px rgba(0,0,0,0.85))",
         }}
@@ -191,7 +211,7 @@ function Centrepiece() {
   );
 }
 
-export default function HeroVideo() {
+export default function HeroVideo({ rail, centre }: HeroFilmProps) {
   const frame = useCurrentFrame();
   const { fx, fy, width, height } = useStage();
   const fade = interpolate(frame, [0, 22], [0, 1], { extrapolateRight: "clamp" });
@@ -207,11 +227,11 @@ export default function HeroVideo() {
       />
       <Starfield />
       <Orbits />
-      <Rail />
-      <Centrepiece />
+      <Rail rail={rail} />
+      <Centrepiece centre={centre} />
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse at ${gx}% ${gy}%, transparent 34%, rgba(9,9,10,0.3) 66%, rgba(9,9,10,0.82) 100%)`,
+          background: `radial-gradient(ellipse at ${gx}% ${gy}%, transparent 38%, rgba(9,9,10,0.24) 68%, rgba(9,9,10,0.78) 100%)`,
         }}
       />
     </AbsoluteFill>

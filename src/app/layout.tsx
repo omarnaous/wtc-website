@@ -1,27 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/site/Header";
-import Footer from "@/components/site/Footer";
-import { site } from "@/data/site";
 
+/**
+ * Root layout — document shell only.
+ *
+ * The storefront chrome (header, footer, motion provider) lives in the (site)
+ * group, and the dashboard brings its own. Everything shared between them,
+ * which is the font loading and the stylesheet, stays here.
+ */
 export const metadata: Metadata = {
-  // Set NEXT_PUBLIC_SITE_URL in the deployment environment so Open Graph
-  // images resolve to absolute URLs.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: {
-    default: `${site.name} — ${site.longName} | OMEGA × Swatch MoonSwatch`,
-    template: `%s — ${site.name}`,
-  },
-  description: site.blurb,
-  // This is a client preview with placeholder pricing — keep it out of search
-  // results. Remove when the real catalogue and prices go live.
-  robots: { index: false, follow: false },
-  openGraph: {
-    title: `${site.name} — ${site.longName}`,
-    description: site.blurb,
-    locale: "en_US",
-    type: "website",
-  },
+  title: { default: "WTC", template: "%s — WTC" },
 };
 
 export default function RootLayout({
@@ -37,11 +26,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-ink text-chalk antialiased">
-        <Header />
-        <main>{children}</main>
-        <Footer />
-      </body>
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

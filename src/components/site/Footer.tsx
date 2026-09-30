@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { site } from "@/data/site";
-import { FAMILY_LABEL, FAMILIES } from "@/data/products";
+import { getSection, str } from "@/lib/store/content";
+import { getSettings } from "@/lib/store/settings";
+import { listCollections } from "@/lib/store/collections";
+import { listPolicies } from "@/lib/store/policies";
 
 function Instagram() {
   return (
@@ -21,26 +23,39 @@ function WhatsApp() {
   );
 }
 
-export default function Footer() {
+/**
+ * The closing block. Collections, policies and contact details are all read
+ * back out of the shop, so a policy added in the dashboard appears here.
+ */
+export default async function Footer() {
+  const [footer, { brand, contact, social }, collections, policies] = await Promise.all([
+    getSection("footer"),
+    getSettings(),
+    listCollections(),
+    listPolicies(),
+  ]);
+
   return (
     <footer id="about" className="relative border-t border-line bg-ink-2">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <Logo />
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-mute">{site.blurb}</p>
+            <Logo logo={brand.logo} name={brand.name} tagline={brand.tagline} />
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-mute">
+              {str(footer, "blurb") || brand.blurb}
+            </p>
             <div className="mt-6 flex items-center gap-3">
               <a
-                href={site.social.instagram}
+                href={social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-[12px] text-mute transition-colors hover:border-gold hover:text-gold"
               >
                 <Instagram />
-                {site.social.instagramHandle}
+                {social.instagramHandle}
               </a>
               <a
-                href={`https://wa.me/${site.contact.whatsapp}`}
+                href={`https://wa.me/${contact.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-[12px] text-mute transition-colors hover:border-gold hover:text-gold"
@@ -52,30 +67,39 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="eyebrow">Collection</h3>
+            <h3 className="eyebrow">{str(footer, "shopHeading", "Shop")}</h3>
             <ul className="mt-5 space-y-2.5">
-              {FAMILIES.map((f) => (
-                <li key={f}>
-                  <Link
-                    href={`/products?family=${f}`}
-                    className="text-sm text-mute transition-colors hover:text-chalk"
-                  >
-                    {FAMILY_LABEL[f]}
-                  </Link>
-                </li>
-              ))}
+              {collections.map((c) =>
+                (c.count ?? 0) === 0 ? (
+                  <li key={c.id} className="flex items-center gap-2 text-sm text-mute-2">
+                    {c.name}
+                    <span className="text-[10px] uppercase tracking-[0.12em]">
+                      {str(footer, "soonLabel", "soon")}
+                    </span>
+                  </li>
+                ) : (
+                  <li key={c.id}>
+                    <Link
+                      href={`/products?collection=${c.id}`}
+                      className="text-sm text-mute transition-colors hover:text-chalk"
+                    >
+                      {c.name}
+                    </Link>
+                  </li>
+                )
+              )}
               <li>
                 <Link href="/products" className="text-sm text-mute transition-colors hover:text-chalk">
-                  All references
+                  {str(footer, "allLabel", "All references")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="eyebrow">Policies</h3>
+            <h3 className="eyebrow">{str(footer, "policiesHeading", "Policies")}</h3>
             <ul className="mt-5 space-y-2.5">
-              {site.policies.map((p) => (
+              {policies.map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/policies/${p.slug}`}
@@ -89,19 +113,14 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="eyebrow">Contact</h3>
+            <h3 className="eyebrow">{str(footer, "contactHeading", "Get in touch")}</h3>
             <ul className="mt-5 space-y-2.5 text-sm text-mute">
               <li>
-                <a href={`tel:${site.contact.phone.replace(/\s/g, "")}`} className="hover:text-chalk">
-                  {site.contact.phone}
+                <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="hover:text-chalk">
+                  {contact.phone}
                 </a>
               </li>
-              <li>
-                <a href={`mailto:${site.contact.email}`} className="hover:text-chalk">
-                  {site.contact.email}
-                </a>
-              </li>
-              <li className="pt-1 text-mute-2">{site.location}</li>
+              <li className="pt-1 text-mute-2">{brand.location}</li>
             </ul>
           </div>
         </div>
@@ -110,13 +129,9 @@ export default function Footer() {
 
         <div className="mt-6 flex flex-col gap-3 text-[11px] leading-relaxed text-mute-2 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {site.longName}. All rights reserved.
+            © {new Date().getFullYear()} {brand.longName}. All rights reserved.
           </p>
-          <p className="max-w-xl sm:text-right">
-            WTC is an independent reseller. Not affiliated with, endorsed by or
-            sponsored by Swatch AG or OMEGA SA. Product names and photography remain
-            the property of their respective owners.
-          </p>
+          <p className="max-w-xl sm:text-right">{str(footer, "note")}</p>
         </div>
       </div>
     </footer>

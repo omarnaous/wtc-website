@@ -1,19 +1,41 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import Catalog from "./Catalog";
+import Catalog, { type CatalogCopy } from "./Catalog";
 import { FAMILIES } from "@/data/products";
-import type { Family } from "@/data/types";
+import type { CollectionId, Family, Product } from "@/data/types";
 
 /**
- * Reads ?family= on the client. The catalogue page is prerendered to static
- * HTML, so the query string is only known once the page is running — hence
- * the client component and the Suspense boundary around it.
+ * Reads ?family= and ?collection= on the client, so the collection tiles and
+ * the footer can link straight into a filtered catalogue.
  */
-export default function CatalogParams() {
-  const family = useSearchParams().get("family");
+export default function CatalogParams({
+  products,
+  collections,
+  copy,
+}: {
+  products: Product[];
+  collections: { id: string; name: string }[];
+  copy?: Partial<CatalogCopy>;
+}) {
+  const params = useSearchParams();
+  const family = params.get("family");
+  const collection = params.get("collection");
+
   const initialFamily = FAMILIES.includes(family as Family) ? (family as Family) : undefined;
+  const initialCollection = collections.some((c) => c.id === collection)
+    ? (collection as CollectionId)
+    : undefined;
 
   // Catalog seeds its filter state once, so remount when the link changes.
-  return <Catalog key={initialFamily ?? "all"} initialFamily={initialFamily} />;
+  return (
+    <Catalog
+      key={`${initialCollection ?? "all"}-${initialFamily ?? "all"}`}
+      products={products}
+      collections={collections}
+      copy={copy}
+      initialCollection={initialCollection}
+      initialFamily={initialFamily}
+    />
+  );
 }

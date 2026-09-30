@@ -4,7 +4,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import ProductCard from "@/components/product/ProductCard";
 import { COLOR_GROUPS, FAMILIES, FAMILY_LABEL, AVAILABILITY_LABEL, products as ALL } from "@/data/products";
-import type { Availability, ColorGroup, Family, Product } from "@/data/types";
+import { collections as COLLECTIONS } from "@/data/collections";
+import type {
+  Availability,
+  CollectionId,
+  ColorGroup,
+  Family,
+  Product,
+} from "@/data/types";
 import { EMPTY, SORTS, activeCount, apply, type FilterState, type Sort } from "@/lib/filters";
 import { cx, usd } from "@/lib/format";
 
@@ -40,17 +47,43 @@ function Chip({
   );
 }
 
+export interface CatalogCopy {
+  searchPlaceholder: string;
+  emptyMessage: string;
+  emptyCopy: string;
+  clearLabel: string;
+}
+
+/** Matches the defaults declared in src/lib/content/schema.ts. */
+const COPY: CatalogCopy = {
+  searchPlaceholder: "Search a mission or reference…",
+  emptyMessage: "Nothing matches that yet",
+  emptyCopy:
+    "Loosen a filter, or message us — we source references to order and can usually find one within a week.",
+  clearLabel: "Clear filters",
+};
+
 export default function Catalog({
   products = ALL,
+  collections = COLLECTIONS,
+  copy,
   initialFamily,
+  initialCollection,
   limit,
 }: {
   products?: Product[];
+  /** Filter chips. Comes from the shop so a new house appears here too. */
+  collections?: { id: string; name: string }[];
+  /** Sections → Catalogue page. */
+  copy?: Partial<CatalogCopy>;
   initialFamily?: Family;
+  initialCollection?: CollectionId;
   limit?: number;
 }) {
+  const t = { ...COPY, ...copy };
   const [f, setF] = useState<FilterState>({
     ...EMPTY,
+    collections: initialCollection ? [initialCollection] : [],
     families: initialFamily ? [initialFamily] : [],
   });
   const [open, setOpen] = useState(false);
@@ -70,7 +103,7 @@ export default function Catalog({
           <input
             value={f.query}
             onChange={(e) => setF({ ...f, query: e.target.value })}
-            placeholder="Search a mission or reference…"
+            placeholder={t.searchPlaceholder}
             className="w-full rounded-full border border-line bg-surface/60 px-5 py-2.5 text-sm text-chalk placeholder:text-mute-2 focus:border-mute-2 focus:outline-none"
           />
         </div>
@@ -112,9 +145,26 @@ export default function Catalog({
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="mt-5 grid gap-6 rounded-2xl border border-line bg-surface/40 p-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-5 grid gap-6 rounded-2xl border border-line bg-surface/40 p-5 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <p className="eyebrow">Collection</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {collections.map((c) => (
+                    <Chip
+                      key={c.id}
+                      active={f.collections.includes(c.id as CollectionId)}
+                      onClick={() =>
+                        setF({ ...f, collections: toggle(f.collections, c.id as CollectionId) })
+                      }
+                    >
+                      {c.name}
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="eyebrow">Series</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {FAMILIES.map((fam) => (
                     <Chip
@@ -181,7 +231,7 @@ export default function Catalog({
                 </div>
               </div>
 
-              <div className="sm:col-span-2 lg:col-span-4">
+              <div className="sm:col-span-2 lg:col-span-3">
                 <button
                   onClick={() => setF({ ...EMPTY })}
                   className="text-[12px] text-mute underline underline-offset-4 hover:text-chalk"
@@ -206,7 +256,12 @@ export default function Catalog({
         >
           <AnimatePresence mode="popLayout">
             {results.map((p, i) => (
-              <motion.div key={p.slug} layout exit={{ opacity: 0, scale: 0.96 }}>
+              <motion.div
+                key={p.slug}
+                layout="position"
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <ProductCard product={p} priority={i < 4} />
               </motion.div>
             ))}
@@ -214,16 +269,13 @@ export default function Catalog({
         </motion.div>
       ) : (
         <div className="mt-10 rounded-2xl border border-dashed border-line p-12 text-center">
-          <p className="font-display text-lg font-semibold">Nothing matches that yet</p>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-mute">
-            Loosen a filter, or message us — we source references to order and can
-            usually find one within a week.
-          </p>
+          <p className="font-display text-lg font-semibold">{t.emptyMessage}</p>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-mute">{t.emptyCopy}</p>
           <button
             onClick={() => setF({ ...EMPTY })}
             className="mt-6 rounded-full border border-line px-5 py-2.5 text-[12px] text-chalk hover:border-gold hover:text-gold"
           >
-            Clear filters
+            {t.clearLabel}
           </button>
         </div>
       )}

@@ -1,0 +1,12 @@
+-- Up to five photographs per watch, in the order they are shown.
+--
+-- Three fixed columns — front, angle, side — were a guess at what every watch
+-- needs, and it is both too many for a piece with one good shot and too few
+-- for one with a box, papers and a caseback worth showing. A JSON array holds
+-- however many there are, first one leading.
+--
+-- The three columns stay: the cart reads image_front directly, and keeping
+-- them written means nothing that queries the table by hand has to change.
+-- Rows are backfilled by the first save; until then the reader falls back to
+-- the three columns, so this migration cannot leave a watch without a picture.
+ALTER TABLE products ADD COLUMN photos TEXT NOT NULL DEFAULT '[]';

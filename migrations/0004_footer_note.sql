@@ -1,0 +1,11 @@
+-- A line of copy under the buy buttons, per watch.
+--
+-- Until now that line was one sentence shared by the whole catalogue
+-- (Sections → Product page → "What it ships with"), with {strap} swapped in.
+-- That is right for a catalogue where every watch ships the same way, and
+-- wrong the moment one of them does not — a full set, a piece with papers
+-- missing, a pre-order with a date on it.
+--
+-- Empty means "use the shared sentence", so nothing changes for the 26
+-- watches that are already there.
+ALTER TABLE products ADD COLUMN footer_note TEXT NOT NULL DEFAULT '';

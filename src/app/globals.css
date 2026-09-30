@@ -23,11 +23,24 @@
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+    /* The header is fixed, so an anchor that scrolls to the top of a section
+       puts that section under it. Clears the 4rem bar plus a little air. */
+    scroll-padding-top: 5.5rem;
   }
   body {
     background: var(--color-ink);
     color: var(--color-chalk);
     font-family: var(--font-sans);
+    /* A safety net for the wide rails and the hero film: clip rather than
+       hidden, which would break `position: sticky` on descendants. */
+    overflow-x: clip;
+    /* No rubber-band at the ends of the page on top of a fixed header. */
+    overscroll-behavior-y: none;
+  }
+  /* Tapping a card should not flash a grey box over the photograph. */
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
   }
   ::selection {
     background: var(--color-gold);
@@ -35,6 +48,9 @@
   }
   /* Everything here is choreographed; honour the OS setting. */
   @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
     *,
     *::before,
     *::after {
@@ -87,7 +103,38 @@
 .no-bar {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* Swiping past the end of a rail must not scroll the page sideways or fire
+     the browser's back gesture — on a phone that is what makes a rail feel
+     like it is fighting you. */
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .no-bar::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Dashboard ──────────────────────────────────────────────────────────────
+   The storefront is dark by default, so the light admin surface has to reach
+   the document element too — otherwise overscroll flashes near-black. */
+body:has(.admin-root) {
+  background: #f6f6f7;
+  color: #18181b;
+}
+
+.admin-root {
+  --admin-bg: #f6f6f7;
+  --admin-panel: #ffffff;
+  --admin-line: #e4e4e7;
+  --admin-line-soft: #f0f0f2;
+  --admin-text: #18181b;
+  --admin-mute: #71717a;
+  --admin-mute-2: #a1a1aa;
+  --admin-accent: #18181b;
+  --admin-gold: #a98419;
+  font-family: var(--font-sans);
+}
+
+/* Numbers in tables should line up column to column. */
+.tnum {
+  font-variant-numeric: tabular-nums;
 }

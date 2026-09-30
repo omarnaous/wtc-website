@@ -29,16 +29,11 @@ export default function ProductCard({ product, priority = false }: { product: Pr
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             priority={priority}
+            /* The card holds one photograph. Fading a second one in under the
+               cursor swapped the dial for whatever the second shot happened to
+               be — usually the caseback, which is not what anyone is shopping
+               for. The lift alone is enough of a response. */
             className="object-contain p-4 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
-          />
-          {/* Second angle fades in under the cursor. */}
-          <Image
-            src={product.images.angle}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            aria-hidden
-            className="object-contain p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           />
           <div className="absolute left-3 top-3">
             <Badge availability={product.availability} />

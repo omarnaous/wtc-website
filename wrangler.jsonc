@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wtc-website",
+  // Joseph Nassif's account — the shop belongs to the business that runs it,
+  // not to whoever built it. Pinned here so a deploy cannot land on the wrong
+  // account when a login can reach more than one.
+  "account_id": "4df5a97789f22e17ff5f50da97c2fefb",
+  "compatibility_date": "2026-09-22",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "vinext/server/fetch-handler",
+  "assets": {
+    "directory": "dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS"
+  },
+  "cache": {
+    "enabled": true
+  },
+  "version_metadata": {
+    "binding": "CF_VERSION_METADATA"
+  },
+  // Stock, pricing and orders. Primary region WEUR — closest D1 region to
+  // Beirut; there is no Middle East location hint.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "wtc-store",
+      "database_id": "813b8dd3-9c0f-40eb-a28b-ee5d0541fc5d"
+    }
+  ],
+
+  // Uploaded photography. Everything under public/ is shipped with the build
+  // and needs a deploy to change; anything added from the dashboard lands here
+  // instead and is served by /api/media/[...key].
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "wtc-media"
+    }
+  ]
+}

@@ -9,3 +9,18 @@ npm-debug.log*
 next-env.d.ts
 .vercel
 *.tsbuildinfo
+/dist/
+.vinext/
+.wrangler/
+
+# Cached source photography for the strap pipeline — build input, not output.
+.cache/
+
+# Local dashboard invite link — local database only, never commit.
+.admin-invite.txt
+
+# First-run dashboard token — never commit.
+.setup-token.txt
+
+# Local database backups.
+backups/
