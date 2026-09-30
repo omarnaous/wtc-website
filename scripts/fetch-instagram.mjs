@@ -16,7 +16,7 @@
  *   3. Run:  INSTAGRAM_TOKEN=... INSTAGRAM_USER_ID=... npm run instagram
  *
  * Writes src/data/instagram.json and downloads the thumbnails into
- * public/instagram/ so the site never hot-links Instagram's CDN (those URLs
+ * media/instagram/ so the site never hot-links Instagram's CDN (those URLs
  * expire within days).
  */
 import sharp from "sharp";
@@ -27,7 +27,7 @@ const TOKEN = process.env.INSTAGRAM_TOKEN;
 const USER_ID = process.env.INSTAGRAM_USER_ID ?? "me";
 const COUNT = Number(process.env.INSTAGRAM_COUNT ?? 6);
 
-const OUT_DIR = "public/instagram";
+const OUT_DIR = "media/instagram";
 const OUT_JSON = "src/data/instagram.json";
 
 if (!TOKEN) {

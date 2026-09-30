@@ -5,9 +5,9 @@
  * it takes. Files already on disk are left alone; only missing ones are
  * fetched, which makes this safe to re-run after adding a seed.
  *
- * Run with: npm run watches          (fetch, then palette, thumbs, manifest)
+ * Run with: npm run watches          (fetch, palette, thumbs, manifest, push to R2)
  *           node scripts/fetch-watch-images.mjs SSX03R100N   (just one)
- * Writes   : public/products/watches/<SKU>_sa{200,300,000}.png
+ * Writes   : media/products/watches/<SKU>_sa{200,300,000}.png
  *
  * A reference only appears on the site once its sa200 is on disk and
  * `npm run images` has listed it — see the filter in products.ts.
@@ -15,7 +15,7 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const OUT = "public/products/watches";
+const OUT = "media/products/watches";
 const VIEWS = ["sa200", "sa300", "sa000"];
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
@@ -62,6 +62,6 @@ if (missing.length) {
   console.log(`${missing.length} not available:\n  ${missing.join("\n  ")}`);
   console.log(
     "\nA reference without its sa200 stays off the site. Drop the three files in by hand " +
-      `(${OUT}/<SKU>_sa200.png, _sa300.png, _sa000.png) and run \`npm run images\`.`,
+      `(${OUT}/<SKU>_sa200.png, _sa300.png, _sa000.png), then \`npm run images && npm run media:push\`.`,
   );
 }

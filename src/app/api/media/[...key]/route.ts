@@ -1,6 +1,10 @@
 import { mediaBucket } from "@/lib/db/binding";
 
-/** Serves an uploaded image straight out of R2. Public, like anything in public/. */
+/**
+ * Serves an image straight out of R2 — dashboard uploads, and the catalogue
+ * photography that used to ship in public/ (reached here through the
+ * rewrite in src/middleware.ts).
+ */
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ key: string[] }> },
@@ -28,8 +32,27 @@ export async function GET(
   return new Response(object.body, {
     headers: {
       "content-type": object.httpMetadata?.contentType ?? "application/octet-stream",
-      "cache-control": "public, max-age=31536000, immutable",
+      "cache-control": cacheFor(key[0]),
+      // The vinext CDN adapter takes the edge's policy from this header and
+      // makes the browser revalidate against the edge; without it every image
+      // request would reach the Worker and R2.
+      "cloudflare-cdn-cache-control": cacheFor(key[0]),
       etag: object.httpEtag,
     },
   });
+}
+
+/**
+ * Uploads are keyed by a fresh id, so a URL is one picture forever. The
+ * catalogue photography is keyed by reference and can be replaced in place, so
+ * it gets a day in the browser with a week of background revalidation — the
+ * policy public/_headers used to set — and the Instagram grid, which turns
+ * over, an hour.
+ */
+function cacheFor(top: string): string {
+  if (top === "instagram") return "public, max-age=3600, stale-while-revalidate=86400";
+  if (top === "products" || top === "brand") {
+    return "public, max-age=86400, stale-while-revalidate=604800";
+  }
+  return "public, max-age=31536000, immutable";
 }

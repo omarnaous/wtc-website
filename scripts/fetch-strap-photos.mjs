@@ -8,7 +8,7 @@
  * between frames, so cross-fading them reads as one watch being re-strapped.
  *
  * Run with: npm run strap-photos
- * Writes   : public/products/strap-photos/<set>/<variant>.webp
+ * Writes   : media/products/strap-photos/<set>/<variant>.webp
  *            src/data/strap-photos.json
  *
  * ⚠️ The photography belongs to Wristbuddys. Fine for a design preview;
@@ -24,7 +24,7 @@ const ORIGIN = "https://wristbuddys.com";
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
-const OUT_IMG = "public/products/strap-photos";
+const OUT_IMG = "media/products/strap-photos";
 const OUT_JSON = "src/data/strap-photos.json";
 
 /**

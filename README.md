@@ -19,6 +19,8 @@ between this and taking money online.
 nvm use            # Node 22 — vinext needs ≥ 22
 npm install
 npm run db:migrate # first run only: create the tables in the local database
+npm run media:pull -- --remote   # the photography, from R2 into media/
+npm run media:push               # …and into the local bucket dev serves from
 npm run dev
 ```
 
@@ -31,13 +33,17 @@ the dashboard. The first account you create owns the shop.
 | `npm run dev:next` | Plain `next dev` on :3001 — no bindings, so no dashboard |
 | `npm run build` | Production build for Workers |
 | `npm run preview` | Run the built Worker locally against the local database |
-| `npm run deploy` | Deploy to Cloudflare Workers |
+| `npm run release` | Migrate the live database, push the photography to R2, build and deploy |
+| `npm run deploy` | Deploy the last build to Cloudflare Workers |
 | `npm run deploy:pages` | Static export to GitHub Pages (the frozen preview) |
 | `npm run db:migrate` | Apply migrations to the local database |
 | `npm run db:migrate:remote` | Apply migrations to the live database |
 | `npm run types` | Regenerate `worker-configuration.d.ts` from `wrangler.jsonc` |
 | `npm run palette` | Re-sample product colours from the photography |
-| `npm run images` | Rebuild the image picker's manifest of `public/` |
+| `npm run images` | Rebuild the image picker's manifest of `media/` |
+| `npm run media:push` | Upload `media/` to R2 — local bucket, or the live one with `-- --remote` |
+| `npm run media:pull` | Download the photography from R2 into `media/` (`-- --remote` for live) |
+| `npm run watches` | Fetch any missing watch packshots, rebuild colours and thumbs, push to R2 |
 | `npm run strap-photos` | Re-fetch the Strap Studio photo sets (sources cached in `.cache/`) |
 | `npm run thumbs` | Rebuild the 128px watch thumbnails the studio's picker uses |
 | `npm run instagram` | Pull the Instagram grid via the Graph API (needs a token) |
@@ -165,19 +171,32 @@ re-exported from another module reads as "unknown" in the build report.
 | --- | --- |
 | `ASSETS` | Static assets from `dist/client` |
 | `DB` | D1 database `wtc-store` (`cc3b36de…23db`, WEUR — the closest region to Beirut) |
-| `MEDIA` | **Not bound yet.** R2 is not enabled on the account |
+| `MEDIA` | R2 bucket `wtc-media` — all photography, plus dashboard uploads |
 
 Schema lives in `migrations/`. A new environment needs
 `npm run db:migrate:remote` before the dashboard will open — it says so
 itself rather than failing, if you forget.
 
-**Image uploads are off** until R2 is enabled in the Cloudflare dashboard
-(Storage → R2 → enable, which needs a payment method even for the free tier).
-Once it is: `wrangler r2 bucket create wtc-media`, add an `r2_buckets` entry
-binding it as `MEDIA` to `wrangler.jsonc`, redeploy. The upload endpoint and
-the library screen are already written and switch on by themselves. Until
-then the image picker browses everything in `public/` and any image field
-takes a URL.
+### Where everything lives
+
+Nothing the shop shows ships inside the build.
+
+- **Photography → R2.** Watches, straps, Strap Studio shots, thumbnails, the
+  logo and the Instagram tiles are objects in `wtc-media`, keyed by the path
+  the site asks for (`products/watches/SO33M100_sa200.png`).
+  `src/middleware.ts` answers `/products/…`, `/brand/…` and `/instagram/…`
+  image requests from the bucket through `/api/media`, so every stored path
+  keeps working. `media/` is the gitignored local copy the image scripts
+  work on; `src/data/media-index.json` records what is in the live bucket.
+- **Everything else → D1.** Products, straps and their fittings, collections,
+  policies, section copy and the Instagram grid. The files in `src/data/` are
+  what *Import the catalogue* loads from, and what the GitHub Pages export
+  renders.
+
+The bucket has to exist before the first deploy
+(`wrangler r2 bucket create wtc-media`, with R2 enabled on the account).
+Then `npm run release`, and *Import the catalogue* from the dashboard on a
+fresh database.
 
 ## Deploying to GitHub Pages
 

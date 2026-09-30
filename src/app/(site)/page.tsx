@@ -7,7 +7,7 @@ import ScrollReel from "@/components/sections/ScrollReel";
 import Collections, { type CollectionTile } from "@/components/sections/Collections";
 import Reviews from "@/components/sections/Reviews";
 import StrapStudio from "@/components/strap/StrapStudio";
-import feed from "@/data/instagram.json";
+import { listInstagramPosts } from "@/lib/store/instagram";
 import { asset } from "@/lib/asset";
 import { getSections, flag, num, str } from "@/lib/store/content";
 import { getSettings } from "@/lib/store/settings";
@@ -62,9 +62,10 @@ export default async function Home() {
   // ── Instagram ────────────────────────────────────────────────────────────
   const ig = sections.instagram;
   const igLimit = num(ig, "limit", 6);
-  const live = (feed.posts as Post[])?.length > 0;
+  const feed = await listInstagramPosts(igLimit);
+  const live = feed.length > 0;
   const posts: Post[] = live
-    ? (feed.posts as Post[]).slice(0, igLimit).map((p) => ({ ...p, image: asset(p.image) }))
+    ? feed.map((p) => ({ ...p, image: asset(p.image) }))
     : bestsellers.slice(0, igLimit).map((p) => ({
         id: p.slug,
         image: p.images.angle,

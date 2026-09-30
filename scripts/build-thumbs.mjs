@@ -8,7 +8,7 @@
  * would pull the full-size shots down a phone connection to draw thumbnails.
  *
  * Run with: npm run thumbs
- * Writes   : public/products/watches/thumbs/<name>.webp
+ * Writes   : media/products/watches/thumbs/<name>.webp
  *            src/data/watch-thumbs.json
  *
  * The manifest is what makes the swap safe: the helper in src/lib/thumb.ts
@@ -19,7 +19,7 @@ import sharp from "sharp";
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const DIR = "public/products/watches";
+const DIR = "media/products/watches";
 const OUT = path.join(DIR, "thumbs");
 const MANIFEST = "src/data/watch-thumbs.json";
 const SIZE = 128; // 44px at 2.5x, with room for a denser screen

@@ -30,7 +30,7 @@ const grab = async (url) => {
   return Buffer.from(await r.arrayBuffer());
 };
 
-await mkdir("public/instagram", { recursive: true });
+await mkdir("media/instagram", { recursive: true });
 const posts = [];
 
 for (const p of (raw.posts ?? []).slice(0, COUNT)) {
@@ -40,7 +40,7 @@ for (const p of (raw.posts ?? []).slice(0, COUNT)) {
     await sharp(buf)
       .resize(640, 640, { fit: "cover", position: "attention" })
       .webp({ quality: 78 })
-      .toFile(path.join("public/instagram", file));
+      .toFile(path.join("media/instagram", file));
     posts.push({
       id: p.code,
       image: `/instagram/${file}`,
@@ -55,11 +55,11 @@ for (const p of (raw.posts ?? []).slice(0, COUNT)) {
 }
 
 if (raw.avatar?.src) {
-  await mkdir("public/brand", { recursive: true });
+  await mkdir("media/brand", { recursive: true });
   try {
     const buf = await grab(raw.avatar.src);
-    await sharp(buf).resize(256, 256, { fit: "cover" }).png().toFile("public/brand/logo.png");
-    console.log("  avatar -> public/brand/logo.png");
+    await sharp(buf).resize(256, 256, { fit: "cover" }).png().toFile("media/brand/logo.png");
+    console.log("  avatar -> media/brand/logo.png");
   } catch (e) {
     console.warn(`  ! avatar: ${e.message}`);
   }

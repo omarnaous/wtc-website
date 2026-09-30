@@ -21,11 +21,14 @@ set -euo pipefail
 
 REPO_URL="$(git config --get remote.origin.url)"
 BASE_PATH="${NEXT_PUBLIC_BASE_PATH:-/wtc-website}"
+# The photography is in R2, behind the Worker — there is none in public/ to export.
+export NEXT_PUBLIC_MEDIA_ORIGIN="${NEXT_PUBLIC_MEDIA_ORIGIN:-https://wtc-website.follies.workers.dev}"
 STAGE="$(mktemp -d)"
 HIDDEN="$(mktemp -d)"
 
 # Everything the static export cannot contain.
 #
+#   middleware           — serves the photography from R2; not in an export
 #   admin / api          — read cookies and D1 on every request
 #   components/admin     — import the server actions under src/app/admin
 #   (site)/order/[id]    — a receipt for an order that does not exist at build
@@ -38,6 +41,7 @@ HIDDEN="$(mktemp -d)"
 # src/lib/runtime.ts also hides the bag and the buy buttons for this build —
 # a preview with a dead bag button is worse than one without it.
 EXCLUDED=(
+  src/middleware.ts
   src/app/admin
   src/app/api
   src/components/admin

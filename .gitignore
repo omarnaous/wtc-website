@@ -24,3 +24,7 @@ next-env.d.ts
 
 # Local database backups.
 backups/
+
+# Catalogue photography — lives in R2 (wtc-media). This is the local working
+# copy the image scripts read and write; `npm run media:pull` restores it.
+/media/

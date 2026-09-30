@@ -9,6 +9,7 @@
     "preview": "wrangler dev --config dist/server/wrangler.json --port 8788 --persist-to .wrangler/state",
     "deploy": "vinext-cloudflare deploy --config dist/server/wrangler.json",
     "deploy:pages": "bash scripts/deploy-pages.sh",
+    "release": "npm run db:migrate:remote && npm run media:push -- --remote && npm run build && npm run deploy",
     "db:migrate": "wrangler d1 migrations apply wtc-store --local",
     "db:migrate:remote": "wrangler d1 migrations apply wtc-store --remote",
     "db:console": "wrangler d1 execute wtc-store --local --command",
@@ -20,7 +21,9 @@
     "instagram": "node scripts/fetch-instagram.mjs",
     "instagram:import": "node scripts/import-instagram.mjs",
     "thumbs": "node scripts/build-thumbs.mjs",
-    "watches": "node scripts/fetch-watch-images.mjs && npm run palette && npm run thumbs && npm run images"
+    "watches": "node scripts/fetch-watch-images.mjs && npm run palette && npm run thumbs && npm run images && npm run media:push -- --remote",
+    "media:push": "node scripts/media.mjs push",
+    "media:pull": "node scripts/media.mjs pull"
   },
   "dependencies": {
     "@remotion/player": "^4.0.360",

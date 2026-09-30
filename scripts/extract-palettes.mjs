@@ -3,7 +3,7 @@
  * vector watch in the Strap Studio matches each real colourway.
  *
  * Run with: npm run palette
- * Reads   : public/products/**.png
+ * Reads   : media/products/**.png
  * Writes  : src/data/palettes.json
  */
 import sharp from "sharp";
@@ -11,8 +11,8 @@ import { readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const SIZE = 512;
-const WATCH_DIR = "public/products/watches";
-const STRAP_DIR = "public/products/straps";
+const WATCH_DIR = "media/products/watches";
+const STRAP_DIR = "media/products/straps";
 
 const hex = ([r, g, b]) =>
   "#" + [r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Lists everything in public/ that an image field could point at, so the
- * dashboard's image picker has something to browse.
+ * Lists every catalogue photograph an image field could point at, so the
+ * dashboard's image picker has something to browse. Reads the local media/
+ * copy of what `npm run media:push` puts in R2 — the paths are the same.
  *
  * Workers have no filesystem, so the list cannot be built at request time —
  * it is baked here and imported like any other data file. Re-run with
@@ -11,7 +12,7 @@ import { readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-const PUBLIC = path.join(ROOT, "public");
+const PUBLIC = path.join(ROOT, "media");
 const OUT = path.join(ROOT, "src/data/images.json");
 
 const EXT = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg", ".gif"]);

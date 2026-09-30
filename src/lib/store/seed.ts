@@ -6,6 +6,7 @@ import { collections as fileCollections } from "@/data/collections";
 import { site } from "@/data/site";
 import { SECTIONS } from "@/lib/content/schema";
 import photoData from "@/data/strap-photos.json";
+import feed from "@/data/instagram.json";
 import { SETTINGS_DEFAULTS } from "./settings";
 
 /**
@@ -43,6 +44,7 @@ export interface SeedReport {
   pairings: number;
   policies: number;
   sections: number;
+  instagram: number;
 }
 
 export async function seedFromFiles(strapPrice = 49): Promise<SeedReport> {
@@ -150,9 +152,13 @@ export async function seedFromFiles(strapPrice = 49): Promise<SeedReport> {
   const seen = new Map<string, PhotoStrap>();
   const pairings: { slug: string; sku: string; photo: string; chip: string; pos: number }[] = [];
 
+  // Only for watches this import actually writes — a fitting for a watch that
+  // has been taken off the list (or has no photography yet) has no row to
+  // point at, and one such foreign key fails the whole batch it is in.
+  const listed = new Set(fileProducts.map((p) => p.slug));
   for (const [slug, setKey] of Object.entries(bySlug)) {
     const set = sets[setKey];
-    if (!set) continue;
+    if (!set || !listed.has(slug)) continue;
     set.straps.forEach((s, i) => {
       const sku = STRAP_PREFIX + s.id.toUpperCase();
       if (!seen.has(sku)) seen.set(sku, s);
@@ -205,6 +211,18 @@ export async function seedFromFiles(strapPrice = 49): Promise<SeedReport> {
     });
   });
 
+  // ── Instagram grid ───────────────────────────────────────────────────────
+  // The file is the latest capture, so it replaces what is there: a post
+  // that dropped off the profile's grid drops off the homepage too.
+  statements.push({ sql: `DELETE FROM instagram_posts`, params: [] });
+  feed.posts.forEach((p, i) => {
+    statements.push({
+      sql: `INSERT INTO instagram_posts (id, image, permalink, caption, is_video, position)
+            VALUES (?,?,?,?,?,?)`,
+      params: [p.id, p.image, p.permalink, p.caption ?? "", p.isVideo ? 1 : 0, i],
+    });
+  });
+
   // ── Settings and section copy ────────────────────────────────────────────
   for (const [key, value] of Object.entries(SETTINGS_DEFAULTS)) {
     statements.push({
@@ -230,6 +248,7 @@ export async function seedFromFiles(strapPrice = 49): Promise<SeedReport> {
     pairings: pairings.length,
     policies: site.policies.length,
     sections: SECTIONS.length,
+    instagram: feed.posts.length,
   };
 }
 
