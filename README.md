@@ -246,7 +246,7 @@ dial), takes the outline from the dark-strap frames where the cut is reliable,
 restores pale cases from Swatch's own alpha (Wristbuddys build on Swatch's
 render, hands frozen at the same time), drops the grey shadows that only read
 as shadow on white paper, and fades the strap out where the frame cuts it off.
-The output goes to R2 under `products/strap-photos-v2/`; a new prefix rather
+The output goes to R2 under `products/strap-photos-v3/`; a new prefix rather
 than an overwrite, because `/api/media` tells browsers to keep every image for
 a year.
 

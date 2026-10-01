@@ -74,8 +74,10 @@ const QUALITY = 72;
 const DONOR_LUMA = 150;
 /** Alpha below this is dropped: a sliver that faint only leaves a speck. */
 const FLOOR = 0.04;
-/** How far, in px, the strap fades out at each end of the frame. */
-const FADE = 56;
+/** How far, in px, the strap fades out at each end of the frame. Long on
+ * purpose: a white strap is still a bright bar on a dark page unless it
+ * dissolves over most of its visible run. */
+const FADE = 170;
 /** A frame that registers onto the anchor below this is processed alone. */
 const MIN_FRAME_MATCH = 0.8;
 /** Swatch's packshot below this is not the frame's render; no case repair. */

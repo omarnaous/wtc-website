@@ -41,7 +41,7 @@ Both were removed once the catalogue became something Joseph keeps:
 
 The Strap Studio's try-on photography — 206 frames of each strap fitted to its
 watch, and a swatch crop of each — is Wristbuddys' work. It is no longer in the
-repository but it is in R2 — the frames under `products/strap-photos-v2/`
+repository but it is in R2 — the frames under `products/strap-photos-v3/`
 (re-cut by `scripts/recut-strap-photos.mjs`), the swatches under
 `products/strap-photos/<set>/chips/` — and every `product_straps` row names its
 frame (`photo`) and swatch (`chip`). A pairing
