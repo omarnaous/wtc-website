@@ -1,5 +1,4 @@
 import { tryAll } from "@/lib/db/sql";
-import { STRAP_PRICE, strapSetFor } from "@/data/strapPhotos";
 import type { ColorGroup } from "@/data/types";
 import { bool } from "./json";
 
@@ -98,8 +97,10 @@ export async function getStrap(sku: string): Promise<AdminStrap | null> {
 
 /**
  * The straps offered on one watch, in the order the studio shows them.
- * Falls back to the shipped photo sets so the design still works with no
- * database behind it.
+ *
+ * No watch, no straps — the pairings are rows, and there is no shipped photo
+ * set standing behind them any more. A watch with nothing fitted to it hides
+ * the studio rather than showing someone else's straps.
  */
 export async function strapsForProduct(slug: string): Promise<StrapOption[]> {
   const rows = await tryAll<{
@@ -124,27 +125,16 @@ export async function strapsForProduct(slug: string): Promise<StrapOption[]> {
     [slug],
   );
 
-  if (rows.length) {
-    return rows.map((r) => ({
-      id: r.sku,
-      name: r.name,
-      color: r.color,
-      image: r.photo || r.image,
-      chip: r.chip || r.image,
-      price: r.override ?? r.price,
-      soldOut: bool(r.track) && r.on_hand <= 0,
-    }));
-  }
-
-  const set = strapSetFor(slug);
-  if (!set) return [];
-  return set.straps.map((s) => ({
-    id: s.id,
-    name: s.name,
-    color: s.color,
-    image: s.image,
-    chip: s.chip,
-    price: STRAP_PRICE,
+  // `photo` is a shot of this strap fitted to this watch, where one was taken;
+  // without it the strap's own photograph stands in. Both live in R2.
+  return rows.map((r) => ({
+    id: r.sku,
+    name: r.name,
+    color: r.color,
+    image: r.photo || r.image,
+    chip: r.chip || r.image,
+    price: r.override ?? r.price,
+    soldOut: bool(r.track) && r.on_hand <= 0,
   }));
 }
 

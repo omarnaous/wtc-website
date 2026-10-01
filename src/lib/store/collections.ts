@@ -1,5 +1,5 @@
 import { tryAll } from "@/lib/db/sql";
-import type { Collection } from "@/data/collections";
+import type { Collection } from "@/data/types";
 
 export interface AdminCollection extends Collection {
   position: number;

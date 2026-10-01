@@ -3,8 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import ProductCard from "@/components/product/ProductCard";
-import { COLOR_GROUPS, FAMILIES, FAMILY_LABEL, AVAILABILITY_LABEL, products as ALL } from "@/data/products";
-import { collections as COLLECTIONS } from "@/data/collections";
+import {
+  COLOR_GROUPS,
+  FAMILIES,
+  FAMILY_LABEL,
+  AVAILABILITY_LABEL,
+} from "@/lib/products/constants";
 import type {
   Availability,
   CollectionId,
@@ -64,16 +68,19 @@ const COPY: CatalogCopy = {
 };
 
 export default function Catalog({
-  products = ALL,
-  collections = COLLECTIONS,
+  products,
+  collections,
   copy,
   initialFamily,
   initialCollection,
   limit,
 }: {
-  products?: Product[];
+  /** Always passed in from the shop — there is no shipped catalogue to fall
+   * back on, and a silent fallback is how a broken query looks like a stocked
+   * page. */
+  products: Product[];
   /** Filter chips. Comes from the shop so a new house appears here too. */
-  collections?: { id: string; name: string }[];
+  collections: { id: string; name: string }[];
   /** Sections → Catalogue page. */
   copy?: Partial<CatalogCopy>;
   initialFamily?: Family;

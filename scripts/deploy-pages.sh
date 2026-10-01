@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
 # Build the static export and publish it to the gh-pages branch.
 #
-# This is the frozen client preview, not the live shop — the live shop runs on
-# Cloudflare Workers (`npm run deploy`) and reads from D1. A static export has
-# no database, so the pages here are built from the files in src/data: the
-# design as it shipped, with placeholder prices and no dashboard.
+# ⚠️ THIS NOW PUBLISHES AN EMPTY SHOP. Do not run it without reading this.
+#
+# It used to work because the catalogue was a file: src/data/products.ts held 26
+# watches and their photography lived in public/, so a build with no database
+# behind it still had something to render. Both are gone — the catalogue is D1
+# rows and every photograph is an R2 object — and a static export can reach
+# neither. It will build and deploy happily, and the result is a correct-looking
+# site with no watches in it.
+#
+# Either delete this script and the `deploy:pages` alias, or give the export a
+# way to read the catalogue at build time (fetch the live /products data and
+# write it to a file the pages can import). Leaving it as it is means one
+# mistyped command publishes an empty storefront under the client's name.
+#
+# The live shop runs on Cloudflare Workers: `npm run deploy`.
 #
 # The dashboard is moved aside for the build. `output: export` prerenders every
 # route, and /admin reads cookies on every request — it cannot be a static file,

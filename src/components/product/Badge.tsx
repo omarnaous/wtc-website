@@ -1,4 +1,4 @@
-import { AVAILABILITY_LABEL } from "@/data/products";
+import { AVAILABILITY_LABEL } from "@/lib/products/constants";
 import type { Availability } from "@/data/types";
 import { cx } from "@/lib/format";
 

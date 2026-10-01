@@ -7,10 +7,8 @@ import ScrollReel from "@/components/sections/ScrollReel";
 import Collections, { type CollectionTile } from "@/components/sections/Collections";
 import Reviews from "@/components/sections/Reviews";
 import StrapStudio from "@/components/strap/StrapStudio";
-import feed from "@/data/instagram.json";
-import { asset } from "@/lib/asset";
 import { getSections, flag, num, str } from "@/lib/store/content";
-import { getSettings } from "@/lib/store/settings";
+import { getSetting, getSettings } from "@/lib/store/settings";
 import { listCollections } from "@/lib/store/collections";
 import { listStorefrontProducts } from "@/lib/store/products";
 import { strapSetsFor } from "@/lib/store/straps";
@@ -29,7 +27,7 @@ const SECTION_KEYS = [
 ] as const;
 
 export default async function Home() {
-  const [sections, { social, contact }, collections, products, reviews, ratings] =
+  const [sections, { social, contact }, collections, products, reviews, ratings, feed] =
     await Promise.all([
       getSections([...SECTION_KEYS]),
       getSettings(),
@@ -37,6 +35,9 @@ export default async function Home() {
       listStorefrontProducts(),
       listReviews(),
       reviewSummary(),
+      // The grid lives in D1 with its images in R2, so a new capture is a
+      // dashboard change rather than a deploy.
+      getSetting<{ posts: Post[] }>("instagram_feed", { posts: [] }),
     ]);
 
   const bySlug = new Map(products.map((p) => [p.slug, p]));
@@ -62,9 +63,9 @@ export default async function Home() {
   // ── Instagram ────────────────────────────────────────────────────────────
   const ig = sections.instagram;
   const igLimit = num(ig, "limit", 6);
-  const live = (feed.posts as Post[])?.length > 0;
+  const live = feed.posts?.length > 0;
   const posts: Post[] = live
-    ? (feed.posts as Post[]).slice(0, igLimit).map((p) => ({ ...p, image: asset(p.image) }))
+    ? feed.posts.slice(0, igLimit)
     : bestsellers.slice(0, igLimit).map((p) => ({
         id: p.slug,
         image: p.images.angle,

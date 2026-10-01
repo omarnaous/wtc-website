@@ -13,13 +13,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply wtc-store --remote",
     "db:console": "wrangler d1 execute wtc-store --local --command",
     "types": "wrangler types",
-    "typecheck": "tsc --noEmit",
-    "palette": "node scripts/extract-palettes.mjs",
-    "images": "node scripts/build-image-manifest.mjs",
-    "strap-photos": "node scripts/fetch-strap-photos.mjs",
-    "instagram": "node scripts/fetch-instagram.mjs",
-    "instagram:import": "node scripts/import-instagram.mjs",
-    "thumbs": "node scripts/build-thumbs.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@remotion/player": "^4.0.360",

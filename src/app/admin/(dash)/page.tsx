@@ -1,6 +1,5 @@
 import Link from "next/link";
 import BarChart from "@/components/admin/BarChart";
-import ImportCatalogue from "@/components/admin/ImportCatalogue";
 import {
   Card,
   Empty,
@@ -22,7 +21,7 @@ import {
 } from "@/lib/store/analytics";
 import { listOrders } from "@/lib/store/orders";
 import { ORDER_STATUSES } from "@/lib/orders/constants";
-import { isSeeded } from "@/lib/store/seed";
+import { hasProducts } from "@/lib/store/products";
 
 export const dynamic = "force-dynamic";
 
@@ -38,31 +37,30 @@ function change(now: number, before: number): number | null {
 
 export default async function DashboardPage() {
   const me = await currentUser();
-  const seeded = await isSeeded();
+  const seeded = await hasProducts();
 
   if (!seeded) {
     return (
       <>
         <PageHeader
           title={`Welcome, ${me?.name.split(" ")[0] ?? "there"}`}
-          subtitle="The shop is connected but the catalogue has not been loaded yet."
+          subtitle="The shop is connected, and there is nothing in the catalogue yet."
         />
         <Card
-          title="Import the catalogue"
-          description="Brings in everything the design already ships with, so you can edit rather than retype it."
+          title="Add the first watch"
+          description="The catalogue lives here now — there is no file behind the shop to import from."
         >
-          <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
-            <ul className="space-y-1.5 text-[13px] leading-relaxed text-[var(--admin-mute)]">
-              <li>· 26 watches with their photography, colours and descriptions</li>
-              <li>· Every strap reference, and the photographs of each one fitted</li>
-              <li>· The four policies, the collections and all section copy</li>
-            </ul>
-            <ImportCatalogue />
+          <ul className="space-y-1.5 text-[13px] leading-relaxed text-[var(--admin-mute)]">
+            <li>· Upload its photographs under Images, then add the watch under Watches.</li>
+            <li>· Put it in a collection, and set what you hold under Inventory.</li>
+            <li>· Straps are their own list, and each watch says which of them fit it.</li>
+          </ul>
+          <div className="mt-6 flex flex-wrap gap-2">
+            <LinkButton href="/admin/products/new" tone="primary">
+              Add a watch
+            </LinkButton>
+            <LinkButton href="/admin/media">Upload images</LinkButton>
           </div>
-          <p className="mt-5 border-t border-[var(--admin-line-soft)] pt-4 text-[12.5px] text-[var(--admin-mute)]">
-            Prices come across as the placeholders they are today, and stock starts at zero with
-            tracking off. Nothing you edit later is overwritten if you run this again.
-          </p>
         </Card>
       </>
     );

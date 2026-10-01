@@ -88,3 +88,31 @@ export interface Strap {
   /** Slug of the watch this Velcro strap was made for, when applicable */
   pairedWith?: string;
 }
+
+/**
+ * The top level of the catalogue: the brand partnership a piece belongs to.
+ * One row per collection in D1 — the homepage shows a tile each, and a tile
+ * opens the catalogue filtered to it (/products?collection=<id>).
+ *
+ * `id` is a plain string rather than CollectionId: collections are rows the
+ * dashboard can add to, so the union below cannot be the whole truth.
+ */
+export interface Collection {
+  id: string;
+  name: string;
+  /** Sits under the name on the tile. */
+  blurb: string;
+  /** Product whose photography fronts the tile. */
+  heroSlug?: string;
+  /** Tints the tile. */
+  accent: string;
+  /** Overrides the shared "Coming soon" wording on this tile. */
+  badge?: string;
+  /** Two or three letters, drawn large when the tile has no photograph. */
+  monogram?: string;
+  /**
+   * "auto" — empty reads as upcoming, which is the old behaviour.
+   * "upcoming" / "open" — say so regardless of how many watches are in it.
+   */
+  state?: "auto" | "upcoming" | "open";
+}

@@ -1,4 +1,3 @@
-import ImportCatalogue from "@/components/admin/ImportCatalogue";
 import SettingsForms from "@/components/admin/SettingsForms";
 import { Card, LinkButton, Notice, PageHeader } from "@/components/admin/ui";
 import { getSettings } from "@/lib/store/settings";
@@ -40,13 +39,6 @@ export default async function SettingsPage() {
           <LinkButton href="/admin/content/seo">Open search settings</LinkButton>
         </Card>
 
-        <Card
-          title="Catalogue import"
-          description="Reloads the watches, straps and photography that ship with the design. Prices, stock and copy you have edited are left alone."
-        >
-          <ImportCatalogue label="Re-import the catalogue" />
-        </Card>
-
         <Card title="Image uploads" description="Where pictures added from the dashboard are stored.">
           {uploads ? (
             <Notice tone="success">
@@ -54,9 +46,9 @@ export default async function SettingsPage() {
             </Notice>
           ) : (
             <Notice tone="info">
-              Uploads are off — R2 is not enabled on this Cloudflare account. The image picker still
-              browses everything already in the site&apos;s <code>public/</code> folder, and any
-              image field accepts a URL. To turn uploads on, enable R2 in the Cloudflare dashboard,
+              Uploads are off — R2 is not enabled on this Cloudflare account, and every picture in
+              the shop is stored there, so the image picker has nothing to list. An image field will
+              still accept a full URL. To turn uploads on, enable R2 in the Cloudflare dashboard,
               then add an <code>R2</code> binding named <code>MEDIA</code> to{" "}
               <code>wrangler.jsonc</code>.
             </Notice>

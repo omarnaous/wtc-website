@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import imageData from "@/data/images.json";
 import { Button, Card, INPUT, Notice, cx } from "./ui";
-
-interface Group {
-  label: string;
-  dir: string;
-  files: { path: string; size: number }[];
-}
 
 export interface Uploaded {
   id: string;
@@ -17,8 +10,6 @@ export interface Uploaded {
   size: number;
   created_at: string;
 }
-
-const GROUPS = (imageData as { groups: Group[] }).groups ?? [];
 
 function Copyable({ path }: { path: string }) {
   const [copied, setCopied] = useState(false);
@@ -63,10 +54,11 @@ export default function MediaLibrary({
   const [message, setMessage] = useState<{ tone: "error" | "success"; text: string } | null>(null);
   const [items, setItems] = useState(uploaded);
 
-  const groups = GROUPS.map((g) => ({
-    ...g,
-    files: query ? g.files.filter((f) => f.path.toLowerCase().includes(query.toLowerCase())) : g.files,
-  })).filter((g) => g.files.length);
+  // Every image is an R2 object now, so this is the whole library — there is no
+  // second list of pictures that shipped with the build.
+  const shown = query
+    ? items.filter((m) => `${m.filename} ${m.key}`.toLowerCase().includes(query.toLowerCase()))
+    : items;
 
   async function upload(form: HTMLFormElement) {
     setBusy(true);
@@ -119,57 +111,42 @@ export default function MediaLibrary({
           </form>
 
           {items.length > 0 && (
-            <div className="mt-5 grid grid-cols-3 gap-2 sm:grid-cols-6">
-              {items.map((m) => (
-                <Copyable key={m.id} path={`/api/media/${m.key}`} />
-              ))}
+            <div className="mt-5">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--admin-mute-2)]">
+                  In the shop · {shown.length}
+                  {shown.length !== items.length && ` of ${items.length}`}
+                </p>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Filter by name…"
+                  aria-label="Filter images"
+                  className={cx(INPUT, "max-w-[240px]")}
+                />
+              </div>
+              {shown.length === 0 ? (
+                <p className="py-6 text-center text-[13px] text-[var(--admin-mute)]">
+                  Nothing matches that.
+                </p>
+              ) : (
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+                  {shown.map((m) => (
+                    <Copyable key={m.id} path={`/api/media/${m.key}`} />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </Card>
       ) : (
         <Notice tone="info">
-          Uploads are off — R2 is not enabled on this Cloudflare account. Everything below is
-          already in the site and can be used anywhere an image is asked for; any image field also
-          accepts a full URL.
+          Uploads are off — R2 is not enabled on this Cloudflare account, and every picture in the
+          shop is stored there. Until it is switched back on, an image field will still accept a
+          full URL.
         </Notice>
       )}
 
-      <Card
-        title="In the site"
-        description="Every picture that ships with the shop. Click one to copy its path."
-      >
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Filter by name…"
-          aria-label="Filter images"
-          className={cx(INPUT, "mb-4 max-w-[280px]")}
-        />
-        <div className="space-y-6">
-          {groups.length === 0 && (
-            <p className="py-6 text-center text-[13px] text-[var(--admin-mute)]">
-              Nothing matches that.
-            </p>
-          )}
-          {groups.map((g) => (
-            <div key={g.dir}>
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--admin-mute-2)]">
-                {g.label} · {g.files.length}
-              </p>
-              <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
-                {g.files.slice(0, 48).map((f) => (
-                  <Copyable key={f.path} path={f.path} />
-                ))}
-              </div>
-              {g.files.length > 48 && (
-                <p className="mt-2 text-[12px] text-[var(--admin-mute)]">
-                  Showing 48 of {g.files.length} — filter to find the rest.
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      </Card>
     </div>
   );
 }

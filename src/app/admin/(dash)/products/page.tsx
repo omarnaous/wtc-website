@@ -1,5 +1,4 @@
 import CatalogueSheet, { type SheetRow } from "@/components/admin/CatalogueSheet";
-import ImportCatalogue from "@/components/admin/ImportCatalogue";
 import { Card, LinkButton, Notice, PageHeader } from "@/components/admin/ui";
 import { listAllProducts } from "@/lib/store/products";
 import { listCollections } from "@/lib/store/collections";
@@ -43,9 +42,12 @@ export default async function ProductsPage() {
         <Card title="Nothing here yet">
           <div className="space-y-4">
             <p className="text-[13px] text-[var(--admin-mute)]">
-              Import the catalogue that ships with the design, or add a watch by hand.
+              Add the first watch — photographs, a name, a price and a description are enough to
+              put it on the site.
             </p>
-            <ImportCatalogue />
+            <LinkButton href="/admin/products/new" tone="primary">
+              Add a watch
+            </LinkButton>
           </div>
         </Card>
       ) : (

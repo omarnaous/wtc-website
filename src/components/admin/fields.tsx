@@ -2,7 +2,6 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
-import imageData from "@/data/images.json";
 import { Button, INPUT, Label, Notice, cx } from "./ui";
 import ProductPicker, { type PickerProduct } from "./ProductPicker";
 import { useNotifyForm } from "./use-notify-form";
@@ -276,8 +275,6 @@ interface ImageGroup {
   files: { path: string; size: number }[];
 }
 
-const IMAGE_GROUPS = (imageData as { groups: ImageGroup[] }).groups ?? [];
-
 /** One image uploaded from the dashboard, as the picker needs it. */
 export interface UploadedImage {
   key: string;
@@ -312,20 +309,18 @@ export function ImageField({
   const [browsing, setBrowsing] = useState(false);
   const [query, setQuery] = useState("");
 
-  // Uploads lead: they are the ones someone has just added and is looking
-  // for, while the bundled photography has been there since the build.
-  const all: ImageGroup[] = [
-    ...(uploads.length
-      ? [
-          {
-            label: "Uploaded",
-            dir: "__uploads",
-            files: uploads.map((u) => ({ path: `/api/media/${u.key}`, size: 0 })),
-          },
-        ]
-      : []),
-    ...IMAGE_GROUPS,
-  ];
+  // Everything the picker can offer is in R2 now. There is no second group of
+  // bundled photography to list behind these — the public/ folder it read is
+  // gone, and an image that is not in Images does not exist.
+  const all: ImageGroup[] = uploads.length
+    ? [
+        {
+          label: "Images",
+          dir: "__uploads",
+          files: uploads.map((u) => ({ path: `/api/media/${u.key}`, size: 0 })),
+        },
+      ]
+    : [];
 
   const groups = all
     .map((g) => ({
@@ -363,7 +358,7 @@ export function ImageField({
             name={name}
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="/products/watches/SO33M100_sa200.png"
+            placeholder="/api/media/…"
             className={INPUT}
           />
           <div className="flex gap-2">

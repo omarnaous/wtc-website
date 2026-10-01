@@ -1,13 +1,12 @@
 import { tryAll } from "@/lib/db/sql";
-import { products as fileProducts, FAMILY_LABEL } from "@/data/products";
+import { FAMILY_LABEL, MAX_PHOTOS } from "@/lib/products/constants";
 import type { Availability, ColorGroup, CollectionId, Family, Palette, Product } from "@/data/types";
 import { safeJson, bool } from "./json";
-import { MAX_PHOTOS } from "@/lib/products/constants";
 
 export { MAX_PHOTOS };
 
 /**
- * The catalogue, from D1 when there is one and from src/data otherwise.
+ * The catalogue. D1 is the whole of it — there is no file behind this.
  *
  * Rows are mapped back to the same `Product` shape the components already
  * take, so nothing downstream knows or cares where a watch came from. That is
@@ -126,26 +125,6 @@ export function rowToProduct(row: ProductRow & Partial<StockRow>): AdminProduct 
   };
 }
 
-/**
- * The file catalogue, dressed as admin rows so both paths have one shape.
- *
- * No longer a fallback for an empty database — an empty catalogue now means an
- * empty shop, which is the only honest answer once the dashboard is the place
- * the catalogue is kept. Falling back here meant deleting every product left
- * 26 of them on the site, coming from a file nobody was editing.
- *
- * Still used by the dashboard's "Import the catalogue" button, which is an
- * explicit choice rather than something that happens behind your back.
- */
-export const catalogueFromFiles = (): AdminProduct[] =>
-  fileProducts.map((p, i) => ({
-    ...p,
-    photos: [...new Set([p.images.front, p.images.angle, p.images.side].filter(Boolean))],
-    status: "active" as const,
-    position: i,
-    stock: { onHand: 0, reserved: 0, lowStockAt: 2, track: false },
-  }));
-
 const SELECT = `
   SELECT p.*, i.on_hand, i.reserved, i.low_stock_at, i.track
     FROM products p
@@ -157,6 +136,12 @@ export async function listProducts(): Promise<AdminProduct[]> {
     `${SELECT} WHERE p.status = 'active' ORDER BY p.position, p.name`,
   );
   return rows.map(rowToProduct);
+}
+
+/** Whether there is a catalogue at all — the dashboard's empty state turns on it. */
+export async function hasProducts(): Promise<boolean> {
+  const rows = await tryAll<{ n: number }>(`SELECT COUNT(*) AS n FROM products`);
+  return (rows[0]?.n ?? 0) > 0;
 }
 
 /** Everything, whatever its status — the dashboard list. */

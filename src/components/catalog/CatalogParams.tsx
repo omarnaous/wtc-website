@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import Catalog, { type CatalogCopy } from "./Catalog";
-import { FAMILIES } from "@/data/products";
+import { FAMILIES } from "@/lib/products/constants";
 import type { CollectionId, Family, Product } from "@/data/types";
 
 /**

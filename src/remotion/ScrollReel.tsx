@@ -1,7 +1,5 @@
 import { AbsoluteFill, Img, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import Starfield from "./Starfield";
-import { products } from "@/data/products";
-import { asset } from "@/lib/asset";
 
 export interface ReelEntry {
   sku: string;
@@ -23,21 +21,12 @@ export interface ReelEntry {
 export const FRAMES_PER_ENTRY = 14;
 export const reelFrames = (count: number) => Math.max(1, count) * FRAMES_PER_ENTRY;
 
-/** Fallback cast, used when the composition is rendered without input props. */
-const DEFAULT_FILM: ReelEntry[] = products.map((p) => ({
-  sku: p.sku,
-  name: p.name,
-  family: p.familyLabel,
-  year: p.year,
-  src: asset(p.images.front),
-}));
-
-export const REEL_FRAMES = reelFrames(DEFAULT_FILM.length);
-
 /** Only the few frames either side of centre are worth drawing. */
 const WINDOW = 3.4;
 
-export default function ScrollReel({ film = DEFAULT_FILM }: { film?: ReelEntry[] }) {
+// The cast always comes in as a prop: the watches are D1 rows, and there is
+// no shipped catalogue to stand in for them.
+export default function ScrollReel({ film }: { film: ReelEntry[] }) {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
   const portrait = height > width;

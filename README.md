@@ -36,12 +36,6 @@ the dashboard. The first account you create owns the shop.
 | `npm run db:migrate` | Apply migrations to the local database |
 | `npm run db:migrate:remote` | Apply migrations to the live database |
 | `npm run types` | Regenerate `worker-configuration.d.ts` from `wrangler.jsonc` |
-| `npm run palette` | Re-sample product colours from the photography |
-| `npm run images` | Rebuild the image picker's manifest of `public/` |
-| `npm run strap-photos` | Re-fetch the Strap Studio photo sets (sources cached in `.cache/`) |
-| `npm run thumbs` | Rebuild the 128px watch thumbnails the studio's picker uses |
-| `npm run instagram` | Pull the Instagram grid via the Graph API (needs a token) |
-| `npm run instagram:import` | …or import a capture from the rendered profile |
 
 ## The dashboard
 
@@ -234,56 +228,71 @@ frame from scroll position, so scrolling *is* the timeline and scrubbing back
 up runs it backwards. It walks the whole catalogue, so a watch added in the
 dashboard appears in it.
 
-**The Strap Studio** (`src/components/strap/`) runs on real photography.
-Wristbuddys shoot every strap colour fitted to the specific MoonSwatch it is
-made for, in a fixed studio setup — same angle, same framing, same flat
-background — so within a set the watch is pixel-aligned frame to frame. Only
-the strap changes, which means a straight cross-fade reads as the watch being
-re-strapped rather than as a slideshow. `scripts/fetch-strap-photos.mjs`
-pulls those frames, applies one fixed crop across the whole set to keep the
-alignment, and samples each strap's colour; the picker chips are themselves
-crops of the photographs, so they carry the real texture and stitching.
+**The Strap Studio** (`src/components/strap/`) runs on real photography. Which
+straps a watch offers is a `product_straps` row, edited per watch, and the
+pictures are R2 objects like everything else. Where a strap was photographed
+fitted to that specific watch the pairing names that shot; otherwise the
+strap's own photograph stands in. There is no shipped photo set behind this —
+a watch with nothing fitted to it hides the studio rather than borrowing
+another watch's straps.
 
-Lifting the watch off that background is `scripts/lib/cutout.mjs`, and the
-hard case is a white strap: it is within a few RGB units of the studio paper,
-so a flood fill walks straight into it. Three things hold it back — the weave
-(paper is mathematically flat, rubber is not), a running median down each edge
-of the strap that closes any bite the fill still managed to take, and the same
-edges carried across the rows the case occupies, where the fill can otherwise
-squeeze in beside a lug. Source frames are cached under `.cache/`, so
-re-running the cut-out costs nothing and does not touch their CDN.
+The try-on frames are built by `scripts/recut-strap-photos.mjs`, from the
+Wristbuddys originals cached in `.cache/wristbuddys/` and Swatch's front
+packshots. Cutting a white strap or a white case off white studio paper frame
+by frame does not work — it leaves slabs of backdrop beside the strap and eats
+the crown — so it does not try. Every frame in a set is the same watch, so the
+script registers each frame onto one anchor (scale and offset, matched on the
+dial), takes the outline from the dark-strap frames where the cut is reliable,
+restores pale cases from Swatch's own alpha (Wristbuddys build on Swatch's
+render, hands frozen at the same time), drops the grey shadows that only read
+as shadow on white paper, and fades the strap out where the frame cuts it off.
+The output goes to R2 under `products/strap-photos-v2/`; a new prefix rather
+than an overwrite, because `/api/media` tells browsers to keep every image for
+a year.
 
-206 frames across 23 sets cover all 26 references (the monthly Moonshine Gold
-Earthphases share a set — from the front they are the same watch). Which
-straps appear on which watch is a `product_straps` row, edited per watch.
+`scripts/cutout-photo.mjs` is what lifts a watch off a real background when a
+new one is shot in-house, and `scripts/lib/cutout.mjs` is the machinery under
+both. The hard case is a white strap: it is within a few RGB units of studio
+paper, so a flood fill walks straight into it. Three things hold it back — the
+weave (paper is mathematically flat, rubber is not), a running median down each
+edge of the strap that closes any bite the fill still managed to take, and the
+same edges carried across the rows the case occupies, where the fill can
+otherwise squeeze in beside a lug.
 
-**Colour** on the cards comes from the real packshots. `scripts/extract-palettes.mjs`
-samples the case flank, bezel ring, dial, counters and strap out of each
-1080×1080 photo into `src/data/palettes.json`, and the import copies those
-into the database, where they become editable per watch.
+**Colour** on the cards is a palette stored per watch — the case flank, bezel
+ring, dial, counters and strap, sampled from its photography and editable in
+the dashboard.
 
 ## Before this goes live
 
-- **Prices, stock and the phone number are placeholders.** The WhatsApp and
-  `tel:` links go nowhere until Settings → Contact is filled in; the dashboard
-  refuses to save the placeholder number back.
+- **Stock and the phone number.** Every watch is seeded with nothing on hand
+  and tracking **off**, so nothing falsely reads "Sold out" — no stock figure
+  was invented. Set the real counts under Inventory and switch tracking on
+  there. The phone number is still `+961 00 000 000`: the WhatsApp and `tel:`
+  links go nowhere until Settings → Contact is filled in.
+- **Prices are Joseph's own** ($60–75 for the MoonSwatches, $95 for the Royal
+  Pop), well under the references' retail. Worth being deliberate about how
+  the pieces are described, since the specs on the MoonSwatches say "Plastic"
+  where Swatch says Bioceramic.
 - **Online payment.** Checkout works, but it is cash on delivery — no card
   gateway is wired up. See *Taking payment online* above for where one goes.
-- **Instagram.** The grid shows the six most recent reels, imported from the
-  profile. It is a scrape, so it will rot — move it to the Graph API when
+- **Instagram.** The grid is six reels held in the `instagram_feed` settings
+  row with their thumbnails in R2. It came from a scrape of the profile and
+  does not refresh itself, so it will go stale — wire it to the Graph API when
   there is an access token.
 - **vinext is 1.0.0-beta.** It builds, deploys and runs cleanly here, but it
   is pre-release software under a client-facing site. `@opennextjs/cloudflare`
   is the mature fallback if it ever bites.
 - **Remotion licence.** Free for individuals and companies of up to three
   people; larger teams need a company licence. See <https://remotion.dev/license>.
-- **Image rights — the sharpest open item.** The packshots are Swatch's, and
-  the Strap Studio photography is Wristbuddys' — a competing strap retailer.
-  Using a competitor's product photography on a live storefront is a real
-  legal exposure, not a formality. Before this stops being a design preview,
-  either license the images or reshoot the sets in-house; the fixed studio
-  position is the only thing the effect depends on, so it is reproducible with
-  a tripod and any MoonSwatch.
+- **Image rights — the sharpest open item.** The 91 watch packshots are
+  Swatch's own product photography, and the Strap Studio's 206 try-on frames
+  and their swatches are Wristbuddys' — a competing strap retailer. Deleting them from `public/` changed nothing
+  about that: they are now R2 objects served from the live shop, which is more
+  exposure, not less. Using a competitor's product photography on a storefront
+  is a real legal risk, not a formality. Either license the images or reshoot
+  them; `scripts/cutout-photo.mjs` handles in-house shots, and the three
+  Mission to Mars photographs already in the shop went through it.
 
 ## Stack
 
