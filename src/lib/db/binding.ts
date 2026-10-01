@@ -15,7 +15,7 @@
 
 export type Db = D1Database;
 
-type Bindings = { DB?: D1Database; MEDIA?: R2Bucket; SETUP_TOKEN?: string };
+type Bindings = { DB?: D1Database; MEDIA?: R2Bucket; SETUP_TOKEN?: string; BREVO_API_KEY?: string };
 
 let resolved: Bindings | null | undefined;
 
@@ -75,4 +75,36 @@ export async function setupToken(): Promise<string | null> {
   const b = await bindings();
   const token = b?.SETUP_TOKEN;
   return typeof token === "string" && token.length > 0 ? token : null;
+}
+
+/**
+ * The Brevo API key that sends order emails. A Worker secret —
+ * `wrangler secret put BREVO_API_KEY` — never a var, so it is not in the repo
+ * or the dashboard. Null locally, which simply means no emails go out there.
+ */
+export async function brevoKey(): Promise<string | null> {
+  const b = await bindings();
+  const key = b?.BREVO_API_KEY;
+  return typeof key === "string" && key.length > 0 ? key : null;
+}
+
+/**
+ * Lets work finish after the response has gone. The customer's "order placed"
+ * page should not wait on an email provider, and on Workers a promise left
+ * running after the response is otherwise cancelled. Outside workerd there is
+ * no such thing, so the work is awaited instead — slower, never lost.
+ */
+export async function afterResponse(work: Promise<unknown>): Promise<void> {
+  try {
+    const mod = (await import(/* webpackIgnore: true */ "cloudflare:workers")) as {
+      waitUntil?: (p: Promise<unknown>) => void;
+    };
+    if (typeof mod.waitUntil === "function") {
+      mod.waitUntil(work);
+      return;
+    }
+  } catch {
+    // Not on Workers.
+  }
+  await work;
 }

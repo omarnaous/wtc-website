@@ -1,15 +1,20 @@
 import SettingsForms from "@/components/admin/SettingsForms";
 import { Card, LinkButton, Notice, PageHeader } from "@/components/admin/ui";
-import { getSettings } from "@/lib/store/settings";
+import { getOrderEmails, getSettings } from "@/lib/store/settings";
 import { getDelivery } from "@/lib/store/cart";
-import { mediaBucket } from "@/lib/db/binding";
+import { brevoKey, mediaBucket } from "@/lib/db/binding";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
-  const [settings, delivery] = await Promise.all([getSettings(), getDelivery()]);
+  const [settings, delivery, orderEmails, key] = await Promise.all([
+    getSettings(),
+    getDelivery(),
+    getOrderEmails(),
+    brevoKey(),
+  ]);
   const uploads = Boolean(await mediaBucket());
   const placeholderPhone = /0{2}\s*0{3}\s*0{3}/.test(settings.contact.phone);
 
@@ -30,7 +35,12 @@ export default async function SettingsPage() {
       )}
 
       <div className="space-y-4">
-        <SettingsForms settings={settings} delivery={delivery} />
+        <SettingsForms
+          settings={settings}
+          delivery={delivery}
+          orderEmails={orderEmails}
+          emailReady={Boolean(key)}
+        />
 
         <Card
           title="Search &amp; sharing"

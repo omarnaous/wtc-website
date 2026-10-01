@@ -4,6 +4,9 @@ import { parseLines, type CartLine } from "@/lib/cart/types";
 import { resolveCart } from "@/lib/store/cart";
 import { createOrder } from "@/lib/store/orders";
 import { logAudit } from "@/lib/auth/session";
+import { afterResponse } from "@/lib/db/binding";
+import { sendOrderEmails } from "@/lib/email/order-emails";
+import { siteOrigin } from "@/lib/email/origin";
 
 export interface CheckoutResult {
   error?: string;
@@ -62,8 +65,11 @@ export async function placeOrder(
   const phone = normalisePhone(phoneRaw);
   if (!phone) return { error: "Enter a Lebanese phone number we can reach you on." };
 
+  // Required: it is where the order confirmation goes, and the browser's own
+  // check can be skipped, so it is enforced here as well.
   const email = text(data, "email");
-  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+  if (!email) return { error: "Enter your email — the order confirmation is sent there." };
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return { error: "That email address does not look right." };
   }
 
@@ -73,7 +79,7 @@ export async function placeOrder(
       {
         customer_name: name,
         phone,
-        email: email || undefined,
+        email,
         address_line: address,
         city,
         area: text(data, "area"),
@@ -100,6 +106,19 @@ export async function placeOrder(
     );
 
     await logAudit(null, "create", "order", order.id, `Order #${order.number} placed on the site.`);
+
+    // The confirmation and the shop's alert go out after the response: the
+    // customer sees their receipt at once, and a slow or failing email
+    // provider can neither delay nor undo an order that has been placed.
+    const origin = await siteOrigin();
+    await afterResponse(
+      sendOrderEmails(
+        order,
+        sellable.map((l) => ({ name: l.name, qty: l.sellable, unit_price: l.price, image: l.image, kind: l.kind })),
+        origin,
+      ),
+    );
+
     return { orderId: order.id, number: order.number };
   } catch {
     return {

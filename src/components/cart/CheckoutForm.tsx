@@ -182,7 +182,14 @@ export default function CheckoutForm({
               autoComplete="tel"
               hint="How we confirm the order and arrange delivery."
             />
-            <Field name="email" label="Email" type="email" autoComplete="email" />
+            <Field
+              name="email"
+              label="Email"
+              type="email"
+              required
+              autoComplete="email"
+              hint="Your order confirmation is sent here."
+            />
           </div>
         </section>
 

@@ -73,3 +73,40 @@ export async function getSetting<T>(key: string, fallback: T): Promise<T> {
   const rows = await tryAll<{ value: string }>(`SELECT value FROM settings WHERE key = ?`, [key]);
   return rows.length ? safeJson<T>(rows[0].value, fallback) : fallback;
 }
+
+/**
+ * Who order emails come from and who hears about new orders. Kept in D1 with
+ * the rest of the settings and edited under Settings → Order emails.
+ *
+ * `fromEmail` has to be a sender verified in the Brevo account — Brevo refuses
+ * anything else. `notify` is a comma-separated list, because "the shop" is
+ * often more than one inbox.
+ */
+export interface OrderEmails {
+  fromName: string;
+  fromEmail: string;
+  /** Send the customer a confirmation, when they gave an email at checkout. */
+  customer: boolean;
+  /** Send a new-order alert to `notify`. */
+  admin: boolean;
+  notify: string;
+}
+
+export const ORDER_EMAILS_DEFAULTS: OrderEmails = {
+  fromName: "",
+  fromEmail: "",
+  customer: true,
+  admin: true,
+  notify: "",
+};
+
+export async function getOrderEmails(): Promise<OrderEmails> {
+  return { ...ORDER_EMAILS_DEFAULTS, ...(await getSetting<Partial<OrderEmails>>("order_emails", {})) };
+}
+
+/** The `notify` list, split and checked. */
+export const notifyList = (s: OrderEmails) =>
+  s.notify
+    .split(/[,;\s]+/)
+    .map((e) => e.trim())
+    .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e));
