@@ -6,6 +6,7 @@ import Badge from "@/components/product/Badge";
 import StrapStudio from "@/components/strap/StrapStudio";
 import AddToCart from "@/components/cart/AddToCart";
 import ProductCard from "@/components/product/ProductCard";
+import StickyBuy from "@/components/product/StickyBuy";
 import Gallery from "@/components/product/Gallery";
 import { getProduct, getStorefrontProduct, listStorefrontProducts } from "@/lib/store/products";
 import { getStrap, strapSetsFor } from "@/lib/store/straps";
@@ -15,6 +16,7 @@ import { usd } from "@/lib/format";
 import { studioLabels } from "@/lib/content/studio";
 export { dynamic } from "@/lib/runtime";
 import { COMMERCE_ENABLED } from "@/lib/runtime";
+import ScrollList from "@/components/motion/ScrollList";
 
 export async function generateStaticParams() {
   const products = await listStorefrontProducts();
@@ -69,6 +71,14 @@ export default async function ProductPage({
   const specs = product.specs?.length
     ? product.specs
     : list<{ label: string; value: string }>(copy, "specs");
+  const soldOut = product.availability === "sold-out";
+  const inquire = contact.whatsapp
+    ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(
+        str(copy, "whatsappMessage", "Hi — is the {name} ({sku}) available?")
+          .replace("{name}", product.name)
+          .replace("{sku}", product.sku),
+      )}`
+    : "";
   const related = products
     .filter((p) => p.family === product.family && p.slug !== product.slug)
     .slice(0, 4);
@@ -77,11 +87,11 @@ export default async function ProductPage({
     <div className="pt-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <nav className="text-[12px] text-mute-2">
-          <Link href="/" className="hover:text-chalk">
+          <Link href="/" className="hit hover:text-chalk">
             {str(copy, "homeLabel", "Home")}
           </Link>
           <span className="px-2">/</span>
-          <Link href="/products" className="hover:text-chalk">
+          <Link href="/products" className="hit hover:text-chalk">
             {str(copy, "catalogueLabel", "Catalogue")}
           </Link>
           <span className="px-2">/</span>
@@ -116,32 +126,36 @@ export default async function ProductPage({
 
             <p className="mt-6 text-[15px] leading-relaxed text-mute">{product.description}</p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {COMMERCE_ENABLED && (
-                <AddToCart
-                  kind="watch"
-                  refId={product.slug}
-                  label={str(copy, "buyLabel", "Add to bag")}
-                  addedLabel={str(copy, "addedLabel", "Added to bag")}
-                  soldOut={product.availability === "sold-out"}
-                  soldOutLabel={str(copy, "soldOutLabel", "Sold out")}
-                  /* Straight on to the straps that fit it. Nothing happens
-                     when this watch has none — the section is not rendered. */
-                  scrollTo="strap-studio"
-                />
+            {/* In stock: the bag, and nothing competing with it. Out of stock:
+                says so, and the way to ask about the next one is WhatsApp. */}
+            <div id="buy-inline" className="mt-8 flex flex-wrap items-center gap-3">
+              {soldOut ? (
+                <>
+                  <p className="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 font-display text-[13px] font-semibold uppercase tracking-[0.14em] text-mute">
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-mute-2" />
+                    Out of stock
+                  </p>
+                  {inquire && (
+                    <a
+                      href={inquire}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full bg-chalk px-7 py-3.5 text-sm font-semibold text-ink transition-colors hover:bg-gold-soft"
+                    >
+                      Inquire on WhatsApp
+                    </a>
+                  )}
+                </>
+              ) : (
+                COMMERCE_ENABLED && (
+                  <AddToCart
+                    kind="watch"
+                    refId={product.slug}
+                    label={str(copy, "buyLabel", "Add to bag")}
+                    addedLabel={str(copy, "addedLabel", "Added to bag")}
+                  />
+                )
               )}
-              <a
-                href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(
-                  str(copy, "whatsappMessage", "Hi — is the {name} ({sku}) available?")
-                    .replace("{name}", product.name)
-                    .replace("{sku}", product.sku),
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-chalk transition-colors hover:border-gold hover:text-gold"
-              >
-                {str(copy, "whatsappLabel", "Ask on WhatsApp")}
-              </a>
             </div>
 
             {footerNote && <p className="mt-5 text-[12px] text-mute-2">{footerNote}</p>}
@@ -151,7 +165,7 @@ export default async function ProductPage({
                 {str(copy, "specsHeading") && (
                   <p className="eyebrow mb-5">{str(copy, "specsHeading")}</p>
                 )}
-                <dl className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <dl className="pop-stagger grid grid-cols-2 gap-x-6 gap-y-4">
                   {specs.map((spec) => (
                     <div key={spec.label}>
                       <dt className="text-[11px] uppercase tracking-[0.12em] text-mute-2">
@@ -190,6 +204,21 @@ export default async function ProductPage({
         </section>
       )}
 
+      {COMMERCE_ENABLED && (
+        <StickyBuy
+          slug={product.slug}
+          name={product.name}
+          price={product.price}
+          image={product.images.front}
+          label={str(copy, "buyLabel", "Add to bag")}
+          addedLabel={str(copy, "addedLabel", "Added to bag")}
+          soldOut={soldOut}
+          soldOutLabel="Out of stock"
+          inquire={inquire}
+          watch={["buy-inline", "strap-studio"]}
+        />
+      )}
+
       {related.length > 0 && (
         <section className="py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
@@ -199,11 +228,11 @@ export default async function ProductPage({
                 product.familyLabel,
               )}
             </p>
-            <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-4">
+            <ScrollList className="mt-8 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-4">
               {related.map((p) => (
                 <ProductCard key={p.slug} product={p} />
               ))}
-            </div>
+            </ScrollList>
           </div>
         </section>
       )}

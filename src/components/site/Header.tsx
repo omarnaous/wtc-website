@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Logo from "./Logo";
+import Search from "./Search";
 import CartButton from "@/components/cart/CartButton";
-import { cx } from "@/lib/format";
+import { scrollTo } from "@/lib/scroll";
 
 export interface NavLink {
   label: string;
@@ -20,8 +22,6 @@ export default function Header({
   nav,
   ctaLabel,
   ctaHref,
-  shopLabel,
-  shopHref,
   whatsapp,
   brand,
   commerce = true,
@@ -29,35 +29,33 @@ export default function Header({
   nav: NavLink[];
   ctaLabel: string;
   ctaHref: string;
-  shopLabel: string;
-  shopHref: string;
+  /** Kept for the dashboard's Header section; the bar shows a search instead. */
+  shopLabel?: string;
+  shopHref?: string;
   whatsapp: string;
   brand: { name: string; tagline: string; logo: string };
   /** False in the static export, which has no server to price a bag. */
   commerce?: boolean;
 }) {
-  const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
-  // Spring it so the line eases rather than tracking the wheel one-to-one.
-  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 26, mass: 0.4 });
 
-  useEffect(() => {
-    // Read once per frame rather than once per scroll event: the handler only
-    // flips a boolean, but on a phone the event fires far faster than paint.
-    let queued = false;
-    const onScroll = () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
-        setSolid(window.scrollY > 24);
-      });
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // The logo and the name always go home, to the top of the hero. On the
+  // homepage that is a scroll back up; anywhere else, a navigation that
+  // lands at the top rather than wherever the router last left it.
+  const router = useRouter();
+  const onLogo = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    setOpen(false);
+    if (location.pathname === "/") {
+      scrollTo(0);
+      if (location.hash) history.replaceState(history.state, "", "/");
+      return;
+    }
+    router.push("/");
+    // After the new page has drawn.
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }), 60);
+  };
 
   // Escape closes the menu, and so does growing past the breakpoint that hides
   // the toggle — otherwise the panel is left open and unreachable.
@@ -74,25 +72,41 @@ export default function Header({
     };
   }, [open]);
 
+  // The menu covers the page, so the page must not scroll under it — on iOS a
+  // swipe on the panel otherwise scrolls the document behind. Focus goes to
+  // the first link on open and back to the toggle on close.
+  const toggle = useRef<HTMLButtonElement>(null);
+  const firstLink = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const root = document.documentElement;
+    const prev = root.style.overflow;
+    root.style.overflow = "hidden";
+    const id = requestAnimationFrame(() => firstLink.current?.focus({ preventScroll: true }));
+    const btn = toggle.current;
+    return () => {
+      root.style.overflow = prev;
+      cancelAnimationFrame(id);
+      btn?.focus({ preventScroll: true });
+    };
+  }, [open]);
+
   // An empty link falls back to WhatsApp, which is how most people reach WTC.
   const cta = ctaHref || (whatsapp ? `https://wa.me/${whatsapp}` : "");
   const external = cta.startsWith("http");
 
   return (
-    <header
-      className={cx(
-        "fixed inset-x-0 top-0 z-50 transition-colors duration-500",
-        solid ? "border-b border-line bg-ink/85 backdrop-blur-xl" : "border-b border-transparent",
-      )}
-    >
-      <motion.div
-        aria-hidden
-        style={{ scaleX: progress }}
-        className="absolute inset-x-0 bottom-0 h-px origin-left bg-gold/70"
-      />
+    /* Always on screen and always solid. It used to be clear over the hero
+       and blurred once scrolled — a live backdrop blur under a fixed bar is
+       re-rendered on every frame of scroll, which on a phone is most of what
+       made the page feel heavy. A near-opaque fill looks the same. */
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-ink/95">
+      {/* Reading progress, driven by the browser's scroll timeline — no
+          JavaScript runs while scrolling. */}
+      <div aria-hidden className="scroll-progress absolute inset-x-0 bottom-0 h-px origin-left bg-gold/70" />
 
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-10">
-        <Link href="/" aria-label={`${brand.name} home`}>
+        <Link href="/" onClick={onLogo} aria-label={`${brand.name} home`} className="flex min-h-11 items-center">
           <Logo logo={brand.logo} name={brand.name} tagline={brand.tagline} />
         </Link>
 
@@ -108,7 +122,7 @@ export default function Header({
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {ctaLabel && cta && (
             <a
               href={cta}
@@ -118,30 +132,32 @@ export default function Header({
               {ctaLabel}
             </a>
           )}
+          <Search />
           {commerce && <CartButton />}
-          {shopLabel && (
-            <Link
-              href={shopHref || "/products"}
-              className="rounded-full bg-chalk px-4 py-2 text-[12px] font-semibold text-ink transition-opacity hover:opacity-85"
-            >
-              {shopLabel}
-            </Link>
-          )}
           <button
+            ref={toggle}
             onClick={() => setOpen((v) => !v)}
             /* -mr-2.5 keeps the bars optically aligned with the row while the
                tappable box reaches the 44px minimum. */
             className="-mr-2.5 flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-menu"
           >
+            {/* Three lines; open, the middle one fades and the outer two
+                cross. 6px apart, so each outer line travels 7px to meet. */}
             <motion.span
-              animate={open ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
+              animate={open ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="block h-px w-6 origin-center bg-chalk"
             />
             <motion.span
-              animate={open ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
+              animate={open ? { opacity: 0, scaleX: 0.4 } : { opacity: 1, scaleX: 1 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="block h-px w-6 origin-center bg-chalk"
+            />
+            <motion.span
+              animate={open ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="block h-px w-6 origin-center bg-chalk"
             />
@@ -149,39 +165,73 @@ export default function Header({
         </div>
       </div>
 
-      <AnimatePresence initial={false}>
+      {/* ── Mobile menu ─────────────────────────────────────────────────
+          Full screen rather than a strip under the bar: a dropdown of 14px
+          links over a page that showed through underneath read as unfinished,
+          and its targets were the smallest on the site. Large type, one link
+          per row, a backdrop that owns the screen, and the page held still. */}
+      <AnimatePresence>
         {open && (
-          <motion.nav
-            key="mobile-nav"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+          <motion.div
+            key="mobile-menu"
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.18 } }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden border-t border-line bg-ink md:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto overscroll-contain border-t border-line bg-ink md:hidden"
           >
-            <div className="px-4 pb-5 pt-3">
-              {nav.map((n) => (
-                <Link
-                  key={`${n.href}-${n.label}`}
-                  href={n.href}
-                  onClick={() => setOpen(false)}
-                  className="block py-2.5 text-sm text-mute transition-colors hover:text-chalk"
-                >
-                  {n.label}
-                </Link>
-              ))}
-              {ctaLabel && cta && (
-                <a
-                  href={cta}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  onClick={() => setOpen(false)}
-                  className="mt-2 block border-t border-line pt-4 text-sm text-gold sm:hidden"
-                >
-                  {ctaLabel}
-                </a>
-              )}
-            </div>
-          </motion.nav>
+            <nav className="flex min-h-full flex-col px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-6">
+              <ul>
+                {nav.map((n, i) => (
+                  <motion.li
+                    key={`${n.href}-${n.label}`}
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.04 + i * 0.05, duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                    className="border-b border-line/70"
+                  >
+                    <Link
+                      ref={i === 0 ? firstLink : undefined}
+                      href={n.href}
+                      onClick={() => setOpen(false)}
+                      className="group flex items-center justify-between py-4 font-display text-[1.75rem] font-semibold tracking-[-0.02em] text-chalk transition-colors active:text-gold"
+                    >
+                      {n.label}
+                      <span
+                        aria-hidden
+                        className="text-lg text-mute-2 transition-transform duration-300 group-active:translate-x-1"
+                      >
+                        →
+                      </span>
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.06 + nav.length * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-auto pt-10"
+              >
+                {ctaLabel && cta && (
+                  <a
+                    href={cta}
+                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    onClick={() => setOpen(false)}
+                    className="flex h-12 items-center justify-center rounded-full border border-gold/50 text-sm font-semibold text-gold"
+                  >
+                    {ctaLabel}
+                  </a>
+                )}
+                <p className="mt-5 text-center text-[12px] text-mute-2">{brand.tagline}</p>
+              </motion.div>
+            </nav>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>

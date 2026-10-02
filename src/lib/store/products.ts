@@ -2,6 +2,7 @@ import { tryAll } from "@/lib/db/sql";
 import { FAMILY_LABEL, MAX_PHOTOS } from "@/lib/products/constants";
 import type { Availability, ColorGroup, CollectionId, Family, Palette, Product } from "@/data/types";
 import { safeJson, bool } from "./json";
+import { memo } from "./memo";
 
 export { MAX_PHOTOS };
 
@@ -131,11 +132,14 @@ const SELECT = `
     LEFT JOIN inventory i ON i.product_slug = p.slug`;
 
 /** Everything the shop sells — drafts and archived pieces excluded. */
-export async function listProducts(): Promise<AdminProduct[]> {
-  const rows = await tryAll<ProductRow & StockRow>(
-    `${SELECT} WHERE p.status = 'active' ORDER BY p.position, p.name`,
-  );
-  return rows.map(rowToProduct);
+export function listProducts(): Promise<AdminProduct[]> {
+  // Every storefront page reads this; kept for half a minute per isolate.
+  return memo("products", 30_000, async () => {
+    const rows = await tryAll<ProductRow & StockRow>(
+      `${SELECT} WHERE p.status = 'active' ORDER BY p.position, p.name`,
+    );
+    return rows.map(rowToProduct);
+  });
 }
 
 /** Whether there is a catalogue at all — the dashboard's empty state turns on it. */

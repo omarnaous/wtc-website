@@ -32,6 +32,18 @@ export default function ScrollReelSection({
   const player = useRef<PlayerRef>(null);
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
   const [reduced, setReduced] = useState(false);
+  // Mounted only once the section is close: it sits far down the homepage,
+  // and building it on arrival slowed every navigation to the homepage.
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = section.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), {
+      rootMargin: "100% 0px",
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: section,
@@ -59,9 +71,14 @@ export default function ScrollReelSection({
     return () => ro.disconnect();
   }, []);
 
+  // Seek only when the frame actually changes: the scroll reports far more
+  // often than there are frames, and every seek re-renders the composition.
+  const last = useRef(-1);
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const frame = Math.round(v * (frames - 1));
-    player.current?.seekTo(Math.min(frames - 1, Math.max(0, frame)));
+    const frame = Math.min(frames - 1, Math.max(0, Math.round(v * (frames - 1))));
+    if (frame === last.current) return;
+    last.current = frame;
+    player.current?.seekTo(frame);
   });
 
   return (
@@ -72,7 +89,7 @@ export default function ScrollReelSection({
       style={{ height: `${height}svh` }}
     >
       <div ref={stage} className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
-        {size && !reduced && (
+        {size && near && !reduced && (
           <Player
             ref={player}
             component={Reel}
@@ -87,6 +104,7 @@ export default function ScrollReelSection({
             doubleClickToFullscreen={false}
             spaceKeyToPlayOrPause={false}
             acknowledgeRemotionLicense
+                  numberOfSharedAudioTags={0}
           />
         )}
 

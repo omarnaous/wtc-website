@@ -14,16 +14,23 @@ export default async function ReviewsPage() {
     listAllProducts(),
   ]);
   const names = new Map(products.map((p) => [p.slug, p.name]));
+  // Written on the site and not yet published: these lead the list.
+  const waiting = (r: (typeof reviews)[number]) => r.source === "website" && r.status === "hidden";
+  const pending = reviews.filter(waiting).length;
+  const ordered = [...reviews.filter(waiting), ...reviews.filter((r) => !waiting(r))];
 
   return (
     <>
       <PageHeader
         title="Customer reviews"
-        subtitle={
+        subtitle={[
           summary.count
             ? `${summary.count} published · ${summary.average.toFixed(1)} average`
-            : "Nothing published yet."
-        }
+            : "Nothing published yet.",
+          pending ? `${pending} written on the site, waiting for you to publish` : "",
+        ]
+          .filter(Boolean)
+          .join(" · ")}
         actions={<LinkButton href="/admin/reviews/new" tone="primary">Add a review</LinkButton>}
       />
 
@@ -36,14 +43,14 @@ export default async function ReviewsPage() {
             </LinkButton>
           }
         >
-          The section is built and sits on the homepage between the Strap Studio and Instagram — it
-          stays hidden until there is something real to put in it. Add what customers have actually
-          told you on Instagram or WhatsApp; nothing has been made up to fill it.
+          Customers can write one from the Reviews section on the homepage; each lands here,
+          hidden, for you to read and publish. You can also add what customers have told you on
+          Instagram or WhatsApp. Nothing has been made up to fill it.
         </Empty>
       ) : (
         <Card bodyClassName="p-0">
           <ul className="divide-y divide-[var(--admin-line-soft)]">
-            {reviews.map((r) => (
+            {ordered.map((r) => (
               <li key={r.id}>
                 <Link
                   href={`/admin/reviews/${r.id}`}
@@ -69,7 +76,11 @@ export default async function ReviewsPage() {
                       {r.reviewed_on && ` · ${shortDate(r.reviewed_on)}`}
                     </span>
                   </span>
-                  {r.status === "hidden" && <Pill tone="grey">Hidden</Pill>}
+                  {waiting(r) ? (
+                    <Pill tone="amber">New · publish to show</Pill>
+                  ) : (
+                    r.status === "hidden" && <Pill tone="grey">Hidden</Pill>
+                  )}
                 </Link>
               </li>
             ))}

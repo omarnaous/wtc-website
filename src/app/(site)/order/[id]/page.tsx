@@ -1,3 +1,4 @@
+import OrderSealPlayer from "@/components/order/OrderSealPlayer";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,6 +7,7 @@ import { getOrder } from "@/lib/store/orders";
 import { getSection, list, str } from "@/lib/store/content";
 import { getSettings } from "@/lib/store/settings";
 import { usd } from "@/lib/format";
+import { thumb } from "@/lib/thumb";
 export { dynamic } from "@/lib/runtime";
 
 export const metadata: Metadata = {
@@ -36,7 +38,8 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="mx-auto max-w-3xl px-4 pb-28 pt-32 sm:px-6">
-      <p className="eyebrow">{str(copy, "eyebrow")}</p>
+      <OrderSealPlayer />
+      <p className="eyebrow mt-6">{str(copy, "eyebrow")}</p>
       <h1 className="mt-4 font-display text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.04] tracking-[-0.03em]">
         {str(copy, "title")}
       </h1>
@@ -62,7 +65,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
             <li key={item.id} className="flex items-center gap-4 px-5 py-4">
               <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
                 {item.image && (
-                  <Image src={item.image} alt="" fill sizes="56px" className="object-contain p-1" />
+                  <Image src={thumb(item.image)} alt="" fill sizes="56px" className="object-contain p-1" />
                 )}
               </span>
               <span className="min-w-0 flex-1">
@@ -116,7 +119,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
             <ol className="mt-3 space-y-3">
               {steps.map((s, i) => (
                 <li key={i} className="flex gap-3 text-[13px]">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-line text-[10px] text-mute">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-line text-[11px] text-mute">
                     {i + 1}
                   </span>
                   <span>

@@ -38,7 +38,7 @@ export default async function Footer() {
   return (
     <footer id="about" className="relative border-t border-line bg-ink-2">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-10">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="reveal-stagger grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Logo logo={brand.logo} name={brand.name} tagline={brand.tagline} />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-mute">
@@ -49,7 +49,7 @@ export default async function Footer() {
                 href={social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-[12px] text-mute transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 py-2 text-[12px] text-mute transition-colors hover:border-gold hover:text-gold"
               >
                 <Instagram />
                 {social.instagramHandle}
@@ -58,7 +58,7 @@ export default async function Footer() {
                 href={`https://wa.me/${contact.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-[12px] text-mute transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 py-2 text-[12px] text-mute transition-colors hover:border-gold hover:text-gold"
               >
                 <WhatsApp />
                 WhatsApp
@@ -73,7 +73,7 @@ export default async function Footer() {
                 (c.count ?? 0) === 0 ? (
                   <li key={c.id} className="flex items-center gap-2 text-sm text-mute-2">
                     {c.name}
-                    <span className="text-[10px] uppercase tracking-[0.12em]">
+                    <span className="text-[11px] uppercase tracking-[0.12em]">
                       {str(footer, "soonLabel", "soon")}
                     </span>
                   </li>
@@ -81,7 +81,7 @@ export default async function Footer() {
                   <li key={c.id}>
                     <Link
                       href={`/products?collection=${c.id}`}
-                      className="text-sm text-mute transition-colors hover:text-chalk"
+                      className="hit text-sm text-mute transition-colors hover:text-chalk"
                     >
                       {c.name}
                     </Link>
@@ -89,7 +89,7 @@ export default async function Footer() {
                 )
               )}
               <li>
-                <Link href="/products" className="text-sm text-mute transition-colors hover:text-chalk">
+                <Link href="/products" className="hit text-sm text-mute transition-colors hover:text-chalk">
                   {str(footer, "allLabel", "All references")}
                 </Link>
               </li>
@@ -103,7 +103,7 @@ export default async function Footer() {
                 <li key={p.slug}>
                   <Link
                     href={`/policies/${p.slug}`}
-                    className="text-sm text-mute transition-colors hover:text-chalk"
+                    className="hit text-sm text-mute transition-colors hover:text-chalk"
                   >
                     {p.title}
                   </Link>
@@ -115,11 +115,15 @@ export default async function Footer() {
           <div>
             <h3 className="eyebrow">{str(footer, "contactHeading", "Get in touch")}</h3>
             <ul className="mt-5 space-y-2.5 text-sm text-mute">
-              <li>
-                <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="hover:text-chalk">
-                  {contact.phone}
-                </a>
-              </li>
+              {/* The number the design shipped with is a placeholder; a tel:
+                  link to it rings nobody, so it is not shown until replaced. */}
+              {!/^\+?961\s*0{2}\s*0{3}\s*0{3}$/.test(contact.phone.replace(/\s+/g, " ")) && (
+                <li>
+                  <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="hit hover:text-chalk">
+                    {contact.phone}
+                  </a>
+                </li>
+              )}
               <li className="pt-1 text-mute-2">{brand.location}</li>
             </ul>
           </div>

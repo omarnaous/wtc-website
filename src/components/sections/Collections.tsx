@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import type { AdminCollection } from "@/lib/store/collections";
+import { thumb } from "@/lib/thumb";
+import ScrollList from "@/components/motion/ScrollList";
 
 export interface CollectionTile extends AdminCollection {
   /** Resolved here rather than in the tile so the client gets one flat prop. */
@@ -30,15 +31,15 @@ export default function Collections({
   upcomingMessage: string;
 }) {
   return (
-    <div className="grid gap-5 sm:grid-cols-2">
-      {collections.map((c, i) => {
+    <ScrollList className="grid gap-5 sm:grid-cols-2">
+      {collections.map((c) => {
         const count = c.count ?? 0;
         // "auto" is the old rule — empty means not open yet. The other two say
         // so outright, for a collection that is stocked but not launched, or
         // one that is empty on purpose and should still open.
         const upcoming =
           c.state === "upcoming" ? true : c.state === "open" ? false : count === 0;
-        const hero = c.heroImage;
+        const hero = c.heroImage && thumb(c.heroImage);
 
         const inner = (
           <>
@@ -56,7 +57,7 @@ export default function Collections({
                 alt=""
                 width={320}
                 height={320}
-                className="pointer-events-none absolute -right-6 top-1/2 w-44 -translate-y-1/2 object-contain transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-[54%] group-hover:scale-105 sm:w-52"
+                className="drift pointer-events-none absolute -right-6 top-1/2 w-44 -translate-y-1/2 object-contain transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-[54%] group-hover:scale-105 sm:w-52"
               />
             ) : (
               c.monogram && (
@@ -100,19 +101,7 @@ export default function Collections({
           "group relative flex min-h-[15rem] flex-col justify-end overflow-hidden rounded-3xl border border-line bevel bg-[radial-gradient(ellipse_at_20%_20%,#17171c_0%,#111114_60%,#0c0c0f_100%)] p-7 transition-colors hover:border-mute-2";
 
         return (
-          <motion.div
-            key={c.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{
-              duration: 0.5,
-              // Capped: an unbounded stagger means the ninth tile waits two
-              // thirds of a second after you have already scrolled past it.
-              delay: Math.min(i, 5) * 0.07,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-          >
+          <div key={c.id}>
             {upcoming ? (
               <a
                 href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
@@ -129,9 +118,9 @@ export default function Collections({
                 {inner}
               </Link>
             )}
-          </motion.div>
+          </div>
         );
       })}
-    </div>
+    </ScrollList>
   );
 }

@@ -25,6 +25,18 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
           rel="stylesheet"
         />
+        {/* A page opens at its top. Reloading, or reopening a tab, used to
+            restore the old position — or jump to a #section left in the
+            address — so the homepage opened on the Strap Studio. Runs before
+            the body is parsed, so there is no jump to undo. Moving to a
+            section from a link on the site still works: those are handled
+            after load. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{history.scrollRestoration='manual';if(location.hash){history.replaceState(history.state,'',location.pathname+location.search)}}catch(e){}",
+          }}
+        />
       </head>
       <body className="min-h-screen antialiased">{children}</body>
     </html>

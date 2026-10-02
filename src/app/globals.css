@@ -99,6 +99,229 @@
   }
 }
 
+/* ── Reveal on scroll ───────────────────────────────────────────────────────
+   Driven by the browser's own scroll timeline, not by JavaScript. The old
+   reveals shipped every card at opacity 0 and waited for the bundle to fade
+   them in — on a slow phone the catalogue was a blank page for seconds, and
+   with a script error it stayed blank. Here the markup is visible as served;
+   browsers that support scroll-driven animation add the motion on top, the
+   rest simply show the content. Reduced motion gets nothing. */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      /* Plays while it rises into the middle of the screen, where it is
+         seen — not in the strip along the bottom edge before you get there. */
+      animation-range: entry 20% cover 45%;
+    }
+    /* Neighbours in a row land a beat apart instead of as one block. */
+    .reveal-stagger > * {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+    .reveal-stagger > *:nth-child(4n + 2) {
+      animation-range: entry 30% cover 48%;
+    }
+    .reveal-stagger > *:nth-child(4n + 3) {
+      animation-range: entry 40% cover 51%;
+    }
+    .reveal-stagger > *:nth-child(4n + 4) {
+      animation-range: entry 50% cover 54%;
+    }
+  }
+}
+
+/* ── More scroll-driven motion ──────────────────────────────────────────────
+   All of it on the browser's scroll timeline and all of it transform and
+   opacity, so it runs on the compositor: the page scrolls at full rate
+   however much is moving. Browsers without scroll timelines see the page
+   still; reduced motion sees it still. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes hero-copy-out {
+  to {
+    opacity: 0;
+    transform: translateY(-14%);
+  }
+}
+@keyframes hero-film-out {
+  to {
+    opacity: 0.25;
+    transform: scale(1.1);
+  }
+}
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes drift {
+  from {
+    transform: translateY(14%) rotate(-4deg);
+  }
+  to {
+    transform: translateY(-14%) rotate(3deg);
+  }
+}
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+/* A card that pops up into place: rises, grows and settles with a touch of
+   overshoot, all inside its own entry into the screen. */
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: translateY(44px) scale(0.86);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The footer clears the product page's buy bar. */
+body:has(.sticky-buy) footer {
+  padding-bottom: 5.5rem;
+}
+
+/* The reading line under the header: hidden where it cannot be driven. */
+.scroll-progress {
+  transform: scaleX(0);
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: grow-x linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* The hero hands over to the page: the copy lifts away and the film
+       pushes in and dims as it scrolls off the top. */
+    .hero-copy {
+      animation: hero-copy-out linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 80%;
+    }
+    .hero-film {
+      animation: hero-film-out linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+    /* Large pieces — the Strap Studio's stage — rise and settle in. */
+    .reveal-scale {
+      animation: reveal-scale linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+    /* Watches that float past at their own pace as their card goes by. */
+    .drift {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    /* Cards and tiles pop up as they arrive; in a grid, neighbours land a
+       beat apart. */
+    .pop,
+    .pop-stagger > * {
+      animation: pop linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+    .pop-stagger > *:nth-child(4n + 2) {
+      animation-range: entry 30% cover 48%;
+    }
+    .pop-stagger > *:nth-child(4n + 3) {
+      animation-range: entry 40% cover 51%;
+    }
+    .pop-stagger > *:nth-child(4n + 4) {
+      animation-range: entry 50% cover 54%;
+    }
+    /* Section headings slide in from the margin. */
+    .reveal-left > * {
+      animation: slide-in-left linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 42%;
+    }
+    .reveal-left > *:nth-child(2) {
+      animation-range: entry 45% cover 46%;
+    }
+    .reveal-left > *:nth-child(3) {
+      animation-range: entry 60% cover 50%;
+    }
+  }
+}
+
+/* ── Touch ─────────────────────────────────────────────────────────────────
+   iOS Safari zooms the page into any field set under 16px the moment it is
+   tapped, and leaves it zoomed. Every storefront field was 12–14px. On a
+   touch screen they are all 16px; a mouse keeps the tighter desktop sizes. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: max(16px, 1em) !important;
+  }
+}
+
+/* A 44px hit area on a link that should still look like small text. The
+   negative margin keeps the visual rhythm; only the tappable box grows. */
+.hit {
+  display: inline-flex;
+  align-items: center;
+}
+@media (pointer: coarse) {
+  .hit {
+    min-height: 44px;
+  }
+}
+
 /* Horizontal rails: hide the bar, keep the scroll. */
 .no-bar {
   scrollbar-width: none;

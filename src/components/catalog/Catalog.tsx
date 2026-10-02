@@ -16,8 +16,9 @@ import type {
   Family,
   Product,
 } from "@/data/types";
-import { EMPTY, SORTS, activeCount, apply, type FilterState, type Sort } from "@/lib/filters";
+import { EMPTY, activeCount, apply, type FilterState } from "@/lib/filters";
 import { cx, usd } from "@/lib/format";
+import ScrollList from "@/components/motion/ScrollList";
 
 const PRICE_STOPS = [500, 700, 950] as const;
 const AVAILABILITIES: Availability[] = ["in-stock", "low-stock", "pre-order"];
@@ -73,6 +74,7 @@ export default function Catalog({
   copy,
   initialFamily,
   initialCollection,
+  initialQuery,
   limit,
 }: {
   /** Always passed in from the shop — there is no shipped catalogue to fall
@@ -85,11 +87,14 @@ export default function Catalog({
   copy?: Partial<CatalogCopy>;
   initialFamily?: Family;
   initialCollection?: CollectionId;
+  /** From the header search's "See all results". */
+  initialQuery?: string;
   limit?: number;
 }) {
   const t = { ...COPY, ...copy };
   const [f, setF] = useState<FilterState>({
     ...EMPTY,
+    query: initialQuery ?? "",
     collections: initialCollection ? [initialCollection] : [],
     families: initialFamily ? [initialFamily] : [],
   });
@@ -108,17 +113,20 @@ export default function Catalog({
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative min-w-[13rem] flex-1">
           <input
+            type="search"
+            enterKeyHint="search"
+            aria-label={t.searchPlaceholder || "Search the catalogue"}
             value={f.query}
             onChange={(e) => setF({ ...f, query: e.target.value })}
             placeholder={t.searchPlaceholder}
-            className="w-full rounded-full border border-line bg-surface/60 px-5 py-2.5 text-sm text-chalk placeholder:text-mute-2 focus:border-mute-2 focus:outline-none"
+            className="min-h-11 w-full rounded-full border border-line bg-surface/60 px-5 py-2.5 text-sm text-chalk placeholder:text-mute-2 focus:border-mute-2 focus:outline-none"
           />
         </div>
 
         <button
           onClick={() => setOpen((v) => !v)}
           className={cx(
-            "rounded-full border px-4 py-2.5 text-[12px] font-medium transition-colors",
+            "min-h-11 rounded-full border px-4 py-2.5 text-[12px] font-medium transition-colors",
             n ? "border-gold text-gold" : "border-line text-mute hover:text-chalk"
           )}
           aria-expanded={open}
@@ -126,21 +134,6 @@ export default function Catalog({
           Filters{n ? ` · ${n}` : ""}
         </button>
 
-        <label className="sr-only" htmlFor="sort">
-          Sort
-        </label>
-        <select
-          id="sort"
-          value={f.sort}
-          onChange={(e) => setF({ ...f, sort: e.target.value as Sort })}
-          className="rounded-full border border-line bg-surface/60 px-4 py-2.5 text-[12px] text-chalk focus:outline-none"
-        >
-          {SORTS.map((s) => (
-            <option key={s.id} value={s.id} className="bg-surface">
-              {s.label}
-            </option>
-          ))}
-        </select>
       </div>
 
       <AnimatePresence initial={false}>
@@ -256,24 +249,17 @@ export default function Catalog({
       </p>
 
       {/* ── Grid ───────────────────────────────────────────────────────── */}
+      {/* A plain grid. Every card used to be a layout-animated motion element,
+          which had Framer measure all thirty of them on every render — on a
+          phone that alone made typing in the search box stutter. */}
       {results.length ? (
-        <motion.div
-          layout
-          className="mt-5 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 xl:grid-cols-4"
-        >
-          <AnimatePresence mode="popLayout">
-            {results.map((p, i) => (
-              <motion.div
-                key={p.slug}
-                layout="position"
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <ProductCard product={p} priority={i < 4} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <ScrollList className="mt-5 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 xl:grid-cols-4">
+          {results.map((p, i) => (
+            <div key={p.slug}>
+              <ProductCard product={p} priority={i < 4} />
+            </div>
+          ))}
+        </ScrollList>
       ) : (
         <div className="mt-10 rounded-2xl border border-dashed border-line p-12 text-center">
           <p className="font-display text-lg font-semibold">{t.emptyMessage}</p>

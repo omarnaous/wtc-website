@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
 import { HERO } from "./constants";
 
@@ -33,26 +34,55 @@ const STARS: Star[] = (() => {
 const DRIFT = [0.03, 0.07, 0.13]; // fraction of the width drifted per loop
 const q = (n: number) => Math.round(n * 1000) / 1000;
 
+/**
+ * Drawn once per size, then moved as three layers.
+ *
+ * It used to place and fade 240 circles individually on every frame, which
+ * is 240 SVG nodes for React to diff and the browser to repaint thirty times
+ * a second — in the hero and again in the scroll reel. Each layer is now one
+ * group, drawn twice side by side so it can wrap, and the frame only moves
+ * the three groups and breathes their opacity.
+ */
 export default function Starfield() {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
   const t = frame / HERO.durationInFrames; // 0 → 1 across the loop
 
+  const layers = useMemo(
+    () =>
+      [0, 1, 2].map((layer) => {
+        const stars = STARS.filter((s) => s.layer === layer);
+        const draw = (dx: number) =>
+          stars.map((s, i) => (
+            <circle
+              key={`${dx}-${i}`}
+              cx={q(s.x * width + dx)}
+              cy={q(s.y * height)}
+              r={q(s.r)}
+              fill={layer === 2 ? "#e2c469" : "#ffffff"}
+              opacity={q(s.o)}
+            />
+          ));
+        return (
+          <>
+            {draw(0)}
+            {draw(-width)}
+          </>
+        );
+      }),
+    [width, height],
+  );
+
   return (
     <svg width={width} height={height} style={{ position: "absolute", inset: 0 }}>
-      {STARS.map((s, i) => {
+      {layers.map((stars, layer) => {
         // Wrapping at 1 keeps the drift continuous across the loop point.
-        const x = ((s.x + t * DRIFT[s.layer]) % 1) * width;
-        const twinkle = 0.75 + 0.25 * Math.sin(t * Math.PI * 2 * 3 + s.phase);
+        const x = ((t * DRIFT[layer]) % 1) * width;
+        const twinkle = 0.8 + 0.2 * Math.sin(t * Math.PI * 2 * 3 + layer * 2.1);
         return (
-          <circle
-            key={i}
-            cx={q(x)}
-            cy={q(s.y * height)}
-            r={q(s.r)}
-            fill={s.layer === 2 ? "#e2c469" : "#ffffff"}
-            opacity={q(s.o * twinkle)}
-          />
+          <g key={layer} transform={`translate(${q(x)} 0)`} opacity={q(twinkle)}>
+            {stars}
+          </g>
         );
       })}
     </svg>

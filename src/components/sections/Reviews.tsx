@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useActionState, useEffect, useRef, useState } from "react";
 import type { Review } from "@/lib/reviews/constants";
+import { submitReview, type ReviewState } from "@/app/(site)/review-actions";
+import { cx } from "@/lib/format";
+import ScrollList from "@/components/motion/ScrollList";
 
 /** Five stars, `rating` of them filled. */
 function Stars({ rating, className }: { rating: number; className?: string }) {
@@ -25,11 +28,169 @@ function Stars({ rating, className }: { rating: number; className?: string }) {
   );
 }
 
+const field =
+  "w-full rounded-xl border border-line bg-ink/60 px-4 py-3 text-[14px] text-chalk placeholder:text-mute-2 focus:border-gold/60 focus:outline-none";
+
+/**
+ * The review form. What is sent is saved to the shop's database and lands in
+ * Dashboard → Reviews, hidden until someone publishes it.
+ */
+function ReviewForm({
+  productNames,
+  onClose,
+}: {
+  productNames: Record<string, string>;
+  onClose: () => void;
+}) {
+  const [state, action, pending] = useActionState<ReviewState, FormData>(submitReview, {});
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [opened] = useState(() => Date.now());
+  const first = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    first.current?.focus({ preventScroll: true });
+  }, []);
+
+  if (state.ok) {
+    return (
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-display text-lg font-semibold">Thank you — it is with us.</p>
+          <p className="mt-1.5 max-w-md text-[14px] leading-relaxed text-mute">
+            Your review shows here as soon as we have read it.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="h-11 shrink-0 rounded-full border border-line px-5 text-[13px] text-chalk transition-colors hover:border-gold hover:text-gold"
+        >
+          Close
+        </button>
+      </div>
+    );
+  }
+
+  const shown = hover || rating;
+  const names = Object.entries(productNames).sort((a, b) => a[1].localeCompare(b[1]));
+
+  return (
+    <form action={action} className="grid gap-4 sm:grid-cols-2">
+      <input type="hidden" name="rating" value={rating || ""} />
+      <input type="hidden" name="opened" value={opened} />
+      {/* Never shown; a bot that fills every field fills this one too. */}
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
+
+      <div className="sm:col-span-2">
+        <p id="rating-label" className="text-[12px] text-mute">Your rating</p>
+        <div
+          role="radiogroup"
+          aria-labelledby="rating-label"
+          className="mt-1.5 flex"
+          onMouseLeave={() => setHover(0)}
+        >
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              ref={n === 1 ? first : undefined}
+              type="button"
+              role="radio"
+              aria-checked={rating === n}
+              aria-label={`${n} star${n === 1 ? "" : "s"}`}
+              onClick={() => setRating(n)}
+              onMouseEnter={() => setHover(n)}
+              className="flex h-11 w-11 items-center justify-center text-gold transition-transform active:scale-90"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden
+                className={cx("h-7 w-7 transition-transform duration-200", n <= shown && "scale-110")}
+                fill={n <= shown ? "currentColor" : "none"}
+                stroke="currentColor"
+                strokeWidth="1.3"
+              >
+                <path d="m12 2.6 2.9 5.9 6.5.9-4.7 4.6 1.1 6.4-5.8-3-5.8 3 1.1-6.4L2.6 9.4l6.5-.9z" />
+              </svg>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <label className="block">
+        <span className="text-[12px] text-mute">Your name</span>
+        <input name="author" required maxLength={60} autoComplete="name" className={cx(field, "mt-1.5")} />
+      </label>
+      <label className="block">
+        <span className="text-[12px] text-mute">
+          Where you are <span className="text-mute-2">(optional)</span>
+        </span>
+        <input name="location" maxLength={60} placeholder="Beirut" className={cx(field, "mt-1.5")} />
+      </label>
+
+      {names.length > 0 && (
+        <label className="block sm:col-span-2">
+          <span className="text-[12px] text-mute">
+            Which watch <span className="text-mute-2">(optional)</span>
+          </span>
+          <select name="productSlug" defaultValue="" className={cx(field, "mt-1.5")}>
+            <option value="" className="bg-surface">
+              —
+            </option>
+            {names.map(([slug, name]) => (
+              <option key={slug} value={slug} className="bg-surface">
+                {name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+
+      <label className="block sm:col-span-2">
+        <span className="text-[12px] text-mute">Your review</span>
+        <textarea
+          name="body"
+          required
+          minLength={10}
+          maxLength={1200}
+          rows={4}
+          placeholder="How did it land? The watch, the strap, the delivery…"
+          className={cx(field, "mt-1.5 resize-y leading-relaxed")}
+        />
+      </label>
+
+      {state.error && (
+        <p role="alert" className="text-[13px] text-red-300 sm:col-span-2">
+          {state.error}
+        </p>
+      )}
+
+      <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
+        <button
+          type="submit"
+          disabled={pending}
+          className="h-12 rounded-full bg-chalk px-7 text-sm font-semibold text-ink transition-opacity hover:opacity-85 disabled:opacity-50"
+        >
+          {pending ? "Sending…" : "Post my review"}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="h-12 rounded-full px-4 text-[13px] text-mute transition-colors hover:text-chalk"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+}
+
 /**
  * Customer reviews.
  *
- * With nothing published the section still stands, but it asks for a review
- * rather than showing one. The one thing it will never do is fill itself with
+ * Anyone can write one here; it is saved to the shop and published from the
+ * dashboard. With nothing published the section still stands, but it asks
+ * for a review rather than showing one. The one thing it will never do is fill itself with
  * written-in quotes: a review is a sentence attributed to a named person, and
  * inventing those is inventing customers.
  */
@@ -42,8 +203,6 @@ export default function Reviews({
   copy,
   showRating,
   productNames,
-  whatsapp,
-  instagram,
   inviteTitle,
   inviteCopy,
   inviteCta,
@@ -57,7 +216,7 @@ export default function Reviews({
   showRating: boolean;
   /** slug → name, so a review can name the watch it is about. */
   productNames: Record<string, string>;
-  /** Digits only. Where the invitation sends people when nothing is published. */
+  /** No longer used — reviews are written on the site now, not sent by DM. */
   whatsapp?: string;
   instagram?: string;
   inviteTitle: string;
@@ -65,9 +224,25 @@ export default function Reviews({
   inviteCta: string;
 }) {
   const empty = reviews.length === 0;
-  const waHref = whatsapp
-    ? `https://wa.me/${whatsapp}?text=${encodeURIComponent("Hi WTC — here is how my watch landed:")}`
-    : instagram || "";
+  const [writing, setWriting] = useState(false);
+  const panel = useRef<HTMLDivElement>(null);
+
+  const openForm = () => {
+    setWriting(true);
+    requestAnimationFrame(() =>
+      panel.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }),
+    );
+  };
+
+  const formCard = (
+    <div
+      ref={panel}
+      className="mt-10 overflow-hidden rounded-3xl border border-gold/30 bevel bg-[radial-gradient(ellipse_at_20%_0%,#17171c_0%,#111114_60%,#0c0c0f_100%)] p-6 [animation:fade-in_220ms_ease-out] sm:p-8"
+    >
+      <p className="eyebrow mb-5">Write a review</p>
+      <ReviewForm productNames={productNames} onClose={() => setWriting(false)} />
+    </div>
+  );
 
   return (
     <section id="reviews" className="border-b border-line py-20 lg:py-28">
@@ -84,6 +259,16 @@ export default function Reviews({
             {copy && <p className="mt-4 max-w-md text-[15px] leading-relaxed text-mute">{copy}</p>}
           </div>
 
+          <div className="flex items-end gap-4">
+          {!empty && !writing && (
+            <button
+              type="button"
+              onClick={openForm}
+              className="h-11 rounded-full border border-line px-5 text-[13px] font-medium text-chalk transition-colors hover:border-gold hover:text-gold"
+            >
+              Write a review
+            </button>
+          )}
           {showRating && summary.count > 0 && (
             <div className="rounded-2xl border border-line bg-surface/40 px-5 py-4 text-right">
               <p className="font-display text-3xl font-semibold leading-none">
@@ -95,9 +280,12 @@ export default function Reviews({
               </p>
             </div>
           )}
+          </div>
         </div>
 
-        {empty ? (
+        {writing && formCard}
+
+        {empty && !writing ? (
           <div className="mt-10 overflow-hidden rounded-3xl border border-line bevel bg-[radial-gradient(ellipse_at_20%_0%,#17171c_0%,#111114_60%,#0c0c0f_100%)] p-8 sm:p-10">
             <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="max-w-lg">
@@ -105,33 +293,22 @@ export default function Reviews({
                 <p className="mt-4 font-display text-lg font-semibold sm:text-xl">{inviteTitle}</p>
                 <p className="mt-2 text-[14px] leading-relaxed text-mute">{inviteCopy}</p>
               </div>
-              {waHref && (
-                <a
-                  href={waHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="shrink-0 rounded-full bg-chalk px-6 py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
-                >
-                  {inviteCta}
-                </a>
-              )}
+              <button
+                type="button"
+                onClick={openForm}
+                className="h-12 shrink-0 rounded-full bg-chalk px-6 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
+              >
+                {inviteCta || "Write a review"}
+              </button>
             </div>
           </div>
-        ) : (
-          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((r, i) => {
+        ) : empty ? null : (
+          <ScrollList as="ul" className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((r) => {
               const watch = r.product_slug ? productNames[r.product_slug] : undefined;
               return (
-                <motion.li
+                <li
                   key={r.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{
-                    duration: 0.5,
-                    delay: Math.min(i, 5) * 0.06,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
                   className="flex flex-col rounded-3xl border border-line bevel bg-[radial-gradient(ellipse_at_20%_0%,#17171c_0%,#111114_60%,#0c0c0f_100%)] p-6"
                 >
                   <Stars rating={r.rating} className="text-gold" />
@@ -146,14 +323,14 @@ export default function Reviews({
                       {[r.location, watch].filter(Boolean).join(" · ")}
                     </p>
                   </footer>
-                </motion.li>
+                </li>
               );
             })}
-          </ul>
+          </ScrollList>
         )}
 
         <p className="mt-8 text-[12px] text-mute-2">
-          <Link href="/products" className="transition-colors hover:text-gold">
+          <Link href="/products" className="hit transition-colors hover:text-gold">
             Browse the catalogue →
           </Link>
         </p>

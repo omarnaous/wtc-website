@@ -1,7 +1,6 @@
 import { AbsoluteFill, Img, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import Starfield from "./Starfield";
 import { HERO } from "./constants";
-import { asset } from "@/lib/asset";
 
 /**
  * The hero film.
@@ -12,13 +11,12 @@ import { asset } from "@/lib/asset";
  * motion is periodic over HERO.durationInFrames so the loop has no seam.
  */
 
-/** Fallback cast, used when the film is rendered without input props. */
-const RAIL = [
-  "SO33W700", "SO33M100", "SO33R100", "SO33L103",
-  "SO33N700", "SO33G100", "SO33O100", "SO33J100",
-].map((sku) => asset(`/products/watches/${sku}_sa200.png`));
-
-const CENTREPIECE = asset("/products/watches/SO33W700_sa200.png");
+/*
+ * There is no built-in cast. The film used to fall back to a list of bundled
+ * packshots, and those files are gone — every photograph is an R2 object now —
+ * so a hero with no watches picked in the dashboard would have drawn broken
+ * images. Without a cast it simply draws the backdrop and the orbits.
+ */
 
 /**
  * Which watches appear, as image paths. Passed in by the host so the film
@@ -33,8 +31,10 @@ export interface HeroFilmProps {
  * Where the watch sits, and how big.
  *
  * Landscape pushes it right of centre so the headline column stays clear;
- * portrait lifts it into the top third for the same reason. Nothing is
- * cropped, so an off-centre focal point is safe at any size.
+ * portrait puts it in the top third, large — on a phone the watch is the
+ * reason anyone is on the page, and at 46% of the width it read as a
+ * thumbnail beside the eyebrow. HeroPlayer's poster sits on the same spot, so
+ * the film fades in over it without a jump.
  */
 function useStage() {
   const { width, height } = useVideoConfig();
@@ -45,8 +45,8 @@ function useStage() {
     height,
     portrait,
     fx: width * (portrait ? 0.5 : 0.66),
-    fy: height * (portrait ? 0.2 : 0.46),
-    size: min * (portrait ? 0.46 : 0.62),
+    fy: height * (portrait ? 0.27 : 0.46),
+    size: min * 0.62,
   };
 }
 
@@ -100,7 +100,7 @@ function Orbits() {
 }
 
 /** Watches drifting right-to-left behind the centrepiece. */
-function Rail({ rail = RAIL }: { rail?: string[] }) {
+function Rail({ rail = [] }: { rail?: string[] }) {
   const frame = useCurrentFrame();
   const { fx, fy, size, width, portrait } = useStage();
   const t = frame / HERO.durationInFrames;
@@ -140,7 +140,6 @@ function Rail({ rail = RAIL }: { rail?: string[] }) {
               objectFit: "contain",
               transform: `scale(${scale}) rotate(${spin}deg)`,
               opacity,
-              filter: portrait ? "saturate(0.9)" : "blur(1px) saturate(0.9)",
             }}
           />
         );
@@ -150,7 +149,7 @@ function Rail({ rail = RAIL }: { rail?: string[] }) {
 }
 
 /** The hero watch: breathing scale, a slow tilt, and a warm halo. */
-function Centrepiece({ centre = CENTREPIECE }: { centre?: string }) {
+function Centrepiece({ centre }: { centre?: string }) {
   const frame = useCurrentFrame();
   const { fx, fy, size } = useStage();
   const t = frame / HERO.durationInFrames;
@@ -178,6 +177,8 @@ function Centrepiece({ centre = CENTREPIECE }: { centre?: string }) {
   const scale = (0.94 + 0.06 * appear) * breathe;
   const halo = size * 1.45;
 
+  if (!centre) return null;
+
   return (
     <AbsoluteFill>
       <div
@@ -193,6 +194,23 @@ function Centrepiece({ centre = CENTREPIECE }: { centre?: string }) {
           opacity: appear,
         }}
       />
+      {/* A soft shadow under the watch. It was a drop-shadow filter on the
+          image, re-rendered on every frame because the image moves — the
+          single most expensive thing in the film. A gradient ellipse that
+          follows it costs nothing. */}
+      <div
+        style={{
+          position: "absolute",
+          left: fx - size * 0.38,
+          top: fy + size * 0.3,
+          width: size * 0.76,
+          height: size * 0.22,
+          borderRadius: "50%",
+          background: "radial-gradient(ellipse, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 45%, transparent 72%)",
+          transform: `translate(${sway}px, ${lift * 0.4}px)`,
+          opacity: appear,
+        }}
+      />
       <Img
         src={centre}
         style={{
@@ -204,7 +222,6 @@ function Centrepiece({ centre = CENTREPIECE }: { centre?: string }) {
           objectFit: "contain",
           transform: `translate(${sway}px, ${lift}px) rotate(${tilt}deg) scale(${scale})`,
           opacity: appear,
-          filter: "drop-shadow(0 50px 90px rgba(0,0,0,0.85))",
         }}
       />
     </AbsoluteFill>

@@ -1,0 +1,272 @@
+{
+ "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-black.webp": {
+  "s": 0.9516,
+  "tx": -228,
+  "ty": -25,
+  "score": 0.902926154539318
+ },
+ "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-white.webp": {
+  "s": 1.0802,
+  "tx": -253,
+  "ty": 8,
+  "score": 0.9640778632242966
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-black-and-white-stitches.webp": {
+  "s": 1.0894,
+  "tx": -258,
+  "ty": 8,
+  "score": 0.9541309491620557
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-white-and-black-stitches.webp": {
+  "s": 1.0832,
+  "tx": -254,
+  "ty": 20,
+  "score": 0.945345785821295
+ },
+ "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-grey.webp": {
+  "s": 1.0867,
+  "tx": -256,
+  "ty": 19,
+  "score": 0.9535603867183043
+ },
+ "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-dark-grey.webp": {
+  "s": 1.0675,
+  "tx": -246,
+  "ty": 17,
+  "score": 0.9661685507094431
+ },
+ "/api/media/products/strap-photos-v3/1965/vertech-red.webp": {
+  "s": 1.0895,
+  "tx": -258,
+  "ty": 11,
+  "score": 0.9633512153111479
+ },
+ "/api/media/products/strap-photos-v3/mission-to-jupiter/vertech-orange.webp": {
+  "s": 1.0889,
+  "tx": -257,
+  "ty": 14,
+  "score": 0.973631483156185
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-green.webp": {
+  "s": 1.0804,
+  "tx": -252,
+  "ty": 18,
+  "score": 0.9196203709739662
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-capri-blue.webp": {
+  "s": 0.9639,
+  "tx": -235,
+  "ty": -11,
+  "score": 0.8753089877588913
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-capri-blue.webp": {
+  "s": 1.0838,
+  "tx": -254,
+  "ty": 14,
+  "score": 0.986570832960663
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-sun/vertech-yellow.webp": {
+  "s": 1.0815,
+  "tx": -253,
+  "ty": 22,
+  "score": 0.9629552000555294
+ },
+ "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-burgundy.webp": {
+  "s": 1.0867,
+  "tx": -256,
+  "ty": 19,
+  "score": 0.9532991706938287
+ },
+ "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-navy-blue.webp": {
+  "s": 1.0802,
+  "tx": -253,
+  "ty": 8,
+  "score": 0.9644546939006879
+ },
+ "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-blue-and-white-stitches.webp": {
+  "s": 1.0801,
+  "tx": -253,
+  "ty": 17,
+  "score": 0.9830100024965939
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-sun/yellow.webp": {
+  "s": 1.084,
+  "tx": -255,
+  "ty": 14,
+  "score": 0.9406202535273592
+ },
+ "/api/media/products/strap-photos-v3/mission-to-mercury/black.webp": {
+  "s": 1.0829,
+  "tx": -255,
+  "ty": 14,
+  "score": 0.9612600704982076
+ },
+ "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-black-and-blue-stitches.webp": {
+  "s": 1.0852,
+  "tx": -256,
+  "ty": 18,
+  "score": 0.9831723525378199
+ },
+ "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-black-and-green-stitches.webp": {
+  "s": 1.0779,
+  "tx": -252,
+  "ty": 21,
+  "score": 0.9744240218606004
+ },
+ "/api/media/products/strap-photos-v3/mission-to-mars/vertech-black-and-red-stitches.webp": {
+  "s": 1.0866,
+  "tx": -256,
+  "ty": 14,
+  "score": 0.9878338556686718
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth-lava/vertech-black-and-orange-stitches.webp": {
+  "s": 1.0867,
+  "tx": -256,
+  "ty": 14,
+  "score": 0.8798890248169989
+ },
+ "/api/media/products/strap-photos-v3/mission-to-jupiter/vertech-black-and-orange-stitches.webp": {
+  "s": 1.0838,
+  "tx": -254,
+  "ty": 17,
+  "score": 0.8710370540526898
+ },
+ "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-black-and-orange-stitches.webp": {
+  "s": 1.0829,
+  "tx": -255,
+  "ty": 14,
+  "score": 0.9614156586382641
+ },
+ "/api/media/products/strap-photos-v3/mission-to-uranus/vertech-turquoise.webp": {
+  "s": 1.0887,
+  "tx": -256,
+  "ty": 14,
+  "score": 0.8495198882264745
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-turquoise.webp": {
+  "s": 1.0832,
+  "tx": -254,
+  "ty": 20,
+  "score": 0.9451215644570471
+ },
+ "/api/media/products/strap-photos-v3/mission-to-venus/vertech-pink.webp": {
+  "s": 1.0801,
+  "tx": -252,
+  "ty": 17,
+  "score": 0.9708625940644042
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/vertech-white-and-pink-stitches.webp": {
+  "s": 1.0775,
+  "tx": -251,
+  "ty": 18,
+  "score": 0.9719068306529144
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth/vertech-blue.webp": {
+  "s": 1.0811,
+  "tx": -253,
+  "ty": 18,
+  "score": 0.9935333331512074
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth/vertech-mint.webp": {
+  "s": 1.0811,
+  "tx": -253,
+  "ty": 18,
+  "score": 0.9935983944115243
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth/blue.webp": {
+  "s": 1.0811,
+  "tx": -253,
+  "ty": 18,
+  "score": 0.9935909040565053
+ },
+ "/api/media/products/strap-photos-v3/mission-to-mars/vertech-red-and-white-stitches.webp": {
+  "s": 1.0895,
+  "tx": -258,
+  "ty": 11,
+  "score": 0.9618120049786886
+ },
+ "/api/media/products/strap-photos-v3/mission-to-mars/red.webp": {
+  "s": 1.0895,
+  "tx": -258,
+  "ty": 11,
+  "score": 0.9616072901440115
+ },
+ "/api/media/products/strap-photos-v3/mission-to-mars/vertech-white-and-red-stitches.webp": {
+  "s": 1.0895,
+  "tx": -258,
+  "ty": 11,
+  "score": 0.9615719886429995
+ },
+ "/api/media/products/strap-photos-v3/mission-to-uranus/white.webp": {
+  "s": 1.0852,
+  "tx": -254,
+  "ty": 14,
+  "score": 0.9753110422460026
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth-desert/vertech-beige.webp": {
+  "s": 1.085,
+  "tx": -255,
+  "ty": 24,
+  "score": 0.9352624650297056
+ },
+ "/api/media/products/strap-photos-v3/mission-to-jupiter/orange.webp": {
+  "s": 1.0889,
+  "tx": -257,
+  "ty": 14,
+  "score": 0.9732066135093543
+ },
+ "/api/media/products/strap-photos-v3/mission-to-saturn/vertech-brown.webp": {
+  "s": 1.0887,
+  "tx": -257,
+  "ty": 11,
+  "score": 0.9796809832781715
+ },
+ "/api/media/products/strap-photos-v3/mission-to-saturn/brown.webp": {
+  "s": 1.0867,
+  "tx": -255,
+  "ty": 14,
+  "score": 0.9684269220553605
+ },
+ "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-neptune-blue.webp": {
+  "s": 1.0852,
+  "tx": -256,
+  "ty": 18,
+  "score": 0.9831731463892499
+ },
+ "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-white-and-blue-stitches.webp": {
+  "s": 1.0802,
+  "tx": -253,
+  "ty": 8,
+  "score": 0.9641053947783869
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/pink-new-moon.webp": {
+  "s": 1.0838,
+  "tx": -255,
+  "ty": 14,
+  "score": 0.974080110695621
+ },
+ "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/black-and-pink-stitches.webp": {
+  "s": 1.0838,
+  "tx": -255,
+  "ty": 14,
+  "score": 0.9738389927386923
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth-lava/lava-orange.webp": {
+  "s": 1.071,
+  "tx": -246,
+  "ty": 27,
+  "score": 0.9493436973411494
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth-lava/lava-orange-and-black-stitches.webp": {
+  "s": 1.071,
+  "tx": -246,
+  "ty": 27,
+  "score": 0.9499882985652709
+ },
+ "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/polar-lights-green.webp": {
+  "s": 1.0862,
+  "tx": -255,
+  "ty": 14,
+  "score": 0.9783015415735502
+ }
+}

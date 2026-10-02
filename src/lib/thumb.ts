@@ -1,15 +1,13 @@
 /**
- * The small version of a watch photograph, where one exists.
+ * The small copy of a photograph, for anywhere it is drawn at card or
+ * thumbnail size.
  *
- * It used to substitute 128px copies that `npm run thumbs` wrote beside the
- * bundled packshots. Those files are gone: every photograph now lives in R2 and
- * is served through /api/media, so there is nothing local left to swap in.
- *
- * The seam is kept because the three components that draw watches at thumbnail
- * size still call it, and because this is where a Cloudflare Images transform
- * belongs once the shop has a custom domain — `/cdn-cgi/image/` 404s on
- * *.workers.dev, so it cannot go in yet.
+ * The originals are 1080px PNGs of around 200 KB; the copies are 640px WebP
+ * (360px for strap packshots) of a tenth of that, written to R2 under
+ * `thumbs/` by scripts/make-thumbs.mjs. The media route serves the original
+ * when a copy has not been made yet, so this is always safe to call.
  */
 export function thumb(src: string): string {
-  return src;
+  if (!src || !src.startsWith("/api/media/") || src.startsWith("/api/media/thumbs/")) return src;
+  return `/api/media/thumbs/${src.slice("/api/media/".length)}`;
 }

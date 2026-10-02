@@ -258,7 +258,7 @@ export const SECTIONS: SectionDef[] = [
       copy: "Endless combinations. Switch between the straps we stock and see your watch take on a completely different look.",
       featured: "mission-to-the-moon",
       watchPickerLabel: "Select your watch",
-      strapsLabel: "Rubber straps",
+      strapsLabel: "Straps",
       bagLabel: "Add to bag",
       addedLabel2: "Added to bag",
       soldOutLabel: "Sold out",
@@ -303,8 +303,8 @@ export const SECTIONS: SectionDef[] = [
       showRating: true,
       inviteTitle: "Bought from WTC? Tell us how it landed.",
       inviteCopy:
-        "Send us a line on WhatsApp and it goes up here with your name. Nothing on this page is written by us.",
-      inviteCta: "Send a review",
+        "Write a few lines below and it goes up here with your name once we have read it. Nothing on this page is written by us.",
+      inviteCta: "Write a review",
     },
   },
   {

@@ -9,6 +9,7 @@ import { placeOrder, type CheckoutResult } from "@/app/(site)/checkout/actions";
 import { useCart } from "@/lib/cart/CartContext";
 import type { ResolvedCart } from "@/lib/cart/types";
 import { cx, usd } from "@/lib/format";
+import { thumb } from "@/lib/thumb";
 
 const FIELD =
   "w-full rounded-xl border border-line bg-surface/60 px-4 py-3 text-sm text-chalk outline-none transition-colors placeholder:text-mute-2 focus:border-mute-2";
@@ -141,6 +142,42 @@ export default function CheckoutForm({
       <input type="hidden" name="lines" value={JSON.stringify(lines)} />
 
       <div className="min-w-0 space-y-8">
+        {/* On a phone the summary sits below the whole form, so it is
+            repeated at the top — always open, so what is being ordered is
+            in view the whole time the form is being filled in. Desktop
+            keeps the column beside the form. */}
+        <div className="rounded-2xl border border-line bg-surface/40 lg:hidden">
+          <div className="flex min-h-14 items-center justify-between gap-3 px-5">
+            <span className="flex items-center gap-2 text-[13px] text-mute">
+              {copy.summaryHeading}
+              <span className="text-mute-2">
+                · {cart.totals.items} item{cart.totals.items === 1 ? "" : "s"}
+              </span>
+            </span>
+            <span className="font-display text-base font-semibold tabular-nums">
+              {usd(cart.totals.total)}
+            </span>
+          </div>
+          <ul className="space-y-3 border-t border-line px-5 py-4">
+            {cart.lines.map((l) => (
+              <li key={`m-${l.kind}:${l.ref}`} className="flex items-center gap-3">
+                <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
+                  {l.image && (
+                    <Image src={thumb(l.image)} alt="" fill sizes="48px" className="object-contain p-1" />
+                  )}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[13px]">{l.name}</span>
+                  <span className="text-[12px] text-mute-2">
+                    {l.kind === "watch" ? "Watch" : "Strap"} · {l.sellable} × {usd(l.price)}
+                  </span>
+                </span>
+                <span className="shrink-0 text-[13px] tabular-nums">{usd(l.price * l.sellable)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         {state.error && (
           <div className="rounded-2xl border border-red-500/30 bg-red-500/5 px-5 py-4 text-[13px] leading-relaxed text-red-300">
             {state.error}
@@ -234,9 +271,9 @@ export default function CheckoutForm({
               <li key={`${l.kind}:${l.ref}`} className="flex gap-3">
                 <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
                   {l.image && (
-                    <Image src={l.image} alt="" fill sizes="56px" className="object-contain p-1" />
+                    <Image src={thumb(l.image)} alt="" fill sizes="56px" className="object-contain p-1" />
                   )}
-                  <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-ink px-1 text-[10px] text-chalk ring-1 ring-line">
+                  <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-ink px-1 text-[11px] text-chalk ring-1 ring-line">
                     {l.sellable}
                   </span>
                 </span>

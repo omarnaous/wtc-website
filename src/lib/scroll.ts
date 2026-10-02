@@ -1,15 +1,8 @@
 /**
- * Programmatic scrolling, with a curve worth watching.
- *
- * `scroll-behavior: smooth` in CSS is what anchor links use, and its curve is
- * whatever the browser feels like — a constant-ish glide that crawls over a
- * long page and overshoots the eye on a short one. These are the scrolls the
- * site starts itself, where the distance is known, so they get an ease-out and
- * a duration set from how far they are actually going.
+ * Programmatic scrolling: the scrolls the site starts itself — anchors, the
+ * bag button moving on to the straps, the Strap Studio bringing its preview
+ * back into view. All of them quick, and all of them yield to the reader.
  */
-
-/** Ease-out quart: leaves quickly, arrives gently. */
-const ease = (t: number) => 1 - Math.pow(1 - t, 4);
 
 /** Clears the fixed header, plus a little air. */
 export const HEADER_OFFSET = 88;
@@ -18,57 +11,57 @@ const reduced = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/** Ease-out cubic: leaves quickly, lands gently. */
+const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+
+let running = 0;
+
 /**
- * Scrolls the window to `top`.
+ * Scrolls the window to `top`, quickly.
  *
- * The CSS `scroll-behavior` is switched off for the duration: left on, every
- * frame of this animation would start a browser animation of its own and the
- * page would crawl. It is put back exactly as it was.
- *
- * A wheel, a touch or a key press hands control straight back to the reader —
- * being dragged to a destination you have decided against is the thing that
- * makes automatic scrolling feel hostile.
+ * The browser's own smooth scroll takes its time — the better part of a
+ * second over a screen or two — which read as sluggish every time a tap
+ * moved the page. This one takes a quarter to half a second, scaled to the
+ * distance, and is dropped the moment the reader touches, scrolls or presses
+ * a key: being dragged somewhere you have decided against is worse than slow.
  */
 export function scrollTo(top: number) {
   if (typeof window === "undefined") return;
-
   const root = document.documentElement;
-  const max = document.body.scrollHeight - window.innerHeight;
+  const max = root.scrollHeight - window.innerHeight;
   const target = Math.max(0, Math.min(top, Math.max(0, max)));
   const start = window.scrollY;
   const delta = target - start;
-  if (Math.abs(delta) < 8) return;
-
+  if (Math.abs(delta) < 4) return;
   if (reduced()) {
     window.scrollTo(0, target);
     return;
   }
 
-  // Long jumps take longer, but not in proportion — a page-and-a-half should
-  // not take three seconds.
-  const duration = Math.min(820, Math.max(340, Math.abs(delta) * 0.42));
-  const previous = root.style.scrollBehavior;
+  const duration = Math.min(480, Math.max(240, 200 + Math.abs(delta) * 0.12));
+  const id = ++running;
+  const prev = root.style.scrollBehavior;
+  // Each frame sets the position outright; left on, the CSS smooth scroll
+  // would turn every one of those into an animation of its own.
   root.style.scrollBehavior = "auto";
 
-  let done = false;
+  let stopped = false;
+  const stop = () => (stopped = true);
+  window.addEventListener("touchstart", stop, { passive: true });
+  window.addEventListener("wheel", stop, { passive: true });
+  window.addEventListener("keydown", stop);
   const finish = () => {
-    if (done) return;
-    done = true;
-    root.style.scrollBehavior = previous;
-    window.removeEventListener("wheel", finish);
-    window.removeEventListener("touchstart", finish);
-    window.removeEventListener("keydown", finish);
+    window.removeEventListener("touchstart", stop);
+    window.removeEventListener("wheel", stop);
+    window.removeEventListener("keydown", stop);
+    if (running === id) root.style.scrollBehavior = prev;
   };
-
-  window.addEventListener("wheel", finish, { passive: true });
-  window.addEventListener("touchstart", finish, { passive: true });
-  window.addEventListener("keydown", finish);
 
   const t0 = performance.now();
   const step = (now: number) => {
-    if (done) return;
+    if (stopped || running !== id) return finish();
     const t = Math.min(1, (now - t0) / duration);
-    window.scrollTo(0, Math.round(start + delta * ease(t)));
+    window.scrollTo(0, start + delta * ease(t));
     if (t < 1) requestAnimationFrame(step);
     else finish();
   };
@@ -88,16 +81,62 @@ export function scrollToId(id: string, offset = HEADER_OFFSET) {
 }
 
 /**
- * Brings an element into view only if it is not really in view already.
+ * Brings an element fully into view, unless it already is.
  *
- * Used where the thing you changed may be off-screen — the Strap Studio's
- * preview on a phone — and where scrolling a reader who can already see it
- * would be nothing but an interruption.
+ * Used by the Strap Studio: every tap on a strap brings the watch back on
+ * screen, wherever in the picker you were. When the whole element fits under
+ * the header it is placed just below it; a taller one is centred.
  */
-export function revealElement(el: Element | null, minVisible = 0.6) {
+export function revealElement(el: Element | null) {
   if (!el) return;
   const r = el.getBoundingClientRect();
-  const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
-  if (visible > r.height * minVisible) return;
-  scrollTo(r.top + window.scrollY - (window.innerHeight - r.height) / 2);
+  const room = window.innerHeight - HEADER_OFFSET;
+  const fully = r.top >= HEADER_OFFSET - 8 && r.bottom <= window.innerHeight + 8;
+  if (fully) return;
+  const top =
+    r.height <= room
+      ? r.top + window.scrollY - HEADER_OFFSET + 8
+      : r.top + window.scrollY - (window.innerHeight - r.height) / 2;
+  scrollTo(top);
+}
+
+/**
+ * Scrolls an element to just under the header, and makes sure it got there.
+ *
+ * A smooth scroll on a phone can be cut short — a finger still settling from
+ * the tap that started it, or the page still gliding from a flick — and then
+ * it simply stops partway. This checks once the scroll should be over and
+ * finishes the job, unless the reader has touched or scrolled the page
+ * themselves in the meantime (that is them deciding to look elsewhere).
+ */
+export function scrollToIdSurely(id: string, offset = HEADER_OFFSET) {
+  if (typeof window === "undefined") return;
+  const el = document.getElementById(id.replace(/^#/, ""));
+  if (!el) return;
+  let interrupted = false;
+  const stop = () => (interrupted = true);
+  const go = () => scrollTo(el.getBoundingClientRect().top + window.scrollY - offset);
+  go();
+  // Listen only after the scroll has started, so the tap that began it does
+  // not count as an interruption.
+  const arm = window.setTimeout(() => {
+    window.addEventListener("touchstart", stop, { passive: true, once: true });
+    window.addEventListener("wheel", stop, { passive: true, once: true });
+  }, 150);
+  const check = (left: number) =>
+    window.setTimeout(() => {
+      if (interrupted) return done();
+      const off = el.getBoundingClientRect().top - offset;
+      if (Math.abs(off) > 24) {
+        go();
+        if (left > 0) return check(left - 1);
+      }
+      done();
+    }, 650);
+  const done = () => {
+    clearTimeout(arm);
+    window.removeEventListener("touchstart", stop);
+    window.removeEventListener("wheel", stop);
+  };
+  check(2);
 }

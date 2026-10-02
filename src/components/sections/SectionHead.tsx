@@ -13,7 +13,7 @@ export default function SectionHead({
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-6">
-      <div className="max-w-2xl">
+      <div className="reveal-left max-w-2xl">
         <p className="eyebrow">{eyebrow}</p>
         <h2 className="mt-4 font-display text-[clamp(1.9rem,4.4vw,3.25rem)] font-bold leading-[1.02] tracking-[-0.03em]">
           {title}

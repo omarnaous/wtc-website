@@ -4,7 +4,7 @@ import { Player, type PlayerRef } from "@remotion/player";
 import { useEffect, useMemo, useRef, useState } from "react";
 import HeroVideo from "@/remotion/HeroVideo";
 import { HERO } from "@/remotion/constants";
-import { asset } from "@/lib/asset";
+import { thumb } from "@/lib/thumb";
 
 /**
  * Hosts the Remotion film. The composition is given the hero box's own pixel
@@ -20,12 +20,30 @@ import { asset } from "@/lib/asset";
  * scroll for the whole length of the page — which on a phone is felt as the
  * rest of the site being sticky, not as the hero being busy.
  */
-export default function HeroPlayer({ rail = [] }: { rail?: string[] }) {
+export default function HeroPlayer({ rail = [], poster }: { rail?: string[]; poster?: string }) {
   const box = useRef<HTMLDivElement>(null);
   const player = useRef<PlayerRef>(null);
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
   const [reduced, setReduced] = useState(false);
   const [visible, setVisible] = useState(true);
+
+  // The film waits until the page has drawn and the browser has a moment:
+  // arriving on the homepage from another page, mounting a composition of a
+  // few hundred layers in the same frame as the new page made the whole
+  // navigation stutter. The poster below holds the spot in the meantime.
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (w.requestIdleCallback) {
+      const id = w.requestIdleCallback(() => setReady(true), { timeout: 700 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const t = setTimeout(() => setReady(true), 300);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -85,16 +103,32 @@ export default function HeroPlayer({ rail = [] }: { rail?: string[] }) {
   // the film, so the input props are memoised on the cast itself.
   const key = rail.join("|");
   const inputProps = useMemo(
-    () => (rail.length ? { rail, centre: rail[0] } : {}),
+    () => (rail.length ? { rail: rail.map(thumb), centre: rail[0] } : {}),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [key],
   );
 
-  const still = rail[0] ?? asset("/products/watches/SO33W700_sa200.png");
+  const still = poster ?? rail[0];
 
   return (
-    <div ref={box} className="absolute inset-0 overflow-hidden bg-ink">
+    <div ref={box} className="absolute inset-0 overflow-hidden bg-ink [container-type:size]">
+      {/* The first frame, in the served markup. The film needs the bundle and
+          a measured box before it can draw, so without this the hero opened
+          on an empty black panel. Placed where the film puts its centrepiece;
+          the film fades in over it. */}
+      {still && !reduced && (
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_27%,#16161f_0%,#0b0b0e_46%,#09090a_100%)] landscape:bg-[radial-gradient(ellipse_at_66%_46%,#16161f_0%,#0b0b0e_44%,#09090a_100%)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={still}
+            alt=""
+            fetchPriority="high"
+            className="absolute left-1/2 top-[27%] w-[62cqmin] -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)] landscape:left-[66%] landscape:top-[46%] landscape:w-[62cqmin]"
+          />
+        </div>
+      )}
       {reduced ? (
+        still ? (
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_36%,#16161f_0%,#0b0b0e_46%,#09090a_100%)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -103,7 +137,8 @@ export default function HeroPlayer({ rail = [] }: { rail?: string[] }) {
             className="absolute left-1/2 top-[34%] w-[min(60vw,420px)] -translate-x-1/2 -translate-y-1/2"
           />
         </div>
-      ) : size ? (
+        ) : null
+      ) : size && ready ? (
         <Player
           ref={player}
           component={HeroVideo}
@@ -120,6 +155,7 @@ export default function HeroPlayer({ rail = [] }: { rail?: string[] }) {
           doubleClickToFullscreen={false}
           spaceKeyToPlayOrPause={false}
           acknowledgeRemotionLicense
+                  numberOfSharedAudioTags={0}
         />
       ) : null}
     </div>

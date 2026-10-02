@@ -11,11 +11,12 @@ import { getSections, flag, num, str } from "@/lib/store/content";
 import { getSetting, getSettings } from "@/lib/store/settings";
 import { listCollections } from "@/lib/store/collections";
 import { listStorefrontProducts } from "@/lib/store/products";
-import { strapSetsFor } from "@/lib/store/straps";
+import { slugsWithStraps, strapSetsFor } from "@/lib/store/straps";
 import { listReviews, reviewSummary } from "@/lib/store/reviews";
 import { studioLabels } from "@/lib/content/studio";
 export { dynamic } from "@/lib/runtime";
 import { COMMERCE_ENABLED } from "@/lib/runtime";
+import { thumb } from "@/lib/thumb";
 
 const SECTION_KEYS = [
   "bestsellers",
@@ -52,13 +53,19 @@ export default async function Home() {
   // watch someone owns is as likely to be the twelfth seller as the first.
   // Bestsellers still lead the rail; the rest follow in catalogue order.
   const studio = sections.strapStudio;
-  const models = [...bestsellers, ...products.filter((p) => !p.bestsellerRank)];
-  const featured = bySlug.get(str(studio, "featured")) ?? models[0] ?? products[0];
-  const studioSlugs = [...new Set([featured?.slug, ...models.map((m) => m.slug)])].filter(
-    (s): s is string => Boolean(s),
-  );
-  const strapSets = await strapSetsFor(studioSlugs);
+  const ranked = [...bestsellers, ...products.filter((p) => !p.bestsellerRank)];
+  const featured = bySlug.get(str(studio, "featured")) ?? ranked[0] ?? products[0];
+  // The watch the studio opens on leads the rail, so the selected card is the
+  // first one rather than the second.
+  const models = featured ? [featured, ...ranked.filter((p) => p.slug !== featured.slug)] : ranked;
+  // Only the featured watch's straps travel with the page; the rest are
+  // fetched when their watch is picked (/api/straps/[slug]).
+  const [strapSets, fitted] = await Promise.all([
+    featured ? strapSetsFor([featured.slug]) : Promise.resolve({} as Awaited<ReturnType<typeof strapSetsFor>>),
+    slugsWithStraps(),
+  ]);
   const studioHasStraps = Boolean(featured && strapSets[featured.slug]?.length);
+  const studioModels = models.filter((m) => fitted.includes(m.slug));
 
   // ── Instagram ────────────────────────────────────────────────────────────
   const ig = sections.instagram;
@@ -86,7 +93,7 @@ export default async function Home() {
     name: p.name,
     family: p.familyLabel,
     year: p.year,
-    src: p.images.front,
+    src: thumb(p.images.front),
   }));
 
   return (
@@ -161,7 +168,7 @@ export default async function Home() {
             <div className="mt-12">
               <StrapStudio
                 product={featured}
-                models={models}
+                models={studioModels}
                 sets={strapSets}
                 labels={studioLabels(studio)}
                 commerce={COMMERCE_ENABLED}

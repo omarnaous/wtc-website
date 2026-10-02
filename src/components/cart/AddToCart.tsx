@@ -5,6 +5,7 @@ import { useCart } from "@/lib/cart/CartContext";
 import type { LineKind } from "@/lib/cart/types";
 import { cx } from "@/lib/format";
 import { scrollToId } from "@/lib/scroll";
+import { emitAdded } from "@/lib/cart/events";
 
 /**
  * Adds a line to the bag and says so for a moment.
@@ -53,7 +54,22 @@ export default function AddToCart({
   useEffect(() => setAdded(false), [kind, refId]);
 
   const base =
-    "rounded-full px-7 py-3.5 text-sm font-semibold transition-all disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold transition-all active:scale-[0.97] disabled:cursor-not-allowed";
+
+  // Out of stock is a statement, not a button you cannot press.
+  if (soldOut) {
+    return (
+      <p
+        className={cx(
+          "inline-flex items-center justify-center gap-2 rounded-full border border-line px-6 py-3 font-display text-[13px] font-semibold uppercase tracking-[0.14em] text-mute",
+          className,
+        )}
+      >
+        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-mute-2" />
+        {soldOutLabel}
+      </p>
+    );
+  }
 
   return (
     <button
@@ -63,6 +79,7 @@ export default function AddToCart({
         if (soldOut) return;
         add(kind, refId);
         setAdded(true);
+        emitAdded({ kind, ref: refId });
         onAdded?.();
         // A beat, so the button has said "Added" before the page moves.
         if (scrollTo) setTimeout(() => scrollToId(scrollTo), 260);
@@ -78,7 +95,16 @@ export default function AddToCart({
         className,
       )}
     >
-      {soldOut ? soldOutLabel : added ? addedLabel : label}
+      {added ? (
+        <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden>
+          <path d="m5 12.5 4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+          <path d="M6 8h12l-1 12H7L6 8Zm3 0V6a3 3 0 0 1 6 0v2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+      {added ? addedLabel : label}
     </button>
   );
 }

@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useCart } from "@/lib/cart/CartContext";
 import type { ResolvedCart } from "@/lib/cart/types";
 import { cx, usd } from "@/lib/format";
+import { thumb } from "@/lib/thumb";
 
 /**
  * The bag, and the panel behind it.
@@ -20,6 +22,8 @@ export default function CartButton() {
   const [open, setOpen] = useState(false);
   const [cart, setCart] = useState<ResolvedCart | null>(null);
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const resolve = useCallback(async () => {
     if (!lines.length) {
@@ -41,9 +45,16 @@ export default function CartButton() {
     }
   }, [lines]);
 
+  // Priced ahead of time — on load and whenever the bag changes — so the
+  // panel opens on finished rows instead of a "checking stock" pause. It is
+  // checked again on every opening, in case stock moved in the meantime.
+  useEffect(() => {
+    if (ready) void resolve();
+  }, [ready, resolve]);
   useEffect(() => {
     if (open) void resolve();
-  }, [open, resolve]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -63,7 +74,7 @@ export default function CartButton() {
       <button
         onClick={() => setOpen(true)}
         aria-label={count ? `Bag, ${count} item${count === 1 ? "" : "s"}` : "Bag, empty"}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-line text-chalk transition-colors hover:border-gold hover:text-gold"
+        className="relative flex h-11 w-11 items-center justify-center rounded-full border border-line text-chalk transition-colors hover:border-gold hover:text-gold"
       >
         <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden>
           <path
@@ -81,25 +92,29 @@ export default function CartButton() {
         )}
       </button>
 
+      {/* Rendered at the end of <body>, not inside the header: anything the
+          bar does to its own compositing (a blur, a transform) would
+          otherwise drag the whole panel through it on every frame. */}
+      {mounted && createPortal(
       <AnimatePresence>
         {open && (
           <>
             <motion.div
-              className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
+              className="fixed inset-0 z-[60] bg-black/70"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={() => setOpen(false)}
               aria-hidden
             />
             <motion.aside
               role="dialog"
               aria-label="Your bag"
-              className="fixed inset-y-0 right-0 z-[61] flex w-full max-w-[420px] flex-col border-l border-line bg-ink-2"
+              className="fixed inset-y-0 right-0 z-[61] flex w-full max-w-[420px] flex-col border-l border-line bg-ink-2 will-change-transform"
               initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              animate={{ x: 0, transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] } }}
+              exit={{ x: "100%", transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } }}
             >
               <header className="flex items-center justify-between border-b border-line px-5 py-4">
                 <h2 className="font-display text-sm font-semibold tracking-tight">
@@ -132,7 +147,17 @@ export default function CartButton() {
                     </Link>
                   </div>
                 ) : loading && !cart ? (
-                  <p className="py-10 text-center text-[13px] text-mute">Checking stock…</p>
+                  <ul className="space-y-4" aria-label="Loading your bag">
+                    {lines.map((l) => (
+                      <li key={`sk-${l.kind}:${l.ref}`} className="flex gap-3">
+                        <span className="h-[72px] w-[72px] shrink-0 animate-pulse rounded-xl bg-surface" />
+                        <span className="flex-1 space-y-2 pt-1">
+                          <span className="block h-3 w-3/4 animate-pulse rounded bg-surface" />
+                          <span className="block h-3 w-1/3 animate-pulse rounded bg-surface" />
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 ) : (
                   <ul className="space-y-4">
                     {(cart?.lines ?? []).map((l) => (
@@ -144,7 +169,7 @@ export default function CartButton() {
                         >
                           {l.image && (
                             <Image
-                              src={l.image}
+                              src={thumb(l.image)}
                               alt=""
                               fill
                               sizes="72px"
@@ -251,7 +276,9 @@ export default function CartButton() {
             </motion.aside>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body,
+      )}
     </>
   );
 }

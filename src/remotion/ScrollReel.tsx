@@ -88,7 +88,6 @@ export default function ScrollReel({ film }: { film: ReelEntry[] }) {
               objectFit: "contain",
               transform: `scale(${scale}) rotate(${d * 4}deg)`,
               opacity,
-              filter: a > 0.6 ? "saturate(0.75)" : "none",
             }}
           />
         );

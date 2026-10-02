@@ -16,10 +16,12 @@ export default function Badge({
   availability: Availability;
   className?: string;
 }) {
+  // "In stock" is what a shop is expected to be; only the exceptions get a tag.
+  if (availability === "in-stock") return null;
   return (
     <span
       className={cx(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em]",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.08em] bg-ink/70",
         TONE[availability],
         className
       )}

@@ -17,7 +17,16 @@ export async function GET(
   }
 
   const { key } = await params;
-  const object = await bucket.get(key.join("/"));
+  const path = key.join("/");
+  let object = await bucket.get(path);
+  // A photograph uploaded since the thumbnails were last made has none yet:
+  // serve the original rather than a hole, and only briefly, so the small
+  // copy is picked up once scripts/make-thumbs.mjs has written it.
+  let fallback = false;
+  if (!object && path.startsWith("thumbs/")) {
+    object = await bucket.get(path.slice("thumbs/".length));
+    fallback = Boolean(object);
+  }
   if (!object) {
     return new Response("No such image.", {
       status: 404,
@@ -28,7 +37,7 @@ export async function GET(
   return new Response(object.body, {
     headers: {
       "content-type": object.httpMetadata?.contentType ?? "application/octet-stream",
-      "cache-control": "public, max-age=31536000, immutable",
+      "cache-control": fallback ? "public, max-age=3600" : "public, max-age=31536000, immutable",
       etag: object.httpEtag,
     },
   });

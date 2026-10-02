@@ -1,0 +1,1826 @@
+[
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-VERTECH-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/vertech-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/vertech-blue.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-VERTECH-MINT",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/vertech-mint.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/vertech-mint.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/blue.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-on-earth",
+  "strap_sku": "WB-VERTECH-BURGUNDY",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth/vertech-burgundy.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth/chips/vertech-burgundy.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-on-earth-desert",
+  "strap_sku": "WB-VERTECH-BEIGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-desert/vertech-beige.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-desert/chips/vertech-beige.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-on-earth-desert",
+  "strap_sku": "WB-VERTECH-BROWN",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-desert/vertech-brown.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-desert/chips/vertech-brown.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-on-earth-desert",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-desert/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-desert/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-on-earth-desert",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-desert/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-desert/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-on-earth-lava",
+  "strap_sku": "WB-VERTECH-BLACK-AND-ORANGE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-lava/vertech-black-and-orange-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-lava/chips/vertech-black-and-orange-stitches.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-on-earth-lava",
+  "strap_sku": "WB-LAVA-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-lava/lava-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-lava/chips/lava-orange.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-on-earth-lava",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-lava/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-lava/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-on-earth-lava",
+  "strap_sku": "WB-LAVA-ORANGE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-lava/lava-orange-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-lava/chips/lava-orange-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-on-earth-lava",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-lava/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-lava/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-on-earth-lava",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-lava/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-lava/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-VERTECH-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/vertech-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/vertech-blue.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-POLAR-LIGHTS-GREEN",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/polar-lights-green.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/polar-lights-green.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/blue.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/vertech-white-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/vertech-white-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-on-earth-polar-lights",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-on-earth-polar-lights/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-on-earth-polar-lights/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-DARK-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-dark-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-dark-grey.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-BLACK-AND-GREEN-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-black-and-green-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-black-and-green-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-GREEN",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-green.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-green.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-YELLOW",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-yellow.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-yellow.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-BLACK-AND-ORANGE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-black-and-orange-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-black-and-orange-stitches.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-BLACK-AND-RED-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-black-and-red-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-black-and-red-stitches.webp",
+  "is_default": 0,
+  "position": 11
+ },
+ {
+  "product_slug": "mission-to-earthphase",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 12
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-blue.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-white-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-white-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BEIGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold/vertech-beige.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold/chips/vertech-beige.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-white.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-white-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-white-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-NAVY-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-navy-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-navy-blue.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-TURQUOISE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-turquoise.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-turquoise.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-GREEN",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-green.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-green.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 11
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-BEIGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-beige.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-beige.webp",
+  "is_default": 0,
+  "position": 12
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-RED",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-red.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-red.webp",
+  "is_default": 0,
+  "position": 13
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-YELLOW",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-yellow.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-yellow.webp",
+  "is_default": 0,
+  "position": 14
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 15
+ },
+ {
+  "product_slug": "mission-to-earthphase-moonshine-gold-cold-moon",
+  "strap_sku": "WB-VERTECH-BURGUNDY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-earthphase-moonshine-gold-cold-moon/vertech-burgundy.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-earthphase-moonshine-gold-cold-moon/chips/vertech-burgundy.webp",
+  "is_default": 0,
+  "position": 16
+ },
+ {
+  "product_slug": "mission-to-jupiter",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-jupiter/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-jupiter/chips/vertech-orange.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-jupiter",
+  "strap_sku": "WB-VERTECH-BEIGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-jupiter/vertech-beige.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-jupiter/chips/vertech-beige.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-jupiter",
+  "strap_sku": "WB-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-jupiter/orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-jupiter/chips/orange.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-jupiter",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-jupiter/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-jupiter/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-jupiter",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-jupiter/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-jupiter/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-jupiter",
+  "strap_sku": "WB-VERTECH-BLACK-AND-ORANGE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-jupiter/vertech-black-and-orange-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-jupiter/chips/vertech-black-and-orange-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-mars",
+  "strap_sku": "WB-VERTECH-RED-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mars/vertech-red-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mars/chips/vertech-red-and-white-stitches.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-mars",
+  "strap_sku": "WB-RED",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mars/red.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mars/chips/red.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-mars",
+  "strap_sku": "WB-VERTECH-WHITE-AND-RED-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mars/vertech-white-and-red-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mars/chips/vertech-white-and-red-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-mars",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mars/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mars/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-mars",
+  "strap_sku": "WB-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mars/white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mars/chips/white.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-mars",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mars/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mars/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-mars",
+  "strap_sku": "WB-VERTECH-BLACK-AND-RED-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mars/vertech-black-and-red-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mars/chips/vertech-black-and-red-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/black.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-BLACK-AND-GREEN-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-black-and-green-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-black-and-green-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-BLACK-AND-RED-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-black-and-red-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-black-and-red-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-BLACK-AND-ORANGE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-black-and-orange-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-black-and-orange-stitches.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-TURQUOISE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-turquoise.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-turquoise.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-DARK-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-dark-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-dark-grey.webp",
+  "is_default": 0,
+  "position": 11
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 12
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 13
+ },
+ {
+  "product_slug": "mission-to-mercury",
+  "strap_sku": "WB-VERTECH-GREEN",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-mercury/vertech-green.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-mercury/chips/vertech-green.webp",
+  "is_default": 0,
+  "position": 14
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-NEPTUNE-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-neptune-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-neptune-blue.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-blue.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-white-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-white-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/blue.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-neptune",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-NEPTUNE-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-neptune-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-neptune-blue.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-blue.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-white-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-white-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/blue.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-neptune-moonshine-gold",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-neptune/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-neptune/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-pluto",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-pluto/chips/vertech-grey.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-pluto",
+  "strap_sku": "WB-VERTECH-BURGUNDY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-burgundy.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-pluto/chips/vertech-burgundy.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-pluto",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-pluto/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-pluto",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-pluto/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-pluto",
+  "strap_sku": "WB-VERTECH-DARK-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-dark-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-pluto/chips/vertech-dark-grey.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-pluto",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-pluto/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-pluto/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-saturn",
+  "strap_sku": "WB-VERTECH-BROWN",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-saturn/vertech-brown.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-saturn/chips/vertech-brown.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-saturn",
+  "strap_sku": "WB-VERTECH-BEIGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-saturn/vertech-beige.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-saturn/chips/vertech-beige.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-saturn",
+  "strap_sku": "WB-BROWN",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-saturn/brown.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-saturn/chips/brown.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-saturn",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-saturn/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-saturn/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-saturn",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-saturn/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-saturn/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-DARK-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-dark-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-dark-grey.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-BLACK-AND-RED-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black-and-red-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black-and-red-stitches.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-the-moon",
+  "strap_sku": "WB-VERTECH-BLACK-AND-ORANGE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black-and-orange-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black-and-orange-stitches.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-the-moon-1969",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon-1969/chips/vertech-black.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-moon-1969",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon-1969/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-moon-1969",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon-1969/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-moon-1969",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon-1969/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-moon-1969",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon-1969/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-moon-1969",
+  "strap_sku": "WB-VERTECH-DARK-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-dark-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon-1969/chips/vertech-dark-grey.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-the-moon-1969",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon-1969/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon-1969/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-DARK-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-dark-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-dark-grey.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK-AND-RED-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black-and-red-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black-and-red-stitches.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-the-moon-moonshine-gold",
+  "strap_sku": "WB-VERTECH-BLACK-AND-ORANGE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moon/vertech-black-and-orange-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moon/chips/vertech-black-and-orange-stitches.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/black.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/white.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-TURQUOISE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-turquoise.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-turquoise.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-NEPTUNE-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-neptune-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-neptune-blue.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-NAVY-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-navy-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-navy-blue.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-MINT",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-mint.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-mint.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-GREEN",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-green.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-green.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 11
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-full-moon",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase/vertech-white-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase/chips/vertech-white-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 12
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-black.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-GREEN",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-green.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-green.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-YELLOW",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-yellow.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-yellow.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-RED",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-red.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-red.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "mission-to-the-moonphase-new-moon",
+  "strap_sku": "WB-VERTECH-NEPTUNE-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-moonphase-new-moon/vertech-neptune-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-moonphase-new-moon/chips/vertech-neptune-blue.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-PINK-NEW-MOON",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/pink-new-moon.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/pink-new-moon.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-VERTECH-WHITE-AND-PINK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/vertech-white-and-pink-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/vertech-white-and-pink-stitches.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-BLACK-AND-PINK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/black-and-pink-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/black-and-pink-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-VERTECH-PINK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/vertech-pink.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/vertech-pink.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-the-pink-moonphase",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-pink-moonphase/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-pink-moonphase/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-the-sun",
+  "strap_sku": "WB-VERTECH-YELLOW",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-sun/vertech-yellow.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-sun/chips/vertech-yellow.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-sun",
+  "strap_sku": "WB-YELLOW",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-sun/yellow.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-sun/chips/yellow.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-sun",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-sun/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-sun/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-sun",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-sun/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-sun/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-sun",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-sun/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-sun/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-blue.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-NEPTUNE-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-neptune-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-neptune-blue.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-white-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-white-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-BLACK-AND-BLUE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-black-and-blue-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-black-and-blue-stitches.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "mission-to-the-super-blue-moonphase",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-the-super-blue-moonphase/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-the-super-blue-moonphase/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "mission-to-uranus",
+  "strap_sku": "WB-VERTECH-TURQUOISE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-uranus/vertech-turquoise.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-uranus/chips/vertech-turquoise.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-uranus",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-uranus/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-uranus/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-uranus",
+  "strap_sku": "WB-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-uranus/white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-uranus/chips/white.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-uranus",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-uranus/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-uranus/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-uranus",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-uranus/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-uranus/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-uranus",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-uranus/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-uranus/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-venus",
+  "strap_sku": "WB-VERTECH-PINK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-venus/vertech-pink.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-venus/chips/vertech-pink.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "mission-to-venus",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-venus/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-venus/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "mission-to-venus",
+  "strap_sku": "WB-VERTECH-WHITE-AND-PINK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-venus/vertech-white-and-pink-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-venus/chips/vertech-white-and-pink-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "mission-to-venus",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-venus/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-venus/chips/vertech-black.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "mission-to-venus",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-venus/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-venus/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "mission-to-venus",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-venus/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-venus/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "mission-to-venus",
+  "strap_sku": "WB-VERTECH-TURQUOISE",
+  "photo": "/api/media/products/strap-photos-v3/mission-to-venus/vertech-turquoise.webp",
+  "chip": "/api/media/products/strap-photos/mission-to-venus/chips/vertech-turquoise.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-BLACK",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-black.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-black.webp",
+  "is_default": 1,
+  "position": 0
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-WHITE",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-white.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-white.webp",
+  "is_default": 0,
+  "position": 1
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-BLACK-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-black-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-black-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 2
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-WHITE-AND-BLACK-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-white-and-black-stitches.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-white-and-black-stitches.webp",
+  "is_default": 0,
+  "position": 3
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-GREY",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-grey.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-grey.webp",
+  "is_default": 0,
+  "position": 4
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-DARK-GREY",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-dark-grey.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-dark-grey.webp",
+  "is_default": 0,
+  "position": 5
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-RED",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-red.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-red.webp",
+  "is_default": 0,
+  "position": 6
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-ORANGE",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-orange.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-orange.webp",
+  "is_default": 0,
+  "position": 7
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-GREEN",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-green.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-green.webp",
+  "is_default": 0,
+  "position": 8
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-CAPRI-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-capri-blue.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-capri-blue.webp",
+  "is_default": 0,
+  "position": 9
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-YELLOW",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-yellow.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-yellow.webp",
+  "is_default": 0,
+  "position": 10
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-BURGUNDY",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-burgundy.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-burgundy.webp",
+  "is_default": 0,
+  "position": 11
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-NAVY-BLUE",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-navy-blue.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-navy-blue.webp",
+  "is_default": 0,
+  "position": 12
+ },
+ {
+  "product_slug": "moonswatch-1965",
+  "strap_sku": "WB-VERTECH-BLUE-AND-WHITE-STITCHES",
+  "photo": "/api/media/products/strap-photos-v3/1965/vertech-blue-and-white-stitches.webp",
+  "chip": "/api/media/products/strap-photos/1965/chips/vertech-blue-and-white-stitches.webp",
+  "is_default": 0,
+  "position": 13
+ }
+]

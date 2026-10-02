@@ -60,7 +60,7 @@ export default function Logo({
             {name}
           </span>
           {tagline && (
-            <span className="mt-0.5 text-[8px] uppercase tracking-[0.3em] text-mute-2">
+            <span className="mt-0.5 text-[9px] uppercase tracking-[0.28em] text-mute-2">
               {tagline}
             </span>
           )}
