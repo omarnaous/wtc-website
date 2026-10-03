@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCart } from "@/lib/cart/CartContext";
 import AddToCart from "@/components/cart/AddToCart";
-import { onAdded, onStrap, type StrapDetail } from "@/lib/cart/events";
+import { onStrap, type StrapDetail } from "@/lib/cart/events";
 import { usd } from "@/lib/format";
 import { thumb } from "@/lib/thumb";
 
@@ -28,6 +29,7 @@ export default function StickyBuy({
   soldOut,
   soldOutLabel,
   inquire,
+  max,
 }: {
   slug: string;
   name: string;
@@ -39,21 +41,20 @@ export default function StickyBuy({
   soldOutLabel: string;
   /** WhatsApp link offered when the watch is out of stock. */
   inquire?: string;
+  /** Pieces of the watch in stock; null when not tracked. */
+  max?: number | null;
   /** No longer used: the bar no longer steps aside. */
   watch?: string[];
 }) {
-  const [watchIn, setWatchIn] = useState(false);
+  // Whether the watch is in the bag is read from the bag itself, so taking
+  // it out in the drawer brings the watch's own button straight back.
+  const { has, ready } = useCart();
+  const watchIn = ready && has("watch", slug);
   const [strap, setStrap] = useState<StrapDetail | null>(null);
   useEffect(() => onStrap(setStrap), []);
-  useEffect(
-    () =>
-      onAdded((d) => {
-        if (d.kind === "watch" && d.ref === slug) setWatchIn(true);
-      }),
-    [slug],
-  );
 
-  if (watchIn && strap) {
+  // Only a strap the studio on this page announced for this watch.
+  if (watchIn && strap && strap.watch === name) {
     return (
       <div className="sticky-buy fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/[0.97] px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:px-6">
         <div key={strap.id} className="mx-auto flex max-w-3xl items-center gap-3 [animation:fade-in_240ms_ease-out]">
@@ -78,7 +79,7 @@ export default function StickyBuy({
               kind="strap"
               refId={strap.id}
               label={label}
-              addedLabel={addedLabel}
+              max={strap.available}
               className="h-11 shrink-0 px-6 py-0 text-[13px]"
             />
           )}
@@ -124,7 +125,7 @@ export default function StickyBuy({
             kind="watch"
             refId={slug}
             label={label}
-            addedLabel={addedLabel}
+            max={max}
             className="h-11 shrink-0 px-6 py-0 text-[13px]"
           />
         )}

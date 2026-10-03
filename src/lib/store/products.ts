@@ -181,9 +181,18 @@ export function effectiveAvailability(p: AdminProduct): Availability {
 }
 
 /** Same list, with the badge resolved — what the storefront renders. */
-export async function listStorefrontProducts(): Promise<Product[]> {
+export async function listStorefrontProducts(): Promise<AdminProduct[]> {
   const all = await listProducts();
   return all.map((p) => ({ ...p, availability: effectiveAvailability(p) }));
+}
+
+/**
+ * One watch on sale, from the same cached list every page reads — no query
+ * of its own. Drafts and archived pieces are not in the list, so they are
+ * not found, exactly as the page wants.
+ */
+export async function findStorefrontProduct(slug: string): Promise<AdminProduct | null> {
+  return (await listStorefrontProducts()).find((p) => p.slug === slug) ?? null;
 }
 
 /**

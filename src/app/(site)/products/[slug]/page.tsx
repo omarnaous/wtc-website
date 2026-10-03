@@ -8,10 +8,9 @@ import AddToCart from "@/components/cart/AddToCart";
 import ProductCard from "@/components/product/ProductCard";
 import StickyBuy from "@/components/product/StickyBuy";
 import Gallery from "@/components/product/Gallery";
-import { getProduct, getStorefrontProduct, listStorefrontProducts } from "@/lib/store/products";
+import { findStorefrontProduct, listStorefrontProducts } from "@/lib/store/products";
 import { getStrap, strapSetsFor } from "@/lib/store/straps";
-import { getSettings } from "@/lib/store/settings";
-import { getSections, list, str } from "@/lib/store/content";
+import { getSettings, getSections, list, str } from "@/lib/store/storefront";
 import { usd } from "@/lib/format";
 import { studioLabels } from "@/lib/content/studio";
 export { dynamic } from "@/lib/runtime";
@@ -29,7 +28,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const p = await getProduct(slug);
+  const p = await findStorefrontProduct(slug);
   if (!p) return {};
   return {
     title: `${p.name} (${p.sku})`,
@@ -45,7 +44,7 @@ export default async function ProductPage({
 }) {
   const { slug } = await params;
   const [product, products, sections, { contact }] = await Promise.all([
-    getStorefrontProduct(slug),
+    findStorefrontProduct(slug),
     listStorefrontProducts(),
     getSections(["productPage", "strapStudio"]),
     getSettings(),
@@ -72,6 +71,11 @@ export default async function ProductPage({
     ? product.specs
     : list<{ label: string; value: string }>(copy, "specs");
   const soldOut = product.availability === "sold-out";
+  // How many can go in the bag: what is on hand and not already held for an
+  // order. Untracked stock has no ceiling but the bag's own.
+  const inStock = product.stock.track
+    ? Math.max(0, product.stock.onHand - product.stock.reserved)
+    : null;
   const inquire = contact.whatsapp
     ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(
         str(copy, "whatsappMessage", "Hi — is the {name} ({sku}) available?")
@@ -152,7 +156,8 @@ export default async function ProductPage({
                     kind="watch"
                     refId={product.slug}
                     label={str(copy, "buyLabel", "Add to bag")}
-                    addedLabel={str(copy, "addedLabel", "Added to bag")}
+                    max={inStock}
+                    className="min-w-[11rem]"
                   />
                 )
               )}
@@ -215,6 +220,7 @@ export default async function ProductPage({
           soldOut={soldOut}
           soldOutLabel="Out of stock"
           inquire={inquire}
+          max={inStock}
           watch={["buy-inline", "strap-studio"]}
         />
       )}

@@ -60,6 +60,8 @@ export interface StrapOption {
   chip: string;
   price: number;
   soldOut?: boolean;
+  /** Pieces in stock; null when stock is not tracked. */
+  available?: number | null;
   type?: "velcro" | "rubber";
   colorGroup?: ColorGroup;
   /**
@@ -131,6 +133,7 @@ const toOption = (r: PairRow): StrapOption => ({
   chip: r.chip || thumb(r.image),
   price: r.override ?? r.price,
   soldOut: bool(r.track) && r.on_hand <= 0,
+  available: bool(r.track) ? Math.max(0, r.on_hand) : null,
   type: r.type as StrapOption["type"],
   colorGroup: r.color_group as ColorGroup,
 });

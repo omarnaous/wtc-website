@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Catalog from "@/components/catalog/Catalog";
 import CatalogParams from "@/components/catalog/CatalogParams";
-import { getSection, str } from "@/lib/store/content";
-import { listCollections } from "@/lib/store/collections";
+import { getSection, str, listCollections } from "@/lib/store/storefront";
 import { listStorefrontProducts } from "@/lib/store/products";
 export { dynamic } from "@/lib/runtime";
 

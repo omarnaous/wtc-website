@@ -22,10 +22,17 @@ function useTilt() {
     typeof window !== "undefined" &&
     window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches;
 
+  // Measured once as the pointer comes in, not on every move: reading the
+  // box's position right after writing its transform forced a layout on
+  // each mouse event.
+  const rect = useRef<DOMRect | null>(null);
+  const onPointerEnter = () => {
+    rect.current = box.current?.getBoundingClientRect() ?? null;
+  };
   const onPointerMove = (e: React.PointerEvent) => {
     const el = box.current;
     if (!el || e.pointerType !== "mouse" || !fine()) return;
-    const r = el.getBoundingClientRect();
+    const r = rect.current ?? (rect.current = el.getBoundingClientRect());
     const x = (e.clientX - r.left) / r.width - 0.5;
     const y = (e.clientY - r.top) / r.height - 0.5;
     cancelAnimationFrame(raf.current);
@@ -44,8 +51,9 @@ function useTilt() {
     el.style.transition = "transform 600ms cubic-bezier(0.16,1,0.3,1)";
     el.style.transform = "";
     el.style.setProperty("--sheen", "0");
+    rect.current = null;
   };
-  return { box, onPointerMove, onPointerLeave };
+  return { box, onPointerEnter, onPointerMove, onPointerLeave };
 }
 
 export default function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
@@ -63,7 +71,10 @@ export default function ProductCard({ product, priority = false }: { product: Pr
       <Link
         href={href}
         prefetch={false}
-        onPointerEnter={warm}
+        onPointerEnter={() => {
+          warm();
+          tilt.onPointerEnter();
+        }}
         onTouchStart={warm}
         className="block"
         onPointerMove={tilt.onPointerMove}

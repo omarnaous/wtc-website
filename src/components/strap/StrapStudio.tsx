@@ -11,7 +11,7 @@ import { cx, usd } from "@/lib/format";
 import { thumb } from "@/lib/thumb";
 import { revealElement, scrollToIdSurely } from "@/lib/scroll";
 import { emitStrap, onAdded } from "@/lib/cart/events";
-import { useCart } from "@/lib/cart/CartContext";
+import AddToCart from "@/components/cart/AddToCart";
 
 /**
  * Every frame in a set is the same watch photographed in the same position,
@@ -94,8 +94,6 @@ export default function StrapStudio({
   compact?: boolean;
 }) {
   const t = { ...LABELS, ...labels };
-  const { add } = useCart();
-  const [added, setAdded] = useState(false);
   const [head, setHead] = useState(product);
   const [tab, setTab] = useState<Tab>("all");
   const [colour, setColour] = useState<ColorGroup | null>(null);
@@ -289,6 +287,7 @@ export default function StrapStudio({
           price: first.price,
           chip: first.chip,
           soldOut: Boolean(first.soldOut),
+          available: first.available ?? null,
           watch: head.name,
         });
       }, 160);
@@ -304,16 +303,43 @@ export default function StrapStudio({
       price: strap.price,
       chip: strap.chip,
       soldOut: Boolean(strap.soldOut),
+      available: strap.available ?? null,
       watch: head.name,
     });
   }, [compact, strap, head.name]);
 
-  // A different strap or watch means the last confirmation no longer applies.
-  useEffect(() => setAdded(false), [strapId, head]);
 
   // Only offer a watch in the head rail if straps have been fitted to it.
   // The page only lists watches that have straps, so every one is offered.
   const heads = models ?? [];
+
+  // ── Desktop pages ──────────────────────────────────────────────────────
+  const PAGE = 20;
+  const pages = useMemo(() => {
+    const out: Opt[][] = [];
+    for (let i = 0; i < visible.length; i += PAGE) out.push(visible.slice(i, i + PAGE));
+    return out;
+  }, [visible]);
+  const pager = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
+  const goPage = (i: number) => {
+    const el = pager.current;
+    if (!el) return;
+    const to = Math.max(0, Math.min(pages.length - 1, i));
+    el.scrollTo({ left: to * el.clientWidth, behavior: "smooth" });
+    setPage(to);
+  };
+  const onPagerScroll = () => {
+    const el = pager.current;
+    if (!el) return;
+    const i = Math.round(el.scrollLeft / Math.max(1, el.clientWidth));
+    setPage((cur) => (cur === i ? cur : i));
+  };
+  // A new filter starts on its first page.
+  useEffect(() => {
+    pager.current?.scrollTo({ left: 0 });
+    setPage(0);
+  }, [tab, colour, head.slug]);
 
   if (!strap) return null;
 
@@ -321,6 +347,31 @@ export default function StrapStudio({
   const showPreview = () => revealElement(preview.current);
 
   const pictured = `On ${head.name}`;
+
+  // One swatch, drawn the same in the phone rail and the desktop pages.
+  const chip = (s: Opt) => {
+    const active = s.id === strap.id;
+    return (
+      <button
+        key={s.id}
+        onClick={() => {
+          pickStrap(s);
+          showPreview();
+        }}
+        title={s.name}
+        aria-label={s.name}
+        aria-pressed={active}
+        className={cx(
+          "relative aspect-square w-full snap-start overflow-hidden rounded-xl border bg-surface transition-[border-color,transform] duration-200",
+          active ? "border-gold ring-2 ring-gold/30" : "border-line hover:-translate-y-0.5 hover:border-mute-2",
+        )}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={s.chip} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+        {s.soldOut && <span aria-hidden className="absolute inset-0 bg-ink/60" />}
+      </button>
+    );
+  };
 
   const tabs: { id: Tab; label: string; n: number }[] = [
     { id: "all", label: "All", n: counts.all },
@@ -443,46 +494,27 @@ export default function StrapStudio({
               </AnimatePresence>
             </div>
 
-            {commerce &&
-              (strap.soldOut ? (
-                <span className="shrink-0 rounded-full border border-line px-3.5 py-2 font-display text-[11px] font-semibold uppercase tracking-[0.14em] text-mute">
-                  {t.soldOutLabel}
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    add("strap", strap.id);
-                    setAdded(true);
-                  }}
-                  aria-label={added ? t.addedLabel2 : `${t.bagLabel}: ${strap.name}`}
-                  className={cx(
-                    "flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-[13px] font-semibold transition-[background-color,transform] duration-200 active:scale-95 sm:px-5",
-                    added ? "bg-gold text-ink" : "bg-chalk text-ink hover:bg-gold-soft",
-                  )}
-                >
-                  {added ? (
-                    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden>
-                      <path d="m5 12.5 4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  ) : (
-                    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
-                      <path d="M6 8h12l-1 12H7L6 8Zm3 0V6a3 3 0 0 1 6 0v2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                  <span className="hidden min-[400px]:inline">{added ? "Added" : t.bagLabel}</span>
-                </button>
-              ))}
+            {commerce && (
+              <AddToCart
+                kind="strap"
+                refId={strap.id}
+                label={t.bagLabel}
+                soldOut={strap.soldOut}
+                soldOutLabel={t.soldOutLabel}
+                max={strap.available}
+                className="h-11 shrink-0 px-4 py-0 text-[13px] sm:px-5"
+              />
+            )}
           </div>
         </div>
 
         {t.note && <p className="mt-3 text-center text-[11px] text-mute-2">{t.note}</p>}
-      </div>
 
-      {/* ── Picker ─────────────────────────────────────────────────────── */}
-      <div className="flex min-w-0 flex-col">
+        {/* The watch rail sits under the watch: it is a choice about the
+            stage, and beside the straps it pushed the swatches half a screen
+            down on a desktop, leaving the column empty above them. */}
         {heads.length > 1 && (
-          <div className="mb-7">
+          <div className="mt-7">
             <div className="flex items-baseline justify-between gap-3">
               <p className="eyebrow">{t.watchPickerLabel}</p>
               <p className="text-[11px] text-mute-2">{heads.length} watches</p>
@@ -535,6 +567,10 @@ export default function StrapStudio({
           </div>
         )}
 
+      </div>
+
+      {/* ── Picker ─────────────────────────────────────────────────────── */}
+      <div className="flex min-w-0 flex-col">
         <div className="flex items-baseline justify-between gap-3">
           <p className="eyebrow">{t.strapsLabel}</p>
           <p className="text-[11px] text-mute-2">
@@ -592,44 +628,80 @@ export default function StrapStudio({
         )}
 
         {/* On a phone a two-row rail you swipe sideways — a grid inside the
-            page that scrolled on its own fought the page's scroll. On a wide
-            screen, a grid. */}
-        <div
-          className={cx(
-            "no-bar mt-4 grid snap-x grid-flow-col grid-rows-2 auto-cols-[4.25rem] gap-2.5 overflow-x-auto pb-1",
-            "lg:max-h-[21rem] lg:snap-none lg:grid-flow-row lg:grid-rows-none lg:auto-cols-auto lg:grid-cols-[repeat(auto-fill,minmax(3.75rem,1fr))] lg:overflow-x-visible lg:overflow-y-auto lg:pr-1",
-          )}
-        >
-          {visible.map((s) => {
-            const active = s.id === strap.id;
-            return (
-              <button
-                key={s.id}
-                onClick={() => {
-                  pickStrap(s);
-                  showPreview();
-                }}
-                title={s.name}
-                aria-label={s.name}
-                aria-pressed={active}
-                className={cx(
-                  "relative aspect-square snap-start overflow-hidden rounded-xl border bg-surface transition-[border-color,transform] duration-200",
-                  active ? "border-gold ring-2 ring-gold/30" : "border-line hover:-translate-y-0.5 hover:border-mute-2",
-                )}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={s.chip}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                {s.soldOut && <span aria-hidden className="absolute inset-0 bg-ink/60" />}
-              </button>
-            );
-          })}
+            page that scrolled on its own fought the page's scroll. */}
+        <div className="no-bar mt-4 grid snap-x grid-flow-col grid-rows-[4.25rem_4.25rem] auto-cols-[4.25rem] gap-2.5 overflow-x-auto pb-1 lg:hidden">
+          {visible.map((s) => chip(s))}
         </div>
+
+        {/* On a desktop, pages of twenty — five by four — that you step
+            through with the arrows or swipe sideways on a trackpad; each
+            page snaps into place. A long scrolling box of seventy-eight
+            swatches gave no sense of where you were in it. */}
+        {visible.length > 0 && (
+          <div className="mt-4 hidden lg:block">
+            <div
+              ref={pager}
+              onScroll={onPagerScroll}
+              className="no-bar flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth"
+            >
+              {pages.map((group, i) => (
+                <div
+                  key={i}
+                  className="grid w-full shrink-0 snap-start snap-always grid-cols-5 content-start gap-2.5"
+                  aria-hidden={i !== page}
+                  inert={i !== page}
+                >
+                  {group.map((s) => chip(s))}
+                </div>
+              ))}
+            </div>
+
+            {pages.length > 1 && (
+              <div className="mt-4 flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => goPage(page - 1)}
+                  disabled={page === 0}
+                  aria-label="Previous straps"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-mute transition-colors hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-30"
+                >
+                  ←
+                </button>
+                <div className="flex items-center gap-1.5" aria-label={`Page ${page + 1} of ${pages.length}`}>
+                  {pages.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => goPage(i)}
+                      aria-label={`Page ${i + 1}`}
+                      aria-current={i === page}
+                      className="flex h-6 items-center px-0.5"
+                    >
+                      <span
+                        className={cx(
+                          "block h-1.5 rounded-full transition-all duration-300",
+                          i === page ? "w-6 bg-gold" : "w-1.5 bg-line hover:bg-mute-2",
+                        )}
+                      />
+                    </button>
+                  ))}
+                  <span className="ml-2 font-display text-[11px] tabular-nums text-mute-2">
+                    {page + 1} / {pages.length}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => goPage(page + 1)}
+                  disabled={page >= pages.length - 1}
+                  aria-label="More straps"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-mute transition-colors hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-30"
+                >
+                  →
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
         {visible.length === 0 ? (
           <p className="mt-4 text-[12px] text-mute">

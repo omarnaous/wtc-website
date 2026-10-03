@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPolicy, listPolicies } from "@/lib/store/policies";
-import { getSettings } from "@/lib/store/settings";
-import { getSection, str } from "@/lib/store/content";
+import { getPolicy, listPolicies, getSettings, getSection, str } from "@/lib/store/storefront";
 export { dynamic } from "@/lib/runtime";
 
 export async function generateStaticParams() {

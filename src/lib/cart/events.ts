@@ -20,6 +20,8 @@ export interface StrapDetail {
   price: number;
   chip: string;
   soldOut: boolean;
+  /** Pieces in stock, or null when not tracked. */
+  available?: number | null;
   /** The watch it is shown on. */
   watch: string;
 }
@@ -27,8 +29,13 @@ export interface StrapDetail {
 export const emitAdded = (d: AddedDetail) =>
   window.dispatchEvent(new CustomEvent<AddedDetail>("wtc:added", { detail: d }));
 
-export const emitStrap = (d: StrapDetail) =>
+/** The studio's current selection, for a listener that arrives after it was announced. */
+let lastStrap: StrapDetail | null = null;
+
+export const emitStrap = (d: StrapDetail) => {
+  lastStrap = d;
   window.dispatchEvent(new CustomEvent<StrapDetail>("wtc:strap", { detail: d }));
+};
 
 export function onAdded(fn: (d: AddedDetail) => void) {
   const h = (e: Event) => fn((e as CustomEvent<AddedDetail>).detail);
@@ -37,6 +44,7 @@ export function onAdded(fn: (d: AddedDetail) => void) {
 }
 
 export function onStrap(fn: (d: StrapDetail) => void) {
+  if (lastStrap) fn(lastStrap);
   const h = (e: Event) => fn((e as CustomEvent<StrapDetail>).detail);
   window.addEventListener("wtc:strap", h);
   return () => window.removeEventListener("wtc:strap", h);

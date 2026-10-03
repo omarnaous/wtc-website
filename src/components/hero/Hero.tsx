@@ -1,7 +1,6 @@
 import Link from "next/link";
 import HeroPlayer from "./HeroPlayer";
-import { getSection, flag, list, str } from "@/lib/store/content";
-import { getSettings } from "@/lib/store/settings";
+import { getSection, flag, list, str, getSettings } from "@/lib/store/storefront";
 import { listProducts } from "@/lib/store/products";
 
 /**

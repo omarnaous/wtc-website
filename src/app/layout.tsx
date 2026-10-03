@@ -11,6 +11,16 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: { default: "WTC", template: "%s — WTC" },
+  // The WTC mark, cut down to the clock and the letters so it still reads at
+  // tab size. Kept in R2 with the logo (brand/).
+  icons: {
+    icon: [
+      { url: "/api/media/brand/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/api/media/brand/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/api/media/brand/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: { url: "/api/media/brand/apple-touch-icon.png", sizes: "180x180" },
+  },
 };
 
 export default function RootLayout({

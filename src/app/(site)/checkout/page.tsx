@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import CheckoutForm from "@/components/cart/CheckoutForm";
-import { getSection, str } from "@/lib/store/content";
-import { getSettings } from "@/lib/store/settings";
+import { getSection, str, getSettings } from "@/lib/store/storefront";
 export { dynamic } from "@/lib/runtime";
 
 export const metadata: Metadata = {

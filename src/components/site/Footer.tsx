@@ -1,9 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { getSection, str } from "@/lib/store/content";
-import { getSettings } from "@/lib/store/settings";
-import { listCollections } from "@/lib/store/collections";
-import { listPolicies } from "@/lib/store/policies";
+import { getSection, str, getSettings, listCollections, listPolicies } from "@/lib/store/storefront";
 
 function Instagram() {
   return (

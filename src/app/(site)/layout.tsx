@@ -4,10 +4,10 @@ import Footer from "@/components/site/Footer";
 import MotionProvider from "@/components/site/MotionProvider";
 import SmoothAnchors from "@/components/site/SmoothAnchors";
 import { CartProvider } from "@/lib/cart/CartContext";
-import { getSettings } from "@/lib/store/settings";
-import { getSections, flag, list, str } from "@/lib/store/content";
+import { getSettings, getSections, flag, list, str } from "@/lib/store/storefront";
 export { dynamic } from "@/lib/runtime";
 import { COMMERCE_ENABLED } from "@/lib/runtime";
+import { siteOrigin } from "@/lib/email/origin";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [{ brand }, sections] = await Promise.all([getSettings(), getSections(["seo"])]);
@@ -19,7 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const indexable = flag(seo, "indexable", false);
   const ogImage = str(seo, "ogImage");
 
+  // Absolute links (the share image, canonical URLs) are built on whatever
+  // address the site was reached on — workers.dev now, the shop's own
+  // domain once it is connected — rather than a build-time setting.
+  const origin = await siteOrigin();
   return {
+    ...(origin ? { metadataBase: new URL(origin) } : {}),
     title: { default: title, template: `%s — ${brand.name}` },
     description,
     robots: { index: indexable, follow: indexable },
@@ -28,7 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       locale: "en_US",
       type: "website",
-      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+      // The share preview: the one set in Sections → Search, or the WTC mark.
+      images: [{ url: ogImage || "/api/media/brand/icon-512.png" }],
     },
   };
 }
