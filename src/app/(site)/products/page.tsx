@@ -7,12 +7,11 @@ import { listStorefrontProducts } from "@/lib/store/products";
 export { dynamic } from "@/lib/runtime";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const catalog = await getSection("catalog");
   return {
-    title: "Shop all",
+    title: "Shop MoonSwatch & Swatch Collabs in Lebanon — All Watches",
     description:
-      str(catalog, "copy") ||
-      "Everything WTC has in hand — filter by collection, series, colour, availability and budget.",
+      "Every Omega × Swatch MoonSwatch and AP × Swatch Royal Pop WTC has in hand in Beirut — Mission to the Moon, Moonphase, Earthphase and more. Cash on delivery across Lebanon.",
+    alternates: { canonical: "/products" },
   };
 }
 

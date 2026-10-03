@@ -7,35 +7,55 @@ import { CartProvider } from "@/lib/cart/CartContext";
 import { getSettings, getSections, flag, list, str } from "@/lib/store/storefront";
 export { dynamic } from "@/lib/runtime";
 import { COMMERCE_ENABLED } from "@/lib/runtime";
-import { siteOrigin } from "@/lib/email/origin";
+import { SITE_URL, onPrimaryHost } from "@/lib/seo";
+
+/**
+ * What every storefront page tells search engines unless it says otherwise.
+ *
+ * The default title and description carry what people in Lebanon actually
+ * type — MoonSwatch, Omega × Swatch, the straps, Lebanon/Beirut — and both
+ * stay editable in Sections → Search, which wins when filled in.
+ */
+const DEFAULT_TITLE =
+  "WTC — Omega × Swatch MoonSwatch & Straps in Lebanon | Watchtradechronicles";
+const DEFAULT_DESCRIPTION =
+  "Shop authentic Omega × Swatch MoonSwatch and AP × Swatch Royal Pop in Lebanon — checked in hand, with 78 rubber and Velcro straps. Cash on delivery across Lebanon.";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [{ brand }, sections] = await Promise.all([getSettings(), getSections(["seo"])]);
+  const [{ brand }, sections, primary] = await Promise.all([
+    getSettings(),
+    getSections(["seo"]),
+    onPrimaryHost(),
+  ]);
   const seo = sections.seo;
-  const title = str(seo, "title") || `${brand.name} — ${brand.longName} | ${brand.location}`;
-  const description = str(seo, "description") || brand.blurb;
-  // Indexing stays off while prices are placeholders; Sections → Search
-  // flips it at launch.
-  const indexable = flag(seo, "indexable", false);
+  const title = str(seo, "title") || DEFAULT_TITLE;
+  const description = str(seo, "description") || DEFAULT_DESCRIPTION;
+  // Sections → Search switches indexing on; and only the official address
+  // is ever indexed — www and workers.dev answer, but as copies.
+  const indexable = flag(seo, "indexable", false) && primary;
   const ogImage = str(seo, "ogImage");
 
-  // Absolute links (the share image, canonical URLs) are built on whatever
-  // address the site was reached on — workers.dev now, the shop's own
-  // domain once it is connected — rather than a build-time setting.
-  const origin = await siteOrigin();
   return {
-    ...(origin ? { metadataBase: new URL(origin) } : {}),
-    title: { default: title, template: `%s — ${brand.name}` },
+    metadataBase: new URL(SITE_URL),
+    // `absolute`: the homepage title as written — not run through the root
+    // layout's "… — WTC" — while pages under it still get "… | WTC".
+    title: { absolute: title, template: `%s | ${brand.name}` },
     description,
-    robots: { index: indexable, follow: indexable },
+    applicationName: brand.longName,
+    robots: indexable
+      ? { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } }
+      : { index: false, follow: false },
     openGraph: {
-      title: `${brand.name} — ${brand.longName}`,
+      title,
       description,
+      siteName: `${brand.name} — ${brand.longName}`,
       locale: "en_US",
       type: "website",
+      url: SITE_URL,
       // The share preview: the one set in Sections → Search, or the WTC mark.
       images: [{ url: ogImage || "/api/media/brand/icon-512.png" }],
     },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Hero from "@/components/hero/Hero";
 import Bestsellers from "@/components/sections/Bestsellers";
@@ -14,6 +15,10 @@ import { studioLabels } from "@/lib/content/studio";
 export { dynamic } from "@/lib/runtime";
 import { COMMERCE_ENABLED } from "@/lib/runtime";
 import { thumb } from "@/lib/thumb";
+import JsonLd from "@/components/seo/JsonLd";
+import { SITE_URL, abs } from "@/lib/seo";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const SECTION_KEYS = [
   "bestsellers",
@@ -25,7 +30,7 @@ const SECTION_KEYS = [
 ] as const;
 
 export default async function Home() {
-  const [sections, { social, contact }, collections, products, reviews, ratings, feed] =
+  const [sections, { social, contact, brand }, collections, products, reviews, ratings, feed] =
     await Promise.all([
       getSections([...SECTION_KEYS]),
       getSettings(),
@@ -93,8 +98,47 @@ export default async function Home() {
     src: thumb(p.images.front),
   }));
 
+  // Who the shop is, for search engines: the business, its logo, where it
+  // is and where else it lives online, and the site's own search — which
+  // Google can show as a search box under the result.
+  const phone = /\b0{2,}\s?0{3}\s?0{3}\b/.test(contact.phone) ? undefined : contact.phone;
+  const structured = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "@id": `${SITE_URL}/#store`,
+      name: brand.longName,
+      alternateName: brand.name,
+      description: brand.blurb,
+      url: SITE_URL,
+      logo: abs("/api/media/brand/icon-512.png"),
+      image: abs("/api/media/brand/icon-512.png"),
+      ...(phone ? { telephone: phone } : {}),
+      address: { "@type": "PostalAddress", addressLocality: "Beirut", addressCountry: "LB" },
+      areaServed: { "@type": "Country", name: "Lebanon" },
+      currenciesAccepted: "USD",
+      paymentAccepted: "Cash",
+      sameAs: [social.instagram].filter((u) => u && u.startsWith("http")),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: brand.longName,
+      alternateName: brand.name,
+      url: SITE_URL,
+      publisher: { "@id": `${SITE_URL}/#store` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/products?q={search_term_string}` },
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ];
+
   return (
     <>
+      <JsonLd data={structured} />
       <Hero />
 
       {flag(sections.bestsellers, "enabled") && bestsellers.length > 0 && (

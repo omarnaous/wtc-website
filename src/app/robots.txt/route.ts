@@ -1,24 +1,27 @@
 import { getSection, flag } from "@/lib/store/storefront";
-import { siteOrigin } from "@/lib/email/origin";
+import { SITE_URL, onPrimaryHost } from "@/lib/seo";
 
 /**
  * Search engines' instructions. Follows Sections → Search: while indexing is
- * off the whole site is closed to crawlers; once on, everything is open but
- * the dashboard, the API, checkout and order receipts.
+ * off the whole site is closed to crawlers; once on, the official address is
+ * open but for the dashboard, the API, checkout and order receipts. Every
+ * other address the shop answers on (www, workers.dev) stays closed, so it
+ * is never indexed as a second copy.
  */
 export async function GET() {
-  const [seo, origin] = await Promise.all([getSection("seo"), siteOrigin()]);
-  const open = flag(seo, "indexable", false);
+  const [seo, primary] = await Promise.all([getSection("seo"), onPrimaryHost()]);
+  const open = flag(seo, "indexable", false) && primary;
   const body = open
     ? [
         "User-agent: *",
         "Allow: /",
         "Disallow: /admin",
         "Disallow: /api/",
+        "Allow: /api/media/",
         "Disallow: /checkout",
         "Disallow: /order/",
         "",
-        `Sitemap: ${origin}/sitemap.xml`,
+        `Sitemap: ${SITE_URL}/sitemap.xml`,
         "",
       ].join("\n")
     : "User-agent: *\nDisallow: /\n";

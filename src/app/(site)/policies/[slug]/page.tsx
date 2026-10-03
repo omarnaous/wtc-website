@@ -16,7 +16,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const p = await getPolicy(slug);
-  return p ? { title: p.title, description: p.summary } : {};
+  return p
+    ? { title: p.title, description: p.summary, alternates: { canonical: `/policies/${p.slug}` } }
+    : {};
 }
 
 export default async function PolicyPage({

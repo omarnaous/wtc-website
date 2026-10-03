@@ -10,12 +10,14 @@ import StickyBuy from "@/components/product/StickyBuy";
 import Gallery from "@/components/product/Gallery";
 import { findStorefrontProduct, listStorefrontProducts } from "@/lib/store/products";
 import { getStrap, strapSetsFor } from "@/lib/store/straps";
-import { getSettings, getSections, list, str } from "@/lib/store/storefront";
+import { getSettings, getSections, list, listCollections, str } from "@/lib/store/storefront";
 import { usd } from "@/lib/format";
 import { studioLabels } from "@/lib/content/studio";
 export { dynamic } from "@/lib/runtime";
 import { COMMERCE_ENABLED } from "@/lib/runtime";
 import ScrollList from "@/components/motion/ScrollList";
+import JsonLd from "@/components/seo/JsonLd";
+import { SITE_URL, abs, snippet } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const products = await listStorefrontProducts();
@@ -28,12 +30,27 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const p = await findStorefrontProduct(slug);
+  const [p, collections] = await Promise.all([findStorefrontProduct(slug), listCollections()]);
   if (!p) return {};
+  const house = collections.find((c) => c.id === p.collection)?.name ?? "";
+  // "Omega × Swatch Mission to the Moon SO33M100 — Price in Lebanon": the
+  // collab, the model, the reference and the place — the words a search
+  // for this watch is made of.
+  const title = `${house ? `${house} ` : ""}${p.name} ${p.sku} — Price in Lebanon`;
+  const description = snippet(
+    `${p.name} (${p.sku}), ${p.colorway} — ${usd(p.price)}. Authentic ${house || "Swatch"}, checked in hand by WTC in Beirut, cash on delivery across Lebanon. ${p.description}`,
+  );
   return {
-    title: `${p.name} (${p.sku})`,
-    description: p.description,
-    openGraph: { images: [{ url: p.images.front }] },
+    title,
+    description,
+    alternates: { canonical: `/products/${p.slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `/products/${p.slug}`,
+      images: [{ url: p.images.front, alt: p.name }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [p.images.front] },
   };
 }
 
@@ -43,11 +60,12 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [product, products, sections, { contact }] = await Promise.all([
+  const [product, products, sections, { contact }, collections] = await Promise.all([
     findStorefrontProduct(slug),
     listStorefrontProducts(),
     getSections(["productPage", "strapStudio"]),
     getSettings(),
+    listCollections(),
   ]);
   const copy = sections.productPage;
   const studio = sections.strapStudio;
@@ -83,12 +101,57 @@ export default async function ProductPage({
           .replace("{sku}", product.sku),
       )}`
     : "";
+  // The watch as a product, for search results that show price and stock,
+  // and the trail back to the catalogue.
+  const house = collections.find((c) => c.id === product.collection)?.name ?? "";
+  const availability = {
+    "in-stock": "https://schema.org/InStock",
+    "low-stock": "https://schema.org/LimitedAvailability",
+    "pre-order": "https://schema.org/PreOrder",
+    "sold-out": "https://schema.org/OutOfStock",
+  }[product.availability];
+  const structured = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "@id": abs(`/products/${product.slug}#product`),
+      name: `${house ? `${house} ` : ""}${product.name}`,
+      sku: product.sku,
+      mpn: product.sku,
+      color: product.colorway,
+      description: product.description,
+      image: (product.photos?.length ? product.photos : [product.images.front]).map(abs),
+      brand: { "@type": "Brand", name: house || "Swatch" },
+      category: "Watches",
+      url: abs(`/products/${product.slug}`),
+      offers: {
+        "@type": "Offer",
+        url: abs(`/products/${product.slug}`),
+        priceCurrency: "USD",
+        price: product.price.toFixed(2),
+        availability,
+        itemCondition: "https://schema.org/NewCondition",
+        seller: { "@type": "Organization", name: "Watchtradechronicles", url: SITE_URL },
+        areaServed: "LB",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Catalogue", item: abs("/products") },
+        { "@type": "ListItem", position: 3, name: product.name, item: abs(`/products/${product.slug}`) },
+      ],
+    },
+  ];
   const related = products
     .filter((p) => p.family === product.family && p.slug !== product.slug)
     .slice(0, 4);
 
   return (
     <div className="pt-28">
+      <JsonLd data={structured} />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <nav className="text-[12px] text-mute-2">
           <Link href="/" className="hit hover:text-chalk">
