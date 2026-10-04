@@ -52,7 +52,7 @@ export default async function ReviewsPage() {
           <ul className="divide-y divide-[var(--admin-line-soft)]">
             {ordered.map((r) => (
               <li key={r.id}>
-                <Link
+                <Link prefetch={false}
                   href={`/admin/reviews/${r.id}`}
                   className="flex items-start gap-4 px-5 py-4 transition-colors hover:bg-[var(--admin-line-soft)]/60"
                 >

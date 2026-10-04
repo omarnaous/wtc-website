@@ -76,7 +76,7 @@ export default async function Footer() {
                   </li>
                 ) : (
                   <li key={c.id}>
-                    <Link
+                    <Link prefetch={false}
                       href={`/products?collection=${c.id}`}
                       className="hit text-sm text-mute transition-colors hover:text-chalk"
                     >
@@ -86,7 +86,7 @@ export default async function Footer() {
                 )
               )}
               <li>
-                <Link href="/products" className="hit text-sm text-mute transition-colors hover:text-chalk">
+                <Link prefetch={false} href="/products" className="hit text-sm text-mute transition-colors hover:text-chalk">
                   {str(footer, "allLabel", "All references")}
                 </Link>
               </li>
@@ -98,7 +98,7 @@ export default async function Footer() {
             <ul className="mt-5 space-y-2.5">
               {policies.map((p) => (
                 <li key={p.slug}>
-                  <Link
+                  <Link prefetch={false}
                     href={`/policies/${p.slug}`}
                     className="hit text-sm text-mute transition-colors hover:text-chalk"
                   >

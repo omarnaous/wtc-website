@@ -82,7 +82,7 @@ export default function ProductCard({ product, priority = false }: { product: Pr
       >
         <div
           ref={tilt.box}
-          className="relative aspect-square overflow-hidden rounded-2xl border border-line bevel transition-[border-color] duration-300 group-hover:border-mute-2 active:scale-[0.98]"
+          className="shimmer relative aspect-square overflow-hidden rounded-2xl border border-line bevel transition-[border-color] duration-300 group-hover:border-mute-2 active:scale-[0.98]"
           style={{
             background: `radial-gradient(circle at 50% 38%, ${product.palette.case}22 0%, #121215 62%, #0d0d10 100%)`,
           }}

@@ -58,7 +58,7 @@ export default async function Hero() {
 
         <div className="mt-9 flex flex-wrap items-center gap-3">
           {str(hero, "primaryLabel") && (
-            <Link
+            <Link prefetch={false}
               href={str(hero, "primaryHref") || "/products"}
               className="rounded-full bg-chalk px-7 py-3.5 text-sm font-semibold text-ink transition-opacity hover:opacity-85"
             >
@@ -66,7 +66,7 @@ export default async function Hero() {
             </Link>
           )}
           {str(hero, "secondaryLabel") && (
-            <Link
+            <Link prefetch={false}
               href={str(hero, "secondaryHref") || "#strap-studio"}
               className="rounded-full border border-line bg-ink/70 px-7 py-3.5 text-sm font-medium text-chalk transition-colors hover:border-gold hover:text-gold"
             >

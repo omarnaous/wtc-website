@@ -15,7 +15,14 @@
 
 export type Db = D1Database;
 
-type Bindings = { DB?: D1Database; MEDIA?: R2Bucket; SETUP_TOKEN?: string; BREVO_API_KEY?: string };
+type Bindings = {
+  DB?: D1Database;
+  MEDIA?: R2Bucket;
+  SETUP_TOKEN?: string;
+  BREVO_API_KEY?: string;
+  MEDIA_ORIGIN?: string;
+  CF_VERSION_METADATA?: { id?: string };
+};
 
 let resolved: Bindings | null | undefined;
 
@@ -107,4 +114,21 @@ export async function afterResponse(work: Promise<unknown>): Promise<void> {
     // Not on Workers.
   }
   await work;
+}
+
+/**
+ * The public domain of the media bucket, when one is set — the `MEDIA_ORIGIN`
+ * var in wrangler.jsonc. Null means images keep coming through /api/media.
+ * See src/lib/media.ts.
+ */
+export async function mediaOrigin(): Promise<string | null> {
+  const b = await bindings();
+  const origin = b?.MEDIA_ORIGIN;
+  return typeof origin === "string" && /^https:\/\//.test(origin) ? origin.replace(/\/$/, "") : null;
+}
+
+/** This deploy's id, so cached answers from an older build are not reused. */
+export async function versionId(): Promise<string> {
+  const b = await bindings();
+  return b?.CF_VERSION_METADATA?.id ?? "dev";
 }

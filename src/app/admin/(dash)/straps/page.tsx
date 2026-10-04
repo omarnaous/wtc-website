@@ -1,13 +1,13 @@
 import CatalogueSheet, { type SheetRow } from "@/components/admin/CatalogueSheet";
 import { LinkButton, PageHeader } from "@/components/admin/ui";
-import { listStraps } from "@/lib/store/straps";
+import { listStrapsWithFitted } from "@/lib/store/straps";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Straps" };
 
 export default async function StrapsPage() {
-  const all = await listStraps();
+  const all = await listStrapsWithFitted();
 
   const rows: SheetRow[] = all.map((s) => ({
     kind: "strap" as const,

@@ -121,7 +121,7 @@ export default async function DashboardPage() {
           title="Low stock"
           description="At or under the threshold"
           actions={
-            <Link href="/admin/products" className="text-[12.5px] text-[var(--admin-mute)] hover:text-[var(--admin-text)]">
+            <Link prefetch={false} href="/admin/products" className="text-[12.5px] text-[var(--admin-mute)] hover:text-[var(--admin-text)]">
               Inventory →
             </Link>
           }
@@ -155,7 +155,7 @@ export default async function DashboardPage() {
         <Card
           title="Recent orders"
           actions={
-            <Link href="/admin/orders" className="text-[12.5px] text-[var(--admin-mute)] hover:text-[var(--admin-text)]">
+            <Link prefetch={false} href="/admin/orders" className="text-[12.5px] text-[var(--admin-mute)] hover:text-[var(--admin-text)]">
               All orders →
             </Link>
           }
@@ -183,7 +183,7 @@ export default async function DashboardPage() {
                 {recent.orders.map((o) => (
                   <tr key={o.id} className="hover:bg-[var(--admin-line-soft)]/60">
                     <td className="px-5 py-2.5">
-                      <Link href={`/admin/orders/${o.id}`} className="tnum font-medium hover:underline">
+                      <Link prefetch={false} href={`/admin/orders/${o.id}`} className="tnum font-medium hover:underline">
                         #{o.number}
                       </Link>
                     </td>

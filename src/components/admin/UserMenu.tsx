@@ -58,14 +58,14 @@ export default function UserMenu({ name, email }: { name: string; email: string 
           <p className="truncate text-[12px] text-[var(--admin-mute)]">{email}</p>
         </div>
         <div className="my-1 h-px bg-[var(--admin-line-soft)]" />
-        <Link
+        <Link prefetch={false}
           href="/admin/account"
           onClick={() => setOpen(false)}
           className="block rounded-lg px-2.5 py-1.5 text-[13px] hover:bg-[var(--admin-line-soft)]"
         >
           Your account
         </Link>
-        <Link
+        <Link prefetch={false}
           href="/"
           target="_blank"
           onClick={() => setOpen(false)}

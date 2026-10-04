@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
-import { saveInventory, type State } from "@/app/admin/(dash)/inventory/actions";
+import { useActionState, useEffect, useMemo, useState, useTransition } from "react";
+import { deleteCatalogueItem, saveInventory, type State } from "@/app/admin/(dash)/inventory/actions";
 import { SaveBar } from "./fields";
-import { Card, INPUT, Notice, Pill, cx, money } from "./ui";
+import { Button, Card, INPUT, Notice, Pill, cx } from "./ui";
 
 export interface SheetRow {
   kind: "watch" | "strap";
@@ -26,8 +26,6 @@ export interface SheetCollection {
   id: string;
   name: string;
 }
-
-const STATUS_TONE: Record<string, string> = { active: "green", draft: "amber", archived: "grey" };
 
 /**
  * The catalogue and its stock, in one table.
@@ -65,6 +63,40 @@ export default function CatalogueSheet({
   const [state, action] = useActionState<State, FormData>(saveInventory, {});
 
   const key = (r: SheetRow) => `${r.kind}:${r.ref}`;
+  // What each row was when the page loaded, so only fields actually changed
+  // are sent — price and status are owner/admin only, and a staff member
+  // saving a stock count should not trip over them.
+  const [original, setOriginal] = useState(() => new Map(initial.map((r) => [key(r), r])));
+
+  // ── Delete, after asking ──────────────────────────────────────────────────
+  const [toDelete, setToDelete] = useState<SheetRow | null>(null);
+  const [deleteMsg, setDeleteMsg] = useState<State>({});
+  const [deleting, startDelete] = useTransition();
+  useEffect(() => {
+    if (!toDelete) return;
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && !deleting && setToDelete(null);
+    window.addEventListener("keydown", esc);
+    return () => window.removeEventListener("keydown", esc);
+  }, [toDelete, deleting]);
+  const confirmDelete = () => {
+    const r = toDelete;
+    if (!r) return;
+    startDelete(async () => {
+      const res = await deleteCatalogueItem(r.kind, r.ref);
+      if (res.error) {
+        setDeleteMsg({ error: `${r.name}: ${res.error}` });
+      } else {
+        setRows((prev) => prev.filter((x) => key(x) !== key(r)));
+        setOriginal((prev) => {
+          const next = new Map(prev);
+          next.delete(key(r));
+          return next;
+        });
+        setDeleteMsg({ ok: `${r.name} deleted.` });
+      }
+      setToDelete(null);
+    });
+  };
 
   const update = (k: string, patch: Partial<SheetRow>) => {
     setRows((prev) => prev.map((r) => (key(r) === k ? { ...r, ...patch } : r)));
@@ -86,14 +118,19 @@ export default function CatalogueSheet({
 
   const changed = rows.filter((r) => dirty.has(key(r)));
   const payload = JSON.stringify(
-    changed.map((r) => ({
-      kind: r.kind,
-      ref: r.ref,
-      // An empty box is "do not count this one", which is what track carries.
-      track: r.stock !== null,
-      onHand: r.stock ?? 0,
-      ...(r.collectionId === undefined ? {} : { collectionId: r.collectionId }),
-    })),
+    changed.map((r) => {
+      const was = original.get(key(r));
+      return {
+        kind: r.kind,
+        ref: r.ref,
+        // An empty box is "do not count this one", which is what track carries.
+        track: r.stock !== null,
+        onHand: r.stock ?? 0,
+        ...(r.collectionId === undefined ? {} : { collectionId: r.collectionId }),
+        ...(was && r.price !== was.price ? { price: r.price } : {}),
+        ...(was && r.status !== was.status ? { status: r.status } : {}),
+      };
+    }),
   );
 
   const counted = rows.filter((r) => r.stock !== null);
@@ -120,7 +157,14 @@ export default function CatalogueSheet({
   const allShownPicked = shown.length > 0 && shown.every((r) => picked.has(key(r)));
 
   return (
-    <form action={action} onSubmit={() => setDirty(new Set())}>
+    <form
+      action={action}
+      onSubmit={() => {
+        setDirty(new Set());
+        setOriginal(new Map(rows.map((r) => [key(r), r])));
+        setDeleteMsg({});
+      }}
+    >
       <input type="hidden" name="rows" value={payload} />
 
       {state.error && (
@@ -128,9 +172,19 @@ export default function CatalogueSheet({
           <Notice tone="error">{state.error}</Notice>
         </div>
       )}
-      {state.ok && dirty.size === 0 && (
+      {state.ok && dirty.size === 0 && !deleteMsg.ok && !deleteMsg.error && (
         <div className="mb-4">
           <Notice tone="success">{state.ok}</Notice>
+        </div>
+      )}
+      {deleteMsg.error && (
+        <div className="mb-4">
+          <Notice tone="error">{deleteMsg.error}</Notice>
+        </div>
+      )}
+      {deleteMsg.ok && (
+        <div className="mb-4">
+          <Notice tone="success">{deleteMsg.ok}</Notice>
         </div>
       )}
 
@@ -257,7 +311,10 @@ export default function CatalogueSheet({
                 {collections && <th className="px-3 py-2.5 font-medium">Collection</th>}
                 <th className="px-3 py-2.5 text-right font-medium">In stock</th>
                 <th className="px-3 py-2.5 text-right font-medium">Price</th>
-                <th className="py-2.5 pl-3 pr-5 font-medium">Status</th>
+                <th className="px-3 py-2.5 font-medium">Status</th>
+                <th className="py-2.5 pl-1 pr-5 text-right font-medium">
+                  <span className="sr-only">Delete</span>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--admin-line-soft)]">
@@ -278,7 +335,7 @@ export default function CatalogueSheet({
                     )}
 
                     <td className={cx("py-2 pr-3", collections ? "pl-3" : "pl-5")}>
-                      <Link href={r.href} className="flex items-center gap-2.5">
+                      <Link prefetch={false} href={r.href} className="flex items-center gap-2.5">
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-md border border-[var(--admin-line)] bg-[var(--admin-line-soft)]">
                           {r.image && (
                             // eslint-disable-next-line @next/next/no-img-element
@@ -342,9 +399,55 @@ export default function CatalogueSheet({
                       </span>
                     </td>
 
-                    <td className="tnum px-3 py-2 text-right font-medium">{money(r.price)}</td>
-                    <td className="py-2 pl-3 pr-5">
-                      <Pill tone={STATUS_TONE[r.status] ?? "grey"}>{r.status}</Pill>
+                    <td className="px-3 py-2 text-right">
+                      <span className="inline-flex items-center rounded-md border border-[var(--admin-line)] bg-white focus-within:border-[var(--admin-mute-2)]">
+                        <span className="pl-2 text-[12px] text-[var(--admin-mute-2)]">$</span>
+                        <input
+                          type="number"
+                          min={0}
+                          step="0.01"
+                          inputMode="decimal"
+                          value={Number.isFinite(r.price) ? r.price : ""}
+                          aria-label={`Price of ${r.name}`}
+                          onChange={(e) => update(k, { price: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="no-spin tnum w-20 rounded-md bg-transparent px-1.5 py-1 text-right font-medium outline-none"
+                        />
+                      </span>
+                    </td>
+                    <td className="px-3 py-2">
+                      <select
+                        value={r.status}
+                        aria-label={`Status of ${r.name}`}
+                        onChange={(e) => update(k, { status: e.target.value })}
+                        className={cx(
+                          "rounded-md border bg-white px-2 py-1 text-[12.5px] font-medium capitalize",
+                          r.status === "active"
+                            ? "border-emerald-300 text-emerald-700"
+                            : r.status === "draft"
+                              ? "border-amber-300 text-amber-700"
+                              : "border-[var(--admin-line)] text-[var(--admin-mute)]",
+                        )}
+                      >
+                        <option value="active">Active</option>
+                        <option value="draft">Draft</option>
+                        <option value="archived">Archived</option>
+                      </select>
+                    </td>
+                    <td className="py-2 pl-1 pr-5 text-right">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDeleteMsg({});
+                          setToDelete(r);
+                        }}
+                        aria-label={`Delete ${r.name}`}
+                        title="Delete"
+                        className="rounded-md p-1.5 text-[var(--admin-mute-2)] transition-colors hover:bg-red-50 hover:text-red-600"
+                      >
+                        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+                          <path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </button>
                     </td>
                   </tr>
                 );
@@ -358,6 +461,48 @@ export default function CatalogueSheet({
       </Card>
 
       <SaveBar dirty={dirty.size > 0} />
+
+      {toDelete && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center"
+          onClick={(e) => e.target === e.currentTarget && !deleting && setToDelete(null)}
+        >
+          <div role="alertdialog" aria-modal="true" aria-labelledby="del-title" className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+            <div className="flex items-center gap-3">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[var(--admin-line)] bg-[var(--admin-line-soft)]">
+                {toDelete.image && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={toDelete.image} alt="" className="h-full w-full object-contain p-0.5" />
+                )}
+              </span>
+              <div className="min-w-0">
+                <h3 id="del-title" className="text-[16px] font-semibold">
+                  Delete {toDelete.name}?
+                </h3>
+                <p className="text-[12px] text-[var(--admin-mute)]">{toDelete.ref}</p>
+              </div>
+            </div>
+            <p className="mt-4 text-[13.5px] leading-relaxed text-[var(--admin-mute)]">
+              This removes it from the catalogue and the shop for good — its stock and
+              strap pairings go with it. It cannot be undone. To take it off the site but keep it, set its status to{" "}
+              <strong className="text-[var(--admin-text)]">Archived</strong> instead.
+            </p>
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
+              <Button
+                type="button"
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="!border-red-600 !bg-red-600 !text-white hover:!bg-red-700"
+              >
+                {deleting ? "Deleting…" : "Yes, delete it"}
+              </Button>
+              <Button type="button" onClick={() => setToDelete(null)} disabled={deleting}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

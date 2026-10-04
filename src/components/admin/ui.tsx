@@ -22,7 +22,7 @@ export function PageHeader({
     <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
       <div className="min-w-0">
         {back && (
-          <Link
+          <Link prefetch={false}
             href={back.href}
             className="mb-2 inline-flex items-center gap-1.5 text-[13px] text-[var(--admin-mute)] hover:text-[var(--admin-text)]"
           >
@@ -151,7 +151,7 @@ export function LinkButton({
   className,
   ...props
 }: React.ComponentProps<typeof Link> & { tone?: Tone }) {
-  return <Link {...props} className={cx(BUTTON_BASE, TONES[tone], className)} />;
+  return <Link prefetch={false} {...props} className={cx(BUTTON_BASE, TONES[tone], className)} />;
 }
 
 export const INPUT =

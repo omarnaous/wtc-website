@@ -11,6 +11,8 @@ import {
   setPaymentStatus,
 } from "@/lib/store/orders";
 import type { OrderStatus } from "@/lib/orders/constants";
+import { sendDeliveredEmail } from "@/lib/email/order-emails";
+import { SITE_URL } from "@/lib/seo";
 
 export interface State {
   error?: string;
@@ -32,10 +34,23 @@ export async function changeStatus(_prev: State, data: FormData): Promise<State>
   try {
     await setOrderStatus(id, status, me.name);
     await logAudit(me, "update", "order", id, `Set order to ${status}.`);
+
+    // Delivered, and the owner said yes to telling the customer: the
+    // delivery email with its review link goes now, and the result is shown.
+    let mailed = "";
+    if (status === "delivered" && text(data, "notify") === "1") {
+      const r = await sendDeliveredEmail(id, SITE_URL);
+      if (!r.ok) {
+        revalidatePath(`/admin/orders/${id}`);
+        return { error: `Order marked delivered, but the email did not go: ${r.error}` };
+      }
+      mailed = ` Delivery email with a review link sent to ${r.to}.`;
+    }
+
     revalidatePath(`/admin/orders/${id}`);
     revalidatePath("/admin/orders");
     revalidatePath("/admin");
-    return { ok: `Order marked ${status}.` };
+    return { ok: `Order marked ${status}.${mailed}` };
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Could not change the status." };
   }

@@ -137,7 +137,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link
+        <Link prefetch={false}
           href="/products"
           className="rounded-full border border-line px-6 py-3 text-[12px] text-chalk transition-colors hover:border-gold hover:text-gold"
         >

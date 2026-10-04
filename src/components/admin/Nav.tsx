@@ -140,12 +140,21 @@ export default function Nav({
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <div className="flex h-14 items-center gap-2.5 border-b border-[var(--admin-line-soft)] px-5">
-          <span className="font-display text-[14px] font-bold tracking-[0.18em] text-[var(--admin-gold)]">
-            WTC
+        <a href="/admin" className="flex h-14 items-center gap-2.5 border-b border-[var(--admin-line-soft)] px-5">
+          {/* The real WTC mark, the same file the shop's header uses. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/api/media/brand/logo.png"
+            alt="WTC"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-lg bg-[#09090a] object-cover"
+          />
+          <span className="flex flex-col leading-tight">
+            <span className="font-display text-[13px] font-bold tracking-[0.16em] text-[var(--admin-text)]">WTC</span>
+            <span className="text-[11px] text-[var(--admin-mute-2)]">Dashboard</span>
           </span>
-          <span className="text-[12px] text-[var(--admin-mute-2)]">Dashboard</span>
-        </div>
+        </a>
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           {groups.map((group) => (
@@ -161,7 +170,7 @@ export default function Nav({
                   const count = badge(item.href);
                   return (
                     <li key={item.href}>
-                      <Link
+                      <Link prefetch={false}
                         href={item.href}
                         onClick={() => setOpen(false)}
                         aria-current={active ? "page" : undefined}

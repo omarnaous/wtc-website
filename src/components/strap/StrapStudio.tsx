@@ -362,7 +362,7 @@ export default function StrapStudio({
         aria-label={s.name}
         aria-pressed={active}
         className={cx(
-          "relative aspect-square w-full snap-start overflow-hidden rounded-xl border bg-surface transition-[border-color,transform] duration-200",
+          "shimmer relative aspect-square w-full snap-start overflow-hidden rounded-xl border bg-surface transition-[border-color,transform] duration-200",
           active ? "border-gold ring-2 ring-gold/30" : "border-line hover:-translate-y-0.5 hover:border-mute-2",
         )}
       >
@@ -390,10 +390,14 @@ export default function StrapStudio({
       )}
     >
       {/* ── The stage: watch on top, a buy row along its foot ───────────── */}
-      <div className="min-w-0">
+      {/* On a desktop the stage stretches to the height of the picker beside
+          it, the watch centred in it — the picker runs taller (pages of
+          swatches, the pager), and a fixed-height stage left an empty block
+          under it. */}
+      <div className="min-w-0 lg:flex lg:flex-col">
         <div
           ref={preview}
-          className="reveal-scale relative overflow-hidden rounded-3xl border border-line bevel bg-[radial-gradient(ellipse_at_50%_40%,#19191f_0%,#111115_55%,#0a0a0d_100%)]"
+          className="reveal-scale relative overflow-hidden rounded-3xl lg:flex lg:flex-1 lg:flex-col border border-line bevel bg-[radial-gradient(ellipse_at_50%_40%,#19191f_0%,#111115_55%,#0a0a0d_100%)]"
         >
           {/* The light behind the watch, taken from the strap and the dial.
               Each colour is its own layer that cross-fades into the next, so
@@ -414,7 +418,7 @@ export default function StrapStudio({
 
           {/* Sized from its height, in svh so the phone's address bar sliding
               in and out does not resize it while you scroll. */}
-          <div className="relative mx-auto aspect-[700/1195] h-[clamp(15rem,40svh,25rem)] max-w-full">
+          <div className="shimmer relative mx-auto aspect-[700/1195] h-[clamp(15rem,40svh,25rem)] max-w-full lg:my-auto lg:h-[clamp(22rem,52svh,32rem)]">
             <AnimatePresence initial={false}>
               <motion.div
                 key={`${head.slug}:${strap.id}`}
@@ -467,7 +471,7 @@ export default function StrapStudio({
               configurator sums up a choice — instead of a full-width slab
               under it. */}
           <div className="relative flex items-center gap-3 border-t border-line/80 bg-ink/70 p-3 sm:gap-4 sm:p-4">
-            <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-line bg-surface">
+            <span className="shimmer relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-line bg-surface">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={strap.chip} alt="" decoding="async" className="h-full w-full object-cover" />
             </span>
@@ -539,7 +543,7 @@ export default function StrapStudio({
                     aria-busy={loading === m.slug}
                     title={m.name}
                     className={cx(
-                      "flex w-[4.75rem] shrink-0 snap-start flex-col items-center gap-1.5 rounded-2xl border px-1.5 py-2 transition-colors",
+                      "shimmer flex w-[4.75rem] shrink-0 snap-start flex-col items-center gap-1.5 rounded-2xl border px-1.5 py-2 transition-colors",
                       active ? "border-gold bg-gold/10" : "border-line hover:border-mute-2 hover:bg-surface/50",
                       loading === m.slug && "animate-pulse border-gold/60",
                     )}

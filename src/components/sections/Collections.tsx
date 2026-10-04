@@ -114,7 +114,7 @@ export default function Collections({
                 {inner}
               </a>
             ) : (
-              <Link href={`/products?collection=${c.id}`} className={className}>
+              <Link prefetch={false} href={`/products?collection=${c.id}`} className={className}>
                 {inner}
               </Link>
             )}

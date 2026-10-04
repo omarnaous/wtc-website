@@ -35,12 +35,16 @@ const field =
  * The review form. What is sent is saved to the shop's database and lands in
  * Dashboard → Reviews, hidden until someone publishes it.
  */
-function ReviewForm({
+export function ReviewForm({
   productNames,
   onClose,
+  defaults,
 }: {
   productNames: Record<string, string>;
-  onClose: () => void;
+  /** Absent on the review page, which has nowhere to close to. */
+  onClose?: () => void;
+  /** Filled in from an order, when the form is reached from the delivery email. */
+  defaults?: { author?: string; location?: string; productSlug?: string };
 }) {
   const [state, action, pending] = useActionState<ReviewState, FormData>(submitReview, {});
   const [rating, setRating] = useState(0);
@@ -61,13 +65,22 @@ function ReviewForm({
             Your review shows here as soon as we have read it.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="h-11 shrink-0 rounded-full border border-line px-5 text-[13px] text-chalk transition-colors hover:border-gold hover:text-gold"
-        >
-          Close
-        </button>
+        {onClose ? (
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-11 shrink-0 rounded-full border border-line px-5 text-[13px] text-chalk transition-colors hover:border-gold hover:text-gold"
+          >
+            Close
+          </button>
+        ) : (
+          <a
+            href="/products"
+            className="flex h-11 shrink-0 items-center rounded-full border border-line px-5 text-[13px] text-chalk transition-colors hover:border-gold hover:text-gold"
+          >
+            Back to the shop
+          </a>
+        )}
       </div>
     );
   }
@@ -119,13 +132,13 @@ function ReviewForm({
 
       <label className="block">
         <span className="text-[12px] text-mute">Your name</span>
-        <input name="author" required maxLength={60} autoComplete="name" className={cx(field, "mt-1.5")} />
+        <input name="author" required maxLength={60} autoComplete="name" defaultValue={defaults?.author} className={cx(field, "mt-1.5")} />
       </label>
       <label className="block">
         <span className="text-[12px] text-mute">
           Where you are <span className="text-mute-2">(optional)</span>
         </span>
-        <input name="location" maxLength={60} placeholder="Beirut" className={cx(field, "mt-1.5")} />
+        <input name="location" maxLength={60} placeholder="Beirut" defaultValue={defaults?.location} className={cx(field, "mt-1.5")} />
       </label>
 
       {names.length > 0 && (
@@ -133,7 +146,7 @@ function ReviewForm({
           <span className="text-[12px] text-mute">
             Which watch <span className="text-mute-2">(optional)</span>
           </span>
-          <select name="productSlug" defaultValue="" className={cx(field, "mt-1.5")}>
+          <select name="productSlug" defaultValue={defaults?.productSlug ?? ""} className={cx(field, "mt-1.5")}>
             <option value="" className="bg-surface">
               —
             </option>
@@ -173,13 +186,15 @@ function ReviewForm({
         >
           {pending ? "Sending…" : "Post my review"}
         </button>
-        <button
-          type="button"
-          onClick={onClose}
-          className="h-12 rounded-full px-4 text-[13px] text-mute transition-colors hover:text-chalk"
-        >
-          Cancel
-        </button>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-12 rounded-full px-4 text-[13px] text-mute transition-colors hover:text-chalk"
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </form>
   );
@@ -330,7 +345,7 @@ export default function Reviews({
         )}
 
         <p className="mt-8 text-[12px] text-mute-2">
-          <Link href="/products" className="hit transition-colors hover:text-gold">
+          <Link prefetch={false} href="/products" className="hit transition-colors hover:text-gold">
             Browse the catalogue →
           </Link>
         </p>

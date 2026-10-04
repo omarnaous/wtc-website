@@ -154,11 +154,11 @@ export default async function ProductPage({
       <JsonLd data={structured} />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <nav className="text-[12px] text-mute-2">
-          <Link href="/" className="hit hover:text-chalk">
+          <Link prefetch={false} href="/" className="hit hover:text-chalk">
             {str(copy, "homeLabel", "Home")}
           </Link>
           <span className="px-2">/</span>
-          <Link href="/products" className="hit hover:text-chalk">
+          <Link prefetch={false} href="/products" className="hit hover:text-chalk">
             {str(copy, "catalogueLabel", "Catalogue")}
           </Link>
           <span className="px-2">/</span>

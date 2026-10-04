@@ -31,7 +31,7 @@ export default async function ContentPage() {
                   const meta = byKey.get(section.key);
                   return (
                     <li key={section.key}>
-                      <Link
+                      <Link prefetch={false}
                         href={`/admin/content/${section.key}`}
                         className="flex items-center gap-4 rounded-lg px-3 py-3 transition-colors hover:bg-[var(--admin-line-soft)]"
                       >

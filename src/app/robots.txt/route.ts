@@ -20,6 +20,7 @@ export async function GET() {
         "Allow: /api/media/",
         "Disallow: /checkout",
         "Disallow: /order/",
+        "Disallow: /review/",
         "",
         `Sitemap: ${SITE_URL}/sitemap.xml`,
         "",

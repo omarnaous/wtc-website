@@ -98,7 +98,7 @@ export default async function OrdersPage({
                 {orders.map((o) => (
                   <tr key={o.id} className="group hover:bg-[var(--admin-line-soft)]/60">
                     <td className="py-2.5 pl-5 pr-3">
-                      <Link href={`/admin/orders/${o.id}`} className="tnum font-medium group-hover:underline">
+                      <Link prefetch={false} href={`/admin/orders/${o.id}`} className="tnum font-medium group-hover:underline">
                         #{o.number}
                       </Link>
                     </td>

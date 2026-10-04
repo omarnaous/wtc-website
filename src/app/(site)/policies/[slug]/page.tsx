@@ -75,7 +75,7 @@ export default async function PolicyPage({
         {policies
           .filter((p) => p.slug !== policy.slug)
           .map((p) => (
-            <Link
+            <Link prefetch={false}
               key={p.slug}
               href={`/policies/${p.slug}`}
               className="rounded-full border border-line px-4 py-2 text-[12px] text-mute transition-colors hover:border-gold hover:text-gold"

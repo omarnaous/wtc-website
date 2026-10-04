@@ -1,13 +1,13 @@
 /**
  * The storefront's reads of the slow-moving tables — settings, page copy,
- * collections, reviews, policies — kept for half a minute per Worker isolate
+ * collections, reviews, policies — kept in memory and in Cloudflare's shared cache
  * (see memo.ts).
  *
  * Every page read four or five of these one after another, each a round trip
  * to D1, which is most of why a page took 350–650 ms to start arriving while
  * the Worker itself spent ~3 ms on it. The dashboard keeps importing the
  * originals, so an edit there always shows there at once; on the shop it
- * shows within the TTL.
+ * shows within seconds.
  */
 import { memo } from "./memo";
 import { getSettings as freshSettings, getSetting as freshSetting } from "./settings";
@@ -18,7 +18,9 @@ import { getPolicy as freshPolicy, listPolicies as freshPolicies } from "./polic
 
 export { str, num, flag, list, type Section } from "./content";
 
-const TTL = 30_000;
+// Long, because a write anywhere moves the cache generation (memo.ts) and the
+// old answers stop being used within seconds.
+const TTL = 10 * 60_000;
 
 export const getSettings = () => memo("settings", TTL, freshSettings);
 export const getSetting = <T>(key: string, fallback: T) =>

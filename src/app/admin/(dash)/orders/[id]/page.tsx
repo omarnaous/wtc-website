@@ -169,6 +169,8 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
             status={order.status}
             payment={order.payment_status}
             stockApplied={order.stock_applied}
+            customerName={order.customer_name}
+            customerEmail={order.email}
           />
 
           {me?.role !== "staff" && (

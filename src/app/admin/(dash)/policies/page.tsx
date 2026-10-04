@@ -21,7 +21,7 @@ export default async function PoliciesPage() {
         <ul className="divide-y divide-[var(--admin-line-soft)]">
           {policies.map((p) => (
             <li key={p.slug}>
-              <Link
+              <Link prefetch={false}
                 href={`/admin/policies/${p.slug}`}
                 className="flex items-center gap-4 rounded-lg px-3 py-3 transition-colors hover:bg-[var(--admin-line-soft)]"
               >

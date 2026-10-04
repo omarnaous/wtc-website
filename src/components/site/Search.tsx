@@ -190,7 +190,7 @@ export default function Search() {
                           i === active && q.trim() ? "bg-surface" : "hover:bg-surface/60",
                         )}
                       >
-                        <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-line bg-surface-2">
+                        <span className="shimmer relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-line bg-surface-2">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={h.image} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain p-1.5" />
                         </span>
@@ -210,6 +210,7 @@ export default function Search() {
               {index && (
                 <Link
                   href={all}
+                  prefetch={false}
                   onClick={close}
                   className="mt-5 flex h-12 items-center justify-center rounded-full border border-line text-[13px] font-medium text-chalk transition-colors hover:border-gold hover:text-gold"
                 >

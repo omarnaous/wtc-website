@@ -94,11 +94,30 @@ export function rowToStrap(row: StrapRow & { fitted?: number }): AdminStrap {
 }
 
 export async function listStraps(): Promise<AdminStrap[]> {
-  const rows = await tryAll<StrapRow & { fitted: number }>(
-    `SELECT s.*, (SELECT COUNT(*) FROM product_straps ps WHERE ps.strap_sku = s.sku) AS fitted
-       FROM straps s ORDER BY s.position, s.name`,
-  );
+  const rows = await tryAll<StrapRow>(`SELECT * FROM straps ORDER BY position, name`);
   return rows.map(rowToStrap);
+}
+
+/**
+ * The same, with how many watches each is fitted to — the straps page only.
+ *
+ * Counting means reading every pairing (some 1,800 rows), and it used to be
+ * done for every strap list in the dashboard, including the product editor
+ * and new-order form that never show it: 3.4 million rows in a week. The
+ * counts are kept like the storefront's reads (memo.ts) and move with any
+ * pairing change within seconds.
+ */
+export async function listStrapsWithFitted(): Promise<AdminStrap[]> {
+  const [straps, counts] = await Promise.all([
+    listStraps(),
+    memo("strap-fitted", 10 * 60_000, async () => {
+      const rows = await tryAll<{ sku: string; n: number }>(
+        `SELECT strap_sku AS sku, COUNT(*) AS n FROM product_straps GROUP BY strap_sku`,
+      );
+      return Object.fromEntries(rows.map((r) => [r.sku, r.n])) as Record<string, number>;
+    }),
+  ]);
+  return straps.map((s) => ({ ...s, fittedTo: counts[s.sku] ?? 0 }));
 }
 
 export async function getStrap(sku: string): Promise<AdminStrap | null> {
@@ -140,7 +159,7 @@ const toOption = (r: PairRow): StrapOption => ({
 
 /**
  * The straps fitted to each of several watches, in the order the studio
- * shows them. One query for the lot, kept for a minute per isolate.
+ * shows them. One query for the lot, kept until the next write (memo.ts).
  *
  * No watch, no straps — the pairings are rows. A watch with nothing fitted to
  * it hides the studio rather than showing someone else's straps.
@@ -148,7 +167,7 @@ const toOption = (r: PairRow): StrapOption => ({
 export function strapSetsFor(slugs: string[]): Promise<Record<string, StrapOption[]>> {
   const wanted = [...new Set(slugs)].filter(Boolean).sort();
   if (!wanted.length) return Promise.resolve({});
-  return memo(`strap-sets:${wanted.join(",")}`, 60_000, async () => {
+  return memo(`strap-sets:${wanted.join(",")}`, 10 * 60_000, async () => {
     const out: Record<string, StrapOption[]> = {};
     const rows = await tryAll<PairRow>(
       `SELECT ps.product_slug, s.sku, s.name, s.primary_color AS color, s.color_group, s.type,
@@ -183,7 +202,7 @@ export async function strapsForProduct(slug: string): Promise<StrapOption[]> {
  * Velcro try-ons added, to use up D1's free daily allowance in an afternoon.
  */
 export function strapCatalogue(): Promise<StrapOption[]> {
-  return memo("strap-catalogue", 60_000, async () => {
+  return memo("strap-catalogue", 10 * 60_000, async () => {
     const straps = await tryAll<PairRow & { position: number; paired_with: string | null }>(
       `SELECT '' AS product_slug, s.sku, s.name, s.primary_color AS color, s.color_group, s.type,
               NULL AS photo, NULL AS chip, s.image, s.price, NULL AS override, s.on_hand, s.track,
@@ -223,14 +242,25 @@ export function strapCatalogue(): Promise<StrapOption[]> {
   });
 }
 
-/** Which watches have straps pictured on them — the homepage studio's watch rail. */
+/**
+ * Which watches have straps pictured on them — the studio's watch rail.
+ *
+ * Asked per watch: for each one, the pairings index is entered at that watch
+ * and left at the first pictured, active strap. About two rows a watch. It
+ * used to be a DISTINCT over every pairing joined to its strap — some 3,700
+ * rows to learn two dozen names, the most expensive read the shop made.
+ */
 export function slugsWithStraps(): Promise<string[]> {
-  return memo("strap-slugs", 60_000, async () => {
-    const rows = await tryAll<{ product_slug: string }>(
-      `SELECT DISTINCT ps.product_slug FROM product_straps ps
-         JOIN straps s ON s.sku = ps.strap_sku
-        WHERE ps.photo IS NOT NULL AND s.status = 'active'`,
+  return memo("strap-slugs", 10 * 60_000, async () => {
+    const rows = await tryAll<{ slug: string }>(
+      `SELECT p.slug FROM products p
+        WHERE p.status = 'active'
+          AND EXISTS (SELECT 1 FROM product_straps ps
+                        JOIN straps s ON s.sku = ps.strap_sku
+                       WHERE ps.product_slug = p.slug
+                         AND ps.photo IS NOT NULL
+                         AND s.status = 'active')`,
     );
-    return rows.map((r) => r.product_slug);
+    return rows.map((r) => r.slug);
   });
 }

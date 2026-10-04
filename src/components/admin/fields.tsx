@@ -137,7 +137,8 @@ export function NumberField({
           max={max}
           step={step}
           defaultValue={defaultValue}
-          className={cx(INPUT, "tnum", prefix && "pl-7")}
+          // Money fields (a "$" prefix) are typed, never nudged: no spinner.
+          className={cx(INPUT, "tnum", prefix && "pl-7", prefix === "$" && "no-spin")}
         />
       </div>
     </div>

@@ -73,7 +73,7 @@ export default function Gallery({ product }: { product: Product }) {
           {views.map((src, i) => (
             <div
               key={src}
-              className="relative aspect-square w-full shrink-0 snap-center snap-always"
+              className="shimmer relative aspect-square w-full shrink-0 snap-center snap-always"
               aria-roledescription="slide"
               aria-label={`${i + 1} of ${views.length}`}
             >

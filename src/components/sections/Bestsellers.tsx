@@ -16,9 +16,8 @@ const hex = (c: string | undefined) => (c && /^#[0-9a-f]{6}$/i.test(c) ? c : "#c
  *
  * A stage on one side plays the Remotion spotlight (src/remotion/Spotlight.tsx)
  * for one watch at a time and moves on to the next by itself; the ranked list
- * beside it is the way in. Pointing at a row, tapping it, or — on a desktop —
- * scrolling it past the middle of the screen brings that watch onto the
- * stage. On a phone the list is a rail of small cards under the stage.
+ * beside it is the way in. Pointing at a row (or tapping it) brings that
+ * watch onto the stage; scrolling past the rows does nothing. On a phone the list is a rail of small cards under the stage.
  *
  * One Player for the whole section, mounted only once the section is close
  * and paused whenever it is off screen, so it costs nothing while you are
@@ -42,7 +41,6 @@ export default function Bestsellers({
   const section = useRef<HTMLElement>(null);
   const player = useRef<PlayerRef>(null);
   const rail = useRef<HTMLDivElement>(null);
-  const lastPoint = useRef(0);
   const hoverTimer = useRef(0);
 
   const n = products.length;
@@ -129,29 +127,11 @@ export default function Bestsellers({
     r.scrollTo({ left: card.offsetLeft - r.clientWidth / 2 + card.clientWidth / 2, behavior: "smooth" });
   }, [active]);
 
-  // Desktop: scrolling the list past the middle of the screen changes the
-  // watch on the (sticky) stage — unless the pointer has just picked one.
+  // The ranked list only changes the watch on stage when a row is pointed
+  // at (or tapped on a phone) — scrolling past the rows leaves it alone.
   const list = useRef<HTMLOListElement>(null);
-  useEffect(() => {
-    const ol = list.current;
-    if (!ol || !window.matchMedia("(min-width: 1024px)").matches) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (performance.now() - lastPoint.current < 1500) return;
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          const i = Number((e.target as HTMLElement).dataset.i);
-          if (!Number.isNaN(i)) setActive(i);
-        }
-      },
-      { rootMargin: "-46% 0px -46% 0px" },
-    );
-    Array.from(ol.children).forEach((c) => io.observe(c));
-    return () => io.disconnect();
-  }, [n]);
 
   const choose = (i: number) => {
-    lastPoint.current = performance.now();
     setActive(i);
   };
   const hover = (i: number) => {
@@ -251,6 +231,7 @@ export default function Bestsellers({
                 <div className="mt-4 flex items-center gap-2">
                   <Link
                     href={`/products/${p.slug}`}
+                    prefetch={false}
                     className="flex h-11 flex-1 items-center justify-center rounded-full bg-chalk text-[13px] font-semibold text-ink transition-colors hover:bg-gold-soft sm:flex-none sm:px-7"
                   >
                     View this watch
@@ -290,7 +271,7 @@ export default function Bestsellers({
                     aria-pressed={on}
                     aria-label={`${q.name}, number ${i + 1}`}
                     className={cx(
-                      "relative flex w-[6.5rem] shrink-0 snap-center flex-col items-center rounded-2xl border px-2 pb-2.5 pt-3 transition-[border-color,background-color,transform] duration-300 active:scale-95",
+                      "shimmer relative flex w-[6.5rem] shrink-0 snap-center flex-col items-center rounded-2xl border px-2 pb-2.5 pt-3 transition-[border-color,background-color,transform] duration-300 active:scale-95",
                       on ? "border-gold bg-gold/10" : "border-line bg-surface/40",
                     )}
                   >
@@ -342,7 +323,7 @@ export default function Bestsellers({
                     >
                       {pad(i + 1)}
                     </span>
-                    <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-line bg-surface">
+                    <span className="shimmer relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-line bg-surface">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={thumb(q.images.front)}

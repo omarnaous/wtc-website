@@ -16,9 +16,14 @@ export default function AuthCard({
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <div className="w-full max-w-[400px]">
         <div className="mb-6 text-center">
-          <p className="font-display text-[15px] font-bold tracking-[0.18em] text-[var(--admin-gold)]">
-            WTC
-          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/api/media/brand/logo.png"
+            alt="WTC — Your Watch Insider"
+            width={72}
+            height={72}
+            className="mx-auto h-[72px] w-[72px] rounded-2xl bg-[#09090a] object-cover shadow-[0_6px_20px_rgba(0,0,0,0.18)]"
+          />
           <h1 className="mt-4 font-display text-[22px] font-semibold tracking-[-0.01em]">{title}</h1>
           {subtitle && (
             <p className="mx-auto mt-2 max-w-[320px] text-[13px] leading-relaxed text-[var(--admin-mute)]">

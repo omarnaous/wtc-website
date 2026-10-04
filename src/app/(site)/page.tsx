@@ -160,7 +160,7 @@ export default async function Home() {
               copy={str(sections.collections, "copy")}
             >
               {str(sections.collections, "ctaLabel") && (
-                <Link
+                <Link prefetch={false}
                   href={str(sections.collections, "ctaHref") || "/products"}
                   className="rounded-full border border-line px-6 py-3 text-[12px] font-medium text-chalk transition-colors hover:border-gold hover:text-gold"
                 >

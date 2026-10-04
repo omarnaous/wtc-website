@@ -38,6 +38,15 @@
     }
   ],
 
+  // MEDIA_ORIGIN: the media bucket's own public domain. Set, the storefront
+  // fetches photographs from there — Cloudflare's CDN, no Worker request —
+  // instead of through /api/media (src/lib/media.ts). Empty keeps /api/media.
+  // Every thumbnail must exist first: the bucket's domain cannot fall back to
+  // the original the way /api/media does (scripts/make-thumbs.mjs).
+  "vars": {
+    "MEDIA_ORIGIN": "https://media.watchtradechronicles.com"
+  },
+
   // Uploaded photography. Everything under public/ is shipped with the build
   // and needs a deploy to change; anything added from the dashboard lands here
   // instead and is served by /api/media/[...key].

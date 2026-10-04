@@ -138,7 +138,7 @@ export default function CartButton() {
                     <p className="mt-2 max-w-[24ch] text-[13px] leading-relaxed text-mute">
                       Every piece is checked in hand before it ships.
                     </p>
-                    <Link
+                    <Link prefetch={false}
                       href="/products"
                       onClick={() => setOpen(false)}
                       className="mt-6 rounded-full border border-line px-5 py-2.5 text-[12px] text-chalk transition-colors hover:border-gold hover:text-gold"
@@ -162,10 +162,10 @@ export default function CartButton() {
                   <ul className="space-y-4">
                     {(cart?.lines ?? []).map((l) => (
                       <li key={`${l.kind}:${l.ref}`} className="flex gap-3">
-                        <Link
+                        <Link prefetch={false}
                           href={l.href}
                           onClick={() => setOpen(false)}
-                          className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl border border-line bg-surface"
+                          className="shimmer relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl border border-line bg-surface"
                         >
                           {l.image && (
                             <Image
@@ -180,7 +180,7 @@ export default function CartButton() {
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-2">
-                            <Link
+                            <Link prefetch={false}
                               href={l.href}
                               onClick={() => setOpen(false)}
                               className="truncate text-[13px] font-medium hover:text-gold"
@@ -258,7 +258,7 @@ export default function CartButton() {
                     </>
                   )}
 
-                  <Link
+                  <Link prefetch={false}
                     href="/checkout"
                     onClick={() => setOpen(false)}
                     className={cx(

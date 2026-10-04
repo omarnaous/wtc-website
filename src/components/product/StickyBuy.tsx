@@ -58,7 +58,7 @@ export default function StickyBuy({
     return (
       <div className="sticky-buy fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/[0.97] px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:px-6">
         <div key={strap.id} className="mx-auto flex max-w-3xl items-center gap-3 [animation:fade-in_240ms_ease-out]">
-          <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-gold/40 bg-surface">
+          <span className="shimmer relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-gold/40 bg-surface">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={strap.chip} alt="" decoding="async" className="h-full w-full object-cover" />
           </span>
@@ -91,7 +91,7 @@ export default function StickyBuy({
   return (
     <div className="sticky-buy fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/[0.97] px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 [animation:slide-up_420ms_cubic-bezier(0.16,1,0.3,1)_both] sm:px-6">
       <div className="mx-auto flex max-w-3xl items-center gap-3">
-        <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-line bg-surface">
+        <span className="shimmer relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-line bg-surface">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           {image && <img src={thumb(image)} alt="" decoding="async" className="h-full w-full object-contain p-1" />}
         </span>

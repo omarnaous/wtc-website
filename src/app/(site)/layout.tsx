@@ -3,6 +3,7 @@ import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import MotionProvider from "@/components/site/MotionProvider";
 import SmoothAnchors from "@/components/site/SmoothAnchors";
+import ImageLoadWatcher from "@/components/site/ImageLoadWatcher";
 import { CartProvider } from "@/lib/cart/CartContext";
 import { getSettings, getSections, flag, list, str } from "@/lib/store/storefront";
 export { dynamic } from "@/lib/runtime";
@@ -72,6 +73,7 @@ export default async function SiteLayout({
     <div className="bg-ink text-chalk">
       <MotionProvider>
         <SmoothAnchors />
+        <ImageLoadWatcher />
         <CartProvider>
         <Header
           nav={list<{ label: string; href: string }>(header, "nav")}

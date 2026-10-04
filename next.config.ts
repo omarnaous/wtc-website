@@ -23,12 +23,12 @@ const nextConfig: NextConfig = {
         basePath: basePath || undefined,
       }
     : {}),
-  // A static export has no image service at all. On Workers the loader is
-  // Cloudflare's edge transformer, which falls back to the plain path until
-  // NEXT_PUBLIC_IMAGE_CDN names one — see src/lib/image-loader.ts.
-  images: staticExport
-    ? { unoptimized: true }
-    : { loader: "custom", loaderFile: "./src/lib/image-loader.ts" },
+  // Images are drawn as they are stored. The photographs already come in
+  // card-sized copies (src/lib/thumb.ts), and vinext's /_next/image route
+  // only passed them through — one more Worker request per image, against
+  // the free plan's 100,000 a day, and none at all once they are served
+  // from the media bucket's own domain (src/lib/media.ts).
+  images: { unoptimized: true },
 };
 
 export default nextConfig;

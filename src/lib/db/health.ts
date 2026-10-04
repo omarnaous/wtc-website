@@ -10,13 +10,22 @@ import { db } from "./binding";
  */
 export type DbState = "ok" | "no-binding" | "no-schema";
 
+/**
+ * Once the schema is there it stays there, so "ok" is remembered for the
+ * isolate's life. The check ran on every dashboard request — 7,500 times in
+ * a week, each reading the whole schema table.
+ */
+let migrated = false;
+
 export async function dbState(): Promise<DbState> {
   const handle = await db();
   if (!handle) return "no-binding";
+  if (migrated) return "ok";
   try {
     const row = await handle
       .prepare(`SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'admin_users'`)
       .first<{ name: string }>();
+    migrated = Boolean(row);
     return row ? "ok" : "no-schema";
   } catch {
     return "no-schema";

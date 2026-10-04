@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { batch, tryAll } from "@/lib/db/sql";
+import { batch, first, run, tryAll } from "@/lib/db/sql";
 import { currentUser, logAudit } from "@/lib/auth/session";
 
 export interface State {
@@ -18,7 +18,12 @@ interface SheetRow {
   track: boolean;
   /** Watches only — the collection the watch is filed under. */
   collectionId?: string;
+  /** Selling price, USD. */
+  price?: number;
+  status?: "active" | "draft" | "archived";
 }
+
+const STATUSES = new Set(["active", "draft", "archived"]);
 
 /**
  * Saves a catalogue sheet in one go — stock, and for watches the collection
@@ -37,6 +42,17 @@ export async function saveInventory(_prev: State, data: FormData): Promise<State
   }
   if (!rows.length) return { ok: "Nothing to save." };
 
+  // Prices and what is on sale are the owner's and admins' to change; staff
+  // keep the stock count and the filing.
+  const priced = rows.some((r) => r.price !== undefined || r.status !== undefined);
+  if (priced && me.role === "staff") return { error: "Only an owner or admin can change prices or status." };
+  for (const r of rows) {
+    if (r.price !== undefined && !(Number.isFinite(r.price) && r.price >= 0 && r.price < 100000))
+      return { error: `The price for ${r.ref} is not a valid amount.` };
+    if (r.status !== undefined && !STATUSES.has(r.status))
+      return { error: `Unknown status for ${r.ref}.` };
+  }
+
   // A collection id arrives from a <select>, but it reaches the server as
   // plain text like anything else — checked against the table rather than
   // trusted, so a moved watch can only land somewhere that exists.
@@ -47,6 +63,20 @@ export async function saveInventory(_prev: State, data: FormData): Promise<State
   let moved = 0;
 
   for (const r of rows) {
+    const table = r.kind === "watch" ? "products" : "straps";
+    const keyCol = r.kind === "watch" ? "slug" : "sku";
+    if (r.price !== undefined) {
+      statements.push({
+        sql: `UPDATE ${table} SET price = ?, updated_at = datetime('now') WHERE ${keyCol} = ?`,
+        params: [Math.round(r.price * 100) / 100, r.ref],
+      });
+    }
+    if (r.status !== undefined) {
+      statements.push({
+        sql: `UPDATE ${table} SET status = ?, updated_at = datetime('now') WHERE ${keyCol} = ?`,
+        params: [r.status, r.ref],
+      });
+    }
     if (r.kind === "watch") {
       // `? + reserved` rather than `?`: the sheet shows units free to sell, and
       // an order placed before stock started coming off the count at `pending`
@@ -88,4 +118,33 @@ export async function saveInventory(_prev: State, data: FormData): Promise<State
   revalidatePath("/admin/products");
   revalidatePath("/admin/straps");
   return { ok: `Saved ${rows.length} item${rows.length === 1 ? "" : "s"}.` };
+}
+
+/**
+ * Deletes one watch or strap from its row in the sheet, after the sheet has
+ * asked "are you sure". Anything that appears on an order is refused — those
+ * orders would lose the line they point at — with archiving offered instead.
+ */
+export async function deleteCatalogueItem(kind: "watch" | "strap", ref: string): Promise<State> {
+  const me = await currentUser();
+  if (!me) return { error: "Session expired." };
+  if (me.role === "staff") return { error: "Only an owner or admin can delete from the catalogue." };
+
+  const sold = await first<{ n: number }>(
+    `SELECT COUNT(*) AS n FROM order_items WHERE kind = ? AND ref = ?`,
+    kind,
+    ref,
+  );
+  if ((sold?.n ?? 0) > 0) {
+    return {
+      error: `It appears on ${sold!.n} order line${sold!.n === 1 ? "" : "s"}, so it cannot be deleted. Set it to Archived instead — it leaves the shop and the orders keep reading correctly.`,
+    };
+  }
+
+  if (kind === "watch") await run(`DELETE FROM products WHERE slug = ?`, ref);
+  else await run(`DELETE FROM straps WHERE sku = ?`, ref);
+  await logAudit(me, "delete", kind === "watch" ? "product" : "strap", ref, `Deleted ${ref} from the catalogue sheet.`);
+  revalidatePath("/", "layout");
+  revalidatePath(kind === "watch" ? "/admin/products" : "/admin/straps");
+  return { ok: "Deleted." };
 }

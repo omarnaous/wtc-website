@@ -133,8 +133,8 @@ const SELECT = `
 
 /** Everything the shop sells — drafts and archived pieces excluded. */
 export function listProducts(): Promise<AdminProduct[]> {
-  // Every storefront page reads this; kept for half a minute per isolate.
-  return memo("products", 30_000, async () => {
+  // Every storefront page reads this; kept until the next write (memo.ts).
+  return memo("products", 10 * 60_000, async () => {
     const rows = await tryAll<ProductRow & StockRow>(
       `${SELECT} WHERE p.status = 'active' ORDER BY p.position, p.name`,
     );

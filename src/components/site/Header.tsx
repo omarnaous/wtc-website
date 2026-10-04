@@ -106,13 +106,13 @@ export default function Header({
       <div aria-hidden className="scroll-progress absolute inset-x-0 bottom-0 h-px origin-left bg-gold/70" />
 
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-10">
-        <Link href="/" onClick={onLogo} aria-label={`${brand.name} home`} className="flex min-h-11 items-center">
+        <Link prefetch={false} href="/" onClick={onLogo} aria-label={`${brand.name} home`} className="flex min-h-11 items-center">
           <Logo logo={brand.logo} name={brand.name} tagline={brand.tagline} />
         </Link>
 
         <nav className="hidden items-center gap-9 md:flex">
           {nav.map((n) => (
-            <Link
+            <Link prefetch={false}
               key={`${n.href}-${n.label}`}
               href={n.href}
               className="text-[13px] font-medium text-mute transition-colors hover:text-chalk"
@@ -194,7 +194,7 @@ export default function Header({
                     transition={{ delay: 0.04 + i * 0.05, duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
                     className="border-b border-line/70"
                   >
-                    <Link
+                    <Link prefetch={false}
                       ref={i === 0 ? firstLink : undefined}
                       href={n.href}
                       onClick={() => setOpen(false)}

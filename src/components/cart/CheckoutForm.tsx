@@ -125,7 +125,7 @@ export default function CheckoutForm({
       <div className="rounded-3xl border border-dashed border-line px-6 py-16 text-center">
         <p className="font-display text-lg font-semibold">{copy.emptyTitle}</p>
         <p className="mx-auto mt-2 max-w-sm text-sm text-mute">{copy.emptyCopy}</p>
-        <Link
+        <Link prefetch={false}
           href="/products"
           className="mt-6 inline-block rounded-full border border-line px-6 py-3 text-[12px] text-chalk transition-colors hover:border-gold hover:text-gold"
         >
@@ -161,7 +161,7 @@ export default function CheckoutForm({
           <ul className="space-y-3 border-t border-line px-5 py-4">
             {cart.lines.map((l) => (
               <li key={`m-${l.kind}:${l.ref}`} className="flex items-center gap-3">
-                <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
+                <span className="shimmer relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
                   {l.image && (
                     <Image src={thumb(l.image)} alt="" fill sizes="48px" className="object-contain p-1" />
                   )}
@@ -269,7 +269,7 @@ export default function CheckoutForm({
           <ul className="mt-5 space-y-4">
             {cart.lines.map((l) => (
               <li key={`${l.kind}:${l.ref}`} className="flex gap-3">
-                <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
+                <span className="shimmer relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-line bg-surface">
                   {l.image && (
                     <Image src={thumb(l.image)} alt="" fill sizes="56px" className="object-contain p-1" />
                   )}

@@ -56,7 +56,7 @@ export default async function StrapPage({ params }: { params: Promise<{ sku: str
             <ul className="flex flex-wrap gap-1.5">
               {fitted.map((f) => (
                 <li key={f.product_slug}>
-                  <Link
+                  <Link prefetch={false}
                     href={`/admin/products/${f.product_slug}`}
                     className="inline-block rounded-full border border-[var(--admin-line)] px-3 py-1 text-[12.5px] transition-colors hover:border-[var(--admin-text)]"
                   >

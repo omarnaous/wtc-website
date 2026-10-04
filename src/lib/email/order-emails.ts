@@ -1,5 +1,5 @@
 import { run } from "@/lib/db/sql";
-import type { Order } from "@/lib/store/orders";
+import { getOrder, type Order } from "@/lib/store/orders";
 import { getOrderEmails, getSettings, notifyList } from "@/lib/store/settings";
 import { sendMail, type SendResult } from "./brevo";
 
@@ -275,4 +275,102 @@ export async function sendOrderEmails(order: Order, lines: MailLine[], origin: s
 /** For the dashboard's "send a test" button: both emails, to the shop inbox. */
 export function previewOrderEmails(order: Order, lines: MailLine[], origin: string, brand: { name: string; longName: string; logo: string }, contact: { phone: string; whatsapp: string }) {
   return { customer: customerMail(order, lines, origin, brand, contact), admin: adminMail(order, lines, origin, brand) };
+}
+
+// ── Delivered, with a review link ───────────────────────────────────────────
+
+function deliveredMail(
+  order: Order,
+  lines: MailLine[],
+  origin: string,
+  brand: { name: string; longName: string; logo: string },
+  contact: { phone: string; whatsapp: string },
+) {
+  const first = order.customer_name.split(/\s+/)[0] || order.customer_name;
+  const review = `${origin}/review/${order.id}`;
+  const wa = realWhatsApp(contact.whatsapp) ? `https://wa.me/${contact.whatsapp}` : "";
+  const shop = brand.longName || brand.name;
+  const watch = lines.find((l) => l.kind === "watch")?.name;
+
+  const body = `${header(origin, brand.logo, brand.name)}
+<tr><td style="padding:16px 32px 0">
+<p style="margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:${GOLD}">Order #${order.number} · Delivered</p>
+<h1 style="margin:8px 0 0;font-size:24px;line-height:1.25;font-weight:700">It's with you, ${esc(first)}.</h1>
+<p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:${MUTE}">Your order has been delivered${watch ? ` — enjoy the <strong style="color:${INK}">${esc(watch)}</strong>` : ""}. Thank you for buying from ${esc(shop)}.</p>
+</td></tr>
+<tr><td style="padding:20px 32px 0">${itemsTable(origin, lines)}</td></tr>
+<tr><td style="padding:24px 32px 0">
+<p style="margin:0;font-size:15px;line-height:1.6;font-weight:600">How did it land?</p>
+<p style="margin:6px 0 0;font-size:14px;line-height:1.6;color:${MUTE}">A few lines about the watch, the strap or the delivery help the next person decide — and they mean a lot to us. It takes a minute.</p>
+</td></tr>
+<tr><td style="padding:20px 32px 32px">${button(review, "Leave a review")}</td></tr>`;
+
+  const footer = [
+    `Anything not right? Reply to this email${wa ? ` or <a href="${wa}" style="color:${MUTE}">message us on WhatsApp</a>` : ""} and we will sort it.`,
+    esc(shop),
+  ].join("<br>");
+
+  const text = [
+    `It's with you, ${first}.`,
+    ``,
+    `Order #${order.number} has been delivered${watch ? ` — enjoy the ${watch}` : ""}. Thank you for buying from ${shop}.`,
+    ``,
+    textLines(lines),
+    ``,
+    `How did it land? Leave a review — it takes a minute:`,
+    review,
+    ``,
+    `Anything not right? Reply to this email${wa ? ` or message us on WhatsApp: ${wa}` : ""}.`,
+    shop,
+  ].join("\n");
+
+  return {
+    subject: `Delivered — your ${brand.name} order #${order.number}`,
+    html: shell(`Order #${order.number} delivered`, `Your order has been delivered — tell us how it landed`, body, footer),
+    text,
+  };
+}
+
+/**
+ * Tells the customer their order has been delivered and asks for a review.
+ * Sent from the dashboard when an order is marked delivered and the owner
+ * says yes. Returns what happened, for the dashboard to show; never throws.
+ */
+export async function sendDeliveredEmail(
+  orderId: string,
+  origin: string,
+): Promise<{ ok: true; to: string } | { ok: false; error: string }> {
+  try {
+    const found = await getOrder(orderId);
+    if (!found) return { ok: false, error: "Order not found." };
+    const { order, items } = found;
+    if (!order.email) return { ok: false, error: "This order has no customer email." };
+
+    const [cfg, { brand, contact }] = await Promise.all([getOrderEmails(), getSettings()]);
+    const from = { name: cfg.fromName || brand.longName || brand.name, email: cfg.fromEmail };
+    if (!from.email) return { ok: false, error: "Set a sender under Settings → Order emails first." };
+    const shopInbox = notifyList(cfg);
+
+    const lines: MailLine[] = items.map((i) => ({
+      name: i.name,
+      qty: i.qty,
+      unit_price: i.unit_price,
+      image: i.image,
+      kind: i.kind,
+    }));
+    const m = deliveredMail(order, lines, origin, brand, contact);
+    const r = await sendMail({
+      from,
+      to: [{ email: order.email, name: order.customer_name }],
+      replyTo: { email: shopInbox[0] ?? from.email, name: from.name },
+      subject: m.subject,
+      html: m.html,
+      text: m.text,
+      tags: ["order-delivered"],
+    });
+    await note(order.id, outcome(r, `Delivery email with a review link sent to ${order.email}`));
+    return r.ok ? { ok: true, to: order.email } : { ok: false, error: r.error };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "The email could not be sent." };
+  }
 }
