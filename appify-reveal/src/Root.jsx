@@ -2,7 +2,12 @@ import { Composition } from "remotion";
 import { Reveal } from "./Reveal.jsx";
 import { FPS, DURATION } from "./timing.js";
 
-const props = { url: "www.appify-lb.com", slogan: "Ideas, appified." };
+const props = {
+  url: "www.appify-lb.com",
+  slogan: "Ideas, appified.",
+  services: ["UI/UX", "Websites", "Mobile apps", "Motion", "AI agents"],
+  servicesStyle: "line",
+};
 
 export const Root = () => (
   <>
