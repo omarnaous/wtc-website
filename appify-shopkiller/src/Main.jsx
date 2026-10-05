@@ -46,9 +46,9 @@ export const Main = (props) => {
 
       {/* scenes scaled into the top 80% so Dev and his captions own the bottom band */}
       <AbsoluteFill style={{ transform: "scale(0.8)", transformOrigin: "50% 250px" }}>
-      <Sequence {...seq("receipt")}><Receipt {...props} /></Sequence>
-      <Sequence {...seq("cost")}><Cost {...props} /></Sequence>
-      <Sequence {...seq("turn")}><Turn /></Sequence>
+      <Sequence {...seq("receipt")}><Receipt {...props} dur={SCENES.receipt[1]} /></Sequence>
+      <Sequence {...seq("cost")}><Cost {...props} dur={SCENES.cost[1]} /></Sequence>
+      <Sequence {...seq("turn")}><Turn dur={SCENES.turn[1]} /></Sequence>
       <Sequence {...seq("reveal")}><Reveal {...props} /></Sequence>
       <Sequence {...seq("features")}><Features {...props} /></Sequence>
       <Sequence {...seq("compare")}><Compare {...props} /></Sequence>

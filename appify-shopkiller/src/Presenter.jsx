@@ -5,8 +5,9 @@ import { Dev } from "./Dev.jsx";
 import VO from "./vo.json";
 import { clamp } from "./fx.jsx";
 import { sparkPath } from "./brand.js";
+import { warp } from "./timing.js";
 
-const MOODS = [
+const MOODS0 = [
   [0, { brow: 8, lid: 0.05, smile: 1, look: 6 }],       // hey!
   [44, { brow: 0, lid: 0.5, smile: 0, look: 6 }],       // unimpressed at the bills
   [268, { brow: 18, lid: 0.12, smile: 0.4, look: 4 }],  // curious: what if...
@@ -14,16 +15,21 @@ const MOODS = [
   [780, { brow: 12, lid: 0.05, smile: 1, look: 6 }],    // friendly close
 ];
 // [type, start, end]
-const ACTS = [
+const ACTS0 = [
   ["wave", 0, 42], ["shake", 62, 84], ["point", 146, 200], ["shock", 204, 236], ["jump", 204, 220],
   ["shake", 238, 262], ["lean", 276, 326], ["jump", 330, 348], ["happy", 330, 346], ["point", 350, 390],
   ["thumbs", 482, 518], ["point", 527, 566], ["point", 572, 612], ["jump", 649, 664], ["happy", 649, 672],
   ["point", 690, 738], ["thumbs", 742, 778], ["jump", 742, 756], ["jump", 794, 810], ["thumbs", 800, 846], ["happy", 838, 858],
   ["wave", 876, 902], ["wink", 918, 938], ["point", 940, 990],
 ];
-const EMOTES = [["!", 204, 236], ["sweat", 210, 262], ["?", 276, 326], ["!", 330, 360], ["spark", 649, 680], ["$", 742, 780], ["spark", 804, 840], ["spark", 940, 990]];
+const EMOTES0 = [["!", 204, 236], ["sweat", 210, 262], ["?", 276, 326], ["!", 330, 360], ["spark", 649, 680], ["$", 742, 780], ["spark", 804, 840], ["spark", 940, 990]];
 
-const env = (f, a, b, r = 6) => interpolate(f, [a, a + r, b - r, b], [0, 1, 1, 0], clamp);
+// designed on the original 33 s cut; warp() moves them onto the voice-led timing
+const MOODS = MOODS0.map(([f, m]) => [warp(f), m]);
+const ACTS = ACTS0.map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);
+const EMOTES = EMOTES0.map(([k, a, b]) => [k, warp(a), Math.max(warp(a) + 8, warp(b))]);
+
+const env = (f, a, b, r = 6) => { r = Math.min(r, (b - a) / 2 - 0.01); return interpolate(f, [a, a + r, b - r, b], [0, 1, 1, 0], clamp); };
 const act = (f, type) => ACTS.filter((x) => x[0] === type).reduce((v, [, a, b]) => Math.max(v, env(f, a, b)), 0);
 
 function mood(f) {

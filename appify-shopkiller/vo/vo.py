@@ -1,48 +1,47 @@
-"""Voice-over for the Shopify Killer reel, generated locally with Kokoro TTS (voice am_puck), then
-re-intonated with Praat PSOLA so it reads like a person, not a flat TTS line:
-each line is split into phrases, and every phrase gets its own pace, register, pitch range,
-melody (rise / fall / arch), loudness and the pause after it.
-Each line starts on its scene's frame; outputs vo.wav, per-frame mouth envelope and word timings.
+"""Voice-over for the Shopify Killer reel: one continuous read of the full script, and the video follows it.
+Kokoro TTS (voice am_puck) speaks each sentence; Praat PSOLA re-intonates it (register, pitch range,
+melody, loudness) so it isn't one flat tone. Sentences are joined with natural pauses only.
+Scene starts are then placed on the voice (each scene starts `lead` frames before its first line,
+and is held at least `min` frames so its animation can play), and written to src/vo.json with the
+word timings and mouth envelope. timing.js, Presenter.jsx and sound/retime.py all read from it.
 usage: python3 vo/vo.py <kokoro-dir>"""
 import json, sys, numpy as np, soundfile as sf
 import parselmouth
 from parselmouth.praat import call
 from kokoro_onnx import Kokoro
 
-FPS, DUR, SR = 30, 33.0, 24000
+FPS, SR = 30, 24000
 VOICE = "am_puck"
+GAP_SENTENCE, GAP_SCENE = 0.2, 0.3      # seconds of silence between sentences / between scenes
+TAIL = 60                              # frames the end card holds after the last word
 
-# phrase: (spoken, caption, speed, shift st, range x, melody, gain dB, pause after s)
+# sentence: (spoken, caption, speed, shift st, range x, melody, gain dB)
 #   shift: register vs the voice's own (+ = higher / more excited, - = lower / more serious)
-#   range: how far the pitch swings around the phrase centre (1 = as Kokoro said it)
+#   range: how far the pitch swings around the sentence centre (1 = as Kokoro said it)
 #   melody: rise (question), fall (statement lands), arch (hype), dip (aside / flat)
-P = lambda spoken, cap=None, speed=1.12, shift=0, rng=1.5, mel="fall", gain=0, gap=0.12: dict(
-    text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain, gap=gap)
-# (start frame, latest end frame, phrases)
-LINES = [
-    (6, 86, [P("Yo!", speed=1.0, shift=4, rng=1.3, mel="fall", gain=2, gap=0.14),
-             P("Still paying Shopify thirty-nine bucks a month?!", "Still paying Shopify $39 a month?!", speed=1.18, shift=1.5, rng=1.7, mel="rise")]),
-    (92, 262, [P("That's four sixty-eight a year!", "That's $468 a year!", speed=1.12, shift=0.5, rng=1.6, mel="arch", gap=0.22),
-               P("Forty-six eighty in ten years!", "$4,680 in ten years!", speed=1.05, shift=3, rng=1.8, mel="arch", gain=1.5, gap=0.32),
-               P("And you still don't even own your store!", speed=1.1, shift=-1.5, rng=1.5, mel="fall")]),
-    (280, 332, [P("So...", speed=0.95, shift=-2.5, rng=1.0, mel="dip", gain=-2, gap=0.22),
-                P("what if you paid once?", speed=1.05, shift=-1, rng=1.6, mel="rise", gain=-1)]),
-    (338, 476, [P("Boom!", speed=1.0, shift=4, rng=1.2, mel="fall", gain=3, gap=0.2),
-                P("Shopify Killer!", speed=1.0, shift=3.5, rng=1.7, mel="arch", gain=2, gap=0.3),
-                P("Not some boring template.", speed=1.15, shift=-2.5, rng=0.8, mel="dip", gain=-1.5, gap=0.16),
-                P("A stunning store, with real animations!", speed=1.12, shift=2, rng=1.8, mel="arch", gain=1)]),
-    (482, 522, [P("Way more beautiful!", speed=1.08, shift=1, rng=1.7, mel="arch")]),
-    (527, 567, [P("Customize everything!", speed=1.1, shift=1, rng=1.7, mel="arch")]),
-    (572, 612, [P("Full control!", speed=1.0, shift=-1, rng=1.4, mel="fall", gain=1)]),
-    (617, 660, [P("Zero monthly fees!", speed=1.05, shift=2, rng=1.8, mel="arch", gain=2)]),
-    (668, 776, [P("That's forty-three twenty saved!", "That's $4,320 saved!", speed=1.08, shift=2, rng=1.7, mel="arch", gain=1, gap=0.25),
-                P("It pays for itself in ten months!", "It pays for itself in 10 months!", speed=1.12, shift=0, rng=1.5, mel="fall")]),
-    (782, 868, [P("And if you don't love it?", speed=1.12, shift=-1, rng=1.5, mel="rise", gap=0.22),
-                P("Full refund.", speed=1.0, shift=-2.5, rng=1.2, mel="fall", gap=0.16),
-                P("Zero risk!", speed=1.0, shift=1, rng=1.5, mel="fall", gain=1.5)]),
-    (872, 989, [P("D.M. or comment, Appify E-commerce,", "DM or comment \"Appify Ecommerce\"", speed=1.1, shift=1, rng=1.6, mel="arch", gap=0.12),
-                P("to book your free prototype demo!", speed=1.12, shift=0.5, rng=1.7, mel="fall")]),
+P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: dict(
+    text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
+# (scene anchor, its frame in the original 33 s cut, lead frames before the voice, min frames, sentences)
+SCRIPT = [
+    ("receipt", 0, 6, 75, [P("Yo! Still paying Shopify thirty-nine bucks a month?!", "Yo! Still paying Shopify $39 a month?!", speed=1.12, shift=1.5, rng=1.6, mel="rise", gain=1)]),
+    ("cost", 90, 2, 120, [P("That's four sixty-eight a year!", "That's $468 a year!", shift=0.5, rng=1.6, mel="arch"),
+                          P("Forty-six eighty in ten years!", "$4,680 in ten years!", speed=1.05, shift=2.5, rng=1.8, mel="arch", gain=1.5),
+                          P("And you still don't even own your store!", shift=-1.5, rng=1.5, mel="fall")]),
+    ("turn", 270, 10, 60, [P("So... what if you paid once?", speed=1.0, shift=-1.5, rng=1.6, mel="rise", gain=-1)]),
+    ("reveal", 330, 8, 140, [P("Boom! Shopify Killer!", speed=1.02, shift=3.5, rng=1.6, mel="arch", gain=2.5),
+                             P("Not some boring template.", speed=1.12, shift=-2.5, rng=0.8, mel="dip", gain=-1.5),
+                             P("A stunning store, with real animations!", shift=2, rng=1.8, mel="arch", gain=1)]),
+    ("feat0", 480, 2, 30, [P("Way more beautiful!", speed=1.08, shift=1, rng=1.7, mel="arch")]),
+    ("feat1", 525, 2, 30, [P("Customize everything!", shift=1, rng=1.7, mel="arch")]),
+    ("feat2", 570, 2, 30, [P("Full control!", speed=1.0, shift=-1, rng=1.4, mel="fall", gain=1)]),
+    ("feat3", 615, 2, 42, [P("Zero monthly fees!", speed=1.05, shift=2, rng=1.8, mel="arch", gain=2)]),
+    ("compare", 660, 8, 90, [P("That's forty-three twenty saved!", "That's $4,320 saved!", speed=1.08, shift=2, rng=1.7, mel="arch", gain=1),
+                             P("It pays for itself in ten months!", "It pays for itself in 10 months!", shift=0, rng=1.5, mel="fall")]),
+    ("guarantee", 780, 2, 80, [P("And if you don't love it?", shift=-1, rng=1.5, mel="rise"),
+                               P("Full refund. Zero risk!", speed=1.0, shift=-1, rng=1.4, mel="fall", gain=1)]),
+    ("offer", 870, 2, 120, [P("D.M. or comment, Appify E-commerce, to book your free prototype demo!", "DM or comment \"Appify Ecommerce\" to book your free prototype demo!", shift=0.5, rng=1.6, mel="fall")]),
 ]
+OLD_END = 990
 
 
 def smooth(a, b, u):
@@ -58,7 +57,7 @@ def melody(kind, u):
     return decl + 1.2 * np.sin(np.pi * np.clip(u * 1.6, 0, 1)) - 3.0 * smooth(0.65, 1, u)   # fall
 
 
-def intonate(s, ph, stretch=1.0):
+def intonate(s, ph):
     snd = parselmouth.Sound(s, SR)
     man = call(snd, "To Manipulation", 0.01, 60, 450)
     pt = call(man, "Extract pitch tier")
@@ -74,10 +73,6 @@ def intonate(s, ph, stretch=1.0):
         for t, v in zip(ts, centre * 2 ** (st / 12)):
             call(new, "Add point", float(t), float(np.clip(v, 65, 420)))
         call([new, man], "Replace pitch tier")
-    if stretch != 1.0:
-        dt = call("Create DurationTier", "d", snd.xmin, snd.xmax)
-        call(dt, "Add point", snd.xmin, stretch); call(dt, "Add point", snd.xmax, stretch)
-        call([dt, man], "Replace duration tier")
     out = call(man, "Get resynthesis (overlap-add)").values[0]
     return out * 10 ** (ph["gain"] / 20)
 
@@ -105,30 +100,27 @@ def room(x):
 
 
 k = Kokoro(f"{sys.argv[1]}/kokoro-v1.0.onnx", f"{sys.argv[1]}/voices-v1.0.bin")
-out = np.zeros(int(DUR * SR)); words = []
-for li, (start, end, phrases) in enumerate(LINES):
-    budget = (end - start) / FPS
-    raw = [tts(p["text"], p["speed"]) for p in phrases]
-    total = sum(len(r) for r in raw) / SR + sum(p["gap"] for p in phrases[:-1])
-    if total > budget:                                    # too long: speak a touch faster, keep the melody
-        raw = [tts(p["text"], p["speed"] * min(1.18, total / budget)) for p in phrases]
-        total = sum(len(r) for r in raw) / SR + sum(p["gap"] for p in phrases[:-1])
-    stretch = min(1.0, budget / total) if total > budget else 1.0
-    segs, marks = [], []
-    lead = breath() if budget > 3 and li > 0 else np.zeros(0)
-    pos = 0
-    for p, r in zip(phrases, raw):
-        y = intonate(r, p, stretch)
-        segs.append(y); marks.append((pos, y, p)); pos += len(y)
-        if p is not phrases[-1]:
-            g = np.zeros(int(p["gap"] * stretch * SR)); segs.append(g); pos += len(g)
-    line = np.concatenate(segs)
-    i = int(start / FPS * SR)
-    if len(lead): out[max(0, i - len(lead)): i] += lead[-min(i, len(lead)):]
-    out[i:i + len(line)] += line[: len(out) - i]
-    print(f"{start:4d} {len(line) / SR:5.2f}s / {budget:4.2f}s  stretch {stretch:.2f}  {phrases[0]['text'][:40]}")
-    # word timings: spread each phrase's caption words over its voiced frames by word length
-    for off, y, p in marks:
+F = lambda s: int(round(s * FPS))
+# 1. speak every sentence
+lines = []
+for name, old, lead, mn, sents in SCRIPT:
+    lines.append([intonate(tts(p["text"], p["speed"]), p) for p in sents])
+# 2. place scenes on the voice: next scene starts when the voice is ready for it, but not before
+#    the current scene's minimum length
+anchors, starts, voice_free, prev = [], [], 0.0, None
+for (name, old, lead, mn, sents), ys in zip(SCRIPT, lines):
+    a = 0 if prev is None else max(F(voice_free + GAP_SCENE) - lead, prev[0] + prev[1])
+    anchors.append([name, old, a]); starts.append(a + lead); prev = (a, mn)
+    voice_free = (a + lead) / FPS + sum(len(y) for y in ys) / SR + GAP_SENTENCE * (len(ys) - 1)
+total = max(F(voice_free) + TAIL, anchors[-1][2] + SCRIPT[-1][3])
+# 3. lay the audio down and time every caption word
+out = np.zeros(int(total / FPS * SR) + SR); words = []
+for li, ((name, old, lead, mn, sents), ys, s0) in enumerate(zip(SCRIPT, lines, starts)):
+    pos = int(s0 / FPS * SR)
+    if sum(len(y) for y in ys) / SR > 3:
+        b = breath(); out[max(0, pos - len(b)): pos] += b[-min(pos, len(b)):]
+    for p, y in zip(sents, ys):
+        out[pos:pos + len(y)] += y
         env = np.convolve(np.abs(y), np.ones(480) / 480, "same")
         voiced = env > env.max() * 0.08
         vt = np.cumsum(voiced) / max(1, voiced.sum())
@@ -136,14 +128,17 @@ for li, (start, end, phrases) in enumerate(LINES):
         weights = np.array([max(2, len(w.strip('.,?!"\'$'))) + 1.5 for w in cw], float)
         edges = np.concatenate([[0], np.cumsum(weights) / weights.sum()])
         for j, w in enumerate(cw):
-            a = np.searchsorted(vt, edges[j]); b = np.searchsorted(vt, edges[j + 1])
-            words.append({"w": w, "line": li, "start": round(start + (off + a) / SR * FPS, 2), "end": round(start + (off + b) / SR * FPS, 2)})
+            a = np.searchsorted(vt, edges[j]); b2 = np.searchsorted(vt, edges[j + 1])
+            words.append({"w": w, "line": li, "start": round((pos + a) / SR * FPS, 2), "end": round((pos + b2) / SR * FPS, 2)})
+        pos += len(y) + int(GAP_SENTENCE * SR)
+    print(f"{name:10s} scene {anchors[li][2]:4d} (was {old:4d})  voice {s0:4d}  {sents[0]['text'][:44]}")
+out = out[: int(total / FPS * SR)]
 out = room(out)
-peak = np.abs(out).max(); out = out / peak * 0.9
+out = out / np.abs(out).max() * 0.9
 sf.write("vo/vo.wav", out, SR)
-# per-frame mouth envelope 0..1
 hop = SR // FPS
-rms = np.array([np.sqrt(np.mean(out[i * hop:(i + 1) * hop] ** 2)) for i in range(int(DUR * FPS))])
+rms = np.array([np.sqrt(np.mean(out[i * hop:(i + 1) * hop] ** 2)) for i in range(total)])
 env = np.clip(rms / (np.percentile(rms[rms > 0.01], 90) + 1e-9), 0, 1)
-json.dump({"mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
-print("words", len(words))
+anchors.append(["end", OLD_END, total])
+json.dump({"duration": total, "anchors": anchors, "mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
+print(f"total {total} frames = {total / FPS:.2f}s, words {len(words)}")

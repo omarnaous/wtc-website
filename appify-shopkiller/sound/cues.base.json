@@ -1,52 +1,52 @@
 {
  "fps": 30,
- "duration": 32.333,
+ "duration": 33.0,
  "seed": 21,
  "fade_out": 1.0,
  "cues": [
   {
    "type": "drone",
    "start": 0,
-   "end": 287,
+   "end": 330,
    "gain": 0.1,
    "freq": 55
   },
   {
    "type": "beat",
    "start": 0,
-   "end": 227,
+   "end": 270,
    "bpm": 120,
    "pattern": "half-time",
    "gain": 0.22
   },
   {
    "type": "beat",
-   "start": 287,
-   "end": 592,
+   "start": 330,
+   "end": 660,
    "bpm": 120,
    "pattern": "four-on-floor",
    "gain": 0.36
   },
   {
    "type": "beat",
-   "start": 592,
-   "end": 702,
+   "start": 660,
+   "end": 780,
    "bpm": 120,
    "pattern": "half-time",
    "gain": 0.28
   },
   {
    "type": "beat",
-   "start": 841,
-   "end": 879,
+   "start": 922,
+   "end": 960,
    "bpm": 120,
    "pattern": "four-on-floor",
    "gain": 0.3
   },
   {
    "type": "pad",
-   "start": 287,
-   "end": 970,
+   "start": 330,
+   "end": 990,
    "gain": 0.05
   },
   {
@@ -62,7 +62,7 @@
   {
    "type": "printer",
    "start": 4,
-   "end": 79,
+   "end": 82,
    "gain": 0.55
   },
   {
@@ -95,477 +95,477 @@
   },
   {
    "type": "coin",
-   "frame": 67,
+   "frame": 70,
    "gain": 0.12,
    "freq": 2680,
    "pan": 0.3
   },
   {
    "type": "register",
-   "frame": 59,
+   "frame": 62,
    "gain": 0.35
   },
   {
    "type": "whoosh",
-   "start": 75,
-   "end": 89,
+   "start": 78,
+   "end": 92,
    "gain": 0.15
   },
   {
    "type": "snare",
-   "frame": 87,
+   "frame": 90,
    "gain": 0.6
   },
   {
    "type": "kick",
-   "frame": 87,
+   "frame": 90,
    "gain": 0.7
   },
   {
    "type": "snare",
-   "frame": 102,
+   "frame": 105,
    "gain": 0.6
   },
   {
    "type": "kick",
-   "frame": 102,
+   "frame": 105,
    "gain": 0.7
   },
   {
    "type": "snare",
-   "frame": 117,
+   "frame": 120,
    "gain": 0.6
   },
   {
    "type": "kick",
-   "frame": 117,
+   "frame": 120,
    "gain": 0.7
   },
   {
    "type": "coin",
-   "frame": 137,
+   "frame": 140,
    "gain": 0.22,
    "freq": 1700,
    "pan": -0.4
   },
   {
    "type": "coin",
-   "frame": 144,
+   "frame": 147,
    "gain": 0.22,
    "freq": 1819,
    "pan": -0.32
   },
   {
    "type": "coin",
-   "frame": 151,
+   "frame": 154,
    "gain": 0.22,
    "freq": 1946,
    "pan": -0.24000000000000002
   },
   {
    "type": "coin",
-   "frame": 158,
+   "frame": 161,
    "gain": 0.22,
    "freq": 2083,
    "pan": -0.16000000000000003
   },
   {
    "type": "coin",
-   "frame": 165,
+   "frame": 168,
    "gain": 0.22,
    "freq": 2228,
    "pan": -0.08000000000000002
   },
   {
    "type": "coin",
-   "frame": 172,
+   "frame": 175,
    "gain": 0.22,
    "freq": 2384,
    "pan": 0.0
   },
   {
    "type": "coin",
-   "frame": 179,
+   "frame": 182,
    "gain": 0.22,
    "freq": 2551,
    "pan": 0.07999999999999996
   },
   {
    "type": "coin",
-   "frame": 186,
+   "frame": 189,
    "gain": 0.22,
    "freq": 2730,
    "pan": 0.16000000000000003
   },
   {
    "type": "coin",
-   "frame": 193,
+   "frame": 196,
    "gain": 0.22,
    "freq": 2921,
    "pan": 0.24
   },
   {
    "type": "coin",
-   "frame": 200,
+   "frame": 203,
    "gain": 0.22,
    "freq": 3125,
    "pan": 0.31999999999999995
   },
   {
    "type": "register",
-   "frame": 203,
+   "frame": 206,
    "gain": 0.45
   },
   {
    "type": "tick",
-   "frame": 222,
+   "frame": 225,
    "gain": 0.15
   },
   {
    "type": "riser",
-   "start": 199,
-   "end": 225,
+   "start": 242,
+   "end": 268,
    "gain": 0.45
   },
   {
    "type": "rip",
-   "frame": 227,
+   "frame": 270,
    "dur": 0.55,
    "gain": 0.75
   },
   {
    "type": "whoosh",
-   "start": 239,
-   "end": 253,
+   "start": 282,
+   "end": 296,
    "gain": 0.12
   },
   {
    "type": "pop",
-   "frame": 255,
+   "frame": 298,
    "gain": 0.25
   },
   {
    "type": "riser",
-   "start": 259,
-   "end": 283,
+   "start": 302,
+   "end": 326,
    "gain": 0.55
   },
   {
    "type": "impact",
-   "frame": 287,
+   "frame": 330,
    "gain": 1.0
   },
   {
    "type": "whoosh",
-   "start": 325,
-   "end": 341,
+   "start": 368,
+   "end": 384,
    "gain": 0.14
   },
   {
    "type": "pop",
-   "frame": 342,
+   "frame": 385,
    "gain": 0.22
   },
   {
    "type": "pop",
-   "frame": 348,
+   "frame": 391,
    "gain": 0.22
   },
   {
    "type": "pop",
-   "frame": 354,
+   "frame": 397,
    "gain": 0.22
   },
   {
    "type": "pop",
-   "frame": 360,
+   "frame": 403,
    "gain": 0.22
   },
   {
    "type": "click",
-   "frame": 366,
+   "frame": 409,
    "gain": 0.35
   },
   {
    "type": "click",
-   "frame": 375,
+   "frame": 418,
    "gain": 0.35
   },
   {
    "type": "click",
-   "frame": 384,
+   "frame": 427,
    "gain": 0.35
   },
   {
    "type": "whoosh",
-   "start": 401,
-   "end": 422,
+   "start": 444,
+   "end": 462,
    "gain": 0.14
   },
   {
    "type": "snare",
-   "frame": 440,
+   "frame": 480,
    "gain": 0.45
   },
   {
    "type": "impact",
-   "frame": 440,
+   "frame": 480,
    "gain": 0.22
   },
   {
    "type": "snare",
-   "frame": 476,
+   "frame": 525,
    "gain": 0.45
   },
   {
    "type": "impact",
-   "frame": 476,
+   "frame": 525,
    "gain": 0.22
   },
   {
    "type": "snare",
-   "frame": 517,
+   "frame": 570,
    "gain": 0.45
   },
   {
    "type": "impact",
-   "frame": 517,
+   "frame": 570,
    "gain": 0.22
   },
   {
    "type": "snare",
-   "frame": 550,
+   "frame": 615,
    "gain": 0.45
   },
   {
    "type": "impact",
-   "frame": 550,
+   "frame": 615,
    "gain": 0.22
   },
   {
    "type": "riser",
-   "start": 608,
-   "end": 650,
+   "start": 676,
+   "end": 718,
    "gain": 0.25
   },
   {
    "type": "register",
-   "frame": 674,
+   "frame": 742,
    "gain": 0.5
   },
   {
    "type": "chime",
-   "frame": 678,
+   "frame": 746,
    "gain": 0.18
   },
   {
    "type": "kick",
-   "frame": 789,
+   "frame": 870,
    "gain": 0.9
   },
   {
    "type": "impact",
-   "frame": 789,
+   "frame": 870,
    "gain": 0.45
   },
   {
    "type": "printer",
-   "start": 791,
-   "end": 819,
+   "start": 872,
+   "end": 900,
    "gain": 0.5,
    "rate": 90
   },
   {
    "type": "impact",
-   "frame": 827,
+   "frame": 908,
    "gain": 0.8
   },
   {
    "type": "kick",
-   "frame": 827,
+   "frame": 908,
    "gain": 0.8
   },
   {
    "type": "chime",
-   "frame": 841,
+   "frame": 922,
    "gain": 0.2
   },
   {
    "type": "glint",
-   "frame": 869,
+   "frame": 950,
    "gain": 0.06
   },
   {
    "type": "click",
-   "frame": 449,
+   "frame": 498,
    "gain": 0.4,
    "pan": 0.2
   },
   {
    "type": "click",
-   "frame": 462,
+   "frame": 511,
    "gain": 0.4,
    "pan": 0.2
   },
   {
    "type": "click",
-   "frame": 486,
+   "frame": 535,
    "gain": 0.4,
    "pan": 0.2
   },
   {
    "type": "click",
-   "frame": 494,
+   "frame": 547,
    "gain": 0.4,
    "pan": 0.2
   },
   {
    "type": "click",
-   "frame": 526,
+   "frame": 579,
    "gain": 0.4,
    "pan": 0.2
   },
   {
    "type": "click",
-   "frame": 546,
+   "frame": 611,
    "gain": 0.4,
    "pan": 0.2
   },
   {
    "type": "pop",
-   "frame": 447,
+   "frame": 487,
    "gain": 0.25
   },
   {
    "type": "pop",
-   "frame": 454,
+   "frame": 494,
    "gain": 0.15,
    "pan": -0.2
   },
   {
    "type": "pop",
-   "frame": 449,
+   "frame": 498,
    "gain": 0.15,
    "pan": -0.2
   },
   {
    "type": "pop",
-   "frame": 453,
+   "frame": 502,
    "gain": 0.15,
    "pan": -0.2
   },
   {
    "type": "whoosh",
-   "start": 476,
-   "end": 485,
+   "start": 525,
+   "end": 534,
    "gain": 0.12
   },
   {
    "type": "whoosh",
-   "start": 527,
-   "end": 531,
+   "start": 580,
+   "end": 596,
    "gain": 0.16,
    "pan": 0.3
   },
   {
    "type": "pop",
-   "frame": 531,
+   "frame": 596,
    "gain": 0.35
   },
   {
    "type": "coin",
-   "frame": 531,
+   "frame": 596,
    "gain": 0.15,
    "freq": 2600
   },
   {
    "type": "whoosh",
-   "start": 531,
-   "end": 541,
+   "start": 596,
+   "end": 606,
    "gain": 0.1
   },
   {
    "type": "chime",
-   "frame": 551,
+   "frame": 616,
    "gain": 0.2,
    "freq": 1568
   },
   {
    "type": "glitch",
-   "frame": 564,
+   "frame": 629,
    "dur": 0.22,
    "gain": 0.22
   },
   {
    "type": "whoosh",
-   "start": 571,
-   "end": 582,
+   "start": 639,
+   "end": 650,
    "gain": 0.12
   },
   {
    "type": "impact",
-   "frame": 579,
+   "frame": 647,
    "gain": 0.5
   },
   {
    "type": "register",
-   "frame": 580,
+   "frame": 648,
    "gain": 0.4
   },
   {
    "type": "glitch",
-   "frame": 422,
+   "frame": 462,
    "dur": 0.2,
    "gain": 0.2
   },
   {
    "type": "chime",
-   "frame": 426,
+   "frame": 466,
    "gain": 0.16,
    "freq": 1760
   },
   {
    "type": "whoosh",
-   "start": 403,
-   "end": 418,
+   "start": 446,
+   "end": 458,
    "gain": 0.12
   },
   {
    "type": "kick",
-   "frame": 702,
+   "frame": 780,
    "gain": 0.8
   },
   {
    "type": "whoosh",
-   "start": 702,
-   "end": 716,
+   "start": 780,
+   "end": 794,
    "gain": 0.12
   },
   {
    "type": "impact",
-   "frame": 716,
+   "frame": 794,
    "gain": 0.7
   },
   {
    "type": "chime",
-   "frame": 728,
+   "frame": 806,
    "gain": 0.2,
    "freq": 1568
   },
   {
    "type": "pop",
-   "frame": 746,
+   "frame": 824,
    "gain": 0.25
   },
   {
    "type": "pop",
-   "frame": 752,
+   "frame": 830,
    "gain": 0.25
   },
   {
    "type": "beat",
-   "start": 702,
-   "end": 785,
+   "start": 780,
+   "end": 866,
    "bpm": 120,
    "pattern": "half-time",
    "gain": 0.25

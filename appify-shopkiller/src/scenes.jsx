@@ -4,19 +4,20 @@ import { clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Streak } from "
 import { WORDMARK } from "./brand.js";
 import { Storefront } from "./store.jsx";
 import { REVIEWS } from "./reviews.js";
+import { FEATS as FEAT_AT, COST_CUES } from "./timing.js";
 import { Sneaker, Hoodie, Backpack, Cap, Watch } from "./products.jsx";
 
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
 /* ── 1. Hook: the receipt that never ends ─────────────────────────────── */
-export function Receipt({ monthly }) {
+export function Receipt({ monthly, dur = 90 }) {
   const f = useCurrentFrame();
   const slot = 900, speed = 13, rowH = 64, first = 4;
   const len = Math.max(0, (f - first) * speed + 120);
   const rows = Array.from({ length: 24 }, (_, k) => k);
   const sway = Math.sin(f / 14) * 1.2;
   return (
-    <AbsoluteFill style={exitStyle(f, 78, 12, -260)}>
+    <AbsoluteFill style={exitStyle(f, dur - 12, 12, -260)}>
       <div style={{ position: "absolute", inset: 0, transform: `scale(${interpolate(f, [0, 8], [1.08, 1], { ...clamp, easing: easeOut })})`, transformOrigin: "50% 25%" }}>
         <Words text="Still paying" y={300} size={96} start={-40} />
         <Words text={`$${monthly}/month`} y={410} size={168} color={C.alert} start={-40} />
@@ -43,19 +44,21 @@ export function Receipt({ monthly }) {
 }
 
 /* ── 2. The cost: 3D bars, year by year ───────────────────────────────── */
-export function Cost({ monthly }) {
+export function Cost({ monthly, dur = 180 }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const yearly = monthly * 12;
   const base = 1400, maxV = 5000, maxH = 720, x0 = 150, bw = 58, gap = 26, depth = 20;
   const hOf = (v) => (v / maxV) * maxH;
   const head = interpolate(f, [40, 52], [0, 1], { ...clamp, easing: easeOut });
-  const barStart = (i) => 50 + i * 7;
+  // bars cascade so the 10th lands as the voice says "ten years"
+  const step = Math.max(3, Math.min(7, (COST_CUES.ten - 62) / 9));
+  const barStart = (i) => 50 + i * step;
   const grown = Array.from({ length: 10 }, (_, i) => spring({ frame: f - barStart(i), fps, config: { damping: 14, stiffness: 170 } }));
   const lastIdx = grown.reduce((m, g, i) => (g > 0.05 ? i : m), -1);
   const total = lastIdx < 0 ? 0 : Math.min(yearly * 10, yearly * (lastIdx + Math.min(1, grown[lastIdx])));
   return (
-    <AbsoluteFill style={exitStyle(f, 172, 8, -60)}>
+    <AbsoluteFill style={exitStyle(f, dur - 8, 8, -60)}>
       {/* Every. Single. Month. — on the beat, then shrink into a header */}
       <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(head, [0, 1], [430, 236]), transform: `scale(${interpolate(head, [0, 1], [1, 0.3])})`, transformOrigin: "50% 0%" }}>
         {["Every.", "Single.", "Month."].map((w, i) => {
@@ -91,15 +94,15 @@ export function Cost({ monthly }) {
           </svg>
         </>
       )}
-      <Words text="…and you still don't own it." y={1500} size={64} start={135} colors={{ 3: C.alert, 4: C.alert, 5: C.alert }} />
+      <Words text="…and you still don't own it." y={1500} size={64} start={COST_CUES.own} colors={{ 3: C.alert, 4: C.alert, 5: C.alert }} />
     </AbsoluteFill>
   );
 }
 
 /* ── 3. The turn ──────────────────────────────────────────────────────── */
-export function Turn() {
+export function Turn({ dur = 60 }) {
   const f = useCurrentFrame();
-  const suck = interpolate(f, [48, 60], [0, 1], { ...clamp, easing: easeIn });
+  const suck = interpolate(f, [dur - 12, dur], [0, 1], { ...clamp, easing: easeIn });
   return (
     <AbsoluteFill style={{ opacity: 1 - suck, transform: `scale(${1 - suck * 0.4})`, filter: `blur(${suck * 8}px)` }}>
       <Words text="What if" y={720} size={130} color={C.paper} start={14} />
@@ -246,7 +249,7 @@ const FEATS = [["Way more", "beautiful."], ["Customize", "everything."], ["Full"
 export function Features({ monthly }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const k = Math.min(3, Math.floor(f / 45)), l = f - k * 45;
+  const k = FEAT_AT.reduce((m, s, i) => (f >= s ? i : m), 0), l = f - FEAT_AT[k];
   const s = spring({ frame: l, fps, config: { damping: 11, stiffness: 240 } });
   const strike = k === 3 ? interpolate(l, [14, 20], [0, 1], { ...clamp, easing: easeOut }) : 0;
   const drop = k === 3 ? interpolate(l, [24, 36], [0, 1], { ...clamp, easing: easeIn }) : 0;
