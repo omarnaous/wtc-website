@@ -36,6 +36,10 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 | `printer` | dot-matrix needle clicks + motor (`start`/`end`, `rate`, `line`) | receipts, invoices, printing anything |
 | `coin` | metallic ping (`freq`, raise it for rising sequences) | money counting up, bars growing |
 | `register` | cash-register clack + ching + coin rattle | prices, savings, "sold" moments |
+| `cash` | banknote snap, no ring | a price drops, money saved, a "paid" moment |
+| `cash_count` | bills flicking between `start`/`end` (`rate`) | a money counter ticking up |
+| `blip` | soft rounded data tick (`freq`, step it up) | chart bars or points appearing |
+| `sweep` | soft tone gliding `f0`→`f1` between `start`/`end` | a chart line drawing |
 | `rip` | paper tear (`start`/`end` or `dur`) | paper transitions, tearing a bill |
 | `glitch` | digital stutter (`dur`) | crossing something out, errors, cuts |
 | `click` / `pop` | UI tap / bubbly pop | toggles, buttons, cards popping in |
@@ -43,7 +47,7 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 
 ## Warmth
 
-If the mix sounds sharp or tiring ("too bright", "hurts the ears"), set `"lowpass": 4500` at the top of cues.json, give `beat` cues `"hats": 0.1` or less, drop `glint`/`glitch`, and pitch `chime`, `coin`, `tick` and `click` down with `freq` (chime 660-880, coin 800-1200, tick ~1200, click ~600). Under a voice-over, keep the bed warm and low so the voice owns the 2-5 kHz range.
+If the mix sounds sharp or tiring ("too bright", "hurts the ears"), set `"lowpass": 4500` at the top of cues.json, give `beat` cues `"hats": 0.1` or less, drop `glint`/`glitch`, swap bell-like `register`/`coin`/`chime` for `cash`, `cash_count` and `blip`, and pitch `chime`, `coin`, `tick` and `click` down with `freq` (chime 660-880, coin 800-1200, tick ~1200, click ~600). Under a voice-over, keep the bed warm and low so the voice owns the 2-5 kHz range.
 
 ## Levels
 

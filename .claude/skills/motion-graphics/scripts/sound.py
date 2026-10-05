@@ -7,7 +7,7 @@ usage:
                                         print beat frames, for locking cuts/words to the beat
 
 Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
-           printer coin register rip glitch click pop typing.
+           printer coin register rip glitch click pop typing cash cash_count blip sweep.
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
 Requires numpy and scipy (pip install numpy scipy).
 """
@@ -191,6 +191,38 @@ def typing(c, q, fps):
         i = int(t * SR); out[i:i + len(k)] += k[: n - i]; t += c.rng.uniform(0.045, 0.11)
     return out
 
+def cash(c, q):
+    """Banknote snap: a crisp paper flick with a soft body thump. No bell, no ring."""
+    n = int(0.16 * SR); t = np.arange(n) / SR
+    out = np.zeros(n)
+    for d, a in [(0.0, 1.0), (0.028, 0.55)]:
+        i = int(d * SR); m = int(0.06 * SR)
+        out[i:i + m] += bp(c.noise(m), 900, 5200) * decay(m, 0.012) * a
+    return out + lp(c.noise(n), 220) * decay(n, 0.02) * 0.6
+
+def cash_count(c, q, fps):
+    """Bills being counted/flicked between start and end frames."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); out = np.zeros(n); t = 0.0
+    rate = q.get("rate", 16)
+    while t < n / SR - 0.03:
+        m = int(0.03 * SR); i = int(t * SR)
+        out[i:i + m] += (bp(c.noise(m), 1200, 6000) * decay(m, 0.006) * c.rng.uniform(0.5, 1.0))[: n - i]
+        t += 1 / rate * c.rng.uniform(0.8, 1.2)
+    return out
+
+def blip(c, q):
+    """Soft data blip (a bar or point appearing on a chart): rounded sine pluck, raise "freq" to step up."""
+    n = int(0.14 * SR); t = np.arange(n) / SR; f = q.get("freq", 520)
+    s = osc(f * (1 + 0.04 * np.exp(-t / 0.01)), n) + osc(2 * f, n) * 0.18
+    return lp(s * np.minimum(1, t / 0.002) * decay(n, 0.035), 3000)
+
+def sweep(c, q, fps):
+    """Line drawing across a chart: a soft tone gliding from "f0" to "f1" with a little air."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); p = np.linspace(0, 1, n)
+    f = q.get("f0", 260) * (q.get("f1", 780) / q.get("f0", 260)) ** p
+    env = np.minimum(1, p / 0.15) * np.minimum(1, (1 - p) / 0.12)
+    return (osc(f, n) * 0.7 + bp(c.noise(n), 800, 3000) * 0.08) * env
+
 PATTERNS = {  # per 16th-note step in a bar: k=kick s=snare h=hat
     "four-on-floor": ["kh", "", "h", "", "ksh", "", "h", "", "kh", "", "h", "", "ksh", "", "h", ""],
     "half-time":     ["kh", "", "h", "", "h", "", "h", "", "sh", "", "h", "", "h", "", "kh", "h"],
@@ -231,8 +263,11 @@ def render(spec, out):
         elif typ == "printer": sig = printer(c, q, fps)
         elif typ == "rip": sig = rip(c, q, fps)
         elif typ == "typing": sig = typing(c, q, fps)
+        elif typ == "cash_count": sig = cash_count(c, q, fps)
+        elif typ == "sweep": sig = sweep(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
-                   "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop}[typ](c, q)
+                   "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
+                   "cash": cash, "blip": blip}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)
     if loop:  # periodic by construction: whatever rings past the end continues from the start

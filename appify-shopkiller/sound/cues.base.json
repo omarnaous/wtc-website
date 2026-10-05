@@ -66,46 +66,6 @@
    "gain": 0.55
   },
   {
-   "type": "coin",
-   "frame": 10,
-   "gain": 0.12,
-   "freq": 2200,
-   "pan": 0.3
-  },
-  {
-   "type": "coin",
-   "frame": 25,
-   "gain": 0.12,
-   "freq": 2320,
-   "pan": 0.3
-  },
-  {
-   "type": "coin",
-   "frame": 40,
-   "gain": 0.12,
-   "freq": 2440,
-   "pan": 0.3
-  },
-  {
-   "type": "coin",
-   "frame": 55,
-   "gain": 0.12,
-   "freq": 2560,
-   "pan": 0.3
-  },
-  {
-   "type": "coin",
-   "frame": 70,
-   "gain": 0.12,
-   "freq": 2680,
-   "pan": 0.3
-  },
-  {
-   "type": "register",
-   "frame": 62,
-   "gain": 0.35
-  },
-  {
    "type": "whoosh",
    "start": 78,
    "end": 92,
@@ -140,81 +100,6 @@
    "type": "kick",
    "frame": 120,
    "gain": 0.7
-  },
-  {
-   "type": "coin",
-   "frame": 140,
-   "gain": 0.22,
-   "freq": 1700,
-   "pan": -0.4
-  },
-  {
-   "type": "coin",
-   "frame": 147,
-   "gain": 0.22,
-   "freq": 1819,
-   "pan": -0.32
-  },
-  {
-   "type": "coin",
-   "frame": 154,
-   "gain": 0.22,
-   "freq": 1946,
-   "pan": -0.24000000000000002
-  },
-  {
-   "type": "coin",
-   "frame": 161,
-   "gain": 0.22,
-   "freq": 2083,
-   "pan": -0.16000000000000003
-  },
-  {
-   "type": "coin",
-   "frame": 168,
-   "gain": 0.22,
-   "freq": 2228,
-   "pan": -0.08000000000000002
-  },
-  {
-   "type": "coin",
-   "frame": 175,
-   "gain": 0.22,
-   "freq": 2384,
-   "pan": 0.0
-  },
-  {
-   "type": "coin",
-   "frame": 182,
-   "gain": 0.22,
-   "freq": 2551,
-   "pan": 0.07999999999999996
-  },
-  {
-   "type": "coin",
-   "frame": 189,
-   "gain": 0.22,
-   "freq": 2730,
-   "pan": 0.16000000000000003
-  },
-  {
-   "type": "coin",
-   "frame": 196,
-   "gain": 0.22,
-   "freq": 2921,
-   "pan": 0.24
-  },
-  {
-   "type": "coin",
-   "frame": 203,
-   "gain": 0.22,
-   "freq": 3125,
-   "pan": 0.31999999999999995
-  },
-  {
-   "type": "register",
-   "frame": 206,
-   "gain": 0.45
   },
   {
    "type": "tick",
@@ -343,22 +228,6 @@
    "gain": 0.22
   },
   {
-   "type": "riser",
-   "start": 676,
-   "end": 718,
-   "gain": 0.25
-  },
-  {
-   "type": "register",
-   "frame": 742,
-   "gain": 0.5
-  },
-  {
-   "type": "chime",
-   "frame": 746,
-   "gain": 0.18
-  },
-  {
    "type": "kick",
    "frame": 870,
    "gain": 0.9
@@ -384,16 +253,6 @@
    "type": "kick",
    "frame": 908,
    "gain": 0.8
-  },
-  {
-   "type": "chime",
-   "frame": 922,
-   "gain": 0.2
-  },
-  {
-   "type": "glint",
-   "frame": 950,
-   "gain": 0.06
   },
   {
    "type": "click",
@@ -473,28 +332,10 @@
    "gain": 0.35
   },
   {
-   "type": "coin",
-   "frame": 596,
-   "gain": 0.15,
-   "freq": 2600
-  },
-  {
    "type": "whoosh",
    "start": 596,
    "end": 606,
    "gain": 0.1
-  },
-  {
-   "type": "chime",
-   "frame": 616,
-   "gain": 0.2,
-   "freq": 1568
-  },
-  {
-   "type": "glitch",
-   "frame": 629,
-   "dur": 0.22,
-   "gain": 0.22
   },
   {
    "type": "whoosh",
@@ -506,23 +347,6 @@
    "type": "impact",
    "frame": 647,
    "gain": 0.5
-  },
-  {
-   "type": "register",
-   "frame": 648,
-   "gain": 0.4
-  },
-  {
-   "type": "glitch",
-   "frame": 462,
-   "dur": 0.2,
-   "gain": 0.2
-  },
-  {
-   "type": "chime",
-   "frame": 466,
-   "gain": 0.16,
-   "freq": 1760
   },
   {
    "type": "whoosh",
@@ -547,12 +371,6 @@
    "gain": 0.7
   },
   {
-   "type": "chime",
-   "frame": 806,
-   "gain": 0.2,
-   "freq": 1568
-  },
-  {
    "type": "pop",
    "frame": 824,
    "gain": 0.25
@@ -569,6 +387,111 @@
    "bpm": 120,
    "pattern": "half-time",
    "gain": 0.25
+  },
+  {
+   "type": "blip",
+   "frame": 140,
+   "gain": 0.16,
+   "freq": 392,
+   "pan": -0.3
+  },
+  {
+   "type": "blip",
+   "frame": 147,
+   "gain": 0.16,
+   "freq": 440,
+   "pan": -0.23
+  },
+  {
+   "type": "blip",
+   "frame": 154,
+   "gain": 0.16,
+   "freq": 494,
+   "pan": -0.17
+  },
+  {
+   "type": "blip",
+   "frame": 161,
+   "gain": 0.16,
+   "freq": 554,
+   "pan": -0.1
+  },
+  {
+   "type": "blip",
+   "frame": 168,
+   "gain": 0.16,
+   "freq": 622,
+   "pan": -0.04
+  },
+  {
+   "type": "blip",
+   "frame": 175,
+   "gain": 0.16,
+   "freq": 698,
+   "pan": 0.03
+  },
+  {
+   "type": "blip",
+   "frame": 182,
+   "gain": 0.16,
+   "freq": 784,
+   "pan": 0.1
+  },
+  {
+   "type": "blip",
+   "frame": 189,
+   "gain": 0.16,
+   "freq": 880,
+   "pan": 0.16
+  },
+  {
+   "type": "blip",
+   "frame": 196,
+   "gain": 0.16,
+   "freq": 988,
+   "pan": 0.23
+  },
+  {
+   "type": "blip",
+   "frame": 203,
+   "gain": 0.16,
+   "freq": 1109,
+   "pan": 0.29
+  },
+  {
+   "type": "cash_count",
+   "start": 196,
+   "end": 214,
+   "gain": 0.28
+  },
+  {
+   "type": "cash",
+   "frame": 648,
+   "gain": 0.45
+  },
+  {
+   "type": "sweep",
+   "start": 676,
+   "end": 718,
+   "gain": 0.07,
+   "f0": 220,
+   "f1": 660
+  },
+  {
+   "type": "cash_count",
+   "start": 722,
+   "end": 742,
+   "gain": 0.3
+  },
+  {
+   "type": "cash",
+   "frame": 744,
+   "gain": 0.4
+  },
+  {
+   "type": "cash",
+   "frame": 910,
+   "gain": 0.35
   }
  ]
 }

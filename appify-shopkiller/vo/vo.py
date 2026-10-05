@@ -12,8 +12,9 @@ from kokoro_onnx import Kokoro
 
 FPS, SR = 30, 24000
 VOICE = "am_puck"
-GAP_SENTENCE, GAP_SCENE = 0.2, 0.3      # seconds of silence between sentences / between scenes
-TAIL = 60                              # frames the end card holds after the last word
+GAP_SENTENCE, GAP_SCENE = 0.15, 0.22   # seconds of silence between sentences / between scenes
+PACE = 1.2 / 1.1                       # overall read speed: every line's speed is scaled by this (baseline 1.1 -> 1.2)
+TAIL = 36                              # frames the end card holds after the last word
 
 # sentence: (spoken, caption, speed, shift st, range x, melody, gain dB)
 #   shift: register vs the voice's own (+ = higher / more excited, - = lower / more serious)
@@ -23,23 +24,23 @@ P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: di
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
 # (scene anchor, its frame in the original 33 s cut, lead frames before the voice, min frames, sentences)
 SCRIPT = [
-    ("receipt", 0, 6, 75, [P("Are you still paying thirty-nine dollars a month for your online store?",
-                             "Are you still paying $39 a month for your online store?", speed=1.1, shift=1, rng=1.5, mel="rise", gain=1)]),
-    ("cost", 90, 2, 120, [P("That's four hundred sixty-eight dollars a year, and almost five thousand over ten years.",
-                            "That's $468 a year, and almost $5,000 over ten years.", speed=1.12, shift=0.5, rng=1.6, mel="arch", gain=0.5),
-                          P("And you still don't even own your store.", shift=-1, rng=1.5, mel="fall")]),
+    ("receipt", 0, 6, 75, [P("Are you still paying thirty-nine dollars a month for your store?",
+                             "Are you still paying $39 a month for your store?", speed=1.1, shift=1, rng=1.5, mel="rise", gain=1)]),
+    ("cost", 90, 2, 120, [P("That's four sixty-eight a year, and almost five thousand in ten years.",
+                            "That's $468 a year, and almost $5,000 in ten years.", speed=1.12, shift=0.5, rng=1.6, mel="arch", gain=0.5),
+                          P("And you still don't even own it.", shift=-1, rng=1.5, mel="fall")]),
     ("turn", 270, 10, 60, [P("So what if you paid once, and owned it forever?", speed=1.02, shift=-1, rng=1.6, mel="rise", gain=-0.5)]),
     ("reveal", 330, 8, 140, [P("Meet the Subscription Killer, your own custom store by Appify.", speed=1.05, shift=2, rng=1.6, mel="arch", gain=2),
                              P("Not a boring template, but a stunning store with real animations.", shift=0.5, rng=1.6, mel="arch", gain=0.5)]),
-    ("feat0", 480, 2, 30, [P("It looks way more beautiful than any template out there.", shift=1, rng=1.6, mel="arch")]),
-    ("feat1", 525, 2, 30, [P("You can customize every detail to fit your brand.", shift=0.5, rng=1.6, mel="arch")]),
-    ("feat2", 570, 2, 30, [P("You get full control over your store and your data.", shift=-0.5, rng=1.5, mel="fall")]),
-    ("feat3", 615, 2, 45, [P("And you will never pay a monthly fee again.", speed=1.05, shift=1.5, rng=1.7, mel="arch", gain=1.5)]),
-    ("compare", 660, 8, 90, [P("That's over four thousand dollars saved, and it pays for itself in under ten months.",
-                               "That's over $4,000 saved, and it pays for itself in under 10 months.", speed=1.1, shift=1, rng=1.6, mel="arch", gain=1)]),
-    ("guarantee", 780, 2, 80, [P("And if you don't love it, you get a full refund, so there's zero risk.", shift=-0.5, rng=1.5, mel="fall", gain=0.5)]),
-    ("offer", 870, 2, 120, [P("DM us or comment Appify E-commerce to book your free prototype demo.",
-                              "DM us or comment \"Appify Ecommerce\" to book your free prototype demo.", shift=0.5, rng=1.6, mel="fall", gain=0.5)]),
+    ("feat0", 480, 2, 30, [P("It looks way more beautiful than any template.", shift=1, rng=1.6, mel="arch")]),
+    ("feat1", 525, 2, 30, [P("You can customize every single detail.", shift=0.5, rng=1.6, mel="arch")]),
+    ("feat2", 570, 2, 30, [P("You get full control over your store.", shift=-0.5, rng=1.5, mel="fall")]),
+    ("feat3", 615, 2, 45, [P("And you'll never pay a monthly fee again.", speed=1.05, shift=1.5, rng=1.7, mel="arch", gain=1.5)]),
+    ("compare", 660, 8, 90, [P("That's over four thousand saved, and it pays for itself in ten months.",
+                               "That's over $4,000 saved, and it pays for itself in 10 months.", speed=1.1, shift=1, rng=1.6, mel="arch", gain=1)]),
+    ("guarantee", 780, 2, 80, [P("If you don't love it, you get a full refund, so there's zero risk.", shift=-0.5, rng=1.5, mel="fall", gain=0.5)]),
+    ("offer", 870, 2, 120, [P("DM us or comment Appify E-commerce to get your free prototype.",
+                              "DM us or comment \"Appify Ecommerce\" to get your free prototype.", shift=0.5, rng=1.6, mel="fall", gain=0.5)]),
 ]
 OLD_END = 990
 
@@ -78,7 +79,7 @@ def intonate(s, ph):
 
 
 def tts(text, speed):
-    s, sr = k.create(text, voice=VOICE, speed=speed, lang="en-us")
+    s, sr = k.create(text, voice=VOICE, speed=speed * PACE, lang="en-us")
     nz = np.where(np.abs(s) > 0.01)[0]
     return s[max(0, nz[0] - 200): nz[-1] + 900]
 
