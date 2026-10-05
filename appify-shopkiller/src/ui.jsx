@@ -76,10 +76,10 @@ export function Store({ w = 760, h = 980, accent = C.uv, accent2 = C.sky, radius
   );
 }
 
-// The wordmark as the brand name reads in this video: "appify-lb". WORDMARK letters are Sora 600 at
-// 1000 units/em on a 0 baseline, so "-lb" is set in the same face right after them.
-export const LB_W = 4540;
+// The wordmark as the brand name reads in this video: "appifylb". WORDMARK letters are Sora 600 at
+// 1000 units/em on a 0 baseline, so "lb" is set in the same face right after them.
+export const LB_W = 4200;
 export const LB_VIEWBOX = `-20 -917 ${LB_W + 40} 1167`;
 export const lbSvg = (fill, sparkFill) =>
   `<path d="${WORDMARK.letters}" fill="${fill}"/><path d="${WORDMARK.spark}" fill="${sparkFill}"/>` +
-  `<text x="3200" y="0" font-family="Display" font-weight="600" font-size="1000" letter-spacing="-20" fill="${fill}">-lb</text>`;
+  `<text x="3170" y="0" font-family="Display" font-weight="600" font-size="1000" letter-spacing="-20" fill="${fill}">lb</text>`;

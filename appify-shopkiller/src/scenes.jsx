@@ -187,7 +187,7 @@ export function Reveal({ product }) {
           <Extruded text={product[1]} size={200} front={C.iris} side="#2A1678" />
         </div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(up, [0, 1], [1180, 600]), textAlign: "center", ...DISPLAY, fontSize: 46, color: "rgba(243,241,250,.75)", opacity: interpolate(f, [16, 28], [0, 1], clamp) }}>Your own store. Built by appify-lb.</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(up, [0, 1], [1180, 600]), textAlign: "center", ...DISPLAY, fontSize: 46, color: "rgba(243,241,250,.75)", opacity: interpolate(f, [16, 28], [0, 1], clamp) }}>Your own store. Built by appifylb.</div>
 
       {f >= 44 && (
         <div style={{ position: "absolute", zIndex: 1, left: 220, top: 830, width: 640, height: 820, perspective: 2200, opacity: appear, transform: `translateY(${(1 - appear) * 120}px) translateX(${cmp * 205}px) scale(${1.18 - cmp * 0.5})`, transformOrigin: "50% 40%" }}>
@@ -225,7 +225,7 @@ export function Reveal({ product }) {
               </svg>
             </div>
           </div>
-          <div style={{ position: "absolute", zIndex: 30, left: 560, width: 500, top: 866, textAlign: "center", whiteSpace: "nowrap", ...DISPLAY, fontSize: 38, color: C.iris, opacity: cmp }}>appify-lb ✦ animated</div>
+          <div style={{ position: "absolute", zIndex: 30, left: 560, width: 500, top: 866, textAlign: "center", whiteSpace: "nowrap", ...DISPLAY, fontSize: 38, color: C.iris, opacity: cmp }}>appifylb ✦ animated</div>
         </>
       )}
       {f >= 60 && f < 120 && (
@@ -311,8 +311,8 @@ export function Compare({ monthly, price }) {
         <circle cx={X(yr)} cy={Y(yearly * yr)} r={draw > 0 ? 14 : 0} fill={C.alert} />
         <circle cx={X(yr)} cy={Y(price)} r={draw > 0 ? 14 : 0} fill={C.uv} />
         {draw > 0.95 && <>
-          <text x={X(10)} y={Y(ten) - 34} textAnchor="end" style={{ ...DISPLAY, fontSize: 38 }} fill={C.alert}>Shopify plan · {money(ten)}</text>
-          <text x={X(10)} y={Y(price) + 60} textAnchor="end" style={{ ...DISPLAY, fontSize: 38 }} fill={C.uv}>Shopify Killer · {money(price)}</text>
+          <text x={X(10)} y={Y(ten) - 34} textAnchor="end" style={{ ...DISPLAY, fontSize: 38 }} fill={C.alert}>Monthly plan · {money(ten)}</text>
+          <text x={X(10)} y={Y(price) + 60} textAnchor="end" style={{ ...DISPLAY, fontSize: 38 }} fill={C.uv}>Fee Killer · {money(price)}</text>
         </>}
         <g opacity={be}>
           <circle cx={X(breakEven)} cy={Y(price)} r={22 * be} fill="none" stroke={C.ink} strokeWidth="4" />
@@ -335,7 +335,7 @@ export function Offer({ price, cta, url, monthly }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const slot = 300, rows = [
-    ["APPIFY-LB · SHOPIFY KILLER", "", C.ink],
+    ["APPIFYLB · FEE KILLER", "", C.ink],
     ["Custom e-commerce site", "", C.mute],
     ["Lifetime license", `$${price.toFixed(2)}`, C.ink],
     ["Monthly fees", "$0.00", C.uv],

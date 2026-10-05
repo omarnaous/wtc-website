@@ -1,4 +1,4 @@
-"""Voice-over for the Shopify Killer reel: one continuous read of the full script, and the video follows it.
+"""Voice-over for the Fee Killer reel: one continuous read of the full script, and the video follows it.
 Kokoro TTS (voice am_puck) speaks each sentence; Praat PSOLA re-intonates it (register, pitch range,
 melody, loudness) so it isn't one flat tone. Sentences are joined with natural pauses only.
 Scene starts are then placed on the voice (each scene starts `lead` frames before its first line,
@@ -23,12 +23,12 @@ P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: di
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
 # (scene anchor, its frame in the original 33 s cut, lead frames before the voice, min frames, sentences)
 SCRIPT = [
-    ("receipt", 0, 6, 75, [P("Yo! Still paying Shopify thirty-nine bucks a month?!", "Yo! Still paying Shopify $39 a month?!", speed=1.12, shift=1.5, rng=1.6, mel="rise", gain=1)]),
+    ("receipt", 0, 6, 75, [P("Yo! Still paying thirty-nine bucks a month for your store?!", "Yo! Still paying $39 a month for your store?!", speed=1.12, shift=1.5, rng=1.6, mel="rise", gain=1)]),
     ("cost", 90, 2, 120, [P("That's four sixty-eight a year!", "That's $468 a year!", shift=0.5, rng=1.6, mel="arch"),
                           P("Forty-six eighty in ten years!", "$4,680 in ten years!", speed=1.05, shift=2.5, rng=1.8, mel="arch", gain=1.5),
                           P("And you still don't even own your store!", shift=-1.5, rng=1.5, mel="fall")]),
     ("turn", 270, 10, 60, [P("So... what if you paid once?", speed=1.0, shift=-1.5, rng=1.6, mel="rise", gain=-1)]),
-    ("reveal", 330, 8, 140, [P("Boom! Shopify Killer!", speed=1.02, shift=3.5, rng=1.6, mel="arch", gain=2.5),
+    ("reveal", 330, 8, 140, [P("Boom! Fee Killer!", speed=1.02, shift=3.5, rng=1.6, mel="arch", gain=2.5),
                              P("Not some boring template.", speed=1.12, shift=-2.5, rng=0.8, mel="dip", gain=-1.5),
                              P("A stunning store, with real animations!", shift=2, rng=1.8, mel="arch", gain=1)]),
     ("feat0", 480, 2, 30, [P("Way more beautiful!", speed=1.08, shift=1, rng=1.7, mel="arch")]),
@@ -39,7 +39,7 @@ SCRIPT = [
                              P("It pays for itself in ten months!", "It pays for itself in 10 months!", shift=0, rng=1.5, mel="fall")]),
     ("guarantee", 780, 2, 80, [P("And if you don't love it?", shift=-1, rng=1.5, mel="rise"),
                                P("Full refund. Zero risk!", speed=1.0, shift=-1, rng=1.4, mel="fall", gain=1)]),
-    ("offer", 870, 2, 120, [P("D.M. or comment, Appify L.B. E-commerce, to book your free prototype demo!", "DM or comment \"appify-lb Ecommerce\" to book your free prototype demo!", shift=0.5, rng=1.6, mel="fall")]),
+    ("offer", 870, 2, 120, [P("D.M. or comment, Appify L.B. E-commerce, to book your free prototype demo!", "DM or comment \"appifylb Ecommerce\" to book your free prototype demo!", shift=0.5, rng=1.6, mel="fall")]),
 ]
 OLD_END = 990
 
