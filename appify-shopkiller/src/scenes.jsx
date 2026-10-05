@@ -1,5 +1,5 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Easing } from "remotion";
-import { C, money, DISPLAY, MONO, Words, exitStyle, Printer, Store } from "./ui.jsx";
+import { C, money, DISPLAY, MONO, Words, exitStyle, Printer, Store, LB_W, LB_VIEWBOX, lbSvg } from "./ui.jsx";
 import { clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Streak } from "./fx.jsx";
 import { WORDMARK } from "./brand.js";
 import { Storefront } from "./store.jsx";
@@ -187,7 +187,7 @@ export function Reveal({ product }) {
           <Extruded text={product[1]} size={200} front={C.iris} side="#2A1678" />
         </div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(up, [0, 1], [1180, 600]), textAlign: "center", ...DISPLAY, fontSize: 46, color: "rgba(243,241,250,.75)", opacity: interpolate(f, [16, 28], [0, 1], clamp) }}>Your own store. Built by Appify.</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(up, [0, 1], [1180, 600]), textAlign: "center", ...DISPLAY, fontSize: 46, color: "rgba(243,241,250,.75)", opacity: interpolate(f, [16, 28], [0, 1], clamp) }}>Your own store. Built by appify-lb.</div>
 
       {f >= 44 && (
         <div style={{ position: "absolute", zIndex: 1, left: 220, top: 830, width: 640, height: 820, perspective: 2200, opacity: appear, transform: `translateY(${(1 - appear) * 120}px) translateX(${cmp * 205}px) scale(${1.18 - cmp * 0.5})`, transformOrigin: "50% 40%" }}>
@@ -225,7 +225,7 @@ export function Reveal({ product }) {
               </svg>
             </div>
           </div>
-          <div style={{ position: "absolute", zIndex: 30, left: 590, width: 440, top: 862, textAlign: "center", ...DISPLAY, fontSize: 44, color: C.iris, opacity: cmp }}>Appify ✦ animated</div>
+          <div style={{ position: "absolute", zIndex: 30, left: 560, width: 500, top: 866, textAlign: "center", whiteSpace: "nowrap", ...DISPLAY, fontSize: 38, color: C.iris, opacity: cmp }}>appify-lb ✦ animated</div>
         </>
       )}
       {f >= 60 && f < 120 && (
@@ -335,7 +335,7 @@ export function Offer({ price, cta, url, monthly }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const slot = 300, rows = [
-    ["APPIFY · SHOPIFY KILLER", "", C.ink],
+    ["APPIFY-LB · SHOPIFY KILLER", "", C.ink],
     ["Custom e-commerce site", "", C.mute],
     ["Lifetime license", `$${price.toFixed(2)}`, C.ink],
     ["Monthly fees", "$0.00", C.uv],
@@ -347,7 +347,7 @@ export function Offer({ price, cta, url, monthly }) {
   const cta1 = spring({ frame: f - 52, fps, config: { damping: 13 } });
   const wm = interpolate(f, [64, 78], [0, 1], { ...clamp, easing: easeOut });
   const push = interpolate(f, [52, 120], [1, 1.03], clamp);
-  const wmW = 260, wmH = wmW * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
+  const wmW = 340, wmH = wmW * (WORDMARK.bottom - WORDMARK.top + 40) / (LB_W + 40);
   return (
     <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px) scale(${push})`, transformOrigin: "50% 40%" }}>
       <div style={{ position: "absolute", left: 210, top: slot + 40, width: 660, height: len, overflow: "hidden", background: "#FFFFFF", boxShadow: "0 40px 80px rgba(0,0,0,.5)" }}>
@@ -369,7 +369,7 @@ export function Offer({ price, cta, url, monthly }) {
         <div style={{ ...DISPLAY, fontSize: 50, color: C.paper, marginTop: 22 }}>to book your <span style={{ color: C.sky }}>free prototype demo</span></div>
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1330, display: "grid", justifyItems: "center", gap: 14, opacity: wm }}>
-        <svg viewBox={WORDMARK.viewBox} width={wmW} height={wmH}><path d={WORDMARK.letters} fill={C.paper} /><path d={WORDMARK.spark} fill={C.iris} /></svg>
+        <svg viewBox={LB_VIEWBOX} width={wmW} height={wmH} dangerouslySetInnerHTML={{ __html: lbSvg(C.paper, C.iris) }} />
         <div style={{ ...MONO, fontSize: 30, color: C.paper, letterSpacing: "0.18em" }}>{url}</div>
       </div>
       <div style={{ position: "absolute", left: 90, right: 90, top: 1530, textAlign: "center", ...MONO, fontSize: 19, letterSpacing: "0.02em", color: "rgba(243,241,250,.45)", opacity: wm }}>
