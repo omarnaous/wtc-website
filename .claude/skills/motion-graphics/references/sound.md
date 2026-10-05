@@ -20,7 +20,7 @@
 }
 ```
 
-Cue types and when to use them:
+Cue types and when to use them (match each scene's subject: printers for receipts, coins for money, clicks for UI):
 | type | sound | use for |
 |---|---|---|
 | `tick` | short glassy click | something small appearing, a spark, a cursor |
@@ -33,6 +33,13 @@ Cue types and when to use them:
 | `drone` | low evolving bed | loops, dark openings, 3D scenes |
 | `kick` / `snare` / `hat` | single drum hits | accenting individual words or cuts |
 | `beat` | full pattern at `bpm` (`four-on-floor`, `half-time`, `trap`) | kinetic type, showreels, data stories |
+| `printer` | dot-matrix needle clicks + motor (`start`/`end`, `rate`, `line`) | receipts, invoices, printing anything |
+| `coin` | metallic ping (`freq`, raise it for rising sequences) | money counting up, bars growing |
+| `register` | cash-register clack + ching + coin rattle | prices, savings, "sold" moments |
+| `rip` | paper tear (`start`/`end` or `dur`) | paper transitions, tearing a bill |
+| `glitch` | digital stutter (`dur`) | crossing something out, errors, cuts |
+| `click` / `pop` | UI tap / bubbly pop | toggles, buttons, cards popping in |
+| `typing` | keyboard clicks over `start`/`end` | code typing, text fields |
 
 ## Levels
 

@@ -57,7 +57,7 @@ Generate the soundtrack from the same beat sheet with `scripts/sound.py` (numpy 
 python3 <skill-dir>/scripts/sound.py sound/cues.json public/sound.wav
 ```
 
-Cue types: `tick`, `riser`, `impact`, `chime`, `whoosh`, `pad`, `kick`, `snare`, `hat`, `glint`, `drone`, plus `beat` for a whole drum pattern at a BPM. Each cue takes a `frame` (or `start`/`end`), `gain` and `pan`. Read `references/sound.md` for mixing levels and the beat-grid helper (kinetic type "on the beat" means word changes land on the grid frames printed by `sound.py --grid`).
+Cue types: `tick`, `riser`, `impact`, `chime`, `whoosh`, `pad`, `kick`, `snare`, `hat`, `glint`, `drone`, `beat` (a whole drum pattern at a BPM), and foley for the subject on screen: `printer`, `coin`, `register`, `rip`, `glitch`, `click`, `pop`, `typing`. Give each scene sounds that belong to what is on screen. Each cue takes a `frame` (or `start`/`end`), `gain` and `pan`. Read `references/sound.md` for mixing levels and the beat-grid helper (kinetic type "on the beat" means word changes land on the grid frames printed by `sound.py --grid`).
 
 Mount it with `<Audio src={staticFile("sound.wav")} />` in every composition. If the user supplies music, use theirs and cut the beat sheet to its beats instead.
 

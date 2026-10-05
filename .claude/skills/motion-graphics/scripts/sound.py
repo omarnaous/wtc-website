@@ -6,7 +6,8 @@ usage:
   sound.py --grid --bpm 120 --fps 30 --bars 4 [--offset 0]
                                         print beat frames, for locking cuts/words to the beat
 
-Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat.
+Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
+           printer coin register rip glitch click pop typing.
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
 Requires numpy and scipy (pip install numpy scipy).
 """
@@ -120,6 +121,76 @@ def hat(c, q):
     n = int(0.15 * SR)
     return hp(c.noise(n), 7000) * decay(n, 0.025) * 0.6
 
+
+def printer(c, q, fps):
+    """Dot-matrix receipt printer: rapid needle clicks in line-sized bursts + motor hum."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); t = np.arange(n) / SR
+    out = lp(osc(118, n) * 0.25 + c.noise(n) * 0.05, 400) * 0.5
+    hit = bp(c.noise(int(0.006 * SR)), 1800, 6000) * decay(int(0.006 * SR), 0.0015)
+    rate = q.get("rate", 70); line = q.get("line", 0.22)
+    for k in range(int(n / SR * rate)):
+        ts = k / rate + c.rng.uniform(-0.002, 0.002)
+        if (ts % line) > line * 0.8: continue  # gap between printed lines
+        i = int(ts * SR)
+        if i + len(hit) < n: out[i:i + len(hit)] += hit * c.rng.uniform(0.6, 1.0)
+    return out
+
+def coin(c, q):
+    """Metallic coin ping; raise "freq" for a rising sequence."""
+    n = int(0.6 * SR); t = np.arange(n) / SR; f = q.get("freq", 2400)
+    s = sum(np.sin(2 * np.pi * f * m * t) * a * decay(n, d) for m, a, d in [(1, .6, .25), (2.76, .3, .12), (5.4, .15, .06)])
+    return s * np.minimum(1, t / 0.0008) + hp(c.noise(n), 5000) * decay(n, 0.003) * 0.3
+
+def register(c, q):
+    """Cash register: mechanical clack, then a bright 'ching' and a coin rattle."""
+    n = int(1.4 * SR); t = np.arange(n) / SR
+    clack = lp(c.noise(n), 1500) * decay(n, 0.02) * 1.2
+    ching = np.zeros(n); d = int(0.07 * SR)
+    for f, a in [(3136, .55), (4186, .4), (5274, .2)]:
+        ching[d:] += np.sin(2 * np.pi * f * t[:n - d]) * a * decay(n - d, 0.5)
+    rattle = np.zeros(n)
+    for k in range(6):
+        i = d + int(c.rng.uniform(0.05, 0.35) * SR); m = int(0.08 * SR)
+        rattle[i:i + m] += np.sin(2 * np.pi * c.rng.uniform(2500, 4500) * np.arange(m) / SR) * decay(m, 0.02) * 0.25
+    return c.reverb(clack + ching + rattle, 1.2, 0.25)
+
+def rip(c, q, fps):
+    """Paper tearing: crackle bursts that thicken, band-passed noise body."""
+    dur = (q["end"] - q["start"]) / fps if "end" in q else q.get("dur", 0.55)
+    n = int(dur * SR); p = np.linspace(0, 1, n)
+    body = bp(c.noise(n), 700, 6000) * (np.sin(np.pi * p) ** 0.6) * 0.5
+    crk = np.zeros(n)
+    for _ in range(int(dur * 260)):
+        i = int(c.rng.uniform(0, 1) ** 0.7 * (n - 300)); crk[i:i + 300] += hp(c.noise(300), 2000) * decay(300, 0.0012) * c.rng.uniform(0.3, 1)
+    return body + crk
+
+def glitch(c, q):
+    """Digital stutter: stepped square tones and crushed noise."""
+    n = int(q.get("dur", 0.3) * SR); out = np.zeros(n); seg = int(0.03 * SR)
+    for i in range(0, n, seg):
+        m = min(seg, n - i); f = c.rng.choice([180, 360, 720, 1440, 2880])
+        tone = np.sign(np.sin(2 * np.pi * f * np.arange(m) / SR)) * 0.35
+        out[i:i + m] = tone if c.rng.random() > 0.35 else np.round(c.noise(m) * 3) / 6
+    return lp(out, 9000)
+
+def click(c, q):
+    """UI tap."""
+    n = int(0.05 * SR); t = np.arange(n) / SR
+    return np.sin(2 * np.pi * q.get("freq", 1400) * t) * decay(n, 0.006) * 0.8 + hp(c.noise(n), 4000) * decay(n, 0.001) * 0.4
+
+def pop(c, q):
+    """Bubbly UI pop: fast downward sine sweep."""
+    n = int(0.09 * SR); t = np.arange(n) / SR
+    return osc(300 + 900 * np.exp(-t / 0.012), n) * decay(n, 0.03)
+
+def typing(c, q, fps):
+    """Keyboard typing between start and end frames."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); out = np.zeros(n); t = 0.0
+    while t < n / SR - 0.05:
+        k = click(c, {"freq": c.rng.uniform(900, 1700)}) * c.rng.uniform(0.5, 1)
+        i = int(t * SR); out[i:i + len(k)] += k[: n - i]; t += c.rng.uniform(0.045, 0.11)
+    return out
+
 PATTERNS = {  # per 16th-note step in a bar: k=kick s=snare h=hat
     "four-on-floor": ["kh", "", "h", "", "ksh", "", "h", "", "kh", "", "h", "", "ksh", "", "h", ""],
     "half-time":     ["kh", "", "h", "", "h", "", "h", "", "sh", "", "h", "", "h", "", "kh", "h"],
@@ -157,7 +228,11 @@ def render(spec, out):
         elif typ == "whoosh": sig = whoosh(c, q, fps)
         elif typ == "pad": sig = pad(c, q, fps, total)
         elif typ == "drone": sig = drone(c, q, fps, total)
-        else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat}[typ](c, q)
+        elif typ == "printer": sig = printer(c, q, fps)
+        elif typ == "rip": sig = rip(c, q, fps)
+        elif typ == "typing": sig = typing(c, q, fps)
+        else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
+                   "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)
     if loop:  # periodic by construction: whatever rings past the end continues from the start
