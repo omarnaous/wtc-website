@@ -7,7 +7,8 @@ usage:
                                         print beat frames, for locking cuts/words to the beat
 
 Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
-           printer coin register rip glitch click pop typing cash cash_count blip sweep.
+           printer coin register rip glitch click pop typing cash cash_count blip sweep,
+           and viral-reel hits: vine_boom scratch bass_drop stamp buzz.
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
 Requires numpy and scipy (pip install numpy scipy).
 """
@@ -223,6 +224,49 @@ def sweep(c, q, fps):
     env = np.minimum(1, p / 0.15) * np.minimum(1, (1 - p) / 0.12)
     return (osc(f, n) * 0.7 + bp(c.noise(n), 800, 3000) * 0.08) * env
 
+def vine_boom(c, q):
+    """The viral 'vine boom': a deep, saturated sub thump with a pitch drop and a short room tail. Punchlines only."""
+    n = int(1.3 * SR); t = np.arange(n) / SR
+    f = 46 + 50 * np.exp(-t / 0.07)
+    body = np.tanh(osc(f, n) * 3.2) * decay(n, 0.32)
+    knock = lp(c.noise(n), 900) * decay(n, 0.012) * 0.9
+    return c.reverb(lp(body + knock, 2500), 1.0, 0.18)
+
+def scratch(c, q):
+    """Record scratch (the viral 'wait, what?' moment): a rough tone dragged back and forth."""
+    strokes = [(0.0, 0.09, 260, 1100), (0.11, 0.08, 1000, 180), (0.21, 0.12, 300, 1400)]
+    n = int(0.36 * SR); out = np.zeros(n)
+    for st, du, f0, f1 in strokes:
+        m = int(du * SR); i = int(st * SR); tt = np.linspace(0, 1, m)
+        f = f0 + (f1 - f0) * (np.sin(tt * np.pi / 2) ** 1.5)
+        ph = np.cumsum(f) / SR
+        saw = 2 * (ph - np.floor(ph + 0.5))
+        grit = hp(c.noise(m), 1500) * 0.35
+        env = np.sin(np.pi * tt) ** 0.6
+        out[i:i + m] += (lp(saw, 3800) * 0.6 + grit) * env
+    return out
+
+def bass_drop(c, q):
+    """808 slide for a big reveal: sub sliding down, saturated, with a click on the front."""
+    n = int(q.get("dur", 1.4) * SR); t = np.arange(n) / SR
+    f = 38 + 120 * np.exp(-t / 0.18)
+    sub = np.tanh(osc(f, n) * 2.4) * decay(n, 0.6)
+    return lp(sub, 1800) + hp(c.noise(n), 3000) * decay(n, 0.004) * 0.5
+
+def stamp(c, q):
+    """Rubber stamp / seal hitting paper: low thud plus a short slap."""
+    n = int(0.35 * SR); t = np.arange(n) / SR
+    thud = osc(72 * (1 + 0.6 * np.exp(-t / 0.02)), n) * decay(n, 0.09)
+    slap = bp(c.noise(n), 700, 2600) * decay(n, 0.018) * 0.8
+    return thud + slap
+
+def buzz(c, q):
+    """'Wrong answer' buzzer: two detuned low square tones. For a price getting crossed out."""
+    n = int(q.get("dur", 0.38) * SR); t = np.arange(n) / SR
+    sq = np.sign(np.sin(2 * np.pi * 146 * t)) + np.sign(np.sin(2 * np.pi * 153 * t))
+    env = np.minimum(1, t / 0.005) * np.minimum(1, (n / SR - t) / 0.04)
+    return lp(sq * 0.4, 1600) * env
+
 PATTERNS = {  # per 16th-note step in a bar: k=kick s=snare h=hat
     "four-on-floor": ["kh", "", "h", "", "ksh", "", "h", "", "kh", "", "h", "", "ksh", "", "h", ""],
     "half-time":     ["kh", "", "h", "", "h", "", "h", "", "sh", "", "h", "", "h", "", "kh", "h"],
@@ -267,7 +311,8 @@ def render(spec, out):
         elif typ == "sweep": sig = sweep(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
                    "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
-                   "cash": cash, "blip": blip}[typ](c, q)
+                   "cash": cash, "blip": blip, "vine_boom": vine_boom, "scratch": scratch, "bass_drop": bass_drop,
+                   "stamp": stamp, "buzz": buzz}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)
     if loop:  # periodic by construction: whatever rings past the end continues from the start

@@ -40,6 +40,11 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 | `cash_count` | bills flicking between `start`/`end` (`rate`) | a money counter ticking up |
 | `blip` | soft rounded data tick (`freq`, step it up) | chart bars or points appearing |
 | `sweep` | soft tone gliding `f0`→`f1` between `start`/`end` | a chart line drawing |
+| `vine_boom` | deep saturated sub thump (the viral meme boom) | one punchline or shocking number, max 1-2 per reel |
+| `scratch` | record scratch | the 'wait, what?' turn |
+| `bass_drop` | 808 slide down | the big reveal / title slam |
+| `stamp` | thud + slap | stamps, seals, 'PAID' |
+| `buzz` | 'wrong answer' buzzer | a price or bad option getting crossed out |
 | `rip` | paper tear (`start`/`end` or `dur`) | paper transitions, tearing a bill |
 | `glitch` | digital stutter (`dur`) | crossing something out, errors, cuts |
 | `click` / `pop` | UI tap / bubbly pop | toggles, buttons, cards popping in |
@@ -60,3 +65,5 @@ Impact around 0.9-1.0, riser 0.5-0.6, beat 0.4-0.6, chime 0.2, whoosh 0.1, pad 0
 ## Loops
 
 For seamless loops set `"loop": true` at the top level. `sound.py` then snaps pad and drone frequencies to whole cycles per loop, filters noise circularly, and wraps anything that rings past the end back onto the start, so the audio is periodic by construction. Use `drone`/`pad` spanning the whole duration plus hits placed on the beat grid.
+
+For social reels with a voice-over: skip the music bed and use a handful of hits only where something happens on screen (vine_boom, scratch, bass_drop, stamp, whoosh). Leave the music to the platform's trending-audio library at low volume; it is licensed there and boosts reach.

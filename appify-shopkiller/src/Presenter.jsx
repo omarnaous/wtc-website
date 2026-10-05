@@ -1,5 +1,5 @@
 // Dev + karaoke captions. Dev reacts to what happens on screen: waves, points, flinches, jumps,
-// shakes his head, laughs, winks, gives thumbs-up, and pops emotes above his head.
+// laughs, winks, gives thumbs-up, and pops emotes above his head.
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Dev } from "./Dev.jsx";
 import VO from "./vo.json";
@@ -16,8 +16,8 @@ const MOODS0 = [
 ];
 // [type, start, end]
 const ACTS0 = [
-  ["wave", 0, 42], ["shake", 62, 84], ["point", 146, 200], ["shock", 204, 236], ["jump", 204, 220],
-  ["shake", 238, 262], ["lean", 276, 326], ["jump", 330, 348], ["happy", 330, 346], ["point", 350, 390],
+  ["wave", 0, 42], ["point", 146, 200], ["shock", 204, 236], ["jump", 204, 220],
+  ["lean", 276, 326], ["jump", 330, 348], ["happy", 330, 346], ["point", 350, 390],
   ["thumbs", 482, 518], ["point", 527, 566], ["point", 572, 612], ["jump", 649, 664], ["happy", 649, 672],
   ["point", 690, 738], ["thumbs", 742, 778], ["jump", 742, 756], ["jump", 794, 810], ["thumbs", 800, 846], ["happy", 838, 858],
   ["wave", 876, 902], ["wink", 918, 938], ["point", 940, 990],
@@ -79,7 +79,7 @@ export function Presenter() {
   const face = mood(f);
 
   const wave = act(f, "wave"), point = act(f, "point"), thumbs = act(f, "thumbs");
-  const shock = act(f, "shock"), happy = act(f, "happy"), wink = act(f, "wink"), lean = act(f, "lean"), shake = act(f, "shake");
+  const shock = act(f, "shock"), happy = act(f, "happy"), wink = act(f, "wink"), lean = act(f, "lean");
   // jumps: arc up, squash on landing
   let jumpY = 0, squash = 1;
   ACTS.filter((x) => x[0] === "jump").forEach(([, a, b]) => {
@@ -87,10 +87,10 @@ export function Presenter() {
     if (f >= b && f < b + 8) squash = 1 - 0.08 * Math.sin(((f - b) / 8) * Math.PI);
   });
   const waveAng = Math.sin(f / 2.2) * 22;
-  // head stays still at rest; it only moves while talking or during a gesture (shake / lean)
-  const tilt = shake * Math.sin(f * 0.95) * 9 + lean * -7 + (talking ? Math.sin(f / 4) * 1.4 * open : 0);
+  // head stays nearly still: a slow, tiny sway while talking and a gentle lean; no side-to-side shakes
+  const tilt = lean * -3 + (talking ? Math.sin(f / 9) * 0.5 * open : 0);
   const bob = talking ? -open * 2 - Math.abs(Math.sin(f / 4)) * 2 : Math.sin(f / 22) * 0.8; // gentle breathing when idle
-  const flinch = shock * -24; // jolts backwards
+  const flinch = shock * -8; // small jolt backwards
   const scale = 1 + lean * 0.06;
 
   const chunk = CHUNKS.find((c) => f >= c[0].start - 2 && f < c[c.length - 1].end + 10);
