@@ -147,7 +147,7 @@ function Streak({ f, cy }) {
 }
 
 // ── the composition ──────────────────────────────────────────
-export const Reveal = ({ url, slogan }) => {
+export const Reveal = ({ url, slogan, services = [], servicesStyle = "line" }) => {
   useMono();
   const f = useCurrentFrame();
   const { width, height, fps } = useVideoConfig();
@@ -296,6 +296,21 @@ export const Reveal = ({ url, slogan }) => {
                 return <span key={i} style={{ display: "inline-block", opacity: p, transform: `translateY(${(1 - p) * 14}px)`, filter: `blur(${(1 - p) * 6}px)`, color: ch === "." ? C.iris : C.paper }}>{ch}</span>;
               })}
             </div>
+            {services.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: servicesStyle === "pills" ? 12 : 0, marginTop: servicesStyle === "pills" ? 18 : 10, maxWidth: width - 120 }}>
+                {services.map((sv, i) => {
+                  const p = interpolate(f, [T.urlA + 44 + i * 4, T.urlA + 58 + i * 4], [0, 1], { ...clamp, easing: easeOut });
+                  const base = { display: "inline-flex", alignItems: "center", opacity: p, transform: `translateY(${(1 - p) * 12}px)`, fontFamily: "GeistMono", textTransform: "uppercase" };
+                  return servicesStyle === "pills" ? (
+                    <span key={sv} style={{ ...base, height: 50, padding: "0 22px", borderRadius: 99, border: "1.5px solid rgba(205,190,255,.28)", background: "rgba(143,114,255,.08)", fontSize: 20, letterSpacing: "0.12em", color: C.paper }}>{sv}</span>
+                  ) : (
+                    <span key={sv} style={{ ...base, fontSize: 22, letterSpacing: "0.18em", color: "rgba(243,241,250,.62)" }}>
+                      {i > 0 && <span style={{ margin: "0 18px", color: C.iris }}>✦</span>}{sv}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </AbsoluteFill>
