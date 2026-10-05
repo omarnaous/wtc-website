@@ -343,87 +343,6 @@
    "gain": 0.22
   },
   {
-   "type": "click",
-   "frame": 480,
-   "gain": 0.4,
-   "pan": 0.2
-  },
-  {
-   "type": "click",
-   "frame": 495,
-   "gain": 0.4,
-   "pan": 0.2
-  },
-  {
-   "type": "click",
-   "frame": 510,
-   "gain": 0.4,
-   "pan": 0.2
-  },
-  {
-   "type": "pop",
-   "frame": 529,
-   "gain": 0.2,
-   "pan": 0.25
-  },
-  {
-   "type": "pop",
-   "frame": 540,
-   "gain": 0.2,
-   "pan": 0.25
-  },
-  {
-   "type": "pop",
-   "frame": 554,
-   "gain": 0.2,
-   "pan": 0.25
-  },
-  {
-   "type": "pop",
-   "frame": 560,
-   "gain": 0.2,
-   "pan": 0.25
-  },
-  {
-   "type": "typing",
-   "start": 572,
-   "end": 604,
-   "gain": 0.35
-  },
-  {
-   "type": "pop",
-   "frame": 604,
-   "gain": 0.3
-  },
-  {
-   "type": "glitch",
-   "frame": 625,
-   "dur": 0.25,
-   "gain": 0.25
-  },
-  {
-   "type": "whoosh",
-   "start": 635,
-   "end": 648,
-   "gain": 0.14
-  },
-  {
-   "type": "impact",
-   "frame": 645,
-   "gain": 0.5
-  },
-  {
-   "type": "register",
-   "frame": 646,
-   "gain": 0.4
-  },
-  {
-   "type": "whoosh",
-   "start": 658,
-   "end": 674,
-   "gain": 0.18
-  },
-  {
    "type": "riser",
    "start": 676,
    "end": 718,
@@ -475,6 +394,123 @@
    "type": "glint",
    "frame": 860,
    "gain": 0.06
+  },
+  {
+   "type": "click",
+   "frame": 498,
+   "gain": 0.4,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 511,
+   "gain": 0.4,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 535,
+   "gain": 0.4,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 547,
+   "gain": 0.4,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 579,
+   "gain": 0.4,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 611,
+   "gain": 0.4,
+   "pan": 0.2
+  },
+  {
+   "type": "pop",
+   "frame": 487,
+   "gain": 0.25
+  },
+  {
+   "type": "pop",
+   "frame": 494,
+   "gain": 0.15,
+   "pan": -0.2
+  },
+  {
+   "type": "pop",
+   "frame": 498,
+   "gain": 0.15,
+   "pan": -0.2
+  },
+  {
+   "type": "pop",
+   "frame": 502,
+   "gain": 0.15,
+   "pan": -0.2
+  },
+  {
+   "type": "whoosh",
+   "start": 525,
+   "end": 534,
+   "gain": 0.12
+  },
+  {
+   "type": "whoosh",
+   "start": 580,
+   "end": 596,
+   "gain": 0.16,
+   "pan": 0.3
+  },
+  {
+   "type": "pop",
+   "frame": 596,
+   "gain": 0.35
+  },
+  {
+   "type": "coin",
+   "frame": 596,
+   "gain": 0.15,
+   "freq": 2600
+  },
+  {
+   "type": "whoosh",
+   "start": 596,
+   "end": 606,
+   "gain": 0.1
+  },
+  {
+   "type": "chime",
+   "frame": 616,
+   "gain": 0.2,
+   "freq": 1568
+  },
+  {
+   "type": "glitch",
+   "frame": 629,
+   "dur": 0.22,
+   "gain": 0.22
+  },
+  {
+   "type": "whoosh",
+   "start": 639,
+   "end": 650,
+   "gain": 0.12
+  },
+  {
+   "type": "impact",
+   "frame": 647,
+   "gain": 0.5
+  },
+  {
+   "type": "register",
+   "frame": 648,
+   "gain": 0.4
   }
  ]
 }

@@ -2,6 +2,7 @@ import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Eas
 import { C, money, DISPLAY, MONO, Words, exitStyle, Printer, Store } from "./ui.jsx";
 import { clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Streak } from "./fx.jsx";
 import { WORDMARK } from "./brand.js";
+import { Storefront } from "./store.jsx";
 
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
@@ -172,70 +173,38 @@ export function Reveal({ product }) {
   );
 }
 
-/* ── 5. Four selling points ───────────────────────────────────────────── */
-const FEATS = [["Better", "design."], ["Fully", "customizable."], ["Full", "control."], ["No monthly", "fees."]];
+/* ── 5. Four selling points, shown on a working storefront ─────────────── */
+const FEATS = [["Way better", "design."], ["Customize", "everything."], ["Full", "control."], ["Zero monthly", "fees."]];
 export function Features({ monthly }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const k = Math.min(3, Math.floor(f / 45)), l = f - k * 45;
   const s = spring({ frame: l, fps, config: { damping: 11, stiffness: 240 } });
-  const enter = spring({ frame: f, fps, config: { damping: 16 } });
-  // F1: theme swaps on each beat
-  const themes = [[C.uv, C.sky], [C.coral, "#FFC15E"], ["#11A37F", "#9BE15D"]];
-  const th = k === 0 ? themes[Math.min(2, Math.floor(l / 15))] : themes[0];
-  // F2: sliders drive radius + columns
-  const sl = k === 1 ? interpolate(l, [4, 20, 30, 44], [0, 1, 1, 0.55], clamp) : k > 1 ? 0.55 : 0;
-  const radius = 6 + sl * 34, cols = k === 1 && l > 24 ? 3 : 2;
-  // F3: code types in
-  const code = ['store.owner = "you";', "store.theme = custom();", "store.fees  = 0;"];
-  const chars = k === 2 ? Math.floor(interpolate(l, [2, 34], [0, code.join("").length], clamp)) : 0;
-  // F4: price tag struck out and dropped
-  const strike = k === 3 ? interpolate(l, [10, 16], [0, 1], { ...clamp, easing: easeOut }) : 0;
-  const drop = k === 3 ? interpolate(l, [20, 34], [0, 1], { ...clamp, easing: easeIn }) : 0;
-  const zero = k === 3 ? spring({ frame: l - 30, fps, config: { damping: 9, stiffness: 220 } }) : 0;
-  const [sx, sy] = k === 3 ? shake(l, 30, 10, 3) : [0, 0];
-  let typed = chars;
+  const strike = k === 3 ? interpolate(l, [14, 20], [0, 1], { ...clamp, easing: easeOut }) : 0;
+  const drop = k === 3 ? interpolate(l, [24, 36], [0, 1], { ...clamp, easing: easeIn }) : 0;
+  const zero = k === 3 ? spring({ frame: l - 32, fps, config: { damping: 9, stiffness: 220 } }) : 0;
+  const tagIn = k === 3 ? spring({ frame: l - 4, fps, config: { damping: 12 } }) : 0;
+  const [sx, sy] = k === 3 ? shake(l, 32, 10, 3) : [0, 0];
   return (
     <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 290, textAlign: "center", ...MONO, fontSize: 26, color: C.iris }}>0{k + 1} / 04</div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 350, textAlign: "center", transform: `scale(${interpolate(s, [0, 1], [1.35, 1])})`, opacity: Math.min(1, s * 1.5) }}>
-        <div style={{ ...DISPLAY, fontSize: 120, color: C.paper }}>{FEATS[k][0]}</div>
-        <div style={{ ...DISPLAY, fontSize: FEATS[k][1].length > 10 ? 120 : 150, color: C.iris, marginTop: 6 }}>{FEATS[k][1]}</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 286, textAlign: "center", ...MONO, fontSize: 26, color: C.iris }}>0{k + 1} / 04</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 340, textAlign: "center", transform: `scale(${interpolate(s, [0, 1], [1.35, 1])})`, opacity: Math.min(1, s * 1.5) }}>
+        <div style={{ ...DISPLAY, fontSize: 110, color: C.paper }}>{FEATS[k][0]}</div>
+        <div style={{ ...DISPLAY, fontSize: 130, color: C.iris, marginTop: 4 }}>{FEATS[k][1]}</div>
       </div>
-      <div style={{ position: "absolute", left: 160, top: 690, transform: `translateY(${(1 - enter) * 300}px) scale(${0.92 + enter * 0.08})`, transformOrigin: "50% 0%" }}>
-        <Store w={760} h={900} accent={th[0]} accent2={th[1]} radius={radius} cols={cols} />
-      </div>
-      {k === 1 && (
-        <div style={{ position: "absolute", left: 470, top: 1230, width: 520, padding: 28, borderRadius: 26, background: C.ink2, boxShadow: "0 30px 60px rgba(0,0,0,.5)", border: "2px solid rgba(205,190,255,.18)", opacity: interpolate(l, [0, 6], [0, 1], clamp) }}>
-          {[["Corner radius", sl], ["Columns", cols === 3 ? 1 : 0.5], ["Font weight", 0.3 + sl * 0.5]].map(([n, v]) => (
-            <div key={n} style={{ marginBottom: 20 }}>
-              <div style={{ ...MONO, fontSize: 20, color: "rgba(243,241,250,.6)", marginBottom: 10 }}>{n.toUpperCase()}</div>
-              <div style={{ position: "relative", height: 8, borderRadius: 8, background: "rgba(205,190,255,.18)" }}>
-                <div style={{ position: "absolute", left: 0, width: `${v * 100}%`, height: 8, borderRadius: 8, background: C.iris }} />
-                <div style={{ position: "absolute", left: `calc(${v * 100}% - 14px)`, top: -10, width: 28, height: 28, borderRadius: 99, background: "#fff", boxShadow: "0 4px 12px rgba(0,0,0,.4)" }} />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      {k === 2 && (
-        <div style={{ position: "absolute", left: 90, top: 1150, width: 900, padding: "30px 36px", borderRadius: 26, background: "#0D0B1A", boxShadow: "0 30px 60px rgba(0,0,0,.55)", border: "2px solid rgba(205,190,255,.18)", ...MONO, fontSize: 34, letterSpacing: 0, lineHeight: 1.7 }}>
-          {code.map((line, i) => { const show = line.slice(0, Math.max(0, typed)); typed -= line.length; return <div key={i} style={{ color: i === 2 ? C.sky : C.paper, minHeight: 58 }}>{show}{show.length > 0 && show.length < line.length ? <span style={{ color: C.iris }}>▍</span> : null}</div>; })}
-          <div style={{ position: "absolute", right: 26, top: -30, padding: "12px 22px", borderRadius: 99, background: "#3BE38B", color: C.ink, ...DISPLAY, fontSize: 28, transform: `scale(${spring({ frame: l - 34, fps, config: { damping: 9 } })})` }}>100% yours ✓</div>
-        </div>
-      )}
+      <div style={{ position: "absolute", left: 130, top: 626 }}><Storefront l={f} fps={fps} /></div>
       {k === 3 && (
         <>
-          <div style={{ position: "absolute", left: 0, right: 0, top: 1060, display: "flex", justifyContent: "center", transform: `translateY(${drop * 900}px) rotate(${drop * 28}deg)`, opacity: 1 - drop * 0.6 }}>
+          <div style={{ position: "absolute", left: 0, right: 0, top: 1120, display: "flex", justifyContent: "center", opacity: tagIn, transform: `translateY(${drop * 900 + (1 - tagIn) * 80}px) rotate(${drop * 28}deg)` }}>
             <div style={{ position: "relative", padding: "26px 54px", borderRadius: 24, background: C.alert, ...DISPLAY, fontSize: 120, color: "#fff", boxShadow: "0 30px 60px rgba(0,0,0,.4)" }}>
               ${monthly}/mo
               <div style={{ position: "absolute", left: 20, top: "50%", height: 16, width: `calc(${strike * 100}% - 40px)`, background: C.ink, borderRadius: 8, transform: "rotate(-8deg)" }} />
             </div>
           </div>
-          <div style={{ position: "absolute", left: 0, right: 0, top: 1060, display: "flex", justifyContent: "center", transform: `scale(${zero})` }}>
+          <div style={{ position: "absolute", left: 0, right: 0, top: 1120, display: "flex", justifyContent: "center", transform: `scale(${zero})` }}>
             <div style={{ padding: "26px 54px", borderRadius: 24, background: C.paper, ...DISPLAY, fontSize: 120, color: C.uv, boxShadow: "0 30px 80px rgba(91,43,255,.6)" }}>$0/mo</div>
           </div>
-          <Burst f={l} cx={540} cy={1140} start={30} count={40} speed={22} colors={["#fff", C.iris]} seed="zero" scale={0.8} />
+          <Burst f={l} cx={540} cy={1200} start={32} count={40} speed={22} colors={["#fff", C.iris]} seed="zero" scale={0.8} />
         </>
       )}
     </AbsoluteFill>

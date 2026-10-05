@@ -5,30 +5,30 @@ import json, sys, numpy as np, soundfile as sf
 from kokoro_onnx import Kokoro
 
 FPS, DUR, SR = 30, 30.0, 24000
-VOICE = "am_michael"
+VOICE = "am_puck"
 # (start frame, latest end frame, text, caption text)
 LINES = [
-    (8,   86,  "Still paying Shopify thirty bucks a month?", "Still paying Shopify $30 a month?"),
-    (92,  262, "That's three-sixty a year. Thirty-six hundred over ten years... and you still don't own your store.", "That's $360 a year. $3,600 over ten years... and you still don't own your store."),
-    (282, 326, "So... what if you paid once?", "So... what if you paid once?"),
-    (346, 472, "Meet Shopify Killer. Your own store, built by Appify.", "Meet Shopify Killer. Your own store, built by Appify."),
-    (482, 522, "Better design.", "Better design."),
-    (527, 567, "Fully customizable.", "Fully customizable."),
-    (572, 612, "Full control.", "Full control."),
-    (617, 656, "Zero monthly fees.", "Zero monthly fees."),
-    (668, 776, "That's thirty-two forty saved. It pays for itself in a year.", "That's $3,240 saved. It pays for itself in a year."),
-    (786, 894, "Three-sixty, once. Yours for life. D.M. 'store' to start.", "$360 once. Yours for life. DM \"STORE\" to start."),
+    (6,   86,  "Yo! Still paying Shopify thirty bucks a month?!", "Yo! Still paying Shopify $30 a month?!"),
+    (92,  262, "That's three-sixty a year! Thirty-six hundred in ten years! And you still don't even own your store!", "That's $360 a year! $3,600 in ten years! And you still don't even own your store!"),
+    (280, 326, "So... what if you paid once?", "So... what if you paid once?"),
+    (338, 472, "Boom! Shopify Killer! Your own store, built by Appify!", "Boom! Shopify Killer! Your own store, built by Appify!"),
+    (482, 522, "Way better design!", "Way better design!"),
+    (527, 567, "Customize everything!", "Customize everything!"),
+    (572, 612, "Full control!", "Full control!"),
+    (617, 656, "Zero monthly fees!", "Zero monthly fees!"),
+    (668, 776, "That's thirty-two forty saved! It pays for itself in a year!", "That's $3,240 saved! It pays for itself in a year!"),
+    (786, 894, "Three-sixty once, yours forever! D.M. 'store' right now!", "$360 once, yours forever! DM \"STORE\" right now!"),
 ]
 
 k = Kokoro(f"{sys.argv[1]}/kokoro-v1.0.onnx", f"{sys.argv[1]}/voices-v1.0.bin")
 out = np.zeros(int(DUR * SR)); words = []
 for start, end, text, cap in LINES:
     budget = (end - start) / FPS
-    speed = 1.05
+    speed = 1.2
     for _ in range(6):
         s, sr = k.create(text, voice=VOICE, speed=speed, lang="en-us")
         nz = np.where(np.abs(s) > 0.01)[0]; s = s[max(0, nz[0] - 200): nz[-1] + 1200]  # trim silence
-        if len(s) / sr <= budget or speed >= 1.3: break
+        if len(s) / sr <= budget or speed >= 1.4: break
         speed += 0.05
     dur = len(s) / sr
     print(f"{start:4d} {dur:5.2f}s / {budget:4.2f}s  speed {speed:.2f}  {text[:48]}")

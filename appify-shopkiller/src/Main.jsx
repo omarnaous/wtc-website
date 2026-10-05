@@ -24,7 +24,7 @@ function InkLayer({ f }) {
 const TEAR = Array.from({ length: 19 }, (_, i) => `${(i / 18) * 100}% ${50 + (i % 2 ? 1.6 : -1.6) + ((i * 37) % 5) * 0.4}%`).join(", ");
 
 export const Main = (props) => {
-  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"]]);
+  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-400.ttf", { weight: "400" }], ["UI", "Geist-500.ttf", { weight: "500" }], ["UI", "Geist-600.ttf", { weight: "600" }]]);
   const f = useCurrentFrame();
   const rip = interpolate(f, [RIP, RIP + 22], [0, 1], { ...clamp, easing: Easing.bezier(0.5, 0, 0.2, 1) });
   const wipe = interpolate(f, [WIPE, WIPE + 14], [0, 1], { ...clamp, easing: easeOut });
