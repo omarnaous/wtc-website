@@ -9,6 +9,7 @@ usage:
 Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
            printer coin register rip glitch click pop typing cash cash_count blip sweep,
            viral-reel hits: vine_boom scratch bass_drop stamp buzz,
+           money: coin_drop coins cash_riffle; charts: graph_tick graph_rise counter,
            and a music bed for voice-overs: lofi (start/end, bpm, lp, drums/keys/bass).
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
 Requires numpy and scipy (pip install numpy scipy).
@@ -326,6 +327,66 @@ def lofi(c, q, fps):
     out[:fi] *= np.linspace(0, 1, fi); out[-fo:] *= np.linspace(1, 0, fo)
     return out
 
+def _clink(c, f, n_s=0.09, a=1.0):
+    """One coin hit: inharmonic metal partials with a very short decay (a clink, not a bell)."""
+    n = int(n_s * SR); t = np.arange(n) / SR
+    s = sum(np.sin(2 * np.pi * f * r * t + c.rng.uniform(0, 6)) * w * np.exp(-t / d)
+            for r, w, d in [(1, .5, .03), (1.58, .35, .02), (2.31, .25, .012), (3.7, .15, .008)])
+    return (s + hp(c.noise(n), 4000) * np.exp(-t / 0.002) * 0.5) * a
+
+def coin_drop(c, q):
+    """A coin dropped on a table: a few bounces closing up, then a short spin-out. "freq" ~1800-2600."""
+    f = q.get("freq", 2100); n = int(0.75 * SR); out = np.zeros(n)
+    t, gap, a = 0.0, 0.16, 1.0
+    for _ in range(7):
+        k = _clink(c, f * c.rng.uniform(0.97, 1.03), 0.08, a); i = int(t * SR)
+        out[i:i + len(k)] += k[: n - i]; t += gap; gap *= 0.62; a *= 0.72
+    return lp(out, 9000)
+
+def coins(c, q):
+    """A handful of coins landing on a pile: a short burst of clinks. "count" (default 9), "dur" seconds."""
+    dur = q.get("dur", 0.45); n = int((dur + 0.15) * SR); out = np.zeros(n)
+    for _ in range(q.get("count", 9)):
+        t = c.rng.uniform(0, 1) ** 1.8 * dur
+        k = _clink(c, c.rng.uniform(1500, 2900), 0.07, c.rng.uniform(0.35, 1.0)); i = int(t * SR)
+        out[i:i + len(k)] += k[: n - i]
+    return lp(out, 9000) + lp(c.noise(n), 600) * np.exp(-np.arange(n) / SR / 0.05) * 0.3
+
+def cash_riffle(c, q):
+    """Bill-counter machine 'brrrt': fast paper flicks over a motor hum. "dur" seconds (default 0.55)."""
+    dur = q.get("dur", 0.55); n = int(dur * SR); t = np.arange(n) / SR
+    out = lp(np.sin(2 * np.pi * 95 * t) * 0.3 + c.noise(n) * 0.1, 500) * 0.5
+    rate = q.get("rate", 42); m = int(0.018 * SR); k = 0.0
+    while k < dur - 0.02:
+        i = int(k * SR); out[i:i + m] += (bp(c.noise(m), 1500, 7000) * np.exp(-np.arange(m) / SR / 0.004))[: n - i] * c.rng.uniform(0.6, 1)
+        k += 1 / rate
+    env = np.minimum(1, t / 0.03) * np.minimum(1, (dur - t) / 0.06)
+    return out * env
+
+def graph_tick(c, q):
+    """Infographic tick for a bar/point appearing: short pitched click with a soft body. Step "freq" up per bar."""
+    n = int(0.08 * SR); t = np.arange(n) / SR; f = q.get("freq", 800)
+    return (np.sin(2 * np.pi * f * t) * np.exp(-t / 0.018) + hp(c.noise(n), 3000) * np.exp(-t / 0.0015) * 0.4) * np.minimum(1, t / 0.001)
+
+def graph_rise(c, q, fps):
+    """Line graph drawing: a filtered tone rising with a tick train that speeds up. start/end, "f0"/"f1"."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); p = np.linspace(0, 1, n)
+    f = q.get("f0", 300) * (q.get("f1", 1200) / q.get("f0", 300)) ** (p ** 1.3)
+    tone = (osc(f, n) * 0.5 + osc(f * 1.5, n) * 0.15) * np.minimum(1, p / 0.1) * np.minimum(1, (1 - p) / 0.06)
+    ticks = np.zeros(n); tt = 0.0
+    while tt < n / SR:
+        k = graph_tick(c, {"freq": float(f[min(n - 1, int(tt * SR))] * 2)}); i = int(tt * SR)
+        ticks[i:i + len(k)] += k[: n - i] * 0.35; tt += 0.11 - 0.07 * (tt / (n / SR))
+    return lp(tone, 4000) + ticks
+
+def counter(c, q, fps):
+    """Rolling number counter: quick ticks that slow down as the number settles. start/end."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); out = np.zeros(n); tt = 0.0
+    while tt < n / SR - 0.02:
+        k = graph_tick(c, {"freq": 1300}); i = int(tt * SR); out[i:i + len(k)] += k[: n - i] * 0.6
+        tt += 0.035 + 0.09 * (tt / (n / SR)) ** 2
+    return out
+
 PATTERNS = {  # per 16th-note step in a bar: k=kick s=snare h=hat
     "four-on-floor": ["kh", "", "h", "", "ksh", "", "h", "", "kh", "", "h", "", "ksh", "", "h", ""],
     "half-time":     ["kh", "", "h", "", "h", "", "h", "", "sh", "", "h", "", "h", "", "kh", "h"],
@@ -369,10 +430,13 @@ def render(spec, out):
         elif typ == "cash_count": sig = cash_count(c, q, fps)
         elif typ == "sweep": sig = sweep(c, q, fps)
         elif typ == "lofi": sig = lofi(c, q, fps)
+        elif typ == "graph_rise": sig = graph_rise(c, q, fps)
+        elif typ == "counter": sig = counter(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
                    "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
                    "cash": cash, "blip": blip, "vine_boom": vine_boom, "scratch": scratch, "bass_drop": bass_drop,
-                   "stamp": stamp, "buzz": buzz}[typ](c, q)
+                   "stamp": stamp, "buzz": buzz, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
+                   "graph_tick": graph_tick}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)
     if loop:  # periodic by construction: whatever rings past the end continues from the start

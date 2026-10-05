@@ -45,6 +45,12 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 | `bass_drop` | 808 slide down | the big reveal / title slam |
 | `stamp` | thud + slap | stamps, seals, 'PAID' |
 | `buzz` | 'wrong answer' buzzer | a price or bad option getting crossed out |
+| `coin_drop` | one coin bouncing on a table (`freq`) | a small price is said or shown |
+| `coins` | a handful of coins landing (`count`, `dur`) | a bigger amount, savings, a payout |
+| `cash_riffle` | bill-counter machine 'brrrt' (`dur`, `rate`) | a large sum is said or a total lands |
+| `graph_tick` | infographic tick (`freq`, step it up per bar) | each bar/point appearing on a chart |
+| `graph_rise` | rising tone + speeding ticks between `start`/`end` (`f0`, `f1`) | a line graph drawing |
+| `counter` | ticks that slow as the number settles, `start`/`end` | a number counting up |
 | `lofi` | lo-fi hip-hop groove: EP chords, round bass, soft swung drums, vinyl crackle (`bpm` ~85-100, `lp` ~900 for a muffled intro, `drums`/`keys`/`bass` 0..1) | the bed under a voice-over reel; split it into sections (muffled problem, drop out for the turn, full groove for the solution) |
 | `rip` | paper tear (`start`/`end` or `dur`) | paper transitions, tearing a bill |
 | `glitch` | digital stutter (`dur`) | crossing something out, errors, cuts |

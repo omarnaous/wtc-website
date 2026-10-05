@@ -10,9 +10,26 @@ def warp(f):
     to_next = OLD[i + 1] - f
     g = NEW[i + 1] - to_next if to_next <= 30 and i < len(OLD) - 2 else NEW[i] + (f - OLD[i])
     return max(NEW[i], min(NEW[i + 1] - 1, g))
+A = {a[0]: a[2] for a in vo["anchors"]}
+def word_at(line, w):
+    """frame where the voice says word w on script line `line` (punctuation ignored)"""
+    strip = lambda x: "".join(ch for ch in x if ch.isalnum() or ch in "$,")
+    return next(x["start"] for x in vo["words"] if x["line"] == line and strip(x["w"]) == strip(w))
 spec = json.load(open("sound/cues.base.json"))
+# cost bars: same cascade as Cost() in scenes.jsx (10 bars, the last lands as the voice says "years")
+ten = word_at(1, "years") - A["cost"]
+step = max(3, min(7, (ten - 62) / 9))
+bars = [c for c in spec["cues"] if c.get("at_bars")]
+spec["cues"] = [c for c in spec["cues"] if not c.get("at_bars")]
+for b in bars:
+    for i in range(10):
+        spec["cues"].append({"type": b["type"], "frame": round(A["cost"] + 50 + i * step + 3), "gain": b.get("gain", 0.2),
+                             "freq": round(b.get("freq", 600) * 2 ** (i * 2 / 12)), "pan": round(-0.35 + i * 0.075, 2), "_placed": True})
 spec["duration"] = round(vo["duration"] / spec["fps"], 3)
 for c in spec["cues"]:
+    if "at_word" in c:  # locked to a spoken word, already in voice-led frames
+        c["frame"] = round(word_at(*c.pop("at_word")) + c.pop("offset", 0)); continue
+    if c.pop("_placed", False): continue  # bar ticks above are already in voice-led frames
     if "frame" in c: c["frame"] = warp(c["frame"])
     if "start" in c:
         s, e = c["start"], c["end"]

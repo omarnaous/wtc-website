@@ -203,6 +203,116 @@
    "end": 977,
    "gain": 0.08,
    "pan": 0
+  },
+  {
+   "type": "graph_rise",
+   "start": 728,
+   "end": 770,
+   "gain": 0.1,
+   "f0": 280,
+   "f1": 1000
+  },
+  {
+   "type": "counter",
+   "start": 774,
+   "end": 794,
+   "gain": 0.18
+  },
+  {
+   "type": "coin_drop",
+   "gain": 0.3,
+   "freq": 2100,
+   "frame": 39
+  },
+  {
+   "type": "coins",
+   "gain": 0.3,
+   "count": 5,
+   "dur": 0.3,
+   "frame": 105
+  },
+  {
+   "type": "cash_riffle",
+   "gain": 0.3,
+   "dur": 0.5,
+   "frame": 147
+  },
+  {
+   "type": "coins",
+   "gain": 0.4,
+   "count": 12,
+   "dur": 0.6,
+   "frame": 738
+  },
+  {
+   "type": "graph_tick",
+   "frame": 142,
+   "gain": 0.16,
+   "freq": 520,
+   "pan": -0.35
+  },
+  {
+   "type": "graph_tick",
+   "frame": 145,
+   "gain": 0.16,
+   "freq": 584,
+   "pan": -0.27
+  },
+  {
+   "type": "graph_tick",
+   "frame": 148,
+   "gain": 0.16,
+   "freq": 655,
+   "pan": -0.2
+  },
+  {
+   "type": "graph_tick",
+   "frame": 151,
+   "gain": 0.16,
+   "freq": 735,
+   "pan": -0.12
+  },
+  {
+   "type": "graph_tick",
+   "frame": 154,
+   "gain": 0.16,
+   "freq": 825,
+   "pan": -0.05
+  },
+  {
+   "type": "graph_tick",
+   "frame": 157,
+   "gain": 0.16,
+   "freq": 927,
+   "pan": 0.03
+  },
+  {
+   "type": "graph_tick",
+   "frame": 160,
+   "gain": 0.16,
+   "freq": 1040,
+   "pan": 0.1
+  },
+  {
+   "type": "graph_tick",
+   "frame": 163,
+   "gain": 0.16,
+   "freq": 1167,
+   "pan": 0.18
+  },
+  {
+   "type": "graph_tick",
+   "frame": 166,
+   "gain": 0.16,
+   "freq": 1310,
+   "pan": 0.25
+  },
+  {
+   "type": "graph_tick",
+   "frame": 169,
+   "gain": 0.16,
+   "freq": 1471,
+   "pan": 0.32
   }
  ]
 }
