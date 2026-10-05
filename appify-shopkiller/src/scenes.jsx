@@ -3,6 +3,7 @@ import { C, money, DISPLAY, MONO, Words, exitStyle, Printer, Store } from "./ui.
 import { clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Streak } from "./fx.jsx";
 import { WORDMARK } from "./brand.js";
 import { Storefront } from "./store.jsx";
+import { Sneaker, Hoodie, Backpack, Cap, Watch } from "./products.jsx";
 
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
@@ -132,15 +133,46 @@ export function Reveal({ product }) {
   // exploded store
   const ex = spring({ frame: f - 55, fps, config: { damping: 15, stiffness: 120 } }) * (1 - spring({ frame: f - 116, fps, config: { damping: 16, stiffness: 130 } }));
   const appear = interpolate(f, [44, 56], [0, 1], { ...clamp, easing: easeOut });
-  const rotX = 56 * ex, rotZ = -36 * ex;
+  const rotX = 40 * ex, rotZ = -24 * ex;
+  const UIF = { fontFamily: "UI" };
+  const slab = { width: 640, height: 820, borderRadius: 34 };
   const layers = [
-    { label: null, el: <div style={{ width: 640, height: 820, borderRadius: 34, background: C.ink2, boxShadow: "0 0 0 2px rgba(205,190,255,.15)" }} /> },
-    { label: "Your design", el: <div style={{ width: 640, height: 820, padding: 26 }}><div style={{ height: 280, borderRadius: 24, background: `linear-gradient(130deg, ${C.uv}, ${C.sky})`, boxShadow: "0 20px 40px rgba(0,0,0,.35)" }} /></div> },
-    { label: "Your code", el: <div style={{ width: 640, height: 820, padding: "330px 26px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>{[0, 1, 2, 3].map((i) => <div key={i} style={{ height: 200, borderRadius: 20, background: "#fff", boxShadow: "0 16px 30px rgba(0,0,0,.3)", display: "grid", placeItems: "center" }}><div style={{ width: 80, height: 80, borderRadius: i % 2 ? 20 : 99, background: i % 2 ? C.sky : C.uv }} /></div>)}</div> },
-    { label: "Your data", el: <div style={{ width: 640, height: 820, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 30 }}><div style={{ padding: "22px 60px", borderRadius: 99, background: C.iris, color: "#fff", ...DISPLAY, fontSize: 36, boxShadow: "0 16px 40px rgba(143,114,255,.6)" }}>Add to cart</div></div> },
+    { label: null, el: (
+      <div style={{ ...slab, background: "#fff", overflow: "hidden", boxShadow: "0 40px 80px rgba(0,0,0,.5)", ...UIF, color: "#0A0913" }}>
+        <div style={{ height: 34, background: "#0A0913", color: "#fff", display: "grid", placeItems: "center", fontSize: 14 }}>Free shipping over $50</div>
+        <div style={{ height: 64, display: "flex", alignItems: "center", padding: "0 26px", borderBottom: "1px solid #ECEAF1" }}>
+          <span style={{ fontFamily: "Display", fontWeight: 600, fontSize: 24, letterSpacing: "0.14em" }}>KOVA</span>
+          <span style={{ display: "flex", gap: 20, marginLeft: 36, fontSize: 16, color: "#6E6A7C" }}><span style={{ color: "#0A0913" }}>New</span><span>Men</span><span>Women</span><span style={{ color: "#E5484D" }}>Sale</span></span>
+        </div>
+        <div style={{ margin: "16px 20px", height: 280, borderRadius: 22, background: "#F4F3F8" }} />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, padding: "0 20px" }}>{[0, 1, 2, 3].map((i) => <div key={i} style={{ height: 180, borderRadius: 18, background: "#F4F3F8" }} />)}</div>
+      </div>) },
+    { label: "Your design", el: (
+      <div style={{ ...slab, padding: "114px 20px 0" }}>
+        <div style={{ position: "relative", height: 280, borderRadius: 22, background: "linear-gradient(120deg, #5B2BFF, #74C6FF)", boxShadow: "0 24px 50px rgba(0,0,0,.4)", overflow: "hidden", ...UIF, color: "#fff" }}>
+          <div style={{ position: "absolute", left: 26, top: 28 }}>
+            <div style={{ fontFamily: "Mono", fontSize: 13, letterSpacing: "0.16em", opacity: 0.8 }}>NEW DROP</div>
+            <div style={{ fontFamily: "Display", fontWeight: 600, fontSize: 36, letterSpacing: "-0.03em", marginTop: 6 }}>Kova Runner 2</div>
+            <div style={{ fontSize: 24, fontWeight: 600, marginTop: 10 }}>$129</div>
+          </div>
+          <div style={{ position: "absolute", right: -26, bottom: 6, transform: `rotate(-8deg) translateY(${Math.sin(f / 8) * 5}px)` }}><Sneaker size={330} color="#FF6A3D" id="exp" /></div>
+        </div>
+      </div>) },
+    { label: "Your code", el: (
+      <div style={{ ...slab, padding: "410px 20px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, alignContent: "start" }}>
+        {[[Hoodie, "#2B2733", "Fleece Hoodie", 72], [Backpack, "#F0384F", "Daypack 22L", 64], [Cap, "#74C6FF", "Wool Cap", 29], [Watch, "#0A0913", "Kova Watch", 199]].map(([P, c, n, pr], i) => (
+          <div key={n} style={{ height: 180, borderRadius: 18, background: "#fff", boxShadow: "0 16px 30px rgba(0,0,0,.35)", display: "flex", alignItems: "center", gap: 6, padding: "0 12px", ...UIF, color: "#0A0913" }}>
+            <P size={120} color={c} /><div><div style={{ fontSize: 16, fontWeight: 600 }}>{n}</div><div style={{ color: "#F5A524", fontSize: 13 }}>★★★★★</div><div style={{ fontSize: 16, fontWeight: 600 }}>${pr}</div></div>
+          </div>
+        ))}
+      </div>) },
+    { label: "Your data", el: (
+      <div style={{ ...slab, position: "relative", ...UIF }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 34, display: "flex", justifyContent: "center" }}><div style={{ padding: "20px 64px", borderRadius: 99, background: C.iris, color: "#fff", ...DISPLAY, fontSize: 34, boxShadow: "0 16px 40px rgba(143,114,255,.7)" }}>Add to cart</div></div>
+      </div>) },
   ];
-  const labelY = [0, 760, 980, 1340];
-  const labelX = [0, 640, 70, 90];
+  const labelY = [0, 720, 960, 1290];
+  const labelX = [0, 680, 40, 60];
   return (
     <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}>
       <div style={{ position: "absolute", left: 0, right: 0, top: titleY, transform: `scale(${slam * titleScale})`, filter: `blur(${blur}px)`, transformOrigin: "50% 0%", perspective: 1400 }}>
@@ -152,19 +184,25 @@ export function Reveal({ product }) {
       <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(up, [0, 1], [1180, 600]), textAlign: "center", ...DISPLAY, fontSize: 46, color: "rgba(243,241,250,.75)", opacity: interpolate(f, [16, 28], [0, 1], clamp) }}>Your own store. Built by Appify.</div>
 
       {f >= 44 && (
-        <div style={{ position: "absolute", zIndex: 1, left: 220, top: 820, width: 640, height: 820, perspective: 2200, opacity: appear, transform: `translateY(${(1 - appear) * 120}px)` }}>
+        <div style={{ position: "absolute", zIndex: 1, left: 220, top: 830, width: 640, height: 820, perspective: 2200, opacity: appear, transform: `translateY(${(1 - appear) * 120}px) scale(1.18)`, transformOrigin: "50% 40%" }}>
           <div style={{ position: "relative", width: 640, height: 820, transformStyle: "preserve-3d", transform: `rotateX(${rotX}deg) rotateZ(${rotZ}deg)` }}>
-            {layers.map((L, i) => <div key={i} style={{ position: "absolute", inset: 0, transform: `translateZ(${i * 120 * ex}px)` }}>{L.el}</div>)}
+            {layers.map((L, i) => {
+              const lift = i ? interpolate(f, [66 + i * 12, 72 + i * 12, 78 + i * 12, 84 + i * 12], [0, 1, 1, 0], clamp) : 0;
+              return (
+                <div key={i} style={{ position: "absolute", inset: 0, transform: `translateZ(${(i * 95 + lift * 50) * ex}px)`, filter: lift > 0.01 ? `drop-shadow(0 0 ${24 * lift}px rgba(143,114,255,.9))` : "none" }}>{L.el}</div>
+              );
+            })}
           </div>
         </div>
       )}
-      {layers.map((L, i) => {
-        if (!L.label) return null;
-        const p = interpolate(f, [70 + i * 9, 80 + i * 9], [0, 1], { ...clamp, easing: easeOut }) * (1 - interpolate(f, [112, 120], [0, 1], clamp));
-        return (
-          <div key={i} style={{ position: "absolute", zIndex: 20, left: labelX[i], top: labelY[i], opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 40 : -40)}px)`, padding: "16px 26px", borderRadius: 99, background: "rgba(243,241,250,.08)", border: "2px solid rgba(205,190,255,.3)", ...DISPLAY, fontSize: 40, color: C.paper }}>{L.label}</div>
-        );
-      })}
+      {f >= 60 && f < 120 && (
+        <div style={{ position: "absolute", zIndex: 30, left: 0, right: 0, top: 690, display: "flex", justifyContent: "center", gap: 18, opacity: interpolate(f, [60, 68, 110, 118], [0, 1, 1, 0], clamp) }}>
+          {["Your design", "Your code", "Your data"].map((t, j) => {
+            const on = interpolate(f, [66 + (j + 1) * 12, 70 + (j + 1) * 12], [0, 1], clamp);
+            return <div key={t} style={{ padding: "16px 26px", borderRadius: 99, ...DISPLAY, fontSize: 38, whiteSpace: "nowrap", background: on > 0.5 ? C.paper : "rgba(243,241,250,.08)", color: on > 0.5 ? C.ink : "rgba(243,241,250,.6)", border: "2px solid rgba(205,190,255,.3)", transform: `scale(${1 + on * 0.06 - (on > 0.99 ? 0.06 : 0)})` }}><span style={{ color: on > 0.5 ? C.uv : C.iris }}>0{j + 1}</span> {t}</div>;
+          })}
+        </div>
+      )}
       <Shockwave f={f} cx={540} cy={900} start={0} max={1500} width={10} />
       <Streak f={f} start={0} y={900} color={C.iris} />
       <Burst f={f} cx={540} cy={900} start={0} count={120} speed={46} colors={["#fff", C.iris, C.sky]} seed="rev" />

@@ -1,5 +1,6 @@
 // Dev: Appify's founder mascot as an animatable SVG rig.
 // Props are plain numbers so a scene can drive them from the frame.
+import { WORDMARK } from "./brand.js";
 const INK = "#0A0913", IRIS = "#8F72FF", UV = "#5B2BFF", UV_D = "#3A1BB0";
 const SKIN = "#E3AE86", SKIN_D = "#C98F68", HAIR = "#0B0A0C", HAIR_L = "#26222B", BEARD = "#141011";
 const S = 'stroke="#0A0913" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"';
@@ -14,33 +15,57 @@ function octagon(cx, cy, w, h, c) {
   return `M${x0 + c},${y0} H${x1 - c} L${x1},${y0 + c} V${y1 - c} L${x1 - c},${y1} H${x0 + c} L${x0},${y1 - c} V${y0 + c} Z`;
 }
 
+// Athletic build: wide shoulders, V-taper, big arms, fitted tee with the appify wordmark.
 function body({ point = 0, wave = 0, waveAng = 0, thumbs = 0 }) {
   const busy = Math.min(1, Math.max(point, wave, thumbs));
-  let g = `<ellipse cx="300" cy="752" rx="170" ry="18" fill="rgba(10,9,19,.18)"/>`;
-  g += `<rect x="236" y="640" width="56" height="96" rx="14" fill="#1E1B26" ${S}/><rect x="308" y="640" width="56" height="96" rx="14" fill="#1E1B26" ${S}/>`;
-  g += `<path d="M212,728 h84 a14,14 0 0 1 0,22 h-88 a12,12 0 0 1 4,-22 Z" fill="#fff" ${S}/><path d="M304,728 h84 a12,12 0 0 1 4,22 h-88 a14,14 0 0 1 0,-22 Z" fill="#fff" ${S}/>`;
-  g += `<path d="M150,660 Q140,500 210,450 L390,450 Q460,500 450,660 Z" fill="${UV}" ${S}/>`;
-  g += `<path d="M258,452 Q300,494 342,452" fill="none" stroke="${UV_D}" stroke-width="14" stroke-linecap="round"/><path d="M258,452 Q300,494 342,452" fill="none" stroke="${INK}" stroke-width="5"/>`;
-  g += `<path d="${spark(300, 568, 30)}" fill="#fff"/>`;
-  g += `<path d="M160,500 Q120,540 132,600 L186,600 Q190,556 214,520 Z" fill="${UV}" ${S}/><path d="M440,500 Q480,540 468,600 L414,600 Q410,556 386,520 Z" fill="${UV}" ${S}/>`;
+  let g = `<ellipse cx="300" cy="756" rx="190" ry="18" fill="rgba(10,9,19,.18)"/>`;
+  // legs + sneakers
+  g += `<path d="M222,640 L232,736 L292,736 L298,650 Z" fill="#1E1B26" ${S}/><path d="M378,640 L368,736 L308,736 L302,650 Z" fill="#1E1B26" ${S}/>`;
+  g += `<path d="M206,730 h90 a14,14 0 0 1 0,24 h-94 a12,12 0 0 1 4,-24 Z" fill="#fff" ${S}/><path d="M304,730 h90 a12,12 0 0 1 4,24 h-94 a14,14 0 0 1 0,-24 Z" fill="#fff" ${S}/>`;
+  // traps + neck base
+  g += `<path d="M252,452 Q300,436 348,452 L392,478 L208,478 Z" fill="${SKIN_D}" ${S}/>`;
+  // fitted tee: V-taper torso
+  g += `<path d="M206,664 Q190,604 176,548 Q160,496 182,474 Q232,456 268,452 Q300,476 332,452 Q368,456 418,474 Q440,496 424,548 Q410,604 394,664 Z" fill="${UV}" ${S}/>`;
+  g += `<path d="M268,452 Q300,486 332,452" fill="none" stroke="${UV_D}" stroke-width="12" stroke-linecap="round"/><path d="M268,452 Q300,486 332,452" fill="none" stroke="${INK}" stroke-width="5"/>`;
+  // chest + abs hints
+  g += `<path d="M214,532 Q254,552 294,536 M306,536 Q346,552 386,532" fill="none" stroke="${UV_D}" stroke-width="6" stroke-linecap="round"/>`;
+  g += `<path d="M300,600 V650 M268,640 Q284,646 296,640 M304,640 Q316,646 332,640" fill="none" stroke="${UV_D}" stroke-width="4" stroke-linecap="round" opacity=".7"/>`;
+  // appify wordmark on the chest
+  const ws = 150 / WORDMARK.width, wx = 300 - 75, wy = 590;
+  g += `<g transform="translate(${wx} ${wy}) scale(${ws})"><path d="${WORDMARK.letters}" fill="#fff"/><path d="${WORDMARK.spark}" fill="${IRIS}"/></g>`;
   // tablet, tucked away while gesturing
-  g += `<g opacity="${1 - busy}"><g transform="rotate(-4 300 660)"><rect x="200" y="606" width="200" height="110" rx="14" fill="#25212E" ${S}/><path d="${spark(300, 660, 20)}" fill="${IRIS}"/></g></g>`;
-  const arm = (ex, ey, cx, cy, hx, hy) =>
-    `<path d="M${ex},${ey} Q${cx},${cy} ${hx},${hy}" fill="none" stroke="${INK}" stroke-width="40" stroke-linecap="round"/><path d="M${ex},${ey} Q${cx},${cy} ${hx},${hy}" fill="none" stroke="${SKIN}" stroke-width="26" stroke-linecap="round"/>`;
-  // left arm: holding (0) or waving (1)
+  g += `<g opacity="${1 - busy}"><g transform="rotate(-4 300 676)"><rect x="196" y="622" width="208" height="112" rx="14" fill="#25212E" ${S}/><path d="${spark(300, 678, 20)}" fill="${IRIS}"/></g></g>`;
+  const limb = (x1, y1, cx, cy, x2, y2, w) =>
+    `<path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" fill="none" stroke="${INK}" stroke-width="${w + 14}" stroke-linecap="round"/><path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" fill="none" stroke="${SKIN}" stroke-width="${w}" stroke-linecap="round"/>`;
+  const upper = (sx, sy, ex, ey, out) => {
+    let a = limb(sx, sy, (sx + ex) / 2 + out * 8, (sy + ey) / 2, ex, ey, 54);
+    // bicep bulge
+    a += `<ellipse cx="${(sx + ex) / 2 + out * 14}" cy="${(sy + ey) / 2 + 4}" rx="30" ry="40" fill="${SKIN}" stroke="${INK}" stroke-width="7"/>`;
+    a += `<path d="M${(sx + ex) / 2 + out * 2},${(sy + ey) / 2 - 22} Q${(sx + ex) / 2 + out * 24},${(sy + ey) / 2} ${(sx + ex) / 2 + out * 6},${(sy + ey) / 2 + 30}" fill="none" stroke="${SKIN_D}" stroke-width="5" stroke-linecap="round"/>`;
+    return a;
+  };
+  // shoulders (sleeve caps over the delts)
+  const sleeve = (cx) => `<path d="M${cx - 46},512 A46,44 0 0 1 ${cx + 46},512 L${cx + 40},552 Q${cx},566 ${cx - 40},552 Z" fill="${UV}" ${S}/><path d="M${cx - 38},540 Q${cx},552 ${cx + 38},540" fill="none" stroke="${UV_D}" stroke-width="5" stroke-linecap="round"/>`;
+  // left arm
+  const LS = [160, 520], LE = [134, 616];
   const a = (8 + waveAng) * Math.PI / 180;
-  const lhx = lerp(208, 142 + Math.sin(a) * 150, wave), lhy = lerp(664, 598 - Math.cos(a) * 150, wave);
-  g += arm(142, 598, lerp(150, 120, wave), lerp(650, 540, wave), lhx, lhy);
-  g += `<circle cx="${lhx}" cy="${lhy}" r="19" fill="${SKIN}" ${S}/>`;
-  if (wave > 0.5) g += `<path d="M${lhx - 14},${lhy - 14} l-6,-22 M${lhx - 2},${lhy - 18} l-1,-26 M${lhx + 10},${lhy - 15} l5,-23" stroke="${INK}" stroke-width="16" stroke-linecap="round"/><path d="M${lhx - 14},${lhy - 14} l-6,-22 M${lhx - 2},${lhy - 18} l-1,-26 M${lhx + 10},${lhy - 15} l5,-23" stroke="${SKIN}" stroke-width="8" stroke-linecap="round"/>`;
+  const lhx = lerp(214, LE[0] + 10 + Math.sin(a) * 140, wave), lhy = lerp(676, LE[1] - 20 - Math.cos(a) * 140, wave);
+  g += upper(LS[0], LS[1], LE[0], LE[1], -1);
+  g += limb(LE[0], LE[1], lerp(150, 110, wave), lerp(668, 560, wave), lhx, lhy, 42);
+  g += `<circle cx="${lhx}" cy="${lhy}" r="22" fill="${SKIN}" ${S}/>`;
+  if (wave > 0.5) g += `<path d="M${lhx - 16},${lhy - 14} l-6,-24 M${lhx - 3},${lhy - 19} l-1,-28 M${lhx + 11},${lhy - 15} l5,-25" stroke="${INK}" stroke-width="17" stroke-linecap="round"/><path d="M${lhx - 16},${lhy - 14} l-6,-24 M${lhx - 3},${lhy - 19} l-1,-28 M${lhx + 11},${lhy - 15} l5,-25" stroke="${SKIN}" stroke-width="9" stroke-linecap="round"/>`;
+  g += sleeve(170);
   // right arm: hold / point / thumbs-up
+  const RS = [440, 520], RE = [466, 616];
   const w0 = Math.max(0, 1 - point - thumbs);
-  const rhx = 392 * w0 + 520 * point + 500 * thumbs, rhy = 660 * w0 + 452 * point + 520 * thumbs;
-  const rcx = 450 * w0 + 520 * point + 520 * thumbs, rcy = 650 * w0 + 560 * point + 600 * thumbs;
-  g += arm(458, 598, rcx, rcy, rhx, rhy);
-  if (point > 0.5) g += `<rect x="${rhx - 7}" y="${rhy - 52}" width="16" height="44" rx="8" fill="${SKIN}" stroke="${INK}" stroke-width="6" transform="rotate(14 ${rhx} ${rhy})"/>`;
-  if (thumbs > 0.5) g += `<rect x="${rhx - 9}" y="${rhy - 58}" width="20" height="46" rx="10" fill="${SKIN}" stroke="${INK}" stroke-width="6"/>`;
-  g += `<circle cx="${rhx}" cy="${rhy}" r="${thumbs > 0.5 ? 23 : 19}" fill="${SKIN}" ${S}/>`;
+  const rhx = 386 * w0 + 540 * point + 516 * thumbs, rhy = 676 * w0 + 450 * point + 520 * thumbs;
+  const rcx = 450 * w0 + 540 * point + 530 * thumbs, rcy = 668 * w0 + 560 * point + 600 * thumbs;
+  g += upper(RS[0], RS[1], RE[0], RE[1], 1);
+  g += limb(RE[0], RE[1], rcx, rcy, rhx, rhy, 42);
+  if (point > 0.5) g += `<rect x="${rhx - 8}" y="${rhy - 56}" width="18" height="46" rx="9" fill="${SKIN}" stroke="${INK}" stroke-width="6" transform="rotate(14 ${rhx} ${rhy})"/>`;
+  if (thumbs > 0.5) g += `<rect x="${rhx - 10}" y="${rhy - 62}" width="22" height="48" rx="11" fill="${SKIN}" stroke="${INK}" stroke-width="6"/>`;
+  g += `<circle cx="${rhx}" cy="${rhy}" r="${thumbs > 0.5 ? 25 : 22}" fill="${SKIN}" ${S}/>`;
+  g += sleeve(430);
   return g;
 }
 
@@ -99,7 +124,7 @@ export function Dev({ width = 300, point = 0, wave = 0, waveAng = 0, thumbs = 0,
     <svg viewBox="90 50 420 720" width={width} height={h} style={{ overflow: "visible" }}>
       <g transform={`translate(0 ${bob})`}>
         <g dangerouslySetInnerHTML={{ __html: body({ point, wave, waveAng, thumbs }) }} />
-        <g transform={`rotate(${tilt} 300 440)`} dangerouslySetInnerHTML={{ __html: head(face) }} />
+        <g transform={`rotate(${tilt} 300 446) translate(300 452) scale(0.86) translate(-300 -452)`} dangerouslySetInnerHTML={{ __html: head(face) }} />
       </g>
     </svg>
   );
