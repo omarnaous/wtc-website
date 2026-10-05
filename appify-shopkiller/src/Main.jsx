@@ -3,6 +3,7 @@ import { SCENES, RIP, WIPE, CUT } from "./timing.js";
 import { C } from "./ui.jsx";
 import { useFonts, clamp, easeOut, Grain, Vignette, Flash } from "./fx.jsx";
 import { Receipt, Cost, Turn, Reveal, Features, Compare, Offer } from "./scenes.jsx";
+import { Presenter } from "./Presenter.jsx";
 
 // Graph paper = the old way (bills, receipts, cost). Ink = the new way.
 function PaperLayer({ f, style }) {
@@ -43,6 +44,8 @@ export const Main = (props) => {
       ))}
       {paperAfter && <PaperLayer f={f} style={{ transform: `translateY(${(1 - wipe) * 1920}px)`, boxShadow: "0 -40px 80px rgba(0,0,0,.4)" }} />}
 
+      {/* scenes scaled into the top 80% so Dev and his captions own the bottom band */}
+      <AbsoluteFill style={{ transform: "scale(0.8)", transformOrigin: "50% 250px" }}>
       <Sequence {...seq("receipt")}><Receipt {...props} /></Sequence>
       <Sequence {...seq("cost")}><Cost {...props} /></Sequence>
       <Sequence {...seq("turn")}><Turn /></Sequence>
@@ -50,6 +53,8 @@ export const Main = (props) => {
       <Sequence {...seq("features")}><Features {...props} /></Sequence>
       <Sequence {...seq("compare")}><Compare {...props} /></Sequence>
       <Sequence {...seq("offer")}><Offer {...props} /></Sequence>
+      </AbsoluteFill>
+      <Presenter />
 
       <Flash f={f} start={CUT} peak={0.4} />
       <Vignette strength={0.35} />

@@ -281,9 +281,9 @@ export function Compare({ monthly, price }) {
       </svg>
       <div style={{ position: "absolute", left: X(breakEven) - 40, top: base + 74, opacity: be, ...DISPLAY, fontSize: 34, color: C.ink, width: 520 }}>Pays for itself in 12 months</div>
       {f >= 60 && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: 1540, textAlign: "center", opacity: area }}>
+        <div style={{ position: "absolute", left: 520, width: 400, top: 1096, textAlign: "center", opacity: area, padding: "10px 0 14px", borderRadius: 20, background: "rgba(243,241,250,.88)" }}>
           <div style={{ ...MONO, fontSize: 28, color: C.mute }}>YOU SAVE</div>
-          <div style={{ ...DISPLAY, fontSize: 120, color: C.uv, fontVariantNumeric: "tabular-nums" }}>{money(count)}</div>
+          <div style={{ ...DISPLAY, fontSize: 110, color: C.uv, fontVariantNumeric: "tabular-nums" }}>{money(count)}</div>
         </div>
       )}
     </AbsoluteFill>
