@@ -248,10 +248,13 @@ export function Reveal({ product }) {
 
 /* ── 5. Four selling points, shown on a working storefront ─────────────── */
 const FEATS = [["Way more", "beautiful."], ["Customize", "everything."], ["Full", "control."], ["Zero monthly", "fees."]];
-export function Features({ monthly }) {
+export function Features({ monthly, dur = 180 }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const k = FEAT_AT.reduce((m, s, i) => (f >= s ? i : m), 0), l = f - FEAT_AT[k];
+  // the storefront demo was designed as four 45-frame beats; stretch each beat over its voice line
+  const beat = (FEAT_AT[k + 1] ?? dur) - FEAT_AT[k];
+  const demo = 45 * k + Math.min(45, (l * 45) / Math.max(45, Math.min(beat, 90)));
   const s = spring({ frame: l, fps, config: { damping: 11, stiffness: 240 } });
   const strike = k === 3 ? interpolate(l, [14, 20], [0, 1], { ...clamp, easing: easeOut }) : 0;
   const drop = k === 3 ? interpolate(l, [24, 36], [0, 1], { ...clamp, easing: easeIn }) : 0;
@@ -265,7 +268,7 @@ export function Features({ monthly }) {
         <div style={{ ...DISPLAY, fontSize: 110, color: C.paper }}>{FEATS[k][0]}</div>
         <div style={{ ...DISPLAY, fontSize: 130, color: C.iris, marginTop: 4 }}>{FEATS[k][1]}</div>
       </div>
-      <div style={{ position: "absolute", left: 130, top: 626 }}><Storefront l={f} fps={fps} /></div>
+      <div style={{ position: "absolute", left: 130, top: 626 }}><Storefront l={demo} fps={fps} /></div>
       {k === 3 && (
         <>
           <div style={{ position: "absolute", left: 0, right: 0, top: 1120, display: "flex", justifyContent: "center", opacity: tagIn, transform: `translateY(${drop * 900 + (1 - tagIn) * 80}px) rotate(${drop * 28}deg)` }}>

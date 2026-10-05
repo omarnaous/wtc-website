@@ -50,7 +50,7 @@ export const Main = (props) => {
       <Sequence {...seq("cost")}><Cost {...props} dur={SCENES.cost[1]} /></Sequence>
       <Sequence {...seq("turn")}><Turn dur={SCENES.turn[1]} /></Sequence>
       <Sequence {...seq("reveal")}><Reveal {...props} /></Sequence>
-      <Sequence {...seq("features")}><Features {...props} /></Sequence>
+      <Sequence {...seq("features")}><Features {...props} dur={SCENES.features[1]} /></Sequence>
       <Sequence {...seq("compare")}><Compare {...props} /></Sequence>
       <Sequence {...seq("guarantee")}><Guarantee /></Sequence>
       <Sequence {...seq("offer")}><Offer {...props} /></Sequence>

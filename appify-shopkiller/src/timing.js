@@ -17,8 +17,8 @@ export const SCENES = {
   offer: span("offer", "end"),         // one receipt, stamped PAID ONCE + CTA
 };
 export const FEATS = [0, 1, 2, 3].map((i) => A[`feat${i}`] - A.feat0); // feature k starts, within the scene
-const wordAt = (line, w) => VO.words.find((x) => x.line === line && x.w === w)?.start;
-export const COST_CUES = { ten: wordAt(1, "years!") - A.cost, own: wordAt(1, "And") - A.cost };
+const wordAt = (line, w) => VO.words.find((x) => x.line === line && x.w.replace(/[^\w$,]/g, "") === w)?.start;
+export const COST_CUES = { ten: wordAt(1, "years") - A.cost, own: wordAt(1, "And") - A.cost };
 export const RIP = A.turn;      // paper tears open on the turn
 export const WIPE = A.compare;  // paper slides back in for the comparison
 export const CUT = A.guarantee; // hard cut to ink for the guarantee
