@@ -8,7 +8,8 @@ usage:
 
 Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
            printer coin register rip glitch click pop typing cash cash_count blip sweep,
-           and viral-reel hits: vine_boom scratch bass_drop stamp buzz.
+           viral-reel hits: vine_boom scratch bass_drop stamp buzz,
+           and a music bed for voice-overs: lofi (start/end, bpm, lp, drums/keys/bass).
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
 Requires numpy and scipy (pip install numpy scipy).
 """
@@ -267,6 +268,64 @@ def buzz(c, q):
     env = np.minimum(1, t / 0.005) * np.minimum(1, (n / SR - t) / 0.04)
     return lp(sq * 0.4, 1600) * env
 
+NOTE = {n: i for i, n in enumerate(["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"])}
+def _hz(name):  # "A3" -> 220.0
+    return 440 * 2 ** ((NOTE[name[:-1]] + 12 * (int(name[-1]) + 1) - 69) / 12)
+LOFI_PROG = [  # (bass root, chord voicing) - one per bar; warm minor-key loop, no lead melody
+    ("A1", ["G3", "C4", "E4", "B4"]),   # Am9
+    ("F1", ["A3", "C4", "E4", "G4"]),   # Fmaj9
+    ("C2", ["G3", "B3", "E4", "A4"]),   # Cmaj7(6)
+    ("G1", ["F3", "B3", "D4", "A4"]),   # G9
+]
+
+def lofi(c, q, fps):
+    """Lo-fi hip-hop groove for voice-overs: electric-piano chords, round bass, soft swung drums,
+    vinyl crackle. "bpm" (default 92), "lp" (overall low-pass in Hz; ~900 for a muffled intro),
+    "drums"/"keys"/"bass" gains (0..1), "bar0" to start mid-progression."""
+    bpm = q.get("bpm", 92); beat = 60 / bpm; bar = 4 * beat
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); out = np.zeros(n + SR)
+    def put(sig, t, g):
+        i = int(t * SR)
+        if 0 <= i < len(out): m = min(len(sig), len(out) - i); out[i:i + m] += sig[:m] * g
+    def ep(f, dur):  # electric piano: sine + soft bell partial + tremolo, slow decay
+        m = int(dur * SR); t = np.arange(m) / SR
+        s = np.sin(2 * np.pi * f * t) + 0.25 * np.sin(2 * np.pi * 2 * f * t) * np.exp(-t / 0.25)
+        return s * np.minimum(1, t / 0.008) * np.exp(-t / 1.1) * (1 + 0.12 * np.sin(2 * np.pi * 4.5 * t))
+    def bassnote(f, dur):
+        m = int(dur * SR); t = np.arange(m) / SR
+        return np.tanh(np.sin(2 * np.pi * f * t) * 1.6) * np.minimum(1, t / 0.006) * np.exp(-t / 0.6)
+    mk = int(0.45 * SR); tk = np.arange(mk) / SR
+    kick = np.sin(2 * np.pi * np.cumsum(48 + 90 * np.exp(-tk / 0.03)) / SR) * np.exp(-tk / 0.16)
+    ms = int(0.22 * SR); ts = np.arange(ms) / SR
+    snare = bp(c.noise(ms), 900, 5000) * np.exp(-ts / 0.05) * 0.7 + np.sin(2 * np.pi * 190 * ts) * np.exp(-ts / 0.03) * 0.5
+    mh = int(0.05 * SR)
+    hat = hp(c.noise(mh), 7000) * np.exp(-np.arange(mh) / SR / 0.012)
+    gd, gk, gb = q.get("drums", 1.0), q.get("keys", 1.0), q.get("bass", 1.0)
+    swing = 0.6
+    k, t = q.get("bar0", 0), 0.0
+    while t < n / SR:
+        root, chord = LOFI_PROG[k % len(LOFI_PROG)]
+        for j, nt in enumerate(chord):  # slightly strummed chord, re-struck on beat 3
+            put(ep(_hz(nt), bar), t + j * 0.012, 0.16 * gk)
+            put(ep(_hz(nt), bar / 2), t + 2 * beat + 0.03 + j * 0.01, 0.07 * gk)
+        for off, d in [(0, 1.5), (1.5, 1.0), (2.5, 1.5)]:  # bass on 1, the and of 2, and 3
+            put(bassnote(_hz(root) * 2, d * beat), t + off * beat, 0.32 * gb)
+        for b in range(4):
+            tb = t + b * beat
+            if b in (0, 2): put(kick, tb, 0.55 * gd)
+            if b == 1 and k % 2: put(kick, tb + beat * swing, 0.3 * gd)  # ghost kick every other bar
+            if b in (1, 3): put(snare, tb, 0.32 * gd)
+            put(hat, tb, 0.10 * gd); put(hat, tb + beat * swing, 0.06 * gd)
+        t += bar; k += 1
+    out = out[:n]
+    crackle = np.zeros(n)
+    for i in c.rng.integers(0, n, int(n / SR * 9)): crackle[i] = c.rng.uniform(-1, 1)
+    out += lp(crackle, 5000) * 0.25 + lp(c.noise(n), 3000) * 0.004
+    out = lp(out, q.get("lp", 5200))
+    fi, fo = int(0.25 * SR), int(0.6 * SR)  # short fades so sections join smoothly
+    out[:fi] *= np.linspace(0, 1, fi); out[-fo:] *= np.linspace(1, 0, fo)
+    return out
+
 PATTERNS = {  # per 16th-note step in a bar: k=kick s=snare h=hat
     "four-on-floor": ["kh", "", "h", "", "ksh", "", "h", "", "kh", "", "h", "", "ksh", "", "h", ""],
     "half-time":     ["kh", "", "h", "", "h", "", "h", "", "sh", "", "h", "", "h", "", "kh", "h"],
@@ -309,6 +368,7 @@ def render(spec, out):
         elif typ == "typing": sig = typing(c, q, fps)
         elif typ == "cash_count": sig = cash_count(c, q, fps)
         elif typ == "sweep": sig = sweep(c, q, fps)
+        elif typ == "lofi": sig = lofi(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
                    "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
                    "cash": cash, "blip": blip, "vine_boom": vine_boom, "scratch": scratch, "bass_drop": bass_drop,

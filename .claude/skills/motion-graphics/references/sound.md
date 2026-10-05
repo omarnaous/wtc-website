@@ -45,6 +45,7 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 | `bass_drop` | 808 slide down | the big reveal / title slam |
 | `stamp` | thud + slap | stamps, seals, 'PAID' |
 | `buzz` | 'wrong answer' buzzer | a price or bad option getting crossed out |
+| `lofi` | lo-fi hip-hop groove: EP chords, round bass, soft swung drums, vinyl crackle (`bpm` ~85-100, `lp` ~900 for a muffled intro, `drums`/`keys`/`bass` 0..1) | the bed under a voice-over reel; split it into sections (muffled problem, drop out for the turn, full groove for the solution) |
 | `rip` | paper tear (`start`/`end` or `dur`) | paper transitions, tearing a bill |
 | `glitch` | digital stutter (`dur`) | crossing something out, errors, cuts |
 | `click` / `pop` | UI tap / bubbly pop | toggles, buttons, cards popping in |
@@ -66,4 +67,4 @@ Impact around 0.9-1.0, riser 0.5-0.6, beat 0.4-0.6, chime 0.2, whoosh 0.1, pad 0
 
 For seamless loops set `"loop": true` at the top level. `sound.py` then snaps pad and drone frequencies to whole cycles per loop, filters noise circularly, and wraps anything that rings past the end back onto the start, so the audio is periodic by construction. Use `drone`/`pad` spanning the whole duration plus hits placed on the beat grid.
 
-For social reels with a voice-over: skip the music bed and use a handful of hits only where something happens on screen (vine_boom, scratch, bass_drop, stamp, whoosh). Leave the music to the platform's trending-audio library at low volume; it is licensed there and boosts reach.
+For social reels with a voice-over: business explainer reels typically sit on lo-fi hip-hop or a funky groove (85-110 BPM, no lead melody) so the voice stays clear; use `lofi` for that, and a handful of hits only where something happens on screen (vine_boom, scratch, bass_drop, stamp, whoosh). Leave the music to the platform's trending-audio library at low volume; it is licensed there and boosts reach.
