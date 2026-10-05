@@ -49,15 +49,15 @@ function Emote({ kind, p, f }) {
   const s = Math.min(1, p * 1.4);
   const bob = Math.sin(f / 4) * 4;
   const common = { position: "absolute", transform: `scale(${s}) translateY(${bob}px)`, transformOrigin: "50% 100%" };
-  if (kind === "sweat") return <svg style={{ ...common, left: 214, top: 1318 + (1 - p) * -10 }} width="34" height="48" viewBox="0 0 34 48"><path d="M17,2 Q32,26 30,34 A13,13 0 0 1 4,34 Q2,26 17,2 Z" fill="#7CC8FF" stroke="#0A0913" strokeWidth="4" /></svg>;
+  if (kind === "sweat") return <svg style={{ ...common, left: 208, top: 1276 + (1 - p) * -10 }} width="34" height="48" viewBox="0 0 34 48"><path d="M17,2 Q32,26 30,34 A13,13 0 0 1 4,34 Q2,26 17,2 Z" fill="#7CC8FF" stroke="#0A0913" strokeWidth="4" /></svg>;
   if (kind === "spark") return (
-    <svg style={{ ...common, left: 120, top: 1150 }} width="220" height="160" viewBox="0 0 220 160">
+    <svg style={{ ...common, left: 114, top: 1106 }} width="220" height="160" viewBox="0 0 220 160">
       {[[40, 90, 22], [110, 40, 30], [180, 96, 18]].map(([x, y, r], i) => <path key={i} d={sparkPath(x, y + Math.sin(f / 5 + i) * 6, r, 0.22)} fill="#8F72FF" stroke="#0A0913" strokeWidth="4" />)}
     </svg>
   );
   const bg = kind === "$" ? "#1FA971" : kind === "?" ? "#74C6FF" : "#FF6A3D";
   return (
-    <div style={{ ...common, left: 206, top: 1176, width: 84, height: 84, borderRadius: 99, background: bg, border: "5px solid #0A0913", display: "grid", placeItems: "center", fontFamily: "Display", fontWeight: 600, fontSize: 54, color: "#fff", boxShadow: "0 6px 0 #0A0913" }}>{kind}</div>
+    <div style={{ ...common, left: 200, top: 1132, width: 84, height: 84, borderRadius: 99, background: bg, border: "5px solid #0A0913", display: "grid", placeItems: "center", fontFamily: "Display", fontWeight: 600, fontSize: 54, color: "#fff", boxShadow: "0 6px 0 #0A0913" }}>{kind}</div>
   );
 }
 
@@ -88,8 +88,8 @@ export function Presenter() {
   const chunk = CHUNKS.find((c) => f >= c[0].start - 2 && f < c[c.length - 1].end + 10);
   return (
     <>
-      <div style={{ position: "absolute", left: 4 + flinch, top: 1268 + jumpY, transform: `scale(${scale}, ${scale * squash})`, transformOrigin: "50% 100%" }}>
-        <Dev width={290} point={point} wave={wave} waveAng={waveAng} thumbs={thumbs} tilt={tilt} bob={bob} open={open}
+      <div style={{ position: "absolute", left: 6 + flinch, top: 1228 + jumpY, transform: `scale(${scale}, ${scale * squash})`, transformOrigin: "50% 100%" }}>
+        <Dev width={280} point={point} wave={wave} waveAng={waveAng} thumbs={thumbs} tilt={tilt} bob={bob} open={open}
           {...face} smile={Math.max(face.smile, happy)} lid={Math.max(face.lid * (1 - happy), blink * (1 - happy))} shock={shock} happy={happy} wink={wink} />
       </div>
       {EMOTES.map(([k, a, b], i) => (f >= a && f < b ? <Emote key={i} kind={k} p={env(f, a, b, 5)} f={f} /> : null))}

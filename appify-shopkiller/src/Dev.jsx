@@ -18,10 +18,12 @@ function octagon(cx, cy, w, h, c) {
 // Athletic build: wide shoulders, V-taper, big arms, fitted tee with the appify wordmark.
 function body({ point = 0, wave = 0, waveAng = 0, thumbs = 0 }) {
   const busy = Math.min(1, Math.max(point, wave, thumbs));
-  let g = `<ellipse cx="300" cy="756" rx="190" ry="18" fill="rgba(10,9,19,.18)"/>`;
-  // legs + sneakers
-  g += `<path d="M222,640 L232,736 L292,736 L298,650 Z" fill="#1E1B26" ${S}/><path d="M378,640 L368,736 L308,736 L302,650 Z" fill="#1E1B26" ${S}/>`;
-  g += `<path d="M206,730 h90 a14,14 0 0 1 0,24 h-94 a12,12 0 0 1 4,-24 Z" fill="#fff" ${S}/><path d="M304,730 h90 a12,12 0 0 1 4,24 h-94 a14,14 0 0 1 0,-24 Z" fill="#fff" ${S}/>`;
+  let g = `<ellipse cx="300" cy="858" rx="190" ry="18" fill="rgba(10,9,19,.18)"/>`;
+  // longer legs: slim dark trousers with a knee crease, sneakers
+  g += `<path d="M216,640 L230,836 L292,836 L298,650 Z" fill="#1E1B26" ${S}/><path d="M384,640 L370,836 L308,836 L302,650 Z" fill="#1E1B26" ${S}/>`;
+  g += `<path d="M252,730 Q258,760 262,800 M348,730 Q342,760 338,800" fill="none" stroke="#33303D" stroke-width="5" stroke-linecap="round"/>`;
+  g += `<path d="M204,830 h92 a14,14 0 0 1 0,26 h-96 a12,12 0 0 1 4,-26 Z" fill="#fff" ${S}/><path d="M304,830 h92 a12,12 0 0 1 4,26 h-96 a14,14 0 0 1 0,-26 Z" fill="#fff" ${S}/>`;
+  g += `<path d="M206,846 h88 M306,846 h88" stroke="#C9C6D6" stroke-width="4"/>`;
   // traps + neck base
   g += `<path d="M252,452 Q300,436 348,452 L392,478 L208,478 Z" fill="${SKIN_D}" ${S}/>`;
   // fitted tee: V-taper torso
@@ -119,9 +121,9 @@ function head({ brow = 6, lid = 0.1, smile = 0.8, look = 0, open = 0, shock = 0,
 }
 
 export function Dev({ width = 300, point = 0, wave = 0, waveAng = 0, thumbs = 0, tilt = 0, bob = 0, ...face }) {
-  const h = (width * 720) / 420;
+  const h = (width * 830) / 420;
   return (
-    <svg viewBox="90 50 420 720" width={width} height={h} style={{ overflow: "visible" }}>
+    <svg viewBox="90 50 420 830" width={width} height={h} style={{ overflow: "visible" }}>
       <g transform={`translate(0 ${bob})`}>
         <g dangerouslySetInnerHTML={{ __html: body({ point, wave, waveAng, thumbs }) }} />
         <g transform={`rotate(${tilt} 300 446) translate(300 452) scale(0.86) translate(-300 -452)`} dangerouslySetInnerHTML={{ __html: head(face) }} />

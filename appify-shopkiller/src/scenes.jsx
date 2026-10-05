@@ -202,9 +202,18 @@ export function Reveal({ product }) {
           <div style={{ position: "absolute", left: 70, top: 862, width: 400, transform: `translateX(${(1 - cmp) * -300}px) rotate(-3deg)`, opacity: cmp }}>
             <div style={{ textAlign: "center", ...DISPLAY, fontSize: 40, color: "rgba(243,241,250,.6)", marginBottom: 18 }}>Basic template</div>
             <div style={{ position: "relative", height: 500, borderRadius: 14, background: "#E7E6EA", padding: 18, fontFamily: "Georgia, serif", color: "#777", filter: "grayscale(1)" }}>
-              <div style={{ height: 34, background: "#CFCED4", borderRadius: 4, display: "flex", alignItems: "center", padding: "0 12px", fontSize: 18 }}>My Store</div>
-              <div style={{ height: 150, background: "#D6D5DB", borderRadius: 4, marginTop: 14, display: "grid", placeItems: "center", fontSize: 18 }}>Welcome to our store</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 14 }}>{[0, 1, 2, 3].map((i) => <div key={i} style={{ height: 120, background: "#D6D5DB", borderRadius: 4 }} />)}</div>
+              <div style={{ height: 34, background: "#CFCED4", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px", fontSize: 18 }}><span>My Store</span><span style={{ fontSize: 14 }}>Home | Shop | Cart (0)</span></div>
+              <div style={{ height: 120, background: "#D6D5DB", borderRadius: 4, marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 14, fontSize: 18 }}><Sneaker size={120} color="#8A8894" id="bas" /><span>Welcome to our store</span></div>
+              <div style={{ fontSize: 16, margin: "12px 2px 8px" }}>Featured products</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                {[[Hoodie, "Hoodie", "29.99"], [Backpack, "Backpack", "39.99"], [Cap, "Cap", "14.99"], [Watch, "Watch", "49.99"]].map(([P, n, pr]) => (
+                  <div key={n} style={{ background: "#F2F1F4", border: "1px solid #C9C8CE", padding: 6, fontSize: 14, lineHeight: 1.25 }}>
+                    <div style={{ height: 70, background: "#DDDCE1", display: "grid", placeItems: "center" }}><P size={64} color="#8A8894" /></div>
+                    <div style={{ marginTop: 4 }}>{n}</div><div>${pr}</div>
+                    <div style={{ marginTop: 3, border: "1px solid #AAA", textAlign: "center", fontSize: 12 }}>Buy</div>
+                  </div>
+                ))}
+              </div>
               <div style={{ position: "absolute", right: -16, top: -34, ...DISPLAY, fontSize: 46, color: "#9A98A6", transform: `translateY(${Math.sin(f / 5) * 6}px)` }}>z<span style={{ fontSize: 34 }}>z</span><span style={{ fontSize: 24 }}>z</span></div>
               <svg width="400" height="500" viewBox="0 0 400 500" style={{ position: "absolute", left: 0, top: 0 }}>
                 <path d="M40,60 L360,440" stroke={C.alert} strokeWidth="22" strokeLinecap="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - Math.min(1, xMark * 2)} />
