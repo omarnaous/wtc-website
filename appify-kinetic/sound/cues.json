@@ -1,0 +1,28 @@
+{
+  "fps": 30, "duration": 8.0, "seed": 11,
+  "cues": [
+    { "type": "kick", "frame": 0, "gain": 0.8 }, { "type": "hat", "frame": 0, "gain": 0.4 },
+    { "type": "hat", "frame": 8, "gain": 0.4 },
+    { "type": "snare", "frame": 15, "gain": 0.55 }, { "type": "hat", "frame": 15, "gain": 0.4 },
+    { "type": "hat", "frame": 23, "gain": 0.4 },
+    { "type": "kick", "frame": 30, "gain": 0.8 }, { "type": "hat", "frame": 30, "gain": 0.4 },
+    { "type": "hat", "frame": 38, "gain": 0.4 },
+    { "type": "snare", "frame": 45, "gain": 0.55 }, { "type": "hat", "frame": 53, "gain": 0.3 },
+
+    { "type": "kick", "frame": 60, "gain": 1.0 }, { "type": "snare", "frame": 60, "gain": 0.7 },
+    { "type": "impact", "frame": 60, "gain": 0.35 },
+    { "type": "whoosh", "start": 74, "end": 90, "gain": 0.18 },
+    { "type": "chime", "frame": 90, "gain": 0.24, "pan": 0.15 },
+    { "type": "riser", "start": 92, "end": 112, "gain": 0.6 },
+
+    { "type": "impact", "frame": 120, "gain": 1.0 }, { "type": "kick", "frame": 120, "gain": 0.9 },
+    { "type": "beat", "start": 120, "end": 180, "bpm": 120, "pattern": "four-on-floor", "gain": 0.42 },
+    { "type": "snare", "frame": 135, "gain": 0.5 },
+    { "type": "whoosh", "start": 146, "end": 162, "gain": 0.16, "pan": -0.2 },
+    { "type": "tick", "frame": 165, "gain": 0.16 },
+
+    { "type": "kick", "frame": 180, "gain": 0.9 }, { "type": "chime", "frame": 180, "gain": 0.16, "freq": 1318 },
+    { "type": "pad", "start": 120, "gain": 0.07 },
+    { "type": "glint", "frame": 200, "gain": 0.07 }
+  ]
+}
