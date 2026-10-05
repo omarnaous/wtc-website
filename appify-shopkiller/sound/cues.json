@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 30.0,
+ "duration": 33.0,
  "seed": 21,
  "fade_out": 1.0,
  "cues": [
@@ -37,8 +37,8 @@
   },
   {
    "type": "beat",
-   "start": 832,
-   "end": 870,
+   "start": 922,
+   "end": 960,
    "bpm": 120,
    "pattern": "four-on-floor",
    "gain": 0.3
@@ -46,7 +46,7 @@
   {
    "type": "pad",
    "start": 330,
-   "end": 900,
+   "end": 990,
    "gain": 0.05
   },
   {
@@ -360,39 +360,39 @@
   },
   {
    "type": "kick",
-   "frame": 780,
+   "frame": 870,
    "gain": 0.9
   },
   {
    "type": "impact",
-   "frame": 780,
+   "frame": 870,
    "gain": 0.45
   },
   {
    "type": "printer",
-   "start": 782,
-   "end": 810,
+   "start": 872,
+   "end": 900,
    "gain": 0.5,
    "rate": 90
   },
   {
    "type": "impact",
-   "frame": 818,
+   "frame": 908,
    "gain": 0.8
   },
   {
    "type": "kick",
-   "frame": 818,
+   "frame": 908,
    "gain": 0.8
   },
   {
    "type": "chime",
-   "frame": 832,
+   "frame": 922,
    "gain": 0.2
   },
   {
    "type": "glint",
-   "frame": 860,
+   "frame": 950,
    "gain": 0.06
   },
   {
@@ -529,6 +529,46 @@
    "start": 446,
    "end": 458,
    "gain": 0.12
+  },
+  {
+   "type": "kick",
+   "frame": 780,
+   "gain": 0.8
+  },
+  {
+   "type": "whoosh",
+   "start": 780,
+   "end": 794,
+   "gain": 0.12
+  },
+  {
+   "type": "impact",
+   "frame": 794,
+   "gain": 0.7
+  },
+  {
+   "type": "chime",
+   "frame": 806,
+   "gain": 0.2,
+   "freq": 1568
+  },
+  {
+   "type": "pop",
+   "frame": 824,
+   "gain": 0.25
+  },
+  {
+   "type": "pop",
+   "frame": 830,
+   "gain": 0.25
+  },
+  {
+   "type": "beat",
+   "start": 780,
+   "end": 866,
+   "bpm": 120,
+   "pattern": "half-time",
+   "gain": 0.25
   }
  ]
 }

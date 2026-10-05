@@ -4,7 +4,7 @@ usage: python3 vo/vo.py <kokoro-dir>"""
 import json, sys, numpy as np, soundfile as sf
 from kokoro_onnx import Kokoro
 
-FPS, DUR, SR = 30, 30.0, 24000
+FPS, DUR, SR = 30, 33.0, 24000
 VOICE = "am_puck"
 # (start frame, latest end frame, text, caption text)
 LINES = [
@@ -17,7 +17,8 @@ LINES = [
     (572, 612, "Full control!", "Full control!"),
     (617, 656, "Zero monthly fees!", "Zero monthly fees!"),
     (668, 772, "That's forty-three twenty saved! It pays for itself in ten months!", "That's $4,320 saved! It pays for itself in 10 months!"),
-    (778, 899, "D.M. or comment, Appify E-commerce, to book your free prototype demo!", "DM or comment \"Appify Ecommerce\" to book your free prototype demo!"),
+    (782, 866, "And if you don't love it? Full refund. Zero risk!", "And if you don't love it? Full refund. Zero risk!"),
+    (872, 989, "D.M. or comment, Appify E-commerce, to book your free prototype demo!", "DM or comment \"Appify Ecommerce\" to book your free prototype demo!"),
 ]
 
 k = Kokoro(f"{sys.argv[1]}/kokoro-v1.0.onnx", f"{sys.argv[1]}/voices-v1.0.bin")

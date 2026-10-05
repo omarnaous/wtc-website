@@ -2,7 +2,7 @@ import { AbsoluteFill, Audio, Easing, Sequence, interpolate, staticFile, useCurr
 import { SCENES, RIP, WIPE, CUT } from "./timing.js";
 import { C } from "./ui.jsx";
 import { useFonts, clamp, easeOut, Grain, Vignette, Flash } from "./fx.jsx";
-import { Receipt, Cost, Turn, Reveal, Features, Compare, Offer } from "./scenes.jsx";
+import { Receipt, Cost, Turn, Reveal, Features, Compare, Guarantee, Offer } from "./scenes.jsx";
 import { Presenter } from "./Presenter.jsx";
 
 // Graph paper = the old way (bills, receipts, cost). Ink = the new way.
@@ -52,6 +52,7 @@ export const Main = (props) => {
       <Sequence {...seq("reveal")}><Reveal {...props} /></Sequence>
       <Sequence {...seq("features")}><Features {...props} /></Sequence>
       <Sequence {...seq("compare")}><Compare {...props} /></Sequence>
+      <Sequence {...seq("guarantee")}><Guarantee /></Sequence>
       <Sequence {...seq("offer")}><Offer {...props} /></Sequence>
       </AbsoluteFill>
       <Presenter />

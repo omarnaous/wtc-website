@@ -3,6 +3,7 @@ import { C, money, DISPLAY, MONO, Words, exitStyle, Printer, Store } from "./ui.
 import { clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Streak } from "./fx.jsx";
 import { WORDMARK } from "./brand.js";
 import { Storefront } from "./store.jsx";
+import { REVIEWS } from "./reviews.js";
 import { Sneaker, Hoodie, Backpack, Cap, Watch } from "./products.jsx";
 
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -371,6 +372,60 @@ export function Offer({ price, cta, url, monthly }) {
       <div style={{ position: "absolute", left: 90, right: 90, top: 1530, textAlign: "center", ...MONO, fontSize: 19, letterSpacing: "0.02em", color: "rgba(243,241,250,.45)", opacity: wm }}>
         Compares subscription fees only, based on a ${monthly}/month plan over 10 years.
       </div>
+    </AbsoluteFill>
+  );
+}
+
+/* ── 7. Zero risk: money-back guarantee (and real reviews, when there are any) ── */
+export function Guarantee() {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const seal = spring({ frame: f - 14, fps, config: { damping: 10, stiffness: 220 } });
+  const [sx, sy] = shake(f, 14, 14, 3.5);
+  const spin = interpolate(f, [0, 90], [0, 40]);
+  const chips = ["Free prototype before you pay", "No monthly fees, ever"];
+  const teeth = Array.from({ length: 24 }, (_, i) => {
+    const a = (i / 24) * Math.PI * 2, r = i % 2 ? 190 : 214;
+    return `${Math.cos(a) * r},${Math.sin(a) * r}`;
+  }).join(" ");
+  return (
+    <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}>
+      <Words text="Zero risk." y={300} size={130} color={C.paper} start={0} />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 500, display: "flex", justifyContent: "center" }}>
+        <svg width="520" height="520" viewBox="-260 -260 520 520" style={{ transform: `scale(${interpolate(seal, [0, 1], [2.2, 1])}) rotate(${interpolate(seal, [0, 1], [-30, -8])}deg)`, opacity: Math.min(1, seal * 2), overflow: "visible" }}>
+          <g transform={`rotate(${spin})`}><polygon points={teeth} fill={C.uv} stroke="#fff" strokeWidth="6" /></g>
+          <circle r="160" fill={C.ink} stroke={C.iris} strokeWidth="8" />
+          <circle r="140" fill="none" stroke={C.iris} strokeWidth="3" strokeDasharray="4 10" />
+          <text y="-62" textAnchor="middle" style={{ ...MONO, fontSize: 26, letterSpacing: "0.2em" }} fill={C.iris}>MONEY-BACK</text>
+          <text y="34" textAnchor="middle" style={{ ...DISPLAY, fontSize: 112 }} fill="#fff">100%</text>
+          <text y="88" textAnchor="middle" style={{ ...MONO, fontSize: 26, letterSpacing: "0.2em" }} fill={C.iris}>GUARANTEE</text>
+        </svg>
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1060, textAlign: "center", opacity: interpolate(f, [26, 36], [0, 1], clamp), transform: `translateY(${interpolate(f, [26, 36], [30, 0], clamp)}px)` }}>
+        <div style={{ ...DISPLAY, fontSize: 70, color: C.paper }}>Don't love it?</div>
+        <div style={{ ...DISPLAY, fontSize: 96, color: C.iris, marginTop: 8 }}>Full refund.</div>
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1320, display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+        {chips.map((c, i) => {
+          const p = spring({ frame: f - 44 - i * 6, fps, config: { damping: 13 } });
+          return <div key={c} style={{ padding: "16px 30px", borderRadius: 99, background: "rgba(243,241,250,.08)", border: "2px solid rgba(205,190,255,.3)", ...DISPLAY, fontSize: 40, color: C.paper, opacity: p, transform: `translateY(${(1 - p) * 30}px)` }}><span style={{ color: "#3BE38B" }}>✓</span> {c}</div>;
+        })}
+      </div>
+      {REVIEWS.length > 0 && (
+        <div style={{ position: "absolute", left: 60, right: 60, top: 1500, display: "flex", gap: 18 }}>
+          {REVIEWS.slice(0, 2).map((r, i) => {
+            const p = spring({ frame: f - 52 - i * 6, fps, config: { damping: 13 } });
+            return (
+              <div key={i} style={{ flex: 1, padding: 22, borderRadius: 20, background: C.paper, color: C.ink, opacity: p, transform: `translateY(${(1 - p) * 40}px)` }}>
+                <div style={{ color: "#F5A524", fontSize: 26 }}>{"★".repeat(r.stars || 5)}</div>
+                <div style={{ fontFamily: "UI", fontSize: 24, lineHeight: 1.35, margin: "8px 0 12px" }}>“{r.text}”</div>
+                <div style={{ ...DISPLAY, fontSize: 22 }}>{r.name}<span style={{ fontFamily: "UI", color: C.mute }}> · {r.business}</span></div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1490, textAlign: "center", ...MONO, fontSize: 20, color: "rgba(243,241,250,.45)", opacity: interpolate(f, [50, 60], [0, 1], clamp), display: REVIEWS.length ? "none" : "block" }}>Refund terms apply.</div>
     </AbsoluteFill>
   );
 }
