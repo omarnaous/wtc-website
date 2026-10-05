@@ -1,4 +1,4 @@
-# Fee Killer reel
+# Subscription Killer reel
 
 ~32 s, 1080×1920. The voice leads: scenes, captions, Dev's gestures and the sound design all follow the voice-over. Dev (the Appify mascot) narrates bottom-left with lip-sync and karaoke captions.
 
@@ -9,7 +9,7 @@ python3 vo/vo.py <dir with kokoro-v1.0.onnx + voices-v1.0.bin>   # voice-over (K
 python3 sound/retime.py                                           # sound design (cues.base.json) moved onto the voice timing -> sound/cues.json
 python3 <skill>/scripts/sound.py sound/cues.json sound/sfx.wav   # music + foley
 python3 vo/mix.py                                                 # ducks music under the voice -> public/sound.wav
-node render.mjs                                                   # out/FeeKiller.mp4
+node render.mjs                                                   # out/SubscriptionKiller.mp4
 ```
 
 - Script and delivery (pace, pitch, melody per sentence; pauses; each scene's lead and minimum length): `vo/vo.py` (`SCRIPT`). Captions come from the same list, and scene starts are computed from the voice.

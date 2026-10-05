@@ -10,7 +10,7 @@ export const SCENES = {
   receipt: span("receipt", "cost"),    // hook: an endless subscription receipt
   cost: span("cost", "turn"),          // 3D bars: what the monthly fee adds up to
   turn: span("turn", "reveal"),        // paper rips: "What if you paid once?"
-  reveal: span("reveal", "feat0"),     // FEE KILLER slam + exploded 3D store
+  reveal: span("reveal", "feat0"),     // SUBSCRIPTION KILLER slam + exploded 3D store
   features: span("feat0", "compare"),  // four selling points, one per line
   compare: span("compare", "guarantee"), // two lines over 10 years: the savings
   guarantee: span("guarantee", "offer"), // money-back guarantee

@@ -124,6 +124,7 @@ function Extruded({ text, size, front, side, layers = 14 }) {
 }
 
 export function Reveal({ product }) {
+  const fit = (w) => Math.min(200, Math.floor(1040 / (w.length * 0.58))); // long words shrink to fit the frame
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const slam = interpolate(spring({ frame: f, fps, config: { damping: 11, stiffness: 210 } }), [0, 1], [1.5, 1]);
@@ -183,8 +184,9 @@ export function Reveal({ product }) {
     <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}>
       <div style={{ position: "absolute", left: 0, right: 0, top: titleY, transform: `scale(${slam * titleScale})`, filter: `blur(${blur}px)`, transformOrigin: "50% 0%", perspective: 1400 }}>
         <div style={{ transformStyle: "preserve-3d", transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)` }}>
-          <Extruded text={product[0]} size={200} front={C.paper} side={C.uv} />
-          <Extruded text={product[1]} size={200} front={C.iris} side="#2A1678" />
+          <Extruded text={product[0]} size={fit(product[0])} front={C.paper} side={C.uv} />
+          <div style={{ height: 18 }} />
+          <Extruded text={product[1]} size={fit(product[1])} front={C.iris} side="#2A1678" />
         </div>
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(up, [0, 1], [1180, 600]), textAlign: "center", ...DISPLAY, fontSize: 46, color: "rgba(243,241,250,.75)", opacity: interpolate(f, [16, 28], [0, 1], clamp) }}>Your own store. Built by appifylb.</div>
@@ -312,7 +314,7 @@ export function Compare({ monthly, price }) {
         <circle cx={X(yr)} cy={Y(price)} r={draw > 0 ? 14 : 0} fill={C.uv} />
         {draw > 0.95 && <>
           <text x={X(10)} y={Y(ten) - 34} textAnchor="end" style={{ ...DISPLAY, fontSize: 38 }} fill={C.alert}>Monthly plan · {money(ten)}</text>
-          <text x={X(10)} y={Y(price) + 60} textAnchor="end" style={{ ...DISPLAY, fontSize: 38 }} fill={C.uv}>Fee Killer · {money(price)}</text>
+          <text x={X(10)} y={Y(price) + 60} textAnchor="end" style={{ ...DISPLAY, fontSize: 38 }} fill={C.uv}>Subscription Killer · {money(price)}</text>
         </>}
         <g opacity={be}>
           <circle cx={X(breakEven)} cy={Y(price)} r={22 * be} fill="none" stroke={C.ink} strokeWidth="4" />
@@ -335,7 +337,7 @@ export function Offer({ price, cta, url, monthly }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const slot = 300, rows = [
-    ["APPIFYLB · FEE KILLER", "", C.ink],
+    ["APPIFYLB · SUBSCRIPTION KILLER", "", C.ink],
     ["Custom e-commerce site", "", C.mute],
     ["Lifetime license", `$${price.toFixed(2)}`, C.ink],
     ["Monthly fees", "$0.00", C.uv],

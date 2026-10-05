@@ -4,7 +4,7 @@ import { FPS, DURATION } from "./timing.js";
 
 // Edit the offer here. `price` and `monthly` drive every number in the video.
 export const props = {
-  product: ["FEE", "KILLER"],
+  product: ["SUBSCRIPTION", "KILLER"],
   price: 360,
   monthly: 39,
   cta: "appifylb Ecommerce",
@@ -12,5 +12,5 @@ export const props = {
 };
 
 export const Root = () => (
-  <Composition id="FeeKiller" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={props} />
+  <Composition id="SubscriptionKiller" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={props} />
 );
