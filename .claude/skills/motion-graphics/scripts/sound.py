@@ -218,7 +218,7 @@ def render(spec, out):
             bpm = q["bpm"]; step = 60 / bpm / 4; pat = PATTERNS[q.get("pattern", "four-on-floor")]
             t, k, end = q.get("start", 0) / fps, 0, q.get("end", total * fps) / fps
             hits = {"k": kick(c, q), "s": snare(c, q), "h": hat(c, q)}
-            mix = {"k": 1.0, "s": 0.7, "h": 0.35}
+            mix = {"k": 1.0, "s": 0.7, "h": q.get("hats", 0.35)}
             while t < end - 1e-6:
                 for ch in pat[k % 16]:
                     place(L, R, hits[ch], t, g * mix[ch], pan + (0.25 if ch == "h" else 0))
@@ -240,6 +240,8 @@ def render(spec, out):
         st = st[:N]
     else:
         k = int(spec.get("fade_out", 0.7) * SR); st[-k:] *= (np.linspace(1, 0, k) ** 2)[:, None]
+    if spec.get("lowpass"):  # warm the whole mix: roll off harsh highs
+        st = np.stack([lp(st[:, 0], spec["lowpass"]), lp(st[:, 1], spec["lowpass"])], 1)
     st = np.tanh(st * 1.1)
     peak = np.abs(st).max() or 1
     st *= 10 ** (-1 / 20) / peak

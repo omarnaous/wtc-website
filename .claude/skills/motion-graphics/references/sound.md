@@ -41,6 +41,10 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 | `click` / `pop` | UI tap / bubbly pop | toggles, buttons, cards popping in |
 | `typing` | keyboard clicks over `start`/`end` | code typing, text fields |
 
+## Warmth
+
+If the mix sounds sharp or tiring ("too bright", "hurts the ears"), set `"lowpass": 4500` at the top of cues.json, give `beat` cues `"hats": 0.1` or less, drop `glint`/`glitch`, and pitch `chime`, `coin`, `tick` and `click` down with `freq` (chime 660-880, coin 800-1200, tick ~1200, click ~600). Under a voice-over, keep the bed warm and low so the voice owns the 2-5 kHz range.
+
 ## Levels
 
 Impact around 0.9-1.0, riser 0.5-0.6, beat 0.4-0.6, chime 0.2, whoosh 0.1, pad 0.05-0.08, glint 0.05. The mix is normalized after summing, so these are relative. Pan small details (±0.2-0.5) and keep hits centered.

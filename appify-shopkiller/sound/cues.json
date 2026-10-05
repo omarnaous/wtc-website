@@ -17,7 +17,8 @@
    "end": 270,
    "bpm": 120,
    "pattern": "half-time",
-   "gain": 0.22
+   "gain": 0.22,
+   "hats": 0.06
   },
   {
    "type": "beat",
@@ -25,7 +26,8 @@
    "end": 660,
    "bpm": 120,
    "pattern": "four-on-floor",
-   "gain": 0.36
+   "gain": 0.36,
+   "hats": 0.06
   },
   {
    "type": "beat",
@@ -33,7 +35,8 @@
    "end": 780,
    "bpm": 120,
    "pattern": "half-time",
-   "gain": 0.28
+   "gain": 0.28,
+   "hats": 0.06
   },
   {
    "type": "beat",
@@ -41,7 +44,8 @@
    "end": 960,
    "bpm": 120,
    "pattern": "four-on-floor",
-   "gain": 0.3
+   "gain": 0.3,
+   "hats": 0.06
   },
   {
    "type": "pad",
@@ -63,47 +67,47 @@
    "type": "printer",
    "start": 4,
    "end": 82,
-   "gain": 0.55
+   "gain": 0.33
   },
   {
    "type": "coin",
    "frame": 10,
    "gain": 0.12,
-   "freq": 2200,
+   "freq": 820,
    "pan": 0.3
   },
   {
    "type": "coin",
    "frame": 25,
    "gain": 0.12,
-   "freq": 2320,
+   "freq": 860,
    "pan": 0.3
   },
   {
    "type": "coin",
    "frame": 40,
    "gain": 0.12,
-   "freq": 2440,
+   "freq": 900,
    "pan": 0.3
   },
   {
    "type": "coin",
    "frame": 55,
    "gain": 0.12,
-   "freq": 2560,
+   "freq": 940,
    "pan": 0.3
   },
   {
    "type": "coin",
    "frame": 70,
    "gain": 0.12,
-   "freq": 2680,
+   "freq": 980,
    "pan": 0.3
   },
   {
    "type": "register",
    "frame": 62,
-   "gain": 0.35
+   "gain": 0.21
   },
   {
    "type": "whoosh",
@@ -144,88 +148,89 @@
   {
    "type": "coin",
    "frame": 140,
-   "gain": 0.22,
-   "freq": 1700,
+   "gain": 0.16,
+   "freq": 1020,
    "pan": -0.4
   },
   {
    "type": "coin",
    "frame": 147,
-   "gain": 0.22,
-   "freq": 1819,
+   "gain": 0.16,
+   "freq": 1060,
    "pan": -0.32
   },
   {
    "type": "coin",
    "frame": 154,
-   "gain": 0.22,
-   "freq": 1946,
+   "gain": 0.16,
+   "freq": 1100,
    "pan": -0.24000000000000002
   },
   {
    "type": "coin",
    "frame": 161,
-   "gain": 0.22,
-   "freq": 2083,
+   "gain": 0.16,
+   "freq": 1140,
    "pan": -0.16000000000000003
   },
   {
    "type": "coin",
    "frame": 168,
-   "gain": 0.22,
-   "freq": 2228,
+   "gain": 0.16,
+   "freq": 1180,
    "pan": -0.08000000000000002
   },
   {
    "type": "coin",
    "frame": 175,
-   "gain": 0.22,
-   "freq": 2384,
+   "gain": 0.16,
+   "freq": 1220,
    "pan": 0.0
   },
   {
    "type": "coin",
    "frame": 182,
-   "gain": 0.22,
-   "freq": 2551,
+   "gain": 0.16,
+   "freq": 1260,
    "pan": 0.07999999999999996
   },
   {
    "type": "coin",
    "frame": 189,
-   "gain": 0.22,
-   "freq": 2730,
+   "gain": 0.16,
+   "freq": 1300,
    "pan": 0.16000000000000003
   },
   {
    "type": "coin",
    "frame": 196,
-   "gain": 0.22,
-   "freq": 2921,
+   "gain": 0.16,
+   "freq": 1340,
    "pan": 0.24
   },
   {
    "type": "coin",
    "frame": 203,
-   "gain": 0.22,
-   "freq": 3125,
+   "gain": 0.16,
+   "freq": 1380,
    "pan": 0.31999999999999995
   },
   {
    "type": "register",
    "frame": 206,
-   "gain": 0.45
+   "gain": 0.27
   },
   {
    "type": "tick",
    "frame": 225,
-   "gain": 0.15
+   "gain": 0.15,
+   "freq": 1100
   },
   {
    "type": "riser",
    "start": 242,
    "end": 268,
-   "gain": 0.45
+   "gain": 0.36
   },
   {
    "type": "rip",
@@ -248,7 +253,7 @@
    "type": "riser",
    "start": 302,
    "end": 326,
-   "gain": 0.55
+   "gain": 0.44
   },
   {
    "type": "impact",
@@ -284,17 +289,20 @@
   {
    "type": "click",
    "frame": 409,
-   "gain": 0.35
+   "gain": 0.35,
+   "freq": 620
   },
   {
    "type": "click",
    "frame": 418,
-   "gain": 0.35
+   "gain": 0.35,
+   "freq": 620
   },
   {
    "type": "click",
    "frame": 427,
-   "gain": 0.35
+   "gain": 0.35,
+   "freq": 620
   },
   {
    "type": "whoosh",
@@ -346,17 +354,18 @@
    "type": "riser",
    "start": 676,
    "end": 718,
-   "gain": 0.25
+   "gain": 0.2
   },
   {
    "type": "register",
    "frame": 742,
-   "gain": 0.5
+   "gain": 0.3
   },
   {
    "type": "chime",
    "frame": 746,
-   "gain": 0.18
+   "gain": 0.18,
+   "freq": 880
   },
   {
    "type": "kick",
@@ -372,7 +381,7 @@
    "type": "printer",
    "start": 872,
    "end": 900,
-   "gain": 0.5,
+   "gain": 0.3,
    "rate": 90
   },
   {
@@ -388,48 +397,50 @@
   {
    "type": "chime",
    "frame": 922,
-   "gain": 0.2
-  },
-  {
-   "type": "glint",
-   "frame": 950,
-   "gain": 0.06
+   "gain": 0.18,
+   "freq": 880
   },
   {
    "type": "click",
    "frame": 498,
    "gain": 0.4,
-   "pan": 0.2
+   "pan": 0.2,
+   "freq": 620
   },
   {
    "type": "click",
    "frame": 511,
    "gain": 0.4,
-   "pan": 0.2
+   "pan": 0.2,
+   "freq": 620
   },
   {
    "type": "click",
    "frame": 535,
    "gain": 0.4,
-   "pan": 0.2
+   "pan": 0.2,
+   "freq": 620
   },
   {
    "type": "click",
    "frame": 547,
    "gain": 0.4,
-   "pan": 0.2
+   "pan": 0.2,
+   "freq": 620
   },
   {
    "type": "click",
    "frame": 579,
    "gain": 0.4,
-   "pan": 0.2
+   "pan": 0.2,
+   "freq": 620
   },
   {
    "type": "click",
    "frame": 611,
    "gain": 0.4,
-   "pan": 0.2
+   "pan": 0.2,
+   "freq": 620
   },
   {
    "type": "pop",
@@ -476,7 +487,7 @@
    "type": "coin",
    "frame": 596,
    "gain": 0.15,
-   "freq": 2600
+   "freq": 1420
   },
   {
    "type": "whoosh",
@@ -487,14 +498,13 @@
   {
    "type": "chime",
    "frame": 616,
-   "gain": 0.2,
-   "freq": 1568
+   "gain": 0.18,
+   "freq": 880
   },
   {
-   "type": "glitch",
+   "type": "pop",
    "frame": 629,
-   "dur": 0.22,
-   "gain": 0.22
+   "gain": 0.25
   },
   {
    "type": "whoosh",
@@ -510,19 +520,18 @@
   {
    "type": "register",
    "frame": 648,
-   "gain": 0.4
+   "gain": 0.24
   },
   {
-   "type": "glitch",
+   "type": "pop",
    "frame": 462,
-   "dur": 0.2,
-   "gain": 0.2
+   "gain": 0.25
   },
   {
    "type": "chime",
    "frame": 466,
    "gain": 0.16,
-   "freq": 1760
+   "freq": 880
   },
   {
    "type": "whoosh",
@@ -549,8 +558,8 @@
   {
    "type": "chime",
    "frame": 806,
-   "gain": 0.2,
-   "freq": 1568
+   "gain": 0.18,
+   "freq": 880
   },
   {
    "type": "pop",
@@ -568,7 +577,9 @@
    "end": 866,
    "bpm": 120,
    "pattern": "half-time",
-   "gain": 0.25
+   "gain": 0.25,
+   "hats": 0.06
   }
- ]
+ ],
+ "lowpass": 4200
 }
