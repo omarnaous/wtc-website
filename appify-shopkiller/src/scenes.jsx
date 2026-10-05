@@ -46,13 +46,13 @@ export function Cost({ monthly }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const yearly = monthly * 12;
-  const base = 1400, maxV = 4000, maxH = 720, x0 = 150, bw = 58, gap = 26, depth = 20;
+  const base = 1400, maxV = 5000, maxH = 720, x0 = 150, bw = 58, gap = 26, depth = 20;
   const hOf = (v) => (v / maxV) * maxH;
   const head = interpolate(f, [40, 52], [0, 1], { ...clamp, easing: easeOut });
   const barStart = (i) => 50 + i * 7;
   const grown = Array.from({ length: 10 }, (_, i) => spring({ frame: f - barStart(i), fps, config: { damping: 14, stiffness: 170 } }));
   const lastIdx = grown.reduce((m, g, i) => (g > 0.05 ? i : m), -1);
-  const total = lastIdx < 0 ? 0 : yearly * (lastIdx + grown[lastIdx]);
+  const total = lastIdx < 0 ? 0 : Math.min(yearly * 10, yearly * (lastIdx + Math.min(1, grown[lastIdx])));
   return (
     <AbsoluteFill style={exitStyle(f, 172, 8, -60)}>
       {/* Every. Single. Month. — on the beat, then shrink into a header */}
@@ -67,7 +67,7 @@ export function Cost({ monthly }) {
           <div style={{ position: "absolute", left: 0, right: 0, top: 460, textAlign: "center", ...DISPLAY, fontSize: 150, color: C.alert, opacity: head, fontVariantNumeric: "tabular-nums" }}>{money(total)}</div>
           <div style={{ position: "absolute", left: 0, right: 0, top: 618, textAlign: "center", ...MONO, fontSize: 26, color: C.mute, opacity: head }}>SPENT ON SUBSCRIPTION FEES</div>
           <svg width="1080" height="1920" style={{ position: "absolute", inset: 0, opacity: head }}>
-            {[1000, 2000, 3000, 4000].map((v) => (
+            {[1000, 2000, 3000, 4000, 5000].map((v) => (
               <g key={v}><line x1={x0 - 20} x2={x0 + 10 * (bw + gap)} y1={base - hOf(v)} y2={base - hOf(v)} stroke="rgba(10,9,19,.12)" strokeDasharray="4 8" strokeWidth="2" />
                 <text x={x0 - 30} y={base - hOf(v) + 8} textAnchor="end" style={{ ...MONO, fontSize: 20 }} fill={C.mute}>{v / 1000}k</text></g>
             ))}
@@ -131,9 +131,11 @@ export function Reveal({ product }) {
   const tiltX = 16 + Math.sin(f / 18) * 4, tiltY = Math.sin(f / 23) * 10;
 
   // exploded store
-  const ex = spring({ frame: f - 55, fps, config: { damping: 15, stiffness: 120 } }) * (1 - spring({ frame: f - 116, fps, config: { damping: 16, stiffness: 130 } }));
+  const ex = Math.max(0, spring({ frame: f - 55, fps, config: { damping: 15, stiffness: 120 } }) * (1 - spring({ frame: f - 116, fps, config: { damping: 16, stiffness: 130 } })));
   const appear = interpolate(f, [44, 56], [0, 1], { ...clamp, easing: easeOut });
   const rotX = 40 * ex, rotZ = -24 * ex;
+  const cmp = interpolate(f, [118, 128], [0, 1], { ...clamp, easing: easeOut });
+  const xMark = interpolate(f, [132, 138], [0, 1], { ...clamp, easing: easeOut });
   const UIF = { fontFamily: "UI" };
   const slab = { width: 640, height: 820, borderRadius: 34 };
   const layers = [
@@ -184,7 +186,7 @@ export function Reveal({ product }) {
       <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(up, [0, 1], [1180, 600]), textAlign: "center", ...DISPLAY, fontSize: 46, color: "rgba(243,241,250,.75)", opacity: interpolate(f, [16, 28], [0, 1], clamp) }}>Your own store. Built by Appify.</div>
 
       {f >= 44 && (
-        <div style={{ position: "absolute", zIndex: 1, left: 220, top: 830, width: 640, height: 820, perspective: 2200, opacity: appear, transform: `translateY(${(1 - appear) * 120}px) scale(1.18)`, transformOrigin: "50% 40%" }}>
+        <div style={{ position: "absolute", zIndex: 1, left: 220, top: 830, width: 640, height: 820, perspective: 2200, opacity: appear, transform: `translateY(${(1 - appear) * 120}px) translateX(${cmp * 205}px) scale(${1.18 - cmp * 0.5})`, transformOrigin: "50% 40%" }}>
           <div style={{ position: "relative", width: 640, height: 820, transformStyle: "preserve-3d", transform: `rotateX(${rotX}deg) rotateZ(${rotZ}deg)` }}>
             {layers.map((L, i) => {
               const lift = i ? interpolate(f, [66 + i * 12, 72 + i * 12, 78 + i * 12, 84 + i * 12], [0, 1, 1, 0], clamp) : 0;
@@ -194,6 +196,24 @@ export function Reveal({ product }) {
             })}
           </div>
         </div>
+      )}
+      {cmp > 0 && (
+        <>
+          <div style={{ position: "absolute", left: 70, top: 862, width: 400, transform: `translateX(${(1 - cmp) * -300}px) rotate(-3deg)`, opacity: cmp }}>
+            <div style={{ textAlign: "center", ...DISPLAY, fontSize: 40, color: "rgba(243,241,250,.6)", marginBottom: 18 }}>Basic template</div>
+            <div style={{ position: "relative", height: 500, borderRadius: 14, background: "#E7E6EA", padding: 18, fontFamily: "Georgia, serif", color: "#777", filter: "grayscale(1)" }}>
+              <div style={{ height: 34, background: "#CFCED4", borderRadius: 4, display: "flex", alignItems: "center", padding: "0 12px", fontSize: 18 }}>My Store</div>
+              <div style={{ height: 150, background: "#D6D5DB", borderRadius: 4, marginTop: 14, display: "grid", placeItems: "center", fontSize: 18 }}>Welcome to our store</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 14 }}>{[0, 1, 2, 3].map((i) => <div key={i} style={{ height: 120, background: "#D6D5DB", borderRadius: 4 }} />)}</div>
+              <div style={{ position: "absolute", right: -16, top: -34, ...DISPLAY, fontSize: 46, color: "#9A98A6", transform: `translateY(${Math.sin(f / 5) * 6}px)` }}>z<span style={{ fontSize: 34 }}>z</span><span style={{ fontSize: 24 }}>z</span></div>
+              <svg width="400" height="500" viewBox="0 0 400 500" style={{ position: "absolute", left: 0, top: 0 }}>
+                <path d="M40,60 L360,440" stroke={C.alert} strokeWidth="22" strokeLinecap="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - Math.min(1, xMark * 2)} />
+                <path d="M360,60 L40,440" stroke={C.alert} strokeWidth="22" strokeLinecap="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - Math.max(0, xMark * 2 - 1)} />
+              </svg>
+            </div>
+          </div>
+          <div style={{ position: "absolute", zIndex: 30, left: 590, width: 440, top: 862, textAlign: "center", ...DISPLAY, fontSize: 44, color: C.iris, opacity: cmp }}>Appify ✦ animated</div>
+        </>
       )}
       {f >= 60 && f < 120 && (
         <div style={{ position: "absolute", zIndex: 30, left: 0, right: 0, top: 690, display: "flex", justifyContent: "center", gap: 18, opacity: interpolate(f, [60, 68, 110, 118], [0, 1, 1, 0], clamp) }}>
@@ -212,7 +232,7 @@ export function Reveal({ product }) {
 }
 
 /* ── 5. Four selling points, shown on a working storefront ─────────────── */
-const FEATS = [["Way better", "design."], ["Customize", "everything."], ["Full", "control."], ["Zero monthly", "fees."]];
+const FEATS = [["Way more", "beautiful."], ["Customize", "everything."], ["Full", "control."], ["Zero monthly", "fees."]];
 export function Features({ monthly }) {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -253,7 +273,7 @@ export function Features({ monthly }) {
 export function Compare({ monthly, price }) {
   const f = useCurrentFrame();
   const yearly = monthly * 12, ten = yearly * 10, saved = ten - price;
-  const x0 = 140, x1 = 940, base = 1360, top = 740, maxV = 4000;
+  const x0 = 140, x1 = 940, base = 1360, top = 740, maxV = 5000;
   const X = (yr) => x0 + (yr / 10) * (x1 - x0), Y = (v) => base - (v / maxV) * (base - top);
   const draw = interpolate(f, [16, 58], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   const area = interpolate(f, [58, 70], [0, 1], clamp);
@@ -270,7 +290,7 @@ export function Compare({ monthly, price }) {
           <pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="16" height="16" fill="rgba(91,43,255,.08)" /><line x1="0" y1="0" x2="0" y2="16" stroke="rgba(91,43,255,.35)" strokeWidth="5" /></pattern>
         </defs>
         {[0, 2, 4, 6, 8, 10].map((t) => <text key={t} x={X(t)} y={base + 44} textAnchor="middle" style={{ ...MONO, fontSize: 22 }} fill={C.mute}>{t === 0 ? "now" : `${t}y`}</text>)}
-        {[1000, 2000, 3000, 4000].map((v) => <g key={v}><line x1={x0} x2={x1} y1={Y(v)} y2={Y(v)} stroke="rgba(10,9,19,.1)" strokeDasharray="4 8" strokeWidth="2" /><text x={x0 - 16} y={Y(v) + 8} textAnchor="end" style={{ ...MONO, fontSize: 20 }} fill={C.mute}>{v / 1000}k</text></g>)}
+        {[1000, 2000, 3000, 4000, 5000].map((v) => <g key={v}><line x1={x0} x2={x1} y1={Y(v)} y2={Y(v)} stroke="rgba(10,9,19,.1)" strokeDasharray="4 8" strokeWidth="2" /><text x={x0 - 16} y={Y(v) + 8} textAnchor="end" style={{ ...MONO, fontSize: 20 }} fill={C.mute}>{v / 1000}k</text></g>)}
         <line x1={x0} x2={x1} y1={base} y2={base} stroke={C.ink} strokeWidth="3" />
         <polygon points={`${X(0)},${Y(price)} ${X(10)},${Y(price)} ${X(10)},${Y(ten)} ${X(breakEven)},${Y(price)}`} fill="url(#hatch)" opacity={area} />
         <line x1={X(0)} y1={Y(0)} x2={X(yr)} y2={Y(yearly * yr)} stroke={C.alert} strokeWidth="9" strokeLinecap="round" />
@@ -286,7 +306,7 @@ export function Compare({ monthly, price }) {
           <line x1={X(breakEven)} y1={Y(price) + 26} x2={X(breakEven)} y2={base + 66} stroke={C.ink} strokeWidth="3" />
         </g>
       </svg>
-      <div style={{ position: "absolute", left: X(breakEven) - 40, top: base + 74, opacity: be, ...DISPLAY, fontSize: 34, color: C.ink, width: 520 }}>Pays for itself in 12 months</div>
+      <div style={{ position: "absolute", left: X(breakEven) - 40, top: base + 74, opacity: be, ...DISPLAY, fontSize: 34, color: C.ink, width: 520 }}>Pays for itself in {Math.ceil(price / monthly)} months</div>
       {f >= 60 && (
         <div style={{ position: "absolute", left: 520, width: 400, top: 1096, textAlign: "center", opacity: area, padding: "10px 0 14px", borderRadius: 20, background: "rgba(243,241,250,.88)" }}>
           <div style={{ ...MONO, fontSize: 28, color: C.mute }}>YOU SAVE</div>
@@ -330,10 +350,10 @@ export function Offer({ price, cta, url, monthly }) {
       {f >= 38 && (
         <div style={{ position: "absolute", left: 300, top: 560, transform: `rotate(-12deg) scale(${interpolate(stamp, [0, 1], [2.2, 1])})`, opacity: Math.min(1, stamp * 2), padding: "14px 34px", border: `8px solid ${C.uv}`, borderRadius: 18, ...DISPLAY, fontSize: 84, color: C.uv, background: "rgba(255,255,255,.75)" }}>PAID ONCE</div>
       )}
-      <div style={{ position: "absolute", left: 0, right: 0, top: 940, textAlign: "center", opacity: cta1, transform: `translateY(${(1 - cta1) * 60}px)` }}>
-        <div style={{ ...DISPLAY, fontSize: 70, color: C.paper }}>Yours for life.</div>
-        <div style={{ ...DISPLAY, fontSize: 150, color: C.iris, marginTop: 30 }}>DM “{cta}”</div>
-        <div style={{ ...DISPLAY, fontSize: 56, color: C.paper, marginTop: 18 }}>to build your store</div>
+      <div style={{ position: "absolute", left: 40, right: 40, top: 930, textAlign: "center", opacity: cta1, transform: `translateY(${(1 - cta1) * 60}px)` }}>
+        <div style={{ ...DISPLAY, fontSize: 64, color: C.paper }}>DM or comment</div>
+        <div style={{ ...DISPLAY, fontSize: 104, color: C.iris, marginTop: 20, lineHeight: 1.05 }}>“{cta}”</div>
+        <div style={{ ...DISPLAY, fontSize: 50, color: C.paper, marginTop: 22 }}>to book your <span style={{ color: C.sky }}>free prototype demo</span></div>
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1330, display: "grid", justifyItems: "center", gap: 14, opacity: wm }}>
         <svg viewBox={WORDMARK.viewBox} width={wmW} height={wmH}><path d={WORDMARK.letters} fill={C.paper} /><path d={WORDMARK.spark} fill={C.iris} /></svg>

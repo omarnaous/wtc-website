@@ -8,16 +8,16 @@ FPS, DUR, SR = 30, 30.0, 24000
 VOICE = "am_puck"
 # (start frame, latest end frame, text, caption text)
 LINES = [
-    (6,   86,  "Yo! Still paying Shopify thirty bucks a month?!", "Yo! Still paying Shopify $30 a month?!"),
-    (92,  262, "That's three-sixty a year! Thirty-six hundred in ten years! And you still don't even own your store!", "That's $360 a year! $3,600 in ten years! And you still don't even own your store!"),
+    (6,   86,  "Yo! Still paying Shopify thirty-nine bucks a month?!", "Yo! Still paying Shopify $39 a month?!"),
+    (92,  262, "That's four sixty-eight a year! Forty-six eighty in ten years! And you still don't even own your store!", "That's $468 a year! $4,680 in ten years! And you still don't even own your store!"),
     (280, 326, "So... what if you paid once?", "So... what if you paid once?"),
-    (338, 472, "Boom! Shopify Killer! Your own store, built by Appify!", "Boom! Shopify Killer! Your own store, built by Appify!"),
-    (482, 522, "Way better design!", "Way better design!"),
+    (338, 476, "Boom! Shopify Killer! Not some boring template. A stunning store, with real animations!", "Boom! Shopify Killer! Not some boring template. A stunning store, with real animations!"),
+    (482, 522, "Way more beautiful!", "Way more beautiful!"),
     (527, 567, "Customize everything!", "Customize everything!"),
     (572, 612, "Full control!", "Full control!"),
     (617, 656, "Zero monthly fees!", "Zero monthly fees!"),
-    (668, 776, "That's thirty-two forty saved! It pays for itself in a year!", "That's $3,240 saved! It pays for itself in a year!"),
-    (786, 894, "Three-sixty once, yours forever! D.M. 'store' right now!", "$360 once, yours forever! DM \"STORE\" right now!"),
+    (668, 772, "That's forty-three twenty saved! It pays for itself in ten months!", "That's $4,320 saved! It pays for itself in 10 months!"),
+    (778, 899, "D.M. or comment, Appify E-commerce, to book your free prototype demo!", "DM or comment \"Appify Ecommerce\" to book your free prototype demo!"),
 ]
 
 k = Kokoro(f"{sys.argv[1]}/kokoro-v1.0.onnx", f"{sys.argv[1]}/voices-v1.0.bin")

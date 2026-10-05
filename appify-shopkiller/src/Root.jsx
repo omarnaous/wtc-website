@@ -6,8 +6,8 @@ import { FPS, DURATION } from "./timing.js";
 export const props = {
   product: ["SHOPIFY", "KILLER"],
   price: 360,
-  monthly: 30,
-  cta: "STORE",
+  monthly: 39,
+  cta: "Appify Ecommerce",
   url: "www.appify-lb.com",
 };
 

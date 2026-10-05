@@ -511,6 +511,24 @@
    "type": "register",
    "frame": 648,
    "gain": 0.4
+  },
+  {
+   "type": "glitch",
+   "frame": 462,
+   "dur": 0.2,
+   "gain": 0.2
+  },
+  {
+   "type": "chime",
+   "frame": 466,
+   "gain": 0.16,
+   "freq": 1760
+  },
+  {
+   "type": "whoosh",
+   "start": 446,
+   "end": 458,
+   "gain": 0.12
   }
  ]
 }
