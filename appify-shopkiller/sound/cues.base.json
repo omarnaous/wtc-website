@@ -207,7 +207,7 @@
   {
    "type": "graph_tick",
    "at_bars": true,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 520
   },
   {

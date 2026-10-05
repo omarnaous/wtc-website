@@ -247,70 +247,70 @@
   {
    "type": "graph_tick",
    "frame": 142,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 520,
    "pan": -0.35
   },
   {
    "type": "graph_tick",
    "frame": 145,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 584,
    "pan": -0.27
   },
   {
    "type": "graph_tick",
    "frame": 148,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 655,
    "pan": -0.2
   },
   {
    "type": "graph_tick",
    "frame": 151,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 735,
    "pan": -0.12
   },
   {
    "type": "graph_tick",
    "frame": 154,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 825,
    "pan": -0.05
   },
   {
    "type": "graph_tick",
    "frame": 157,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 927,
    "pan": 0.03
   },
   {
    "type": "graph_tick",
    "frame": 160,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 1040,
    "pan": 0.1
   },
   {
    "type": "graph_tick",
    "frame": 163,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 1167,
    "pan": 0.18
   },
   {
    "type": "graph_tick",
    "frame": 166,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 1310,
    "pan": 0.25
   },
   {
    "type": "graph_tick",
    "frame": 169,
-   "gain": 0.16,
+   "gain": 0.11,
    "freq": 1471,
    "pan": 0.32
   }
