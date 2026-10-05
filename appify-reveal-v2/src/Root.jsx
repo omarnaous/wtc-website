@@ -2,7 +2,12 @@ import { Composition } from "remotion";
 import { Main } from "./Main.jsx";
 import { FPS, DURATION } from "./timing.js";
 
-const props = { slogan: "Ideas, appified.", url: "www.appify-lb.com" };
+const props = {
+  slogan: "Ideas, appified.",
+  url: "www.appify-lb.com",
+  // service tags under the url; empty list hides them
+  tags: ["UI/UX", "Websites", "Mobile apps", "Motion graphics", "Framer Motion", "AI agents", "Meta Ads"],
+};
 
 export const Root = () => (
   <>

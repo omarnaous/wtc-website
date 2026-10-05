@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 8.0,
+ "duration": 9.0,
  "seed": 31,
  "lowpass": 4500,
  "cues": [
@@ -141,6 +141,55 @@
    "type": "pop",
    "frame": 127,
    "gain": 0.18
+  },
+  {
+   "type": "pop",
+   "frame": 186,
+   "gain": 0.07,
+   "pan": -0.3,
+   "tag_pop": true
+  },
+  {
+   "type": "pop",
+   "frame": 189,
+   "gain": 0.07,
+   "pan": -0.2,
+   "tag_pop": true
+  },
+  {
+   "type": "pop",
+   "frame": 192,
+   "gain": 0.07,
+   "pan": -0.1,
+   "tag_pop": true
+  },
+  {
+   "type": "pop",
+   "frame": 195,
+   "gain": 0.07,
+   "pan": 0.0,
+   "tag_pop": true
+  },
+  {
+   "type": "pop",
+   "frame": 198,
+   "gain": 0.07,
+   "pan": 0.1,
+   "tag_pop": true
+  },
+  {
+   "type": "pop",
+   "frame": 201,
+   "gain": 0.07,
+   "pan": 0.2,
+   "tag_pop": true
+  },
+  {
+   "type": "pop",
+   "frame": 204,
+   "gain": 0.07,
+   "pan": 0.3,
+   "tag_pop": true
   }
  ]
 }

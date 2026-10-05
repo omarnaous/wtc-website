@@ -21,7 +21,7 @@ function TileGlyph({ k, size }) {
   return <g opacity=".3"><rect x={-s / 2} y={-s / 3} width={s} height={s * 0.18} rx="4" fill={col} /><rect x={-s / 2} y={0} width={s * 0.7} height={s * 0.18} rx="4" fill={col} /></g>;
 }
 
-export const Main = ({ slogan, url }) => {
+export const Main = ({ slogan, url, tags = [] }) => {
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"]]);
   const f = useCurrentFrame();
   const { width: W, height: H, fps } = useVideoConfig();
@@ -217,6 +217,14 @@ export const Main = ({ slogan, url }) => {
             <div style={{ display: "flex", fontFamily: "Mono", fontSize: 30, letterSpacing: "0.2em", color: C.paper, opacity: 0.85 }}>
               {url.split("").map((ch, i) => { const p = interpolate(f, [T.urlA + i * 1.1, T.urlA + 12 + i * 1.1], [0, 1], { ...clamp, easing: easeOut }); return <span key={i} style={{ display: "inline-block", opacity: p, transform: `translateY(${(1 - p) * 14}px)`, filter: `blur(${(1 - p) * 6}px)`, color: ch === "." ? C.iris : C.paper }}>{ch}</span>; })}
             </div>
+            {tags.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 14, marginTop: 14, maxWidth: W - 140 }}>
+                {tags.map((t, i) => {
+                  const p = spring({ frame: f - T.tagsA - i * 3, fps, config: { damping: 12, stiffness: 200 } });
+                  return <span key={t} style={{ display: "inline-flex", alignItems: "center", height: 52, padding: "0 24px", borderRadius: 99, border: "1.5px solid rgba(205,190,255,.3)", background: "rgba(143,114,255,.1)", fontFamily: "Mono", fontSize: 21, letterSpacing: "0.12em", textTransform: "uppercase", color: C.paper, opacity: Math.min(1, p * 1.6), transform: `translateY(${(1 - p) * 18}px) scale(${0.85 + 0.15 * p})` }}>{t}</span>;
+                })}
+              </div>
+            )}
           </div>
         )}
 
