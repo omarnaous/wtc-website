@@ -7,7 +7,7 @@ export const props = {
   product: ["SUBSCRIPTION", "KILLER"],
   price: 360,
   monthly: 39,
-  cta: "appifylb Ecommerce",
+  cta: "Appify Ecommerce",
   url: "www.appify-lb.com",
 };
 

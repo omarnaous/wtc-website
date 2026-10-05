@@ -52,7 +52,7 @@ export function Storefront({ l, fps }) {
   return (
     <div style={{ position: "relative", width: W, height: H, borderRadius: 26, overflow: "hidden", background: "#fff", boxShadow: "0 50px 100px rgba(0,0,0,.45)", transform: `translateY(${(1 - enter) * 260}px) scale(${0.94 + enter * 0.06})`, transformOrigin: "50% 0%", ...UI, color: INK }}>
       {/* announcement + header */}
-      <div style={{ height: 40, background: INK, color: "#fff", display: "grid", placeItems: "center", fontSize: 16, letterSpacing: "0.02em" }}>Free shipping over $50 · Powered by appifylb</div>
+      <div style={{ height: 40, background: INK, color: "#fff", display: "grid", placeItems: "center", fontSize: 16, letterSpacing: "0.02em" }}>Free shipping over $50 · Powered by Appify</div>
       <div style={{ height: 72, display: "flex", alignItems: "center", padding: "0 30px", borderBottom: `1px solid ${LINE}` }}>
         <span style={{ fontFamily: "Display", fontWeight: 600, fontSize: 28, letterSpacing: "0.14em" }}>KOVA</span>
         <span style={{ display: "flex", gap: 26, marginLeft: 46, fontSize: 18, color: MUTE }}><span style={{ color: INK }}>New</span><span>Men</span><span>Women</span><span style={{ color: "#E5484D" }}>Sale</span></span>

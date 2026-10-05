@@ -39,7 +39,7 @@ SCRIPT = [
                              P("It pays for itself in ten months!", "It pays for itself in 10 months!", shift=0, rng=1.5, mel="fall")]),
     ("guarantee", 780, 2, 80, [P("And if you don't love it?", shift=-1, rng=1.5, mel="rise"),
                                P("Full refund. Zero risk!", speed=1.0, shift=-1, rng=1.4, mel="fall", gain=1)]),
-    ("offer", 870, 2, 120, [P("D.M. or comment, Appify L.B. E-commerce, to book your free prototype demo!", "DM or comment \"appifylb Ecommerce\" to book your free prototype demo!", shift=0.5, rng=1.6, mel="fall")]),
+    ("offer", 870, 2, 120, [P("D.M. or comment, Appify E-commerce, to book your free prototype demo!", "DM or comment \"Appify Ecommerce\" to book your free prototype demo!", shift=0.5, rng=1.6, mel="fall")]),
 ]
 OLD_END = 990
 

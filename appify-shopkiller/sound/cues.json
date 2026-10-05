@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 33.0,
+ "duration": 32.467,
  "seed": 21,
  "fade_out": 1.0,
  "cues": [
@@ -46,7 +46,7 @@
   {
    "type": "pad",
    "start": 288,
-   "end": 990,
+   "end": 974,
    "gain": 0.05
   },
   {

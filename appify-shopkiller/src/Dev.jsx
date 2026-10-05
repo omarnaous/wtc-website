@@ -1,7 +1,6 @@
 // Dev: Appify's founder mascot as an animatable SVG rig.
 // Props are plain numbers so a scene can drive them from the frame.
 import { WORDMARK } from "./brand.js";
-import { LB_W, lbSvg } from "./ui.jsx";
 const INK = "#0A0913", IRIS = "#8F72FF", UV = "#5B2BFF", UV_D = "#3A1BB0";
 const SKIN = "#E3AE86", SKIN_D = "#C98F68", HAIR = "#0B0A0C", HAIR_L = "#26222B", BEARD = "#141011";
 const S = 'stroke="#0A0913" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"';
@@ -34,8 +33,8 @@ function body({ point = 0, wave = 0, waveAng = 0, thumbs = 0 }) {
   g += `<path d="M214,532 Q254,552 294,536 M306,536 Q346,552 386,532" fill="none" stroke="${UV_D}" stroke-width="6" stroke-linecap="round"/>`;
   g += `<path d="M300,600 V650 M268,640 Q284,646 296,640 M304,640 Q316,646 332,640" fill="none" stroke="${UV_D}" stroke-width="4" stroke-linecap="round" opacity=".7"/>`;
   // appify wordmark on the chest
-  const ws = 170 / LB_W, wx = 300 - 85, wy = 590;
-  g += `<g transform="translate(${wx} ${wy}) scale(${ws})">${lbSvg("#fff", IRIS)}</g>`;
+  const ws = 150 / WORDMARK.width, wx = 300 - 75, wy = 590;
+  g += `<g transform="translate(${wx} ${wy}) scale(${ws})"><path d="${WORDMARK.letters}" fill="#fff"/><path d="${WORDMARK.spark}" fill="${IRIS}"/></g>`;
   // tablet, tucked away while gesturing
   g += `<g opacity="${1 - busy}"><g transform="rotate(-4 300 676)"><rect x="196" y="622" width="208" height="112" rx="14" fill="#25212E" ${S}/><path d="${spark(300, 678, 20)}" fill="${IRIS}"/></g></g>`;
   const limb = (x1, y1, cx, cy, x2, y2, w) =>
