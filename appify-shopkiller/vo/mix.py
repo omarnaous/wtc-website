@@ -8,7 +8,7 @@ vo = resample_poly(vo, sr, vsr)[: len(sfx)]
 vo = np.pad(vo, (0, len(sfx) - len(vo)))
 env = uniform_filter1d(np.abs(vo), int(0.25 * sr))           # ~250 ms follower
 duck = 1 - 0.72 * np.clip(env / (np.percentile(env, 95) + 1e-9), 0, 1)   # up to -8 dB under the voice
-mix = sfx * duck[:, None] * 0.42 + np.stack([vo, vo], 1) * 1.25  # voice forward, bed well under it
+mix = sfx * duck[:, None] * 0.3 + np.stack([vo, vo], 1) * 1.25  # voice forward, bed well under it
 mix = mix / np.abs(mix).max(); mix = np.tanh(mix * 1.8) / np.tanh(1.8); mix *= 10 ** (-1 / 20)  # gentle limiting for loudness
 sf.write("public/sound.wav", mix, sr, subtype="PCM_16")
 print("mixed", round(len(mix) / sr, 2), "s")

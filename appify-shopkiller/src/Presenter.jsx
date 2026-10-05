@@ -1,6 +1,6 @@
 // Dev + karaoke captions. Dev reacts to what happens on screen: waves, points, flinches, jumps,
 // shakes his head, laughs, winks, gives thumbs-up, and pops emotes above his head.
-import { interpolate, random, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { Dev } from "./Dev.jsx";
 import VO from "./vo.json";
 import { clamp } from "./fx.jsx";
@@ -80,8 +80,9 @@ export function Presenter() {
     if (f >= b && f < b + 8) squash = 1 - 0.08 * Math.sin(((f - b) / 8) * Math.PI);
   });
   const waveAng = Math.sin(f / 2.2) * 22;
-  const tilt = shake * Math.sin(f * 0.95) * 9 + lean * -7 + (talking ? Math.sin(f / 3.2) * 2.2 * open + (random(`t${Math.floor(f / 9)}`) - 0.5) * 1.5 : Math.sin(f / 24) * 0.8);
-  const bob = Math.sin(f / 14) * 3 - open * 3 + (talking ? -Math.abs(Math.sin(f / 4)) * 4 : 0);
+  // head stays still at rest; it only moves while talking or during a gesture (shake / lean)
+  const tilt = shake * Math.sin(f * 0.95) * 9 + lean * -7 + (talking ? Math.sin(f / 4) * 1.4 * open : 0);
+  const bob = talking ? -open * 2 - Math.abs(Math.sin(f / 4)) * 2 : Math.sin(f / 22) * 0.8; // gentle breathing when idle
   const flinch = shock * -24; // jolts backwards
   const scale = 1 + lean * 0.06;
 
