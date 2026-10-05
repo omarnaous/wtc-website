@@ -1,0 +1,10 @@
+{
+  "skill_name": "motion-graphics",
+  "evals": [
+    { "id": 1, "prompt": "make a dynamic 15-second motion graphics video that shows what an incredible motion designer you are, like it's your showreel for a résumé. go all out.", "expected_output": "15 s MP4 with sound: cold open, 4-6 contrasting chapters joined by match cuts on a beat, ends on a logo/name with CTA.", "files": [] },
+    { "id": 2, "prompt": "Make an 8-second logo reveal for iArt, an AI motion graphics studio. The logo is just the wordmark \"iArt\". Punchy and premium, with a satisfying hit when the logo lands. End on the logo with \"iart.ai\" underneath.", "expected_output": "8 s MP4: build-up, silent beat, layered impact on the wordmark landing, secondary detail beat, ends held on 'iArt' with 'iart.ai' below.", "files": [] },
+    { "id": 3, "prompt": "Kinetic typography for Alan Kay's line \"The best way to predict the future is to invent it.\" About 12 seconds, vertical for Reels. Every word should move on the beat.", "expected_output": "~12 s 1080x1920 MP4, exact quote, word changes on beat-grid frames from a generated beat, ends on attribution to Alan Kay.", "files": [] },
+    { "id": 4, "prompt": "A seamless 10-second 3D motion graphics loop: abstract geometric shapes that morph and orbit in depth, hypnotic, the last frame flows back into the first. For a stream background and my Instagram grid.", "expected_output": "10 s loops at 1920x1080 and an Instagram grid size, verify.sh --loop reports a seamless seam, looping audio.", "files": [] },
+    { "id": 5, "prompt": "A 15-second vertical motion graphic about world population: it took until 1804 to reach 1 billion people, then 2B in 1927, 3B 1960, 4B 1974, 5B 1987, 6B 1999, 7B 2011, 8B 2022. Make the speed-up feel dramatic.", "expected_output": "15 s 1080x1920 MP4 with exact milestones, time compression making the acceleration felt, accelerating sound cues, takeaway end frame.", "files": [] }
+  ]
+}

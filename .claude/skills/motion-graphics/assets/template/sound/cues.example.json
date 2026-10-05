@@ -1,0 +1,13 @@
+{
+  "fps": 30,
+  "duration": 6.0,
+  "seed": 7,
+  "cues": [
+    { "type": "tick", "frame": 8, "gain": 0.18 },
+    { "type": "riser", "start": 14, "end": 56, "gain": 0.55 },
+    { "type": "impact", "frame": 60, "gain": 0.95 },
+    { "type": "pad", "start": 60, "gain": 0.07 },
+    { "type": "whoosh", "frame": 80, "gain": 0.1 },
+    { "type": "glint", "frame": 120, "gain": 0.06 }
+  ]
+}
