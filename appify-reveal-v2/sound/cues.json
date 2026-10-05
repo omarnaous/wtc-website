@@ -1,0 +1,146 @@
+{
+ "fps": 30,
+ "duration": 8.0,
+ "seed": 31,
+ "lowpass": 4500,
+ "cues": [
+  {
+   "type": "drone",
+   "start": 0,
+   "end": 86,
+   "gain": 0.09,
+   "freq": 55
+  },
+  {
+   "type": "tick",
+   "frame": 6,
+   "gain": 0.14,
+   "freq": 1200
+  },
+  {
+   "type": "whoosh",
+   "start": 14,
+   "end": 44,
+   "gain": 0.1
+  },
+  {
+   "type": "kick",
+   "frame": 44,
+   "gain": 0.45
+  },
+  {
+   "type": "pop",
+   "frame": 44,
+   "gain": 0.3
+  },
+  {
+   "type": "chime",
+   "frame": 44,
+   "gain": 0.12,
+   "freq": 523
+  },
+  {
+   "type": "whoosh",
+   "start": 52,
+   "end": 66,
+   "gain": 0.1,
+   "pan": -0.2
+  },
+  {
+   "type": "riser",
+   "start": 58,
+   "end": 81,
+   "gain": 0.4,
+   "freq": 98
+  },
+  {
+   "type": "whoosh",
+   "start": 70,
+   "end": 82,
+   "gain": 0.12,
+   "pan": 0.2
+  },
+  {
+   "type": "impact",
+   "frame": 86,
+   "gain": 1.0
+  },
+  {
+   "type": "pad",
+   "start": 86,
+   "gain": 0.06,
+   "chord": [
+    130.8,
+    196,
+    261.6,
+    329.6,
+    392
+   ]
+  },
+  {
+   "type": "whoosh",
+   "start": 110,
+   "end": 128,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "frame": 128,
+   "gain": 0.12,
+   "freq": 523
+  },
+  {
+   "type": "chime",
+   "frame": 132,
+   "gain": 0.12,
+   "freq": 587
+  },
+  {
+   "type": "chime",
+   "frame": 136,
+   "gain": 0.12,
+   "freq": 659
+  },
+  {
+   "type": "chime",
+   "frame": 140,
+   "gain": 0.12,
+   "freq": 784
+  },
+  {
+   "type": "chime",
+   "frame": 144,
+   "gain": 0.12,
+   "freq": 880
+  },
+  {
+   "type": "whoosh",
+   "start": 132,
+   "end": 147,
+   "gain": 0.07,
+   "pan": 0.3
+  },
+  {
+   "type": "chime",
+   "frame": 148,
+   "gain": 0.16,
+   "freq": 1046
+  },
+  {
+   "type": "pop",
+   "frame": 148,
+   "gain": 0.2
+  },
+  {
+   "type": "whoosh",
+   "start": 154,
+   "end": 170,
+   "gain": 0.06
+  },
+  {
+   "type": "pop",
+   "frame": 127,
+   "gain": 0.18
+  }
+ ]
+}
