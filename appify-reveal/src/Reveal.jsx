@@ -20,8 +20,11 @@ const WM_CY = (WM_TOP + 0) / 2 - 40; // optical centre: x-height body, ignoring 
 function useMono() {
   const [handle] = useState(() => delayRender("font"));
   useMemo(() => {
-    const f = new FontFace("GeistMono", `url(${staticFile("geist-mono-500.ttf")})`);
-    f.load().then((ff) => { document.fonts.add(ff); continueRender(handle); });
+    const faces = [
+      new FontFace("GeistMono", `url(${staticFile("geist-mono-500.ttf")})`),
+      new FontFace("Sora", `url(${staticFile("sora-600.ttf")})`, { weight: "600" }),
+    ];
+    Promise.all(faces.map((ff) => ff.load())).then((loaded) => { loaded.forEach((ff) => document.fonts.add(ff)); continueRender(handle); });
   }, [handle]);
 }
 
@@ -144,7 +147,7 @@ function Streak({ f, cy }) {
 }
 
 // ── the composition ──────────────────────────────────────────
-export const Reveal = ({ url }) => {
+export const Reveal = ({ url, slogan }) => {
   useMono();
   const f = useCurrentFrame();
   const { width, height, fps } = useVideoConfig();
@@ -202,8 +205,9 @@ export const Reveal = ({ url }) => {
   const sparkRot = f < T.land ? -40 * (1 - fall) : interpolate(landS, [0, 1], [8, 0]) + (f > T.land + 30 ? 6 * Math.sin((f - T.land) / 20) : 0);
 
   // URL reveal
-  const lineP = interpolate(f, [T.urlA, T.urlA + 16], [0, 1], { ...clamp, easing: easeOut });
-  const urlY = Y(WM_BOT) + 110 * (width / 1080);
+  const lineP = interpolate(f, [T.urlA + 12, T.urlA + 28], [0, 1], { ...clamp, easing: easeOut });
+  const urlY = Y(WM_BOT) + 70 * (width / 1080);
+  const words = slogan.split(" ");
 
   // sheen sweep, in wordmark units
   const sheenX = interpolate(f, [T.sheen, T.sheen + 34], [-800, WM_W + 800], { ...clamp, easing: Easing.inOut(Easing.cubic) });
@@ -272,14 +276,24 @@ export const Reveal = ({ url }) => {
         <Shockwave f={f} cx={sparkX} cy={Y(WSPARK.y)} start={T.land} max={220} width={4} color="143,114,255" />
         <Burst f={f} cx={sparkX} cy={Y(WSPARK.y)} start={T.land} count={16} speed={11} seed="land" scale={0.7} />
 
-        {/* URL */}
+        {/* slogan, divider, URL */}
         {f >= T.urlA && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: urlY, display: "grid", justifyItems: "center", gap: 26 }}>
+          <div style={{ position: "absolute", left: 0, right: 0, top: urlY, display: "grid", justifyItems: "center", gap: 30 }}>
+            <div style={{ display: "flex", gap: "0.28em", fontFamily: "Sora", fontWeight: 600, fontSize: 58, letterSpacing: "-0.03em", lineHeight: 1.15 }}>
+              {words.map((w, i) => {
+                const p = interpolate(f, [T.urlA + i * 5, T.urlA + 16 + i * 5], [0, 1], { ...clamp, easing: easeOut });
+                return (
+                  <span key={i} style={{ display: "inline-block", overflow: "hidden", paddingBottom: 6 }}>
+                    <span style={{ display: "inline-block", transform: `translateY(${(1 - p) * 110}%)`, color: i === words.length - 1 ? C.iris : C.paper }}>{w}</span>
+                  </span>
+                );
+              })}
+            </div>
             <div style={{ width: 300 * lineP, height: 2, background: `linear-gradient(90deg, transparent, ${C.iris}, transparent)` }} />
-            <div style={{ display: "flex", fontFamily: "GeistMono", fontSize: 36, letterSpacing: "0.22em", color: C.paper }}>
+            <div style={{ display: "flex", fontFamily: "GeistMono", fontSize: 30, letterSpacing: "0.2em", color: C.paper, opacity: 0.85 }}>
               {url.split("").map((ch, i) => {
-                const p = interpolate(f, [T.urlA + 6 + i * 1.1, T.urlA + 18 + i * 1.1], [0, 1], { ...clamp, easing: easeOut });
-                return <span key={i} style={{ display: "inline-block", opacity: p, transform: `translateY(${(1 - p) * 18}px)`, filter: `blur(${(1 - p) * 6}px)`, color: ch === "." ? C.iris : C.paper }}>{ch}</span>;
+                const p = interpolate(f, [T.urlA + 20 + i * 1.1, T.urlA + 32 + i * 1.1], [0, 1], { ...clamp, easing: easeOut });
+                return <span key={i} style={{ display: "inline-block", opacity: p, transform: `translateY(${(1 - p) * 14}px)`, filter: `blur(${(1 - p) * 6}px)`, color: ch === "." ? C.iris : C.paper }}>{ch}</span>;
               })}
             </div>
           </div>

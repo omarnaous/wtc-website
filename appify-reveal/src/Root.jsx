@@ -2,7 +2,7 @@ import { Composition } from "remotion";
 import { Reveal } from "./Reveal.jsx";
 import { FPS, DURATION } from "./timing.js";
 
-const props = { url: "appifylb.netlify.app" };
+const props = { url: "www.appify-lb.com", slogan: "Ideas, appified." };
 
 export const Root = () => (
   <>
