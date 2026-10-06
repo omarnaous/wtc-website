@@ -1,0 +1,267 @@
+{
+ "fps": 30,
+ "duration": 15.0,
+ "seed": 11,
+ "fade_out": 0.8,
+ "cues": [
+  {
+   "type": "lofi",
+   "start": 0,
+   "end": 290,
+   "bpm": 90,
+   "gain": 0.5
+  },
+  {
+   "type": "lofi",
+   "start": 300,
+   "end": 450,
+   "bpm": 90,
+   "gain": 0.5,
+   "bar0": 2
+  },
+  {
+   "type": "pop",
+   "frame": 0,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 6,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 12,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 18,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 24,
+   "gain": 0.14
+  },
+  {
+   "type": "whoosh",
+   "start": 26,
+   "end": 40,
+   "gain": 0.1
+  },
+  {
+   "type": "whoosh",
+   "start": 60,
+   "end": 68,
+   "gain": 0.05,
+   "pan": -0.4
+  },
+  {
+   "type": "click",
+   "frame": 68,
+   "gain": 0.22,
+   "freq": 420,
+   "pan": -0.4
+  },
+  {
+   "type": "pop",
+   "frame": 80,
+   "gain": 0.22,
+   "pan": 0.4
+  },
+  {
+   "type": "graph_tick",
+   "frame": 80,
+   "gain": 0.16,
+   "freq": 520,
+   "pan": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 100,
+   "end": 108,
+   "gain": 0.05,
+   "pan": -0.4
+  },
+  {
+   "type": "click",
+   "frame": 108,
+   "gain": 0.22,
+   "freq": 420,
+   "pan": -0.4
+  },
+  {
+   "type": "pop",
+   "frame": 120,
+   "gain": 0.22,
+   "pan": 0.4
+  },
+  {
+   "type": "graph_tick",
+   "frame": 120,
+   "gain": 0.16,
+   "freq": 584,
+   "pan": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 140,
+   "end": 148,
+   "gain": 0.05,
+   "pan": -0.4
+  },
+  {
+   "type": "click",
+   "frame": 148,
+   "gain": 0.22,
+   "freq": 420,
+   "pan": -0.4
+  },
+  {
+   "type": "pop",
+   "frame": 160,
+   "gain": 0.22,
+   "pan": 0.4
+  },
+  {
+   "type": "graph_tick",
+   "frame": 160,
+   "gain": 0.16,
+   "freq": 655,
+   "pan": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 180,
+   "end": 188,
+   "gain": 0.05,
+   "pan": -0.4
+  },
+  {
+   "type": "click",
+   "frame": 188,
+   "gain": 0.22,
+   "freq": 420,
+   "pan": -0.4
+  },
+  {
+   "type": "pop",
+   "frame": 200,
+   "gain": 0.22,
+   "pan": 0.4
+  },
+  {
+   "type": "graph_tick",
+   "frame": 200,
+   "gain": 0.16,
+   "freq": 735,
+   "pan": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 220,
+   "end": 228,
+   "gain": 0.05,
+   "pan": -0.4
+  },
+  {
+   "type": "click",
+   "frame": 228,
+   "gain": 0.22,
+   "freq": 420,
+   "pan": -0.4
+  },
+  {
+   "type": "pop",
+   "frame": 240,
+   "gain": 0.22,
+   "pan": 0.4
+  },
+  {
+   "type": "graph_tick",
+   "frame": 240,
+   "gain": 0.16,
+   "freq": 825,
+   "pan": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 260,
+   "end": 268,
+   "gain": 0.05,
+   "pan": -0.4
+  },
+  {
+   "type": "click",
+   "frame": 268,
+   "gain": 0.22,
+   "freq": 420,
+   "pan": -0.4
+  },
+  {
+   "type": "pop",
+   "frame": 280,
+   "gain": 0.22,
+   "pan": 0.4
+  },
+  {
+   "type": "graph_tick",
+   "frame": 280,
+   "gain": 0.16,
+   "freq": 927,
+   "pan": 0.4
+  },
+  {
+   "type": "coin_drop",
+   "frame": 80,
+   "gain": 0.22,
+   "freq": 2000
+  },
+  {
+   "type": "riser",
+   "start": 284,
+   "end": 300,
+   "gain": 0.18
+  },
+  {
+   "type": "stamp",
+   "frame": 300,
+   "gain": 0.6
+  },
+  {
+   "type": "impact",
+   "frame": 300,
+   "gain": 0.35
+  },
+  {
+   "type": "whoosh",
+   "start": 336,
+   "end": 352,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 352,
+   "gain": 0.16
+  },
+  {
+   "type": "pop",
+   "frame": 360,
+   "gain": 0.16
+  },
+  {
+   "type": "coins",
+   "frame": 372,
+   "gain": 0.28,
+   "count": 7,
+   "dur": 0.35
+  },
+  {
+   "type": "click",
+   "frame": 384,
+   "gain": 0.18,
+   "freq": 1300
+  }
+ ]
+}
