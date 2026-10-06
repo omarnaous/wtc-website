@@ -1,7 +1,7 @@
 # Appify vs subscription builder (comparison)
 
-17.3 s, 30 fps, 100 BPM. Feed 4:5 (1080x1350) and Reel 9:16 (1080x1920). A scoreboard: every row knocks the
-subscription builder down and lights Appify up, 8/8, then the end card (own it, pay once, $360, CTA).
+15 s, 30 fps, 90 BPM. Feed 4:5 (1080x1350) and Reel 9:16 (1080x1920). A scoreboard: every row knocks the
+subscription builder down and lights Appify up, 6/6, then the end card (own it, pay once, $360, CTA).
 
 ```
 npm install

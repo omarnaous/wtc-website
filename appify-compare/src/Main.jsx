@@ -7,8 +7,8 @@ import { WORDMARK, sparkPath } from "./brand.js";
 const C = { ink: "#0A0913", paper: "#F3F1FA", uv: "#5B2BFF", iris: "#8F72FF", sky: "#74C6FF", alert: "#F0384F", mute: "#8A84A3", green: "#3BE38B" };
 const DISPLAY = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.035em", lineHeight: 1.08 };
 const MONO = { fontFamily: "Mono", letterSpacing: "0.14em" };
-const BLOCK_H = 1400;
-const ROW = 132, CELL = 88; // row pitch and cell height inside the block // the layout is designed on a 1080 x 1150 block, scaled to fit each format
+const BLOCK_H = 1240;
+const ROW = 148, CELL = 96; // row pitch and cell height inside the block // the layout is designed on a 1080 x 1150 block, scaled to fit each format
 
 function Cell({ f, fps, start, side, text, i, faded }) {
   const good = side === "right";
@@ -32,7 +32,7 @@ export const Main = ({ rows, price, monthly, cta, url }) => {
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"]]);
   const f = useCurrentFrame();
   const { width: W, height: H, fps } = useVideoConfig();
-  const k = Math.min(W / 1080, (H * (H > 1600 ? 0.72 : 0.94)) / BLOCK_H);
+  const k = Math.min(W / 1080, (H * (H > 1600 ? 0.66 : 0.9)) / BLOCK_H);
   const top = H > 1600 ? H * 0.46 - (BLOCK_H * k) / 2 : (H - BLOCK_H * k) / 2;
 
   const score = rows.reduce((n, _, i) => n + (f >= rowAt(i) + 20 ? 1 : 0), 0);
@@ -51,7 +51,7 @@ export const Main = ({ rows, price, monthly, cta, url }) => {
   const e = (d) => spring({ frame: f - T.end - d, fps, config: { damping: 13, stiffness: 190 } });
   const rise = (p) => ({ opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 50}px)` });
   const wmW = 300, wmH = wmW * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
-  const push = interpolate(f, [T.end, 520], [1, 1.035], clamp);
+  const push = interpolate(f, [T.end, 450], [1, 1.035], clamp);
 
   return (
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
@@ -89,12 +89,12 @@ export const Main = ({ rows, price, monthly, cta, url }) => {
           })}
           {/* verdict stamp on the Appify column */}
           {f >= T.verdict && (
-            <div style={{ position: "absolute", left: 640, top: 1322, padding: "8px 28px", borderRadius: 16, border: `6px solid ${C.green}`, background: "rgba(10,9,19,.82)", ...DISPLAY, fontSize: 58, color: C.green, transform: `rotate(-6deg) scale(${interpolate(verdict, [0, 1], [2.2, 1])})`, opacity: Math.min(1, verdict * 2) }}>WINNER</div>
+            <div style={{ position: "absolute", left: 640, top: 1150, padding: "8px 28px", borderRadius: 16, border: `6px solid ${C.green}`, background: "rgba(10,9,19,.82)", ...DISPLAY, fontSize: 58, color: C.green, transform: `rotate(-6deg) scale(${interpolate(verdict, [0, 1], [2.2, 1])})`, opacity: Math.min(1, verdict * 2) }}>WINNER</div>
           )}
         </div>
       )}
-      <Shockwave f={f} cx={W / 2 + 255 * k} cy={top + 1360 * k} start={T.verdict} max={W * 0.9} width={6} rgb="59,227,139" dur={26} />
-      <Burst f={f} cx={W / 2 + 255 * k} cy={top + 1360 * k} start={T.verdict} count={60} speed={26 * k} colors={["#fff", C.green, C.iris]} seed="win" scale={0.8} />
+      <Shockwave f={f} cx={W / 2 + 255 * k} cy={top + 1190 * k} start={T.verdict} max={W * 0.9} width={6} rgb="59,227,139" dur={26} />
+      <Burst f={f} cx={W / 2 + 255 * k} cy={top + 1190 * k} start={T.verdict} count={60} speed={26 * k} colors={["#fff", C.green, C.iris]} seed="win" scale={0.8} />
 
       {/* ── end card */}
       {f >= T.end && (
@@ -107,7 +107,7 @@ export const Main = ({ rows, price, monthly, cta, url }) => {
             <span style={{ color: "rgba(243,241,250,.55)", textDecoration: "line-through", textDecorationColor: C.alert, textDecorationThickness: 5, fontSize: 40 }}>${monthly}/mo</span>
           </div>
           <div style={{ display: "flex", gap: 10, marginTop: 30, ...rise(e(26)) }}>
-            {["Custom analytics", "Custom admin", "Live in under 1 week"].map((t) => (
+            {["Custom analytics + admin", "Live in under 1 week"].map((t) => (
               <span key={t} style={{ padding: "10px 16px", borderRadius: 99, border: "2px solid rgba(59,227,139,.45)", background: "rgba(59,227,139,.1)", ...DISPLAY, fontSize: 27, color: C.paper }}><span style={{ color: C.green }}>✓</span> {t}</span>
             ))}
           </div>
