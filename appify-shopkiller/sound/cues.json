@@ -218,7 +218,7 @@
   },
   {
    "type": "whoosh",
-   "gain": 0.1,
+   "gain": 0.07,
    "pan": 0.2,
    "start": 481,
    "end": 495
@@ -244,13 +244,6 @@
    "type": "pop",
    "gain": 0.14,
    "frame": 533
-  },
-  {
-   "type": "whoosh",
-   "gain": 0.09,
-   "pan": 0.5,
-   "start": 550,
-   "end": 562
   },
   {
    "type": "click",
@@ -283,7 +276,7 @@
   },
   {
    "type": "sweep",
-   "gain": 0.06,
+   "gain": 0.035,
    "f0": 380,
    "f1": 1150,
    "start": 625,
@@ -293,13 +286,6 @@
    "type": "pop",
    "gain": 0.28,
    "frame": 643
-  },
-  {
-   "type": "whoosh",
-   "gain": 0.08,
-   "pan": 0.4,
-   "start": 644,
-   "end": 655
   },
   {
    "type": "graph_tick",
