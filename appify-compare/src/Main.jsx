@@ -104,7 +104,7 @@ export const Main = ({ rows, price, monthly, cta, url }) => {
           <div style={{ display: "flex", gap: 18, alignItems: "center", marginTop: 40, ...DISPLAY, fontSize: 48, ...rise(e(20)) }}>
             <span style={{ fontSize: 96, color: "#fff" }}>${price}</span>
             <span style={{ padding: "8px 22px", borderRadius: 99, background: C.uv, color: "#fff", fontSize: 40 }}>one-time</span>
-            <span style={{ color: "rgba(243,241,250,.55)", textDecoration: "line-through", textDecorationColor: C.alert, textDecorationThickness: 5, fontSize: 40 }}>${monthly}/mo</span>
+            <span style={{ color: "rgba(243,241,250,.55)", textDecoration: "line-through", textDecorationColor: C.alert, textDecorationThickness: 5, fontSize: 40 }}>${monthly * 12}/yr</span>
           </div>
           <div style={{ display: "flex", gap: 10, marginTop: 30, ...rise(e(26)) }}>
             {["Custom analytics + admin", "Live in under 1 week"].map((t) => (

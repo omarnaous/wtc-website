@@ -5,7 +5,7 @@ import { FPS, DURATION } from "./timing.js";
 // Edit the comparison here. [label, subscription builder, Appify custom]
 const props = {
   rows: [
-    ["PRICE", "$39/month, forever", "$360 one-time"],
+    ["PRICE", "$468/year, forever", "$360 one-time"],
     ["OWNERSHIP", "You rent it", "You own it"],
     ["DESIGN", "Same templates as everyone", "Custom design + real animations"],
     ["CUSTOMIZATION", "Limited by the theme", "Every single detail"],
