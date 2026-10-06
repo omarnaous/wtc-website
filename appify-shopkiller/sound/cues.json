@@ -112,34 +112,6 @@
    "pan": -0.2
   },
   {
-   "type": "whoosh",
-   "start": 483,
-   "end": 493,
-   "gain": 0.1,
-   "pan": 0.2
-  },
-  {
-   "type": "whoosh",
-   "start": 545,
-   "end": 555,
-   "gain": 0.1,
-   "pan": -0.2
-  },
-  {
-   "type": "whoosh",
-   "start": 607,
-   "end": 617,
-   "gain": 0.1,
-   "pan": 0.2
-  },
-  {
-   "type": "whoosh",
-   "start": 659,
-   "end": 669,
-   "gain": 0.1,
-   "pan": -0.2
-  },
-  {
    "type": "buzz",
    "frame": 679,
    "gain": 0.22
@@ -215,7 +187,7 @@
   {
    "type": "counter",
    "start": 774,
-   "end": 794,
+   "end": 798,
    "gain": 0.18
   },
   {
@@ -243,6 +215,119 @@
    "count": 12,
    "dur": 0.6,
    "frame": 738
+  },
+  {
+   "type": "whoosh",
+   "gain": 0.1,
+   "pan": 0.2,
+   "start": 481,
+   "end": 495
+  },
+  {
+   "type": "click",
+   "gain": 0.3,
+   "freq": 1500,
+   "frame": 514
+  },
+  {
+   "type": "pop",
+   "gain": 0.14,
+   "frame": 515
+  },
+  {
+   "type": "click",
+   "gain": 0.3,
+   "freq": 1250,
+   "frame": 532
+  },
+  {
+   "type": "pop",
+   "gain": 0.14,
+   "frame": 533
+  },
+  {
+   "type": "whoosh",
+   "gain": 0.09,
+   "pan": 0.5,
+   "start": 550,
+   "end": 562
+  },
+  {
+   "type": "click",
+   "gain": 0.28,
+   "freq": 1750,
+   "frame": 565
+  },
+  {
+   "type": "click",
+   "gain": 0.26,
+   "freq": 1100,
+   "frame": 581
+  },
+  {
+   "type": "pop",
+   "gain": 0.12,
+   "frame": 583
+  },
+  {
+   "type": "counter",
+   "gain": 0.09,
+   "start": 588,
+   "end": 605
+  },
+  {
+   "type": "click",
+   "gain": 0.3,
+   "freq": 1400,
+   "frame": 622
+  },
+  {
+   "type": "sweep",
+   "gain": 0.06,
+   "f0": 380,
+   "f1": 1150,
+   "start": 625,
+   "end": 643
+  },
+  {
+   "type": "pop",
+   "gain": 0.28,
+   "frame": 643
+  },
+  {
+   "type": "whoosh",
+   "gain": 0.08,
+   "pan": 0.4,
+   "start": 644,
+   "end": 655
+  },
+  {
+   "type": "graph_tick",
+   "gain": 0.2,
+   "freq": 660,
+   "frame": 666
+  },
+  {
+   "type": "graph_tick",
+   "gain": 0.2,
+   "freq": 990,
+   "frame": 669
+  },
+  {
+   "type": "cash_riffle",
+   "frame": 798,
+   "gain": 0.28,
+   "dur": 0.4
+  },
+  {
+   "type": "pop",
+   "frame": 798,
+   "gain": 0.22
+  },
+  {
+   "type": "impact",
+   "frame": 959,
+   "gain": 0.3
   },
   {
    "type": "graph_tick",

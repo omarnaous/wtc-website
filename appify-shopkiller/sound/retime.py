@@ -25,11 +25,21 @@ for b in bars:
     for i in range(10):
         spec["cues"].append({"type": b["type"], "frame": round(A["cost"] + 50 + i * step + 3), "gain": b.get("gain", 0.2),
                              "freq": round(b.get("freq", 600) * 2 ** (i * 2 / 12)), "pan": round(-0.35 + i * 0.075, 2), "_placed": True})
+# storefront demo (Features in scenes.jsx): four 45-frame beats, each stretched over its voice line
+FEAT = [A["feat0"], A["feat1"], A["feat2"], A["feat3"], A["compare"]]
+def demo_at(d):
+    k = max(0, min(3, int(d // 45))); beat = FEAT[k + 1] - FEAT[k]
+    return FEAT[k] + (d - 45 * k) * max(45, min(beat, 90)) / 45
 spec["duration"] = round(vo["duration"] / spec["fps"], 3)
 for c in spec["cues"]:
     if "at_word" in c:  # locked to a spoken word, already in voice-led frames
         c["frame"] = round(word_at(*c.pop("at_word")) + c.pop("offset", 0)); continue
     if c.pop("_placed", False): continue  # bar ticks above are already in voice-led frames
+    if "at_demo" in c:  # a storefront demo moment (frame or [start, end] on the demo's 0-180 clock)
+        d = c.pop("at_demo")
+        if isinstance(d, list): c["start"], c["end"] = round(demo_at(d[0])), round(demo_at(d[1]))
+        else: c["frame"] = round(demo_at(d))
+        continue
     if "frame" in c: c["frame"] = warp(c["frame"])
     if "start" in c:
         s, e = c["start"], c["end"]

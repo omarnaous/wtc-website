@@ -112,34 +112,6 @@
    "pan": -0.2
   },
   {
-   "type": "whoosh",
-   "start": 474,
-   "end": 484,
-   "gain": 0.1,
-   "pan": 0.2
-  },
-  {
-   "type": "whoosh",
-   "start": 519,
-   "end": 529,
-   "gain": 0.1,
-   "pan": -0.2
-  },
-  {
-   "type": "whoosh",
-   "start": 564,
-   "end": 574,
-   "gain": 0.1,
-   "pan": 0.2
-  },
-  {
-   "type": "whoosh",
-   "start": 609,
-   "end": 619,
-   "gain": 0.1,
-   "pan": -0.2
-  },
-  {
    "type": "buzz",
    "frame": 629,
    "gain": 0.22
@@ -221,7 +193,7 @@
   {
    "type": "counter",
    "start": 722,
-   "end": 742,
+   "end": 746,
    "gain": 0.18
   },
   {
@@ -261,6 +233,129 @@
    "gain": 0.4,
    "count": 12,
    "dur": 0.6
+  },
+  {
+   "type": "whoosh",
+   "at_demo": [
+    -6,
+    4
+   ],
+   "gain": 0.1,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "at_demo": 18,
+   "gain": 0.3,
+   "freq": 1500
+  },
+  {
+   "type": "pop",
+   "at_demo": 19,
+   "gain": 0.14
+  },
+  {
+   "type": "click",
+   "at_demo": 31,
+   "gain": 0.3,
+   "freq": 1250
+  },
+  {
+   "type": "pop",
+   "at_demo": 32,
+   "gain": 0.14
+  },
+  {
+   "type": "whoosh",
+   "at_demo": [
+    44,
+    53
+   ],
+   "gain": 0.09,
+   "pan": 0.5
+  },
+  {
+   "type": "click",
+   "at_demo": 55,
+   "gain": 0.28,
+   "freq": 1750
+  },
+  {
+   "type": "click",
+   "at_demo": 67,
+   "gain": 0.26,
+   "freq": 1100
+  },
+  {
+   "type": "pop",
+   "at_demo": 68,
+   "gain": 0.12
+  },
+  {
+   "type": "counter",
+   "at_demo": [
+    72,
+    84
+   ],
+   "gain": 0.09
+  },
+  {
+   "type": "click",
+   "at_demo": 98,
+   "gain": 0.3,
+   "freq": 1400
+  },
+  {
+   "type": "sweep",
+   "at_demo": [
+    100,
+    116
+   ],
+   "gain": 0.06,
+   "f0": 380,
+   "f1": 1150
+  },
+  {
+   "type": "pop",
+   "at_demo": 116,
+   "gain": 0.28
+  },
+  {
+   "type": "whoosh",
+   "at_demo": [
+    117,
+    126
+   ],
+   "gain": 0.08,
+   "pan": 0.4
+  },
+  {
+   "type": "graph_tick",
+   "at_demo": 136,
+   "gain": 0.2,
+   "freq": 660
+  },
+  {
+   "type": "graph_tick",
+   "at_demo": 139,
+   "gain": 0.2,
+   "freq": 990
+  },
+  {
+   "type": "cash_riffle",
+   "frame": 746,
+   "gain": 0.28,
+   "dur": 0.4
+  },
+  {
+   "type": "pop",
+   "frame": 746,
+   "gain": 0.22
+  },
+  {
+   "type": "impact",
+   "frame": 914,
+   "gain": 0.3
   }
  ]
 }

@@ -1,4 +1,4 @@
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Easing } from "remotion";
+import { AbsoluteFill, interpolate, random, spring, useCurrentFrame, useVideoConfig, Easing } from "remotion";
 import { C, money, DISPLAY, MONO, Words, exitStyle, Printer, Store } from "./ui.jsx";
 import { clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Streak } from "./fx.jsx";
 import { WORDMARK } from "./brand.js";
@@ -299,6 +299,18 @@ export function Compare({ monthly, price }) {
   const be = interpolate(f, [86, 96], [0, 1], { ...clamp, easing: easeOut });
   const breakEven = price / yearly; // years
   const yr = draw * 10;
+  // % of the 10-year subscription cost you keep, counted up in a ring; bills burst out when it lands
+  const pctFinal = Math.round((saved / ten) * 100);
+  const ringIn = spring({ frame: f - 60, fps: 30, config: { damping: 13, stiffness: 160 } });
+  const pct = interpolate(f, [64, 86], [0, pctFinal], { ...clamp, easing: easeOut });
+  const ringPop = spring({ frame: f - 86, fps: 30, config: { damping: 7, stiffness: 260 } });
+  const R = 112, CIRC = 2 * Math.PI * R;
+  const bills = Array.from({ length: 14 }, (_, i) => {
+    const t = f - 86 - (i % 4);
+    if (t < 0) return null;
+    const a = -Math.PI / 2 + 0.25 + (random(`ba${i}`) - 0.5) * 1.9, v = 15 + random(`bv${i}`) * 12;
+    return { x: 310 + Math.cos(a) * v * t, y: 880 + Math.sin(a) * v * t + 0.9 * t * t, r: (random(`br${i}`) - 0.5) * 40 + t * (random(`bs${i}`) - 0.5) * 18, o: interpolate(t, [0, 3, 26, 34], [0, 1, 1, 0], clamp) };
+  });
   return (
     <AbsoluteFill>
       <Words text="10 years later" y={330} size={110} start={4} />
@@ -325,6 +337,23 @@ export function Compare({ monthly, price }) {
         </g>
       </svg>
       <div style={{ position: "absolute", left: X(breakEven) - 40, top: base + 74, opacity: be, ...DISPLAY, fontSize: 34, color: C.ink, width: 520 }}>Pays for itself in {Math.ceil(price / monthly)} months</div>
+      {/* bills fly out from behind the ring */}
+      {bills.map((b, i) => b && (
+        <div key={i} style={{ position: "absolute", left: b.x - 46, top: b.y - 24, width: 92, height: 48, borderRadius: 6, background: "#2FBF71", border: "3px solid #17834A", opacity: b.o, transform: `rotate(${b.r}deg)`, display: "grid", placeItems: "center", ...DISPLAY, fontSize: 30, color: "#E9FFF2", boxShadow: "0 8px 16px rgba(10,9,19,.18)" }}>$</div>
+      ))}
+      {f >= 58 && (
+        <div style={{ position: "absolute", left: 310 - 150, top: 880 - 150, width: 300, height: 300, transform: `scale(${ringIn * (1 + 0.08 * Math.sin(Math.min(1, ringPop) * Math.PI))})`, opacity: Math.min(1, ringIn * 1.5) }}>
+          <svg width="300" height="300" viewBox="-150 -150 300 300" style={{ position: "absolute", inset: 0, overflow: "visible" }}>
+            <circle r={R + 22} fill="rgba(243,241,250,.92)" />
+            <circle r={R} fill="none" stroke="rgba(91,43,255,.15)" strokeWidth="22" />
+            <circle r={R} fill="none" stroke={C.uv} strokeWidth="22" strokeLinecap="round" strokeDasharray={`${(pct / 100) * CIRC} ${CIRC}`} transform="rotate(-90)" />
+          </svg>
+          <div style={{ position: "absolute", inset: 0, display: "grid", placeContent: "center", textAlign: "center" }}>
+            <div style={{ ...DISPLAY, fontSize: 92, color: C.uv, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{Math.round(pct)}%</div>
+            <div style={{ ...MONO, fontSize: 24, color: C.ink, marginTop: 6, letterSpacing: "0.12em" }}>SAVED</div>
+          </div>
+        </div>
+      )}
       {f >= 60 && (
         <div style={{ position: "absolute", left: 520, width: 400, top: 1096, textAlign: "center", opacity: area, padding: "10px 0 14px", borderRadius: 20, background: "rgba(243,241,250,.88)" }}>
           <div style={{ ...MONO, fontSize: 28, color: C.mute }}>YOU SAVE</div>
@@ -346,7 +375,8 @@ export function Offer({ price, cta, url, monthly }) {
     ["Monthly fees", "$0.00", C.uv],
     ["TOTAL", `$${price.toFixed(2)}`, C.ink],
   ];
-  const len = interpolate(f, [2, 30], [0, 470], { ...clamp, easing: Easing.out(Easing.quad) });
+  const len = interpolate(f, [2, 30], [0, 400], { ...clamp, easing: Easing.out(Easing.quad) });
+  const priceIn = spring({ frame: f - 44, fps, config: { damping: 11, stiffness: 220 } });
   const stamp = spring({ frame: f - 38, fps, config: { damping: 10, stiffness: 260 } });
   const [sx, sy] = shake(f, 38, 12, 3);
   const cta1 = spring({ frame: f - 52, fps, config: { damping: 13 } });
@@ -356,9 +386,9 @@ export function Offer({ price, cta, url, monthly }) {
   return (
     <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px) scale(${push})`, transformOrigin: "50% 40%" }}>
       <div style={{ position: "absolute", left: 210, top: slot + 40, width: 660, height: len, overflow: "hidden", background: "#FFFFFF", boxShadow: "0 40px 80px rgba(0,0,0,.5)" }}>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 470, padding: "34px 40px" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 400, padding: "26px 40px" }}>
           {rows.map(([a, b, col], i) => (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", ...MONO, fontSize: i === 0 ? 28 : 30, color: col, padding: "14px 0", borderTop: i === 4 ? "3px dashed rgba(10,9,19,.3)" : "none", fontWeight: i === 4 ? 600 : 400 }}>
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", ...MONO, fontSize: i === 4 ? 44 : i === 0 ? 26 : 28, color: i === 4 ? C.uv : col, padding: i === 4 ? "16px 0 0" : "9px 0", marginTop: i === 4 ? 10 : 0, borderTop: i === 4 ? "3px dashed rgba(10,9,19,.3)" : "none", fontWeight: i === 4 ? 600 : 400 }}>
               <span>{a}</span><span>{b}</span>
             </div>
           ))}
@@ -366,14 +396,24 @@ export function Offer({ price, cta, url, monthly }) {
       </div>
       <Printer y={slot - 50} width={800} />
       {f >= 38 && (
-        <div style={{ position: "absolute", left: 300, top: 560, transform: `rotate(-12deg) scale(${interpolate(stamp, [0, 1], [2.2, 1])})`, opacity: Math.min(1, stamp * 2), padding: "14px 34px", border: `8px solid ${C.uv}`, borderRadius: 18, ...DISPLAY, fontSize: 84, color: C.uv, background: "rgba(255,255,255,.75)" }}>PAID ONCE</div>
+        <div style={{ position: "absolute", left: 330, top: 470, transform: `rotate(-10deg) scale(${interpolate(stamp, [0, 1], [2.2, 1])})`, opacity: Math.min(1, stamp * 2), padding: "14px 34px", border: `8px solid ${C.uv}`, borderRadius: 18, ...DISPLAY, fontSize: 84, color: C.uv, background: "rgba(255,255,255,.75)" }}>PAID ONCE</div>
       )}
-      <div style={{ position: "absolute", left: 40, right: 40, top: 930, textAlign: "center", opacity: cta1, transform: `translateY(${(1 - cta1) * 60}px)` }}>
-        <div style={{ ...DISPLAY, fontSize: 64, color: C.paper }}>DM or comment</div>
-        <div style={{ ...DISPLAY, fontSize: 104, color: C.iris, marginTop: 20, lineHeight: 1.05 }}>“{cta}”</div>
-        <div style={{ ...DISPLAY, fontSize: 50, color: C.paper, marginTop: 22 }}>to book your <span style={{ color: C.sky }}>free prototype demo</span></div>
+      {/* the price, big: one-time, next to what the monthly plan costs */}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 760, display: "grid", justifyItems: "center", opacity: Math.min(1, priceIn * 2), transform: `scale(${interpolate(priceIn, [0, 1], [1.6, 1])})` }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 6, ...DISPLAY, color: "#fff", lineHeight: 0.95, textShadow: "0 0 60px rgba(143,114,255,.65)" }}>
+          <span style={{ fontSize: 96, marginTop: 18 }}>$</span><span style={{ fontSize: 210, fontVariantNumeric: "tabular-nums" }}>{price}</span>
+        </div>
+        <div style={{ display: "flex", gap: 18, alignItems: "center", marginTop: 6, ...DISPLAY, fontSize: 44 }}>
+          <span style={{ padding: "6px 20px", borderRadius: 99, background: C.uv, color: "#fff" }}>one-time</span>
+          <span style={{ color: "rgba(243,241,250,.6)", textDecoration: "line-through", textDecorationColor: C.alert, textDecorationThickness: 5 }}>${monthly}/mo</span>
+        </div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1330, display: "grid", justifyItems: "center", gap: 14, opacity: wm }}>
+      <div style={{ position: "absolute", left: 40, right: 40, top: 1050, textAlign: "center", opacity: cta1, transform: `translateY(${(1 - cta1) * 60}px)` }}>
+        <div style={{ ...DISPLAY, fontSize: 54, color: C.paper }}>DM or comment</div>
+        <div style={{ ...DISPLAY, fontSize: 88, color: C.iris, marginTop: 12, lineHeight: 1.05 }}>“{cta}”</div>
+        <div style={{ ...DISPLAY, fontSize: 44, color: C.paper, marginTop: 14 }}>to book your <span style={{ color: C.sky }}>free prototype demo</span></div>
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1360, display: "grid", justifyItems: "center", gap: 12, opacity: wm }}>
         <svg viewBox={WORDMARK.viewBox} width={wmW} height={wmH}><path d={WORDMARK.letters} fill={C.paper} /><path d={WORDMARK.spark} fill={C.iris} /></svg>
         <div style={{ ...MONO, fontSize: 30, color: C.paper, letterSpacing: "0.18em" }}>{url}</div>
       </div>
