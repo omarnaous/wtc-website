@@ -223,6 +223,8 @@ function Stars({ f, n = 90 }) {
 }
 
 // ─────────────────────────────────────────── 4. strap studio
+// The try-on photos end in a flat cut at the top and bottom; fade the strap out before it, as on the site.
+const STRAP_FADE = "linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%)";
 function Strap() {
   const f = useCurrentFrame();
   const { W, H, u, cx, cy, wide } = useLayout();
@@ -233,16 +235,17 @@ function Strap() {
   const lf = f - T.swaps[k];
   const wipe = k === 0 ? 1 : interpolate(lf, [0, 5], [0, 1], { ...clamp, easing: easeOut });
   const final = k === T.swaps.length - 1;
-  const bump = final ? interpolate(spring({ frame: lf, fps, config: { damping: 10, stiffness: 180 } }), [0, 1], [1.12, 1]) : interpolate(lf, [0, 2, 7], [1.03, 1.03, 1], clamp);
+  const bump = final ? interpolate(spring({ frame: lf, fps, config: { damping: 10, stiffness: 180 } }), [0, 1], [1.06, 1]) : interpolate(lf, [0, 2, 7], [1.02, 1.02, 1], clamp);
   const tint = prev.tint === cur.tint ? cur.tint : cur.tint;
   const enter = spring({ frame: f, fps, config: { damping: 16, stiffness: 120 } });
   const exit = interpolate(f, [116, 132], [0, 1], { ...clamp, easing: easeIn });
-  const sH = wide ? H * 0.94 : H * 0.6;
-  const sW = sH * (603 / 1081);
-  const wx = wide ? W * 0.68 : cx, wy = wide ? cy : H * 0.58;
+  const sH = wide ? H * 0.86 : H * 0.56;
+  const sW = sH * (605 / 1084);
+  const wx = wide ? W * 0.68 : cx, wy = wide ? cy : H * 0.56;
   const img = (file, clip) => (
-    <Img src={staticFile(`s/${file}.png`)} style={{ position: "absolute", height: sH, left: wx - sW / 2, top: wy - sH / 2, clipPath: clip,
-      filter: `drop-shadow(0 ${30 * u}px ${60 * u}px rgba(0,0,0,0.55))` }} />
+    <div style={{ position: "absolute", inset: 0, filter: `drop-shadow(0 ${30 * u}px ${60 * u}px rgba(0,0,0,0.55))` }}>
+      <Img src={staticFile(`s/${file}.png`)} style={{ position: "absolute", height: sH, left: wx - sW / 2, top: wy - sH / 2, clipPath: clip, WebkitMaskImage: STRAP_FADE, maskImage: STRAP_FADE }} />
+    </div>
   );
   const tx = wide ? 120 * u : 0;
   const chip = 46 * u, gap = 18 * u;

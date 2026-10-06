@@ -39,7 +39,7 @@ export const PLANETS = [
 ];
 
 export const STRAPS = [
-  { file: "black", tint: "#1b1b1f", chip: "#141414" },
+  { file: "vertech-black", tint: "#1b1b1f", chip: "#141414" },
   { file: "vertech-white", tint: "#3a3a40", chip: "#F2F2F0" },
   { file: "vertech-grey", tint: "#2c2e33", chip: "#8B8E93" },
   { file: "vertech-capri-blue", tint: "#0f3550", chip: "#4FB3E8" },
