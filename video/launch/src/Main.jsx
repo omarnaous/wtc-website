@@ -339,7 +339,194 @@ function Wall() {
   );
 }
 
-// ─────────────────────────────────────────── 6. the mark
+// ─────────────────────────────────────────── 6. now online: the shop on a laptop
+// The page is laid out at 1440 px wide (like the real site at desktop size) and scaled onto the screen.
+const PW = 1440, PH = 900, CHROME = 44, NAV = 64;
+const CARDS = [
+  { sku: "SO33W700", name: "Mission to the Moonphase", sub: "Full Moon" },
+  { sku: "SO33M100", name: "Mission to the Moon", sub: "Omega × Swatch" },
+  { sku: "SO33B700", name: "Mission to the Moonphase", sub: "New Moon" },
+  { sku: "SO33N700", name: "Super Blue Moonphase", sub: "Omega × Swatch" },
+];
+const PICK = 1; // the card the cursor buys
+const SCROLL = 900;
+// Card geometry on the page (page px).
+const CARD_W = 300, CARD_GAP = 28, CARD_X0 = (PW - (4 * CARD_W + 3 * CARD_GAP)) / 2, CARD_Y = NAV + 820 + 200, CARD_H = 470;
+const btn = (i) => ({ x: CARD_X0 + i * (CARD_W + CARD_GAP) + CARD_W / 2, y: CARD_Y + CARD_H - 44 });
+
+function Page({ f }) {
+  const scroll = interpolate(f, [T.scroll0, T.scroll1], [0, SCROLL], { ...clamp, easing: inOut });
+  const loaded = after(f, T.load, [0, 10], [0, 1], { easing: easeOut });
+  const added = f >= T.click;
+  const badge = f < T.click ? 0 : spring({ frame: f - T.click, fps: 30, config: { damping: 8, stiffness: 220 } });
+  const toast = f < T.toast ? 0 : spring({ frame: f - T.toast, fps: 30, config: { damping: 14, stiffness: 160 } });
+  const hb = btn(PICK);
+  const press = f >= T.click && f < T.click + 4 ? 0.94 : 1;
+  // cursor: comes in from the right after the scroll, lands on the button
+  const mv = interpolate(f, [T.move0, T.click - 2], [0, 1], { ...clamp, easing: inOut });
+  const curX = interpolate(mv, [0, 1], [PW * 0.92, hb.x + 30]);
+  const curY = interpolate(mv, [0, 1], [PH * 0.45, hb.y - SCROLL + CHROME - 6]);
+  const hover = mv > 0.9;
+  return (
+    <div style={{ width: PW, height: PH, background: C.ink, position: "relative", overflow: "hidden", fontFamily: SANS, color: C.chalk }}>
+      {/* the page */}
+      <div style={{ position: "absolute", left: 0, right: 0, top: CHROME, bottom: 0, overflow: "hidden", opacity: loaded }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: -scroll + (1 - loaded) * 30 }}>
+          {/* hero */}
+          <div style={{ position: "relative", height: 820, marginTop: NAV, borderBottom: `1px solid ${C.line}`, overflow: "hidden" }}>
+            <Img src={watch("SO33M100")} style={{ position: "absolute", right: 120, top: -120, height: 1040, transform: `rotate(-8deg) translateY(${-scroll * 0.25}px)` }} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, #09090a 0%, rgba(9,9,10,0.88) 30%, rgba(9,9,10,0.4) 50%, transparent 70%)" }} />
+            <div style={{ position: "absolute", left: 96, bottom: 76, width: 760 }}>
+              <div style={{ fontFamily: "Mono", fontSize: 12, letterSpacing: "0.28em", color: C.goldSoft, textTransform: "uppercase" }}>Watch Trade Chronicles</div>
+              <div style={{ marginTop: 20, fontFamily: DISPLAY, fontWeight: 700, fontSize: 92, lineHeight: 0.95, letterSpacing: "-0.03em" }}>
+                Every watch,<br /><span style={{ fontFamily: SERIF, fontWeight: 400, fontStyle: "italic", color: C.goldSoft }}>one insider.</span>
+              </div>
+              <div style={{ marginTop: 24, fontSize: 16, lineHeight: 1.6, color: C.mute, width: 470 }}>Carefully sourced watches, checked in hand and shipped complete — with everything they came with.</div>
+              <div style={{ marginTop: 34, display: "flex", gap: 12 }}>
+                <div style={{ borderRadius: 999, background: C.chalk, color: C.ink, padding: "15px 28px", fontSize: 14, fontWeight: 600 }}>Shop the collection</div>
+                <div style={{ borderRadius: 999, border: `1px solid ${C.line}`, padding: "15px 28px", fontSize: 14 }}>Try the Strap Studio</div>
+              </div>
+              <div style={{ marginTop: 52, paddingTop: 26, borderTop: `1px solid ${C.line}`, display: "flex", gap: 64 }}>
+                {[["200+", "Satisfied customers"], ["26", "Items in stock"], ["100%", "Carefully selected"]].map(([v, l]) => (
+                  <div key={l}><div style={{ fontFamily: DISPLAY, fontWeight: 500, fontSize: 30 }}>{v}</div><div style={{ marginTop: 4, fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: C.mute }}>{l}</div></div>
+                ))}
+              </div>
+            </div>
+          </div>
+          {/* bestsellers */}
+          <div style={{ position: "relative", height: 900, padding: "84px 96px 0" }}>
+            <div style={{ fontFamily: "Mono", fontSize: 12, letterSpacing: "0.28em", color: C.goldSoft, textTransform: "uppercase" }}>Bestsellers</div>
+            <div style={{ marginTop: 16, fontFamily: DISPLAY, fontWeight: 700, fontSize: 52, letterSpacing: "-0.03em" }}>The most wanted, <span style={{ fontFamily: SERIF, fontWeight: 400, fontStyle: "italic", color: C.goldSoft }}>ready to ship.</span></div>
+            {CARDS.map((c, i) => {
+              const isPick = i === PICK;
+              const lift = isPick && hover ? -6 : 0;
+              return (
+                <div key={c.sku} style={{ position: "absolute", left: CARD_X0 + i * (CARD_W + CARD_GAP), top: CARD_Y - NAV - 820, width: CARD_W, height: CARD_H, borderRadius: 26, border: `1px solid ${isPick && hover ? C.gold : C.line}`,
+                  background: "radial-gradient(ellipse at 50% 40%, #1b1b21 0%, #111114 60%, #0b0b0d 100%)", overflow: "hidden", transform: `translateY(${lift}px)` }}>
+                  <div style={{ position: "absolute", left: 18, top: 16, fontFamily: DISPLAY, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", color: C.goldSoft, border: `1px solid rgba(201,162,39,0.3)`, borderRadius: 99, padding: "4px 10px" }}>No. {String(i + 1).padStart(2, "0")}</div>
+                  <Img src={watch(c.sku)} style={{ position: "absolute", left: (CARD_W - 270 * WATCH_AR) / 2, top: 30, height: 270 }} />
+                  <div style={{ position: "absolute", left: 20, right: 20, top: 316 }}>
+                    <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 19, letterSpacing: "-0.01em" }}>{c.name}</div>
+                    <div style={{ marginTop: 3, fontSize: 13, color: C.mute }}>{c.sub}</div>
+                  </div>
+                  <div style={{ position: "absolute", left: 20, right: 20, bottom: 22, height: 46, borderRadius: 99, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 600,
+                    background: isPick && added ? C.gold : isPick && hover ? C.goldSoft : C.chalk, color: C.ink, transform: `scale(${isPick ? press : 1})` }}>
+                    {isPick && added ? "Added to bag ✓" : "Add to bag"}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {/* sticky header */}
+        <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: NAV, background: "rgba(9,9,10,0.95)", borderBottom: `1px solid ${C.line}`, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 96px" }}>
+          <div style={{ fontFamily: SERIF, fontSize: 30, letterSpacing: "0.04em" }}>WTC</div>
+          <div style={{ display: "flex", gap: 36, fontSize: 13, color: C.mute, fontWeight: 500 }}>{["Shop", "Strap Studio", "Collections", "Reviews"].map((n) => <span key={n}>{n}</span>)}</div>
+          <div style={{ position: "relative", width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={C.chalk} strokeWidth="1.6"><path d="M5 8h14l-1 12H6L5 8z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" /></svg>
+            {badge > 0.01 && <div style={{ position: "absolute", right: -2, top: -2, width: 20, height: 20, borderRadius: 99, background: C.gold, color: C.ink, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${badge})` }}>1</div>}
+          </div>
+        </div>
+        {/* toast */}
+        {toast > 0.01 && (
+          <div style={{ position: "absolute", right: 40, top: NAV + 20, width: 360, padding: 16, borderRadius: 18, background: "#16161a", border: `1px solid ${C.line}`, display: "flex", gap: 14, alignItems: "center",
+            transform: `translateX(${(1 - toast) * 420}px)`, boxShadow: "0 20px 50px rgba(0,0,0,0.6)" }}>
+            <div style={{ width: 54, height: 54, borderRadius: 12, background: "#0d0d10", position: "relative", overflow: "hidden" }}><Img src={watch(CARDS[PICK].sku)} style={{ position: "absolute", height: 92, left: (54 - 92 * WATCH_AR) / 2, top: -19 }} /></div>
+            <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 600 }}>Added to your bag</div><div style={{ fontSize: 12, color: C.mute, marginTop: 2 }}>{CARDS[PICK].name}</div></div>
+            <div style={{ borderRadius: 99, background: C.gold, color: C.ink, padding: "9px 14px", fontSize: 12, fontWeight: 700 }}>Checkout</div>
+          </div>
+        )}
+      </div>
+      {/* browser chrome */}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: CHROME, background: "#141417", borderBottom: "1px solid #222", display: "flex", alignItems: "center", gap: 14, padding: "0 16px" }}>
+        <div style={{ display: "flex", gap: 7 }}>{["#ff5f57", "#febc2e", "#28c840"].map((c) => <div key={c} style={{ width: 12, height: 12, borderRadius: 99, background: c }} />)}</div>
+        <div style={{ flex: 1, maxWidth: 620, margin: "0 auto", height: 28, borderRadius: 8, background: "#1f1f24", display: "flex", alignItems: "center", gap: 8, padding: "0 12px", fontSize: 14, color: C.chalk }}>
+          <svg width="12" height="12" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke={C.mute} strokeWidth="2.4" /><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke={C.mute} strokeWidth="2.4" /></svg>
+          <UrlTyping f={f} />
+        </div>
+      </div>
+      {f < T.load && <div style={{ position: "absolute", left: 0, right: 0, top: CHROME, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ fontFamily: SERIF, fontSize: 64, color: "#222" }}>WTC</div></div>}
+      {/* load bar */}
+      {f >= T.type1 && f < T.load + 12 && <div style={{ position: "absolute", left: 0, top: CHROME - 2, height: 3, width: `${interpolate(f, [T.type1, T.load + 8], [0, 100], clamp)}%`, background: C.gold }} />}
+      {/* cursor */}
+      {f >= T.move0 && (
+        <svg width="34" height="34" viewBox="0 0 24 24" style={{ position: "absolute", left: curX, top: curY, transform: `scale(${press})`, filter: "drop-shadow(0 3px 4px rgba(0,0,0,0.6))" }}>
+          {hover ? <path d="M9 11V4.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3.5 14a1.5 1.5 0 0 1 2.4-1.8L9 15" fill="#fff" stroke="#000" strokeWidth="1.2" />
+            : <path d="M4 2l15 11-7 1-4 7z" fill="#fff" stroke="#000" strokeWidth="1.3" strokeLinejoin="round" />}
+        </svg>
+      )}
+      {f >= T.click && f < T.click + 14 && (
+        <div style={{ position: "absolute", left: hb.x - 40, top: hb.y - SCROLL - 40 + CHROME, width: 80, height: 80, borderRadius: 99, border: `2px solid ${C.goldSoft}`,
+          transform: `scale(${interpolate(f - T.click, [0, 14], [0.3, 1.6], clamp)})`, opacity: interpolate(f - T.click, [0, 14], [1, 0], clamp) }} />
+      )}
+    </div>
+  );
+}
+
+function UrlTyping({ f }) {
+  const url = "watchtradechronicles.com";
+  const n = Math.round(interpolate(f, [T.type0, T.type1], [0, url.length], clamp));
+  const caret = f < T.load && Math.floor(f / 6) % 2 === 0;
+  return <span>{url.slice(0, n)}<span style={{ opacity: caret ? 1 : 0, color: C.gold }}>|</span></span>;
+}
+
+function Site() {
+  const f = useCurrentFrame();
+  const { W, H, u, cx, cy, wide } = useLayout();
+  const { fps } = useVideoConfig();
+  const rise = spring({ frame: f, fps, config: { damping: 16, stiffness: 90 } });
+  const lid = interpolate(spring({ frame: f - 4, fps, config: { damping: 13, stiffness: 70 } }), [0, 1], [-92, 0]);
+  const on = after(f, 14, [0, 8], [0, 1]);
+  const push = interpolate(f, [T.push, 150], [0, 1], { ...clamp, easing: easeIn });
+  const SW = wide ? W * 0.6 : W * 0.92;           // screen width incl. bezel
+  const bez = 16 * u;
+  const SH = (SW - 2 * bez) * (PH / PW) + 2 * bez + 8 * u;
+  const lx = wide ? W * 0.635 : cx, ly = wide ? cy + 10 * u : H * 0.52; // screen centre
+  const scale = (SW - 2 * bez) / PW;
+  const zoom = 1 + push * 2.2;
+  const textX = 110 * u;
+  const tilt = interpolate(f, [0, 60, 150], [10, 4, 0], clamp);
+  return (
+    <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
+      <AbsoluteFill style={{ background: `radial-gradient(ellipse at ${(lx / W) * 100}% ${(ly / H) * 100}%, rgba(201,162,39,${0.08 + on * 0.18}), transparent 60%)` }} />
+      <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: `${lx}px ${ly}px`, opacity: 1 - interpolate(f, [142, 150], [0, 1], clamp) }}>
+        {/* the laptop */}
+        <div style={{ position: "absolute", left: lx - SW / 2, top: ly - SH / 2 + (1 - rise) * 260 * u, width: SW, height: SH + 60 * u, perspective: 2400 * u, transform: `rotateY(${-tilt}deg)` }}>
+          <div style={{ position: "absolute", left: SW * 0.08, right: SW * 0.08, top: SH + 34 * u, height: 50 * u, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(0,0,0,0.85), transparent 70%)", filter: `blur(${8 * u}px)` }} />
+          <div style={{ position: "absolute", left: 0, top: 0, width: SW, height: SH, transformOrigin: "50% 100%", transform: `rotateX(${lid}deg)`, borderRadius: 22 * u, background: "linear-gradient(180deg,#2a2a2f,#18181c)", padding: bez, boxShadow: `0 0 0 ${1.5 * u}px #3a3a40 inset, 0 ${40 * u}px ${90 * u}px rgba(0,0,0,0.6)` }}>
+            <div style={{ position: "absolute", left: SW / 2 - 4 * u, top: 6 * u, width: 8 * u, height: 8 * u, borderRadius: 99, background: "#0c0c0e" }} />
+            <div style={{ position: "relative", width: SW - 2 * bez, height: (SW - 2 * bez) * (PH / PW), borderRadius: 6 * u, overflow: "hidden", background: "#000", marginTop: 8 * u }}>
+              <div style={{ width: PW, height: PH, transform: `scale(${scale})`, transformOrigin: "0 0", opacity: on }}><Page f={f} /></div>
+              {/* glare */}
+              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(115deg, transparent ${interpolate(f, [14, 70], [-20, 90], clamp)}%, rgba(255,255,255,0.10) ${interpolate(f, [14, 70], [-10, 100], clamp)}%, transparent ${interpolate(f, [14, 70], [0, 110], clamp)}%)` }} />
+            </div>
+          </div>
+          {/* base */}
+          <div style={{ position: "absolute", left: -SW * 0.07, width: SW * 1.14, top: SH - 2 * u, height: 26 * u, background: "linear-gradient(180deg,#3a3a40 0%,#232327 55%,#151518 100%)", clipPath: `polygon(0 0, 100% 0, 98.5% 100%, 1.5% 100%)`, borderRadius: `0 0 ${14 * u}px ${14 * u}px` }}>
+            <div style={{ position: "absolute", left: "50%", marginLeft: -SW * 0.08, width: SW * 0.16, top: 0, height: 9 * u, background: "#1a1a1e", borderRadius: `0 0 ${10 * u}px ${10 * u}px` }} />
+          </div>
+        </div>
+      </AbsoluteFill>
+      {/* the message */}
+      <div style={{ position: "absolute", ...(wide ? { left: textX, top: cy - 200 * u, width: W * 0.27 } : { left: 0, right: 0, top: H * 0.1, textAlign: "center" }), opacity: 1 - push * 2 }}>
+        <Mono style={{ fontSize: (wide ? 20 : 24) * u, color: C.goldSoft, opacity: after(f, T.now - 6, [0, 8], [0, 1]) }}>New · Online store</Mono>
+        <div style={{ marginTop: 20 * u, fontFamily: DISPLAY, fontWeight: 700, fontSize: (wide ? 112 : 124) * u, letterSpacing: "-0.045em", lineHeight: 0.95, textTransform: "uppercase", color: C.chalk }}>
+          <Rise f={f} start={T.now} text="Now online." style={{ justifyContent: wide ? "flex-start" : "center" }} />
+        </div>
+        <div style={{ marginTop: 10 * u, fontFamily: SERIF, fontStyle: "italic", fontSize: (wide ? 88 : 96) * u, color: C.goldSoft, lineHeight: 1.05 }}>
+          <Rise f={f} start={T.order} text="Order from anywhere." style={{ justifyContent: wide ? "flex-start" : "center" }} />
+        </div>
+      </div>
+      {!wide && (
+        <div style={{ position: "absolute", left: 0, right: 0, top: H * 0.78, textAlign: "center", opacity: after(f, T.toast, [0, 10], [0, 1]) * (1 - push * 2) }}>
+          <Mono style={{ fontSize: 26 * u, color: C.chalk }}>Add to bag · Checkout · Delivered</Mono>
+        </div>
+      )}
+    </AbsoluteFill>
+  );
+}
+
+// ─────────────────────────────────────────── 7. the mark
 function Logo() {
   const f = useCurrentFrame();
   const { W, H, u, cx, wide } = useLayout();
@@ -357,12 +544,12 @@ function Logo() {
   const glow = f < h ? 0 : interpolate(f - h, [0, 3, 30], [1.3, 1.3, 0.6], clamp);
   const tag = after(f, T.tagline, [0, 16], [0, 1], { easing: easeOut });
   const url = "watchtradechronicles.com";
-  const typed = Math.round(interpolate(f, [T.url0, T.url1], [0, url.length], clamp));
+  const typed = url.length;
   const urlIn = after(f, T.url0 - 6, [0, 10], [0, 1], { easing: easeOut });
   const cta = f < T.cta ? 0 : spring({ frame: f - T.cta, fps, config: { damping: 12, stiffness: 160 } });
   const sheen = interpolate(f, [T.sheen, T.sheen + 22], [-30, 130], clamp);
   const wtcSize = 240 * u;
-  const caret = f < T.url1 + 10 ? (Math.floor(f / 8) % 2 ? 1 : 0) : 0;
+  const caret = 0;
   const mark = (
     <div style={{ position: "absolute", left: 0, right: 0, top: cy + 2 * u, textAlign: "center", fontFamily: SERIF, fontSize: wtcSize, lineHeight: 1, letterSpacing: "0.04em", color: "var(--fx-fill, #f4f3f0)" }}>WTC</div>
   );
@@ -400,7 +587,7 @@ function Logo() {
           <span>{url.slice(0, typed)}<span style={{ opacity: caret, color: C.gold }}>|</span><span style={{ opacity: 0 }}>{url.slice(typed)}</span></span>
         </div>
         <div style={{ transform: `scale(${cta})`, opacity: Math.min(1, cta * 1.5), padding: `${18 * u}px ${44 * u}px`, borderRadius: 999, background: C.gold, color: C.ink, fontFamily: DISPLAY, fontWeight: 700, fontSize: (wide ? 36 : 40) * u, letterSpacing: "0.02em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-          Shop the collection →
+          Order now →
         </div>
       </div>
       <Flash f={f} start={h} peak={0.85} />
@@ -427,6 +614,7 @@ export const Main = () => {
       <Sequence from={S.orbit} durationInFrames={S.strap - S.orbit}><ClockWipe dur={T.wipe}><Orbit /></ClockWipe></Sequence>
       <Sequence from={S.strap} durationInFrames={S.wall - S.strap + T.wipe}><Strap /></Sequence>
       <Sequence from={S.wall} durationInFrames={S.logo - S.wall}><ClockWipe dur={T.wipe}><Wall /></ClockWipe></Sequence>
+      <Sequence from={S.site} durationInFrames={S.logo - S.site}><Site /></Sequence>
       <Sequence from={S.logo}><Logo /></Sequence>
       <Vignette strength={0.5} />
       <Grain f={f} opacity={0.06} />

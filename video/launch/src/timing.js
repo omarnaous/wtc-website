@@ -1,6 +1,6 @@
 // Beat sheet in frames (30 fps, 120 BPM = 15 frames a beat). Picture and sound/cues.json both use these.
 export const FPS = 30;
-export const DURATION = 600; // 20 s
+export const DURATION = 750; // 25 s
 
 // Scene starts (global frames).
 export const S = {
@@ -9,7 +9,8 @@ export const S = {
   orbit: 150,   // 32 watches in orbit around a counter (enters on a clock wipe)
   strap: 270,   // Strap Studio: straps swap, accelerating
   wall: 390,    // the whole collection as a wall, zoom-through
-  logo: 480,    // silence, then the WTC mark
+  site: 480,    // NOW ONLINE: a laptop opens on the shop; a watch goes in the bag
+  logo: 630,    // silence, then the WTC mark
 };
 
 export const T = {
@@ -24,6 +25,8 @@ export const T = {
   swaps: [0, 18, 32, 44, 54, 62, 69, 75, 80], // strap: swap frames (local), last one lands
   logoHit: 6,   // logo: after 6 frames of silence (local)
   tagline: 22, url0: 34, url1: 62, cta: 70, sheen: 88,
+  // site (local frames)
+  lid: 0, type0: 12, type1: 32, load: 36, now: 40, order: 50, scroll0: 54, scroll1: 84, move0: 84, click: 104, toast: 107, push: 130,
 };
 
 export const PLANETS = [

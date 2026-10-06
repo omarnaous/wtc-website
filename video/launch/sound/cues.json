@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 20,
+ "duration": 25,
  "seed": 11,
  "lowpass": 9000,
  "fade_out": 0.8,
@@ -8,7 +8,7 @@
   {
    "type": "drone",
    "start": 0,
-   "end": 486,
+   "end": 636,
    "freq": 55,
    "gain": 0.12
   },
@@ -470,74 +470,74 @@
   {
    "type": "riser",
    "start": 450,
-   "end": 476,
+   "end": 478,
    "gain": 0.6,
    "freq": 110
   },
   {
    "type": "impact",
-   "frame": 486,
+   "frame": 636,
    "gain": 1.0
   },
   {
    "type": "tick",
-   "frame": 487,
+   "frame": 637,
    "gain": 0.08,
    "freq": 2200,
    "pan": -0.6
   },
   {
    "type": "tick",
-   "frame": 489,
+   "frame": 639,
    "gain": 0.08,
    "freq": 2320,
    "pan": -0.39999999999999997
   },
   {
    "type": "tick",
-   "frame": 491,
+   "frame": 641,
    "gain": 0.08,
    "freq": 2440,
    "pan": -0.19999999999999996
   },
   {
    "type": "tick",
-   "frame": 493,
+   "frame": 643,
    "gain": 0.08,
    "freq": 2560,
    "pan": 1.1102230246251565e-16
   },
   {
    "type": "tick",
-   "frame": 495,
+   "frame": 645,
    "gain": 0.08,
    "freq": 2680,
    "pan": 0.20000000000000007
   },
   {
    "type": "tick",
-   "frame": 497,
+   "frame": 647,
    "gain": 0.08,
    "freq": 2800,
    "pan": 0.4
   },
   {
    "type": "tick",
-   "frame": 499,
+   "frame": 649,
    "gain": 0.08,
    "freq": 2920,
    "pan": 0.6000000000000002
   },
   {
    "type": "chime",
-   "frame": 502,
+   "frame": 652,
    "gain": 0.22,
    "freq": 880
   },
   {
    "type": "pad",
-   "start": 486,
-   "end": 600,
+   "start": 636,
+   "end": 750,
    "gain": 0.08,
    "chord": [
     110,
@@ -548,20 +548,113 @@
    ]
   },
   {
-   "type": "typing",
-   "start": 514,
-   "end": 542,
-   "gain": 0.35
-  },
-  {
    "type": "pop",
-   "frame": 550,
+   "frame": 700,
    "gain": 0.3
   },
   {
    "type": "glint",
-   "frame": 568,
+   "frame": 718,
    "gain": 0.1
+  },
+  {
+   "type": "whoosh",
+   "frame": 480,
+   "dur": 0.7,
+   "gain": 0.25
+  },
+  {
+   "type": "impact",
+   "frame": 482,
+   "gain": 0.5
+  },
+  {
+   "type": "tick",
+   "frame": 496,
+   "gain": 0.18,
+   "freq": 1400
+  },
+  {
+   "type": "typing",
+   "start": 492,
+   "end": 512,
+   "gain": 0.35
+  },
+  {
+   "type": "click",
+   "frame": 513,
+   "gain": 0.4,
+   "freq": 700
+  },
+  {
+   "type": "whoosh",
+   "frame": 516,
+   "dur": 0.4,
+   "gain": 0.14,
+   "pan": 0.3
+  },
+  {
+   "type": "beat",
+   "start": 520,
+   "end": 608,
+   "bpm": 120,
+   "pattern": "four-on-floor",
+   "gain": 0.5,
+   "hats": 0.3
+  },
+  {
+   "type": "kick",
+   "frame": 520,
+   "gain": 0.5
+  },
+  {
+   "type": "pad",
+   "start": 516,
+   "end": 630,
+   "gain": 0.06,
+   "chord": [
+    110,
+    164.8,
+    220,
+    277.2,
+    329.6
+   ]
+  },
+  {
+   "type": "whoosh",
+   "frame": 534,
+   "dur": 1.0,
+   "gain": 0.12
+  },
+  {
+   "type": "click",
+   "frame": 584,
+   "gain": 0.5,
+   "freq": 1100,
+   "pan": 0.2
+  },
+  {
+   "type": "pop",
+   "frame": 585,
+   "gain": 0.35
+  },
+  {
+   "type": "cash",
+   "frame": 588,
+   "gain": 0.3
+  },
+  {
+   "type": "chime",
+   "frame": 590,
+   "gain": 0.18,
+   "freq": 1320,
+   "pan": 0.3
+  },
+  {
+   "type": "riser",
+   "start": 604,
+   "end": 626,
+   "gain": 0.5
   }
  ]
 }
