@@ -8,20 +8,24 @@ import { sparkPath } from "./brand.js";
 import { warp, T, DATA, filmFrame } from "./timing.js";
 
 const MOODS0 = [
-  [0, { brow: 2, lid: 0.35, smile: 0.2, look: 6 }],         // unimpressed at the plain photo
-  [T.turn, { brow: 20, lid: 0.1, smile: 1, look: 7 }],      // watch this!
-  [T.show + 10, { brow: 14, lid: 0.12, smile: 1, look: 8 }],// proud, watching the film
-  [T.cta, { brow: 12, lid: 0.05, smile: 1, look: 6 }],      // friendly close
+  [0, { brow: 10, lid: 0.15, smile: 0.6, look: 6 }],         // POV...
+  [T.swipe, { brow: 0, lid: 0.55, smile: 0, look: 6 }],      // yeah... good luck with that
+  [T.turn, { brow: 20, lid: 0.1, smile: 1, look: 7 }],       // but what if...
+  [T.talk, { brow: 22, lid: 0.05, smile: 1, look: 8 }],      // okay, THAT got my attention
+  [T.twist, { brow: 6, lid: 0.3, smile: 0.4, look: 6 }],     // "but my product isn't WTC"
+  [T.morph, { brow: 20, lid: 0.08, smile: 1, look: 7 }],     // exactly.
+  [T.cta, { brow: 12, lid: 0.05, smile: 1, look: 6 }],       // friendly close
 ];
 // [type, start, end]
 const ACTS0 = [
-  ["point", 20, T.swipe], ["shock", T.swipe + 6, T.turn - 1], ["jump", T.turn, T.turn + 16], ["happy", T.turn, T.turn + 20],
-  ["point", T.show + 8, T.show + 70], ["thumbs", filmFrame(6), filmFrame(8.5)], ["happy", filmFrame(10), filmFrame(12)],
-  ["point", filmFrame(17.5), filmFrame(20.5)], ["thumbs", filmFrame(21.5), filmFrame(24)],
-  ["point", DATA.people.at - 4, DATA.people.at + 40], ["thumbs", DATA.marketers.at, DATA.marketers.at + 50], ["happy", DATA.marketers.at + 28, DATA.marketers.at + 56],
-  ["wave", T.cta + 2, T.cta + 30], ["point", T.cta + 44, T.end - 10], ["wink", T.cta + 90, T.cta + 110],
+  ["point", 16, T.swipe - 4], ["lean", T.swipe, T.turn - 2], ["jump", T.turn + 30, T.turn + 46], ["point", T.turn + 6, T.show - 2],
+  ["shock", T.talk, T.talk + 22], ["jump", T.talk + 2, T.talk + 18], ["happy", T.talk + 6, T.talk + 40],
+  ["point", T.talk + 50, T.reveal - 4], ["thumbs", T.reveal, T.reveal + 60],
+  ["lean", T.twist + 6, T.morph - 4], ["point", T.morph, T.morph + 40], ["wink", T.morph + 2, T.morph + 18],
+  ["point", DATA.people.at - 4, DATA.people.at + 40],
+  ["wave", T.cta + 2, T.cta + 28], ["point", T.q2, T.fun], ["thumbs", T.fun, T.end - 6],
 ];
-const EMOTES0 = [["?", 30, T.swipe], ["!", T.turn, T.turn + 30], ["spark", filmFrame(10), filmFrame(12.5)]];
+const EMOTES0 = [["?", 30, T.swipe], ["sweat", T.swipe, T.turn], ["!", T.talk, T.talk + 34], ["?", T.twist + 6, T.morph], ["spark", T.morph + 4, T.morph + 40]];
 
 const MOODS = MOODS0.map(([f, m]) => [warp(f), m]);
 const ACTS = ACTS0.map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);

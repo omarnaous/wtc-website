@@ -4,30 +4,33 @@ export const FPS = 30;
 export const DURATION = VO.duration;
 const A = VO.anchors;
 export const T = {
-  hook: A.hook,       // a plain product photo in a feed post
-  swipe: A.turn - 27, // it gets scrolled away
-  turn: A.turn,       // record scratch: "Watch this."
-  show: A.show,       // the WTC launch film starts
-  conv: A.conv,       // conversion beat: plain photo vs motion ad
-  cta: A.cta,         // want one? DM "Motion"
+  hook: A.hook,       // POV: a plain product photo
+  swipe: A.swipe,     // "Yeah... good luck with that." it gets scrolled away
+  turn: A.turn,       // "But what if we made your product do... this?"
+  show: A.show,       // hard cut into the WTC film
+  talk: A.talk,       // "Okay... that got my attention." (film sound stops)
+  reveal: A.reveal,   // "This is the launch film we made for WTC." header comes in
+  twist: A.twist,     // "And before you say..." the plain sneaker
+  morph: A.morph,     // "Exactly." it turns into a motion ad
+  conv: A.conv,       // the 85% proof
+  cta: A.cta,         // still posting product photos? / or making people stop scrolling?
+  q2: A.q2,
+  fun: A.fun,
   end: A.end,
 };
 // what's on screen in the film (seconds on the film's own clock) -> label under the screen
 export const TECH = [
   [1.5, 5.5, "Kinetic typography"],
   [5.5, 9.6, "Animated counters"],
-  [9.6, 17.6, "Product try-on"],
-  [17.6, 21.0, "Website launch"],
-  [21.0, 25, "Logo reveal"],
+  [9.6, 21.3, "Product try-on"],
+  [21.3, 25, "Logo reveal"],
 ];
-// the data beat: real survey figures, shown with their source; each one animates as the voice says it
+// the proof: a real survey figure, shown with its source; it lands as the voice says it
 const wordAt = (w) => VO.words.find((x) => x.w.startsWith(w))?.start ?? A.conv;
 export const DATA = {
   source: "Source: Wyzowl, State of Video Marketing 2026",
-  people: { pct: 85, at: wordAt("85%"), text: "of people say a video has convinced them to buy" },
-  marketers: { pct: 83, at: wordAt("83%"), text: "of marketers say video directly increased their sales" },
+  people: { pct: 85, at: wordAt("85%"), text: "of people say a video convinced them to buy" },
 };
-// the film plays at real speed with one cut (CUT segments on the film's clock, see vo/vo.py)
 export const CUT = A.cut || [[0, 25]];
 export const filmFrame = (sec) => { // film-clock seconds -> reel frame
   let t = 0;

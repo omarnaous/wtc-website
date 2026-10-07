@@ -6,6 +6,7 @@ import { C, DISPLAY, MONO, Words } from "./ui.jsx";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Grain, Vignette } from "./fx.jsx";
 import { random } from "remotion";
 import { WORDMARK, sparkPath } from "./brand.js";
+import { Sneaker } from "./products.jsx";
 import { Presenter } from "./Presenter.jsx";
 
 const SX = 30, SY = 420, SW = 1020, SH = Math.round(1020 * 9 / 16); // the screen the film plays in
@@ -16,8 +17,11 @@ function Hook({ f }) {
   const gone = interpolate(f, [T.swipe + 12, T.swipe + 18], [0, 1], clamp);
   return (
     <AbsoluteFill>
-      <Words text="Still posting boring" y={250} size={84} color={C.ink} start={2} />
-      <Words text="product photos?" y={350} size={104} color={C.uv} start={8} />
+      <div style={{ opacity: interpolate(f, [T.show - 18, T.show - 13], [1, 0], clamp) }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 226, textAlign: "center", ...MONO, fontSize: 34, color: C.uv, letterSpacing: "0.3em" }}>POV</div>
+        <Words text="Another product photo." y={286} size={80} color={C.ink} start={4} />
+        <Words text="Zero reactions." y={384} size={100} color={C.alert} start={34} />
+      </div>
       {/* a plain feed post */}
       <div style={{ position: "absolute", left: 230, top: 510, width: 620, borderRadius: 26, background: "#fff", overflow: "hidden", boxShadow: "0 30px 60px rgba(10,9,19,.18)", border: "2px solid rgba(10,9,19,.08)", opacity: Math.min(1, inP * 1.5) * (1 - away), transform: `translateY(${(1 - inP) * 80 - away * 900}px) rotate(${away * -6}deg)` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 22px" }}>
@@ -27,21 +31,22 @@ function Hook({ f }) {
         <Img src={staticFile("still.jpg")} style={{ width: 620, height: 470, objectFit: "cover", filter: "saturate(.75)" }} />
         <div style={{ padding: "16px 22px 22px", fontFamily: "UI", fontSize: 24, color: "#222" }}>♡ 3 likes · New watch in stock 🔥 DM for price</div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 760, textAlign: "center", ...MONO, fontSize: 48, color: C.alert, opacity: gone * interpolate(f, [T.turn - 4, T.turn], [1, 0], clamp) }}>SCROLLED PAST.</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 760, textAlign: "center", ...MONO, fontSize: 48, color: C.alert, opacity: gone * interpolate(f, [T.turn - 4, T.turn], [1, 0], clamp) }}>GOOD LUCK WITH THAT.</div>
     </AbsoluteFill>
   );
 }
 
 function Showcase({ f, client, film }) {
   const t = f >= T.show ? filmClock(f) : -1;          // seconds on the film's clock
-  const inP = spring({ frame: f - T.turn, fps: 30, config: { damping: 13, stiffness: 160 } });
-  const outP = interpolate(f, [T.conv, T.conv + 8], [0, 1], { ...clamp, easing: easeIn });
+  const inP = f >= T.show ? 1 : 0;                                                  // hard cut in
+  const hd = spring({ frame: f - T.reveal, fps: 30, config: { damping: 13, stiffness: 180 } });  // header lands on the reveal line
+  const outP = interpolate(f, [T.twist, T.twist + 8], [0, 1], { ...clamp, easing: easeIn });
   const cur = TECH.findIndex(([a, b]) => t >= a && t < b);
   const glow = 0.35 + 0.1 * Math.sin(f / 16);
   return (
     <AbsoluteFill style={{ opacity: 1 - outP, transform: `translateY(${-outP * 120}px)` }}>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 236, textAlign: "center", ...MONO, fontSize: 28, color: C.uv, letterSpacing: "0.22em", opacity: inP }}>{film.toUpperCase()} · {client}</div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 286, textAlign: "center", ...DISPLAY, fontSize: 78, color: C.ink, opacity: inP, transform: `translateY(${(1 - inP) * 40}px)` }}>Made by Appify <span style={{ color: C.uv }}>✦</span></div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 236, textAlign: "center", ...MONO, fontSize: 28, color: C.uv, letterSpacing: "0.22em", opacity: hd }}>{film.toUpperCase()} · {client}</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 286, textAlign: "center", ...DISPLAY, fontSize: 78, color: C.ink, opacity: hd, transform: `translateY(${(1 - hd) * 40}px) scale(${0.9 + 0.1 * hd})` }}>Made by Appify <span style={{ color: C.uv }}>✦</span></div>
       <div style={{ position: "absolute", left: SX - 14, top: SY - 14, width: SW + 28, height: SH + 28, borderRadius: 34, background: "#14121F", border: "2px solid rgba(10,9,19,.6)", boxShadow: `0 40px 100px rgba(91,43,255,${glow * 0.7})`, transform: `scale(${0.85 + 0.15 * inP})`, opacity: Math.min(1, inP * 1.4) }}>
         <div style={{ position: "absolute", left: 14, top: 14, width: SW, height: SH, borderRadius: 22, overflow: "hidden", background: "#000" }}>
           {CUT.map(([a, b], i) => (
@@ -81,53 +86,79 @@ function Person({ on, k }) {
   );
 }
 
-// Data beat: 20 people light up to 85% as the voice says it, then a ring fills to 83%; source on screen.
-function Conversion({ f }) {
-  const { people: P1, marketers: P2 } = DATA;
-  const head = spring({ frame: f - T.conv - 9, fps: 30, config: { damping: 13 } });
+// Twist: "...but my product isn't WTC" -> "Exactly." A flat grey sneaker photo turns into a motion ad.
+function Twist({ f }) {
+  const inP = spring({ frame: f - T.twist, fps: 30, config: { damping: 14 } });
+  const out = interpolate(f, [T.conv, T.conv + 10], [0, 1], { ...clamp, easing: easeIn });
+  const m = f - T.morph;
+  const flip = interpolate(m, [0, 10], [0, 1], { ...clamp, easing: easeOut });
+  const color = interpolate(m, [4, 14], [0, 1], clamp);
+  const hero = spring({ frame: m - 6, fps: 30, config: { damping: 9, stiffness: 200 } });
+  const word = (i) => spring({ frame: m - 10 - i * 4, fps: 30, config: { damping: 10, stiffness: 240 } });
+  const price = interpolate(m, [16, 34], [0, 129], { ...clamp, easing: easeOut });
+  const spinY = m >= 0 ? interpolate(hero, [0, 1], [-90, 0]) + Math.sin(m / 14) * 10 : 0;
+  const tiltR = m >= 0 ? Math.sin(m / 10) * 4 - 6 : 0;
+  const after = m >= 0;
+  return (
+    <AbsoluteFill style={{ opacity: Math.min(1, inP * 1.5) * (1 - out), transform: `translateY(${(1 - inP) * 60 - out * 80}px)` }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 230, textAlign: "center", ...MONO, fontSize: 28, color: C.uv, letterSpacing: "0.22em" }}>{after ? "SAME PRODUCT · IN MOTION" : "YOUR PRODUCT"}</div>
+      <div style={{ position: "absolute", left: 140, top: 300, width: 800, height: 800, borderRadius: 36, overflow: "hidden",
+        background: after ? `linear-gradient(160deg, rgba(91,43,255,${color}) 0%, rgba(20,18,31,${color}) 70%), #EEEDF2` : "#EEEDF2",
+        border: "2px solid rgba(10,9,19,.08)", boxShadow: after ? `0 40px 100px rgba(91,43,255,${0.45 * color})` : "0 24px 50px rgba(10,9,19,.12)",
+        transform: `perspective(1400px) rotateY(${interpolate(flip, [0, 0.5, 1], [0, 12, 0])}deg) scale(${1 + 0.04 * Math.sin(Math.min(1, flip) * Math.PI)})` }}>
+        {!after && <div style={{ position: "absolute", left: 30, top: 26, ...MONO, fontSize: 22, color: C.mute }}>IMG_0412.JPG</div>}
+        <div style={{ position: "absolute", left: 0, right: 0, top: after ? 250 : 270, display: "flex", justifyContent: "center", filter: after ? "none" : "grayscale(1) contrast(.85)",
+          transform: `perspective(1200px) rotateY(${spinY}deg) rotate(${tiltR}deg) scale(${after ? 0.9 + 0.2 * hero : 1})` }}>
+          <Sneaker size={600} color={after ? C.uv : "#9C99A8"} accent="#FFFFFF" id="twist" />
+        </div>
+        {after && (
+          <div style={{ position: "absolute", left: 60, top: 70, display: "flex", gap: 28 }}>
+            {["NEW", "DROP."].map((w, i) => (
+              <span key={w} style={{ display: "inline-block", ...DISPLAY, fontSize: 120, color: i ? C.iris : "#fff", transform: `scale(${interpolate(word(i), [0, 1], [1.6, 1])})`, opacity: Math.min(1, word(i) * 2) }}>{w}</span>
+            ))}
+          </div>
+        )}
+        {after && (
+          <div style={{ position: "absolute", left: 60, bottom: 60, padding: "12px 28px", borderRadius: 99, background: "#fff", ...DISPLAY, fontSize: 64, color: C.ink, fontVariantNumeric: "tabular-nums", opacity: Math.min(1, color * 2) }}>${Math.round(price)}</div>
+        )}
+        {after && <div style={{ position: "absolute", right: 40, top: 30, ...MONO, fontSize: 20, color: "rgba(255,255,255,.75)", opacity: color }}>EXAMPLE · MADE IN THIS REEL</div>}
+      </div>
+      <Burst f={f} cx={540} cy={700} start={T.morph + 6} count={70} speed={30} colors={["#fff", C.iris, C.sky]} seed="morph" scale={0.9} />
+      <Shockwave f={f} cx={540} cy={700} start={T.morph + 6} max={900} width={6} rgb="91,43,255" dur={22} />
+    </AbsoluteFill>
+  );
+}
+
+// Proof: the crowd lights up to 85% as the voice says it; source on screen.
+function Proof({ f }) {
+  const P1 = DATA.people;
+  const head = spring({ frame: f - T.conv - 4, fps: 30, config: { damping: 13 } });
   const out = interpolate(f, [T.cta, T.cta + 12], [0, 1], { ...clamp, easing: easeIn });
+  const words = ["Stop.", "Watch.", "Remember."];
   const revealed = f >= P1.at;
-  const spin = Math.floor(10 + random(`spin${Math.floor(f / 2)}`) * 89);           // slot-machine digits while the question hangs
-  const slam = spring({ frame: f - P1.at, fps: 30, config: { damping: 8, stiffness: 280 } });
-  const n1 = revealed ? P1.pct : spin;
-  const litP = interpolate(f, [P1.at, P1.at + 16], [0, 1], { ...clamp, easing: easeOut });
+  const n = interpolate(f, [P1.at - 2, P1.at + 20], [0, P1.pct], { ...clamp, easing: easeOut });
+  const litP = interpolate(f, [P1.at, P1.at + 18], [0, 1], { ...clamp, easing: easeOut });
   const lit = Math.round(litP * (P1.pct / 100) * 20);
-  const panel2 = spring({ frame: f - P2.at + 14, fps: 30, config: { damping: 14 } });
-  const n2 = interpolate(f, [P2.at - 2, P2.at + 28], [0, P2.pct], { ...clamp, easing: easeOut });
-  const R = 104, CIRC = 2 * Math.PI * R;
-  const pop2 = spring({ frame: f - P2.at - 28, fps: 30, config: { damping: 7, stiffness: 260 } });
-  const coins = Array.from({ length: 12 }, (_, i) => {
-    const t = f - P2.at - 28 - (i % 4) * 2; if (t < 0) return null;
-    const a = -Math.PI / 2 + 0.35 + (random(`ca${i}`) - 0.5) * 1.4, v = 12 + random(`cv${i}`) * 9;
-    return { x: 560 + Math.cos(a) * v * t, y: 870 + Math.sin(a) * v * t + 0.8 * t * t, o: interpolate(t, [0, 3, 24, 32], [0, 1, 1, 0], clamp) };
-  });
+  const slam = spring({ frame: f - P1.at, fps: 30, config: { damping: 8, stiffness: 280 } });
   return (
     <AbsoluteFill style={{ opacity: 1 - out, transform: `translateY(${-out * 80}px)` }}>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 220, textAlign: "center", ...MONO, fontSize: 28, color: C.uv, letterSpacing: "0.22em", opacity: head }}>QUICK QUESTION</div>
-      <div style={{ position: "absolute", left: 60, right: 60, top: 268, textAlign: "center", ...DISPLAY, fontSize: 58, lineHeight: 1.1, color: C.ink, opacity: head, transform: `translateY(${(1 - head) * 30}px)` }}>How many people say a video <span style={{ color: C.uv }}>convinced them to buy?</span></div>
-      {/* 85%: a crowd lights up */}
-      <div style={{ position: "absolute", left: 60, top: 410, width: 960, height: 420, borderRadius: 32, background: "#fff", border: "2px solid rgba(10,9,19,.08)", boxShadow: "0 24px 60px rgba(10,9,19,.10)", opacity: head }}>
-        <div style={{ position: "absolute", left: 40, top: 26, ...DISPLAY, fontSize: 120, color: revealed ? C.uv : "rgba(10,9,19,.35)", fontVariantNumeric: "tabular-nums", filter: revealed ? "none" : "blur(2px)", transform: `scale(${revealed ? 1 + 0.25 * Math.max(0, 1 - slam) : 1})`, transformOrigin: "30% 60%" }}>{n1}%</div>
-        <div style={{ position: "absolute", left: 360, top: 50, width: 560, ...DISPLAY, fontSize: 40, lineHeight: 1.15, color: C.ink, opacity: revealed ? 1 : 0.35 }}>{revealed ? P1.text : "Take a guess…"}</div>
-        <div style={{ position: "absolute", left: 40, top: 196, width: 880, display: "grid", gridTemplateColumns: "repeat(10, 1fr)", rowGap: 10, justifyItems: "center" }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 246, display: "flex", justifyContent: "center", gap: 20 }}>
+        {words.map((w, i) => {
+          const p = spring({ frame: f - T.conv - 6 - i * 12, fps: 30, config: { damping: 10, stiffness: 240 } });
+          return <span key={w} style={{ ...DISPLAY, fontSize: 80, color: i === 2 ? C.uv : C.ink, opacity: Math.min(1, p * 2), transform: `translateY(${(1 - p) * 40}px) scale(${interpolate(p, [0, 1], [1.4, 1])})`, display: "inline-block" }}>{w}</span>;
+        })}
+      </div>
+      <div style={{ position: "absolute", left: 60, top: 420, width: 960, height: 560, borderRadius: 32, background: "#fff", border: "2px solid rgba(10,9,19,.08)", boxShadow: "0 24px 60px rgba(10,9,19,.10)", opacity: head, transform: `translateY(${(1 - head) * 40}px)` }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 40, textAlign: "center", ...DISPLAY, fontSize: 190, lineHeight: 1, color: revealed ? C.uv : "rgba(10,9,19,.15)", fontVariantNumeric: "tabular-nums", transform: `scale(${revealed ? 1 + 0.2 * Math.max(0, 1 - slam) : 1})` }}>{Math.round(n)}%</div>
+        <div style={{ position: "absolute", left: 60, right: 60, top: 248, textAlign: "center", ...DISPLAY, fontSize: 38, color: C.ink, opacity: revealed ? 1 : 0.25 }}>{P1.text}</div>
+        <div style={{ position: "absolute", left: 40, top: 330, width: 880, display: "grid", gridTemplateColumns: "repeat(10, 1fr)", rowGap: 12, justifyItems: "center" }}>
           {Array.from({ length: 20 }, (_, i) => {
             const k = i < lit ? Math.max(0, 1 - (litP * (P1.pct / 100) * 20 - i)) : 0;
             return <Person key={i} on={i < lit} k={Math.min(1, k)} />;
           })}
         </div>
       </div>
-      {/* coins burst from behind the ring panel as 83% lands */}
-      {coins.map((c, i) => c && <div key={i} style={{ position: "absolute", left: c.x - 22, top: c.y - 22, width: 44, height: 44, borderRadius: 99, background: "radial-gradient(circle at 35% 30%, #FFE58A, #E3A91B)", border: "3px solid #B07C0C", opacity: c.o, display: "grid", placeItems: "center", ...DISPLAY, fontSize: 24, color: "#7A5306" }}>$</div>)}
-      {/* 83%: a ring fills */}
-      <div style={{ position: "absolute", left: 60, top: 860, width: 960, height: 280, borderRadius: 32, background: C.ink, boxShadow: "0 30px 70px rgba(91,43,255,.35)", opacity: Math.min(1, panel2 * 1.5), transform: `translateY(${(1 - panel2) * 60}px)` }}>
-        <svg width="260" height="260" viewBox="-130 -130 260 260" style={{ position: "absolute", left: 40, top: 10, transform: `scale(${1 + 0.08 * Math.sin(Math.min(1, pop2) * Math.PI)})` }}>
-          <circle r={R} fill="none" stroke="rgba(143,114,255,.2)" strokeWidth="24" />
-          <circle r={R} fill="none" stroke="#3BE38B" strokeWidth="24" strokeLinecap="round" strokeDasharray={`${(n2 / 100) * CIRC} ${CIRC}`} transform="rotate(-90)" />
-          <text y="22" textAnchor="middle" style={{ ...DISPLAY, fontSize: 70 }} fill="#fff">{Math.round(n2)}%</text>
-        </svg>
-        <div style={{ position: "absolute", left: 340, top: 80, width: 580, ...DISPLAY, fontSize: 42, lineHeight: 1.15, color: "#fff" }}>{P2.text}</div>
-      </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1160, textAlign: "center", ...MONO, fontSize: 22, color: C.mute, opacity: head }}>{DATA.source.toUpperCase()}</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1010, textAlign: "center", ...MONO, fontSize: 22, color: C.mute, opacity: head }}>{DATA.source.toUpperCase()}</div>
     </AbsoluteFill>
   );
 }
@@ -135,16 +166,25 @@ function Conversion({ f }) {
 function Cta({ f, cta, url }) {
   const e = (d) => spring({ frame: f - T.cta - d, fps: 30, config: { damping: 12, stiffness: 190 } });
   const rise = (p) => ({ opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 50}px)` });
+  const q2 = spring({ frame: f - T.q2, fps: 30, config: { damping: 12, stiffness: 200 } });
+  const strike = interpolate(f, [T.q2 - 6, T.q2 + 4], [0, 1], { ...clamp, easing: easeOut });
+  const box = spring({ frame: f - T.fun + 4, fps: 30, config: { damping: 10, stiffness: 220 } });
   const wmW = 360, wmH = wmW * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
-  const screen = e(14), W2 = 920, H2 = Math.round(920 * 9 / 16);
+  const W2 = 760, H2 = Math.round(760 * 9 / 16);
   return (
     <>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 220, textAlign: "center", ...DISPLAY, fontSize: 104, color: C.ink, lineHeight: 1.02, ...rise(e(2)) }}>
-        Want an ad <span style={{ color: C.uv }}>like this?</span>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 220, textAlign: "center", ...rise(e(4)) }}>
+        <div style={{ position: "relative", display: "inline-block", ...DISPLAY, fontSize: 70, color: f >= T.q2 ? C.mute : C.ink }}>
+          Still posting product photos?
+          <div style={{ position: "absolute", left: -10, right: -10, top: "52%", height: 8, borderRadius: 8, background: C.alert, transform: `scaleX(${strike})`, transformOrigin: "0 50%" }} />
+        </div>
       </div>
-      {/* the film keeps playing, small, as a reminder of what they'd get */}
-      <div style={{ position: "absolute", left: (1080 - W2) / 2 - 12, top: 430, width: W2 + 24, height: H2 + 24, borderRadius: 30, background: "#14121F", border: "2px solid rgba(10,9,19,.6)", boxShadow: "0 30px 80px rgba(91,43,255,.35)", opacity: Math.min(1, screen * 1.4), transform: `scale(${0.9 + 0.1 * screen})` }}>
-        <div style={{ position: "absolute", left: 12, top: 12, width: W2, height: H2, borderRadius: 20, overflow: "hidden", background: "#000" }}>
+      <div style={{ position: "absolute", left: 40, right: 40, top: 320, textAlign: "center", ...DISPLAY, fontSize: 84, lineHeight: 1.05, color: C.ink, opacity: Math.min(1, q2 * 1.5), transform: `translateY(${(1 - q2) * 40}px)` }}>
+        Or making people <span style={{ color: C.uv }}>stop scrolling?</span>
+      </div>
+      {/* the film keeps playing, small */}
+      <div style={{ position: "absolute", left: (1080 - W2) / 2 - 12, top: 540, width: W2 + 24, height: H2 + 24, borderRadius: 28, background: "#14121F", border: "2px solid rgba(10,9,19,.6)", boxShadow: "0 30px 80px rgba(91,43,255,.35)", ...rise(e(10)) }}>
+        <div style={{ position: "absolute", left: 12, top: 12, width: W2, height: H2, borderRadius: 18, overflow: "hidden", background: "#000" }}>
           <Sequence from={T.cta} layout="none">
             <Loop durationInFrames={5 * 30} layout="none">
               <OffthreadVideo src={staticFile("wtc.mp4")} muted startFrom={9 * 30} style={{ width: W2, height: H2 }} />
@@ -152,15 +192,13 @@ function Cta({ f, cta, url }) {
           </Sequence>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 60, right: 60, top: 430 + H2 + 60, display: "grid", justifyItems: "center", ...rise(e(22)) }}>
-        <div style={{ padding: "26px 44px", borderRadius: 30, background: C.uv, boxShadow: "0 20px 60px rgba(91,43,255,.5)", textAlign: "center" }}>
-          <div style={{ ...DISPLAY, fontSize: 58, color: "#fff" }}>Direct message us “{cta}”</div>
-          <div style={{ ...DISPLAY, fontSize: 33, color: "rgba(255,255,255,.9)", marginTop: 12, whiteSpace: "nowrap" }}>Limited-time offer on motion graphics packages</div>
+      <div style={{ position: "absolute", left: 60, right: 60, top: 540 + H2 + 60, display: "grid", justifyItems: "center", opacity: Math.min(1, box * 1.5), transform: `scale(${interpolate(box, [0, 1], [1.3, 1])})` }}>
+        <div style={{ padding: "22px 52px", borderRadius: 30, background: C.uv, boxShadow: "0 20px 60px rgba(91,43,255,.5)", textAlign: "center" }}>
+          <div style={{ ...DISPLAY, fontSize: 76, color: "#fff" }}>DM “{cta.toUpperCase()}”</div>
+          <div style={{ ...DISPLAY, fontSize: 32, color: "rgba(255,255,255,.9)", marginTop: 8, whiteSpace: "nowrap" }}>Limited-time offer on motion graphics packages</div>
         </div>
-        <div style={{ ...MONO, fontSize: 26, color: C.mute, marginTop: 26 }}>LOGO REVEALS · PRODUCT ADS · LAUNCH FILMS · REELS</div>
       </div>
-      {/* logo sits beside Dev, under his caption */}
-      <div style={{ position: "absolute", left: 330, width: 700, top: 1520, display: "grid", justifyItems: "center", gap: 14, ...rise(e(34)) }}>
+      <div style={{ position: "absolute", left: 330, width: 700, top: 1520, display: "grid", justifyItems: "center", gap: 14, ...rise(e(30)) }}>
         <svg viewBox={WORDMARK.viewBox} width={wmW} height={wmH}><path d={WORDMARK.letters} fill={C.ink} /><path d={WORDMARK.spark} fill={C.uv} /></svg>
         <div style={{ ...MONO, fontSize: 30, color: C.ink, letterSpacing: "0.18em" }}>{url}</div>
       </div>
@@ -171,23 +209,24 @@ function Cta({ f, cta, url }) {
 export const Main = (props) => {
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-400.ttf", { weight: "400" }], ["UI", "Geist-600.ttf", { weight: "600" }]]);
   const f = useCurrentFrame();
-  const [sx, sy] = shake(f, T.turn, 14, 4);
+  const [sx, sy] = shake(f, T.show, 14, 4);
   return (
     <AbsoluteFill style={{ background: C.paper, overflow: "hidden" }}>
       <Audio src={staticFile("sound.wav")} />
       {/* graph paper, same as the Subscription Killer post, for a consistent feed */}
       <AbsoluteFill style={{ background: C.paper, backgroundImage: `linear-gradient(${C.gridMajor} 2px, transparent 2px), linear-gradient(90deg, ${C.gridMajor} 2px, transparent 2px), linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`, backgroundSize: "180px 180px, 180px 180px, 36px 36px, 36px 36px", backgroundPosition: `0 ${f * 0.8}px, 0 ${f * 0.8}px, 0 ${f * 0.8}px, 0 ${f * 0.8}px` }} />
       <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}>
-        {f < T.turn + 2 && <Hook f={f} />}
-        {f >= T.turn && f < T.turn + 20 && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: 700, textAlign: "center", ...DISPLAY, fontSize: 150, color: C.ink, opacity: interpolate(f, [T.turn, T.turn + 3, T.turn + 14, T.turn + 20], [0, 1, 1, 0], clamp), transform: `scale(${interpolate(f, [T.turn, T.turn + 6], [1.4, 1], { ...clamp, easing: easeOut })})` }}>Watch this.</div>
+        {f < T.show && <Hook f={f} />}
+        {f >= T.show - 14 && f < T.show && (
+          <div style={{ position: "absolute", left: 0, right: 0, top: 640, textAlign: "center", ...DISPLAY, fontSize: 170, color: C.uv, opacity: interpolate(f, [T.show - 14, T.show - 11], [0, 1], clamp), transform: `scale(${interpolate(f, [T.show - 14, T.show - 7], [1.6, 1], { ...clamp, easing: easeOut })}) rotate(-4deg)` }}>THIS?</div>
         )}
-        {f >= T.turn + 8 && f < T.conv + 9 && <Showcase f={f} client={props.client} film={props.film} />}
-        {f >= T.conv && f < T.cta + 14 && <Conversion f={f} />}
+        {f >= T.show && f < T.twist + 9 && <Showcase f={f} client={props.client} film={props.film} />}
+        {f >= T.twist && f < T.conv + 11 && <Twist f={f} />}
+        {f >= T.conv && f < T.cta + 14 && <Proof f={f} />}
         {f >= T.cta && <Cta f={f} cta={props.cta} url={props.url} />}
       </AbsoluteFill>
       <Presenter />
-      <Shockwave f={f} cx={540} cy={760} start={T.turn} max={1300} width={8} rgb="91,43,255" dur={22} />
+      <Shockwave f={f} cx={540} cy={760} start={T.show} max={1300} width={8} rgb="91,43,255" dur={22} />
       <Vignette strength={0.18} />
       <Grain f={f} opacity={0.05} />
     </AbsoluteFill>
