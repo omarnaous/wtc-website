@@ -1,6 +1,6 @@
 # Motion graphics showcase reel (WTC launch film)
 
-~40 s, 1080x1920, 30 fps, on the same graph paper as the Subscription Killer post. One continuous voice-over leads:
+35 s, 1080x1920, 30 fps, on the same graph paper as the Subscription Killer post. One continuous voice-over leads:
 (`public/wtc.mp4`, 25 s 16:9) plays in full in a screen frame while labels name each technique; Dev narrates
 and closes on the offer (DM "Motion" for a free sample). Built on the Subscription Killer rig (Dev, captions, voice).
 
@@ -17,4 +17,4 @@ node render.mjs                                                     # out/Motion
 - Timeline, technique labels (film clock): `src/timing.js`. Lines and their frames: `vo/vo.py` (`LINES`).
 - Client name, CTA keyword, URL: `src/Root.jsx`. Dev's gestures: `src/Presenter.jsx`.
 - The data beat uses Wyzowl State of Video Marketing 2026 figures (85% / 83%), source shown on screen: `DATA` in `src/timing.js`.
-- Sound: same palette as Subscription Killer (lo-fi bed + hits); the film is muted (`FILM_GAIN` in `vo/mix.py`).
+- Sound: Subscription Killer palette (lo-fi bed + hits) before and after the film; during it the film plays its own soundtrack, sped up with pitch kept and ducked ~12 dB under the voice (`FILM_GAIN` in `vo/mix.py`). The film speed is solved in `vo/vo.py` (`TARGET`) so the reel lands on 35 s.

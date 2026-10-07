@@ -5,7 +5,7 @@ import { Dev } from "./Dev.jsx";
 import VO from "./vo.json";
 import { clamp } from "./fx.jsx";
 import { sparkPath } from "./brand.js";
-import { warp, T, DATA } from "./timing.js";
+import { warp, T, DATA, filmFrame } from "./timing.js";
 
 const MOODS0 = [
   [0, { brow: 2, lid: 0.35, smile: 0.2, look: 6 }],         // unimpressed at the plain photo
@@ -16,12 +16,12 @@ const MOODS0 = [
 // [type, start, end]
 const ACTS0 = [
   ["point", 20, T.swipe], ["shock", T.swipe + 6, T.turn - 1], ["jump", T.turn, T.turn + 16], ["happy", T.turn, T.turn + 20],
-  ["point", T.show + 8, T.show + 80], ["thumbs", T.show + 200, T.show + 250], ["happy", T.show + 330, T.show + 360],
-  ["point", T.show + 480, T.show + 560], ["thumbs", T.show + 640, T.show + 700],
+  ["point", T.show + 8, T.show + 70], ["thumbs", filmFrame(6), filmFrame(8.5)], ["happy", filmFrame(10), filmFrame(12)],
+  ["point", filmFrame(17.5), filmFrame(20.5)], ["thumbs", filmFrame(21.5), filmFrame(24)],
   ["point", DATA.people.at - 4, DATA.people.at + 40], ["thumbs", DATA.marketers.at, DATA.marketers.at + 50], ["happy", DATA.marketers.at + 28, DATA.marketers.at + 56],
   ["wave", T.cta + 2, T.cta + 30], ["point", T.cta + 44, T.end - 10], ["wink", T.cta + 90, T.cta + 110],
 ];
-const EMOTES0 = [["?", 30, T.swipe], ["!", T.turn, T.turn + 30], ["spark", T.show + 330, T.show + 370], ["spark", T.cta + 44, T.end - 10]];
+const EMOTES0 = [["?", 30, T.swipe], ["!", T.turn, T.turn + 30], ["spark", filmFrame(10), filmFrame(12.5)], ["spark", T.cta + 44, T.end - 10]];
 
 const MOODS = MOODS0.map(([f, m]) => [warp(f), m]);
 const ACTS = ACTS0.map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);

@@ -27,4 +27,6 @@ export const DATA = {
   people: { pct: 85, at: wordAt("85%"), text: "of people say a video has convinced them to buy" },
   marketers: { pct: 83, at: wordAt("83%"), text: "of marketers say video directly increased their sales" },
 };
+export const RATE = A.rate || 1; // the film plays this much faster so the reel fits 35 s
+export const filmFrame = (sec) => A.show + Math.round((sec * 30) / RATE); // film-clock seconds -> reel frame
 export const warp = (f) => f;

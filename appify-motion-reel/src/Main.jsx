@@ -1,7 +1,7 @@
 // Motion-graphics showcase: a plain photo gets scrolled past, then the WTC launch film plays in full
 // in a screen frame while labels name each technique; Dev narrates and closes on the offer.
 import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { T, TECH, DATA } from "./timing.js";
+import { T, TECH, DATA, RATE, filmFrame } from "./timing.js";
 import { C, DISPLAY, MONO, Words } from "./ui.jsx";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Grain, Vignette } from "./fx.jsx";
 import { random } from "remotion";
@@ -33,7 +33,7 @@ function Hook({ f }) {
 }
 
 function Showcase({ f, client, film }) {
-  const t = (f - T.show) / 30;                        // seconds on the film's clock
+  const t = ((f - T.show) / 30) * RATE;               // seconds on the film's clock
   const inP = spring({ frame: f - T.turn, fps: 30, config: { damping: 13, stiffness: 160 } });
   const outP = interpolate(f, [T.conv, T.conv + 8], [0, 1], { ...clamp, easing: easeIn });
   const cur = TECH.findIndex(([a, b]) => t >= a && t < b);
@@ -45,7 +45,7 @@ function Showcase({ f, client, film }) {
       <div style={{ position: "absolute", left: SX - 14, top: SY - 14, width: SW + 28, height: SH + 28, borderRadius: 34, background: "#14121F", border: "2px solid rgba(10,9,19,.6)", boxShadow: `0 40px 100px rgba(91,43,255,${glow * 0.7})`, transform: `scale(${0.85 + 0.15 * inP})`, opacity: Math.min(1, inP * 1.4) }}>
         <div style={{ position: "absolute", left: 14, top: 14, width: SW, height: SH, borderRadius: 22, overflow: "hidden", background: "#000" }}>
           <Sequence from={T.show} layout="none">
-            <OffthreadVideo src={staticFile("wtc.mp4")} muted style={{ width: SW, height: SH }} />
+            <OffthreadVideo src={staticFile("wtc.mp4")} muted playbackRate={RATE} style={{ width: SW, height: SH }} />
           </Sequence>
         </div>
       </div>
@@ -56,7 +56,7 @@ function Showcase({ f, client, film }) {
       {/* technique label */}
       {TECH.map(([a, b, label], i) => {
         if (i !== cur) return null;
-        const p = spring({ frame: f - (T.show + a * 30), fps: 30, config: { damping: 11, stiffness: 220 } });
+        const p = spring({ frame: f - filmFrame(a), fps: 30, config: { damping: 11, stiffness: 220 } });
         const o = interpolate(t, [b - 0.25, b], [1, 0], clamp);
         return (
           <div key={label} style={{ position: "absolute", left: 0, right: 0, top: SY + SH + 64, display: "flex", justifyContent: "center", gap: 16, alignItems: "center", opacity: Math.min(1, p * 1.6) * o, transform: `translateY(${(1 - p) * 30}px) scale(${0.9 + 0.1 * p})` }}>

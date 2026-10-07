@@ -11,23 +11,23 @@ from kokoro_onnx import Kokoro
 
 FPS, SR = 30, 24000
 VOICE = "am_puck"
-PACE = 1.2 / 1.1
+PACE = 1.3 / 1.1                # a touch quicker than Subscription Killer so the reel lands on 35 s
+TARGET = 1050                   # 35 s: the film's playback speed is solved to fit
 GAP = 0.14                      # seconds between sentences: a breath, not a stop
 FILM = 750                      # the WTC film is 25 s
 P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: dict(
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
 HOOK = [P("Are you still posting plain photos of your products and hoping people stop scrolling?", shift=1, rng=1.6, mel="rise", gain=1)]
 FILM_LINES = [
-    P("Watch what we made for W.T.C., a launch film where every word hits the beat and every number counts up on screen.",
-      "Watch what we made for WTC, a launch film where every word hits the beat and every number counts up on screen.", shift=1, rng=1.6, mel="arch", gain=0.5),
-    P("Their products come alive right in the frame, so customers can try every strap before they buy.", shift=0.5, rng=1.6, mel="arch"),
-    P("Then the whole collection rolls in, and it launches their new online store in style.", shift=1, rng=1.6, mel="arch"),
-    P("We designed every scene, animated every detail and timed every move to the music, so it feels like a real brand launch that ends on a logo people remember.", shift=0, rng=1.5, mel="fall"),
+    P("Watch what we made for W.T.C., where every word hits the beat and every number counts up on screen.",
+      "Watch what we made for WTC, where every word hits the beat and every number counts up on screen.", shift=1, rng=1.6, mel="arch", gain=0.5),
+    P("Their products come alive, the whole collection rolls in, and their new online store launches in style.", shift=0.5, rng=1.6, mel="arch"),
+    P("Every scene is designed and timed to the music, right down to a logo people remember.", shift=0, rng=1.5, mel="fall"),
 ]
-CONV = [P("And it works, because eighty-five percent of people say a video has convinced them to buy, and eighty-three percent of marketers say video directly increased their sales.",
-          "And it works, because 85% of people say a video has convinced them to buy, and 83% of marketers say video directly increased their sales.", speed=1.12, shift=1, rng=1.6, mel="arch", gain=1)]
-CTA = [P("Want an ad like this for your brand? Send us a direct message with the word Motion, and benefit from our limited time offer on motion graphics packages.",
-         "Want an ad like this for your brand? Send us a direct message with the word \"Motion\", and benefit from our limited-time offer on motion graphics packages.", shift=1, rng=1.6, mel="fall", gain=1)]
+CONV = [P("And it works, because eighty-five percent of people say a video has convinced them to buy, and eighty-three percent of marketers say it grew their sales.",
+          "And it works, because 85% of people say a video has convinced them to buy, and 83% of marketers say it grew their sales.", speed=1.12, shift=1, rng=1.6, mel="arch", gain=1)]
+CTA = [P("Want an ad like this? Send us a direct message with the word Motion, and benefit from our limited time offer on motion graphics packages.",
+         "Want an ad like this? Send us a direct message with the word \"Motion\", and benefit from our limited-time offer on motion graphics packages.", shift=1, rng=1.6, mel="fall", gain=1)]
 
 
 def smooth(a, b, u):
@@ -96,7 +96,12 @@ A["turn"] = v_hook + F(dur(hook)) + 4
 A["show"] = A["turn"] + 15
 v_film = A["show"] + 8
 film_end_voice = v_film + F(dur(film))
-v_conv = max(film_end_voice + F(GAP), A["show"] + FILM - 60)      # cut in over the last 2 s of the logo hold
+# solve the film's playback speed so the whole reel lands on TARGET frames
+rest = F(dur(conv) + GAP) + F(dur(cta)) + 40 + 4
+window = TARGET - A["show"] - rest + 30          # +30: the data beat cuts in over the last second of the film
+rate = min(1.6, max(1.0, FILM / max(1, window)))
+A["rate"] = round(rate, 4)
+v_conv = max(film_end_voice + F(GAP), A["show"] + round(FILM / rate) - 30)   # cut in over the last second of the logo
 A["conv"] = v_conv
 v_cta = v_conv + F(dur(conv) + GAP)
 A["cta"] = max(v_cta - 4, A["conv"] + 120)
@@ -127,4 +132,4 @@ hop = SR // FPS
 rms = np.array([np.sqrt(np.mean(out[i * hop:(i + 1) * hop] ** 2)) for i in range(total)])
 env = np.clip(rms / (np.percentile(rms[rms > 0.01], 90) + 1e-9), 0, 1)
 json.dump({"duration": total, "anchors": A, "mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
-print("anchors", A, f"total {total / FPS:.1f}s, film voice ends {film_end_voice - A['show']} frames into the film")
+print("anchors", A, f"total {total / FPS:.1f}s, film x{rate:.2f}, film voice ends {film_end_voice - A['show']} of {round(FILM / rate)} film frames")
