@@ -241,57 +241,36 @@ function Cursor({ f, x, y }) {
   );
 }
 
-// ════════════════════════════════════ the studio
-const VX = 540, HORIZON = 1440;
-function Studio({ f }) {
-  const t = f / 30;
-  const dust = Array.from({ length: 70 }, (_, i) => {
-    const x = (random(`dx${i}`) * 1180 + t * (6 + random(`dv${i}`) * 14)) % 1180 - 50;
-    const y = 200 + random(`dy${i}`) * 1250 - t * (4 + random(`du${i}`) * 8);
-    const r = 0.8 + random(`dr${i}`) * 2.2;
-    return <circle key={i} cx={x} cy={((y % 1300) + 1300) % 1300 + 150} r={r} fill="#fff" opacity={0.08 + 0.25 * random(`do${i}`) * (0.6 + 0.4 * Math.sin(t * 2 + i))} />;
-  });
-  const lines = [];
-  for (let i = -14; i <= 14; i++) lines.push(<line key={`v${i}`} x1={VX + i * 18} y1={HORIZON} x2={VX + i * 260} y2={1920} stroke="#9a8cff" strokeOpacity={0.16} strokeWidth="1.2" />);
-  for (let j = 1; j < 12; j++) { const y = HORIZON + Math.pow(j / 12, 2.2) * 480 + ((t * 24) % 1) ; lines.push(<line key={`h${j}`} x1={0} y1={y} x2={1080} y2={y} stroke="#9a8cff" strokeOpacity={0.05 + j * 0.012} strokeWidth="1" />); }
-  return (
-    <AbsoluteFill style={{ background: "#07060f", overflow: "hidden" }}>
-      {/* light: a violet key and a warm rim, drifting */}
-      <AbsoluteFill style={{ background: `radial-gradient(circle at ${45 + Math.sin(t * 0.5) * 8}% ${40 + Math.cos(t * 0.4) * 4}%, rgba(110,92,255,0.55) 0%, rgba(60,40,160,0.25) 28%, transparent 55%)` }} />
-      <AbsoluteFill style={{ background: `radial-gradient(circle at ${82 - Math.sin(t * 0.4) * 6}% ${24 + Math.sin(t * 0.3) * 5}%, rgba(255,160,90,0.35) 0%, transparent 34%)` }} />
-      <AbsoluteFill style={{ background: `radial-gradient(circle at ${12 + Math.cos(t * 0.35) * 5}% ${70}%, rgba(77,120,255,0.28) 0%, transparent 32%)` }} />
-      {/* a big soft orb behind the screen */}
-      <div style={{ position: "absolute", left: 540 - 520, top: 900 - 520, width: 1040, height: 1040, borderRadius: "50%", background: "radial-gradient(circle at 40% 35%, rgba(255,255,255,0.10), rgba(123,108,255,0.10) 40%, transparent 70%)", transform: `scale(${1 + Math.sin(t * 0.8) * 0.02})` }} />
-      {/* floor */}
-      <div style={{ position: "absolute", left: 0, right: 0, top: HORIZON, bottom: 0, background: "linear-gradient(180deg, #120d2c 0%, #07060f 100%)" }} />
-      <svg width="1080" height="1920" style={{ position: "absolute", inset: 0 }}>{lines}</svg>
-      <div style={{ position: "absolute", left: 0, right: 0, top: HORIZON - 1, height: 2, background: "linear-gradient(90deg, transparent, rgba(180,170,255,0.6), transparent)" }} />
-      {/* the screen's light spilling on the floor */}
-      <div style={{ position: "absolute", left: 540 - 560, top: HORIZON - 40, width: 1120, height: 300, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(242,238,230,0.22), transparent 65%)" }} />
-      <svg width="1080" height="1920" style={{ position: "absolute", inset: 0 }}>{dust}</svg>
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%)" }} />
-    </AbsoluteFill>
-  );
+// ════════════════════════════════════ the desk: a real photo; the site is mapped onto its monitor
+// Photo 1746 × 2576, scaled to cover 1080 × 1920 (× 0.7453), aligned left so the whole screen stays in frame.
+// Screen corners found in the photo (TL 26,682 · TR 1143,738 · BR 1148,1318 · BL 104,1491) give this homography
+// from the 1600 × 900 site onto the screen, in frame pixels.
+const SCREEN_MATRIX = "matrix3d(0.741358231, 0.168790567, 0, 0.000259431861, 0.0704474376, 0.753864745, 0, 7.54837916e-05, 0, 0, 1, 0, 19.3788815, 508.322968, 0, 1)";
+const SCR = { cx: 451, cy: 788 };
+// What colour the screen is throwing onto the desk, section by section.
+function spill(f) {
+  let pi = -1; T.hovers.forEach((h, i) => { if (f >= h) pi = i; });
+  const [y] = keyed(f, SCROLL);
+  if (y < 450) return "rgba(201,162,39,0.35)";
+  if (y < 1350) return pi < 0 ? "rgba(120,120,140,0.2)" : PLANETS[pi].bg;
+  if (y < 2250) return "rgba(201,162,39,0.35)";
+  if (y < 3150) { let k = 0; T.swaps.forEach((s, i) => { if (f >= s) k = i + 1; }); return STRAPS[k].chip; }
+  return "rgba(226,196,105,0.4)";
 }
-
-// ════════════════════════════════════ the monitor (studio-display style)
-const MW = 1030, BZ = 12, SW = MW - 2 * BZ, SH = SW * (PH / PW), MH = SH + 2 * BZ;
-const MX = (1080 - MW) / 2, MY = 760;
-function Monitor({ f }) {
+function Desk({ f }) {
+  const glow = spill(f);
   return (
-    <div style={{ position: "absolute", left: 0, top: 0, width: 1080, height: 1920 }}>
-      {/* stand */}
-      <div style={{ position: "absolute", left: 540 - 150, top: MY + MH - 20, width: 300, height: 200, background: "linear-gradient(90deg,#7e8086 0%,#d9dade 40%,#c4c6ca 62%,#7a7c81 100%)", clipPath: "polygon(12% 0, 88% 0, 100% 100%, 0 100%)" }} />
-      <div style={{ position: "absolute", left: 540 - 250, top: MY + MH + 172, width: 520, height: 30, borderRadius: "14px 14px 24px 24px", background: "linear-gradient(180deg,#e2e3e6,#9c9ea3)", boxShadow: "0 30px 50px rgba(0,0,0,0.6)" }} />
-      {/* body */}
-      <div style={{ position: "absolute", left: MX - 4, top: MY - 4, width: MW + 8, height: MH + 8, borderRadius: 26, background: "linear-gradient(135deg,#f0f1f3 0%,#a9abb0 40%,#d7d8dc 70%,#8d8f94 100%)", boxShadow: "0 60px 120px rgba(0,0,0,0.6), 0 0 120px rgba(123,108,255,0.25)" }} />
-      <div style={{ position: "absolute", left: MX, top: MY, width: MW, height: MH, borderRadius: 22, background: "#0a0a0b" }}>
-        <div style={{ position: "absolute", left: BZ, top: BZ, width: SW, height: SH, borderRadius: 6, overflow: "hidden", background: "#000" }}>
-          <div style={{ width: PW, height: PH, transform: `scale(${SW / PW})`, transformOrigin: "0 0" }}><Site f={f} /></div>
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(115deg, rgba(255,255,255,0.0) ${20 + (f * 0.1) % 30}%, rgba(255,255,255,0.10) ${32 + (f * 0.1) % 30}%, rgba(255,255,255,0.0) ${44 + (f * 0.1) % 30}%)` }} />
-        </div>
+    <AbsoluteFill>
+      <Img src={staticFile("desk.jpg")} style={{ position: "absolute", left: 0, top: 0, width: 1746 * (1920 / 2576), height: 1920 }} />
+      {/* the site, on the screen */}
+      <div style={{ position: "absolute", left: 0, top: 0, width: PW, height: PH, transformOrigin: "0 0", transform: SCREEN_MATRIX, overflow: "hidden", background: "#000" }}>
+        <div style={{ filter: "brightness(0.94) contrast(0.97) saturate(0.95)" }}><Site f={f} /></div>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 28%, transparent 42%, transparent 75%, rgba(150,190,255,0.06) 100%)" }} />
       </div>
-    </div>
+      {/* the screen's light on the stand and the desk */}
+      <div style={{ position: "absolute", left: -140, top: 1020, width: 1100, height: 520, borderRadius: "50%", background: `radial-gradient(ellipse at 50% 30%, ${glow}, transparent 65%)`, mixBlendMode: "screen", opacity: 0.4 }} />
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 45% 42%, transparent 50%, rgba(0,0,0,0.35) 100%)" }} />
+    </AbsoluteFill>
   );
 }
 
@@ -373,23 +352,18 @@ export const Main = () => {
   ]);
   const f = useCurrentFrame();
   const t = f / 30;
-  const intro = sp(f, -8, { damping: 18, stiffness: 50 });
-  const endP = interpolate(f, [T.endCard, T.endCard + 22], [0, 1], { ...clamp, easing: inOut });
-  // camera: slow orbit around the monitor, leaning in on the details
-  const yaw = Math.sin(t * 0.45) * 4 * (1 - endP);
-  const pitch = 3 + Math.sin(t * 0.3) * 1.5;
-  const lean = interpolate(f, [86, 100, 150, 160, 178, 192, 232, 240], [0, 0.03, 0.03, 0, 0, 0.035, 0.035, 0], clamp);
-  const scale = (0.95 + 0.04 * intro + interpolate(f, [0, T.endCard], [0, 0.02], clamp) + lean) * (1 - endP * 0.48);
-  const camY = -endP * 560 + Math.sin(t * 0.7) * 6;
+  const endP = interpolate(f, [T.endCard - 2, T.endCard + 16], [0, 1], { ...clamp, easing: Easing.bezier(0.55, 0, 1, 0.45) });
+  // a slow handheld-ish push toward the screen; then straight through it into the end card
+  const push = 1.12 + interpolate(f, [0, T.endCard], [0, 0.07], clamp) + Math.sin(t * 0.6) * 0.004;
+  const scale = push * (1 + endP * 2.2);
+  const tx = 52 + Math.sin(t * 0.37) * 4, ty = Math.cos(t * 0.45) * 4;
   return (
-    <AbsoluteFill style={{ background: "#07060f" }}>
+    <AbsoluteFill style={{ background: "#0b0d12" }}>
       <Audio src={staticFile("sound.wav")} />
-      <Studio f={f} />
-      <AbsoluteFill style={{ perspective: 2600, perspectiveOrigin: "50% 45%" }}>
-        <AbsoluteFill style={{ transform: `translateY(${camY}px) scale(${scale}) rotateY(${yaw}deg) rotateX(${pitch}deg)`, transformOrigin: `540px ${MY + MH / 2}px`, transformStyle: "preserve-3d" }}>
-          <Monitor f={f} />
-        </AbsoluteFill>
+      <AbsoluteFill style={{ transform: `translate(${tx}px, ${ty}px) scale(${scale})`, transformOrigin: `${SCR.cx}px ${SCR.cy}px` }}>
+        <Desk f={f} />
       </AbsoluteFill>
+      <EndCardBackdrop f={f} />
       {CAPTIONS.map((c, i) => <Caption key={i} f={f} cap={c} />)}
       <div style={{ position: "absolute", left: 0, right: 0, top: 1700, textAlign: "center", opacity: interpolate(f, [-1, 0, T.endCard - 6, T.endCard], [1, 1, 1, 0], clamp) }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 14, padding: "14px 30px", borderRadius: 999, background: "rgba(255,255,255,0.08)", border: "1.5px solid rgba(255,255,255,0.16)", color: "#fff", fontFamily: POP, fontWeight: 600, fontSize: 38 }}>
@@ -402,3 +376,10 @@ export const Main = () => {
     </AbsoluteFill>
   );
 };
+
+// Navy that the camera flies into for the end card.
+function EndCardBackdrop({ f }) {
+  const o = interpolate(f, [T.endCard + 4, T.endCard + 16], [0, 1], clamp);
+  if (o <= 0) return null;
+  return <AbsoluteFill style={{ opacity: o, background: `radial-gradient(ellipse at 50% 55%, #2a1d78 0%, ${A.navy} 55%, #07051a 100%)` }} />;
+}
