@@ -41,22 +41,23 @@ def pop():
     return np.sin(2 * np.pi * np.cumsum(300 + 700 * np.exp(-t_ / 0.012)) / SR) * env(n, 0.03)
 
 # captions: a soft pop per line, a glint when the highlight sweeps
-from_lines = [(-12, 2), (74, 2), (156, 2), (252, 2), (334, 2)]
+from_lines = [(-12, 2), (74, 2), (166, 2), (246, 2), (326, 2)]
 for fr, n in from_lines:
     for i in range(n):
         at = f(fr + i * 6)
         if at >= 0: fol.put(pop(), at, 0.35, pan=-0.2 + i * 0.4)
     fol.put(reverb(bell(88, 0.25, 0.5), 1.0, 0.4), max(0, f(fr + 15)), 0.12, pan=0.3)
 # scrolls: a soft swish each time the page moves
-for a, b in ((66, 86), (148, 166), (244, 262), (326, 344)):
+for a, b in ((66, 86), (160, 178), (240, 258), (320, 338)):
     fol.put(air(f(b) - f(a) + 0.15, 1.1), f(a), 0.55)
     fol.put(tick(3000, 0.6), f(b), 0.2)
 # clicks
-for c in (128, 296, 358): fol.put(mouse(), f(c), 0.7, pan=0.15)
-fol.put(pop(), f(129), 0.4); fol.put(ping(2637), f(131), 0.16, pan=0.25); fol.put(ping(3951), f(134), 0.09, pan=0.25)
-for s in (194, 210, 226):
+fol.put(air(f(158) - f(88), 0.7), f(88), 0.45, pan=-0.2)   # the rail runs sideways
+fol.put(air(0.9, 0.9), f(168), 0.4); fol.put(reverb(bell(76, 0.4, 1.2), 1.6, 0.4), f(176), 0.16)  # the dial opens
+for c in (360,): fol.put(mouse(), f(c), 0.7, pan=0.15)
+fol.put(ping(2637), f(362), 0.14, pan=0.25)
+for s in (262, 278, 292, 306):
     fol.put(mouse(), f(s), 0.5, pan=0.15); fol.put(velcro(0.22), f(s) + 0.01, 0.55, pan=0.25)
-for i in range(4): fol.put(tick(4200 + i * 300, 0.5), f(302 + i * 3), 0.2, pan=-0.4 + i * 0.25)
 # end card
 fol.put(air(0.7, 1.2), f(368), 0.5)
 fol.put(clack(), f(380), 0.8)
