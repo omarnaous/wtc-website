@@ -5,7 +5,6 @@ import { SCROLL, ARRIVE, T, CAPTIONS } from "./timing.js";
 import { useFonts, clamp, easeOut, after, Grain } from "./fx.jsx";
 
 const A = { navy: "#120c3a", violet: "#7b6cff", blue: "#4f7dff", hi: "#4d78ff" }; // Appify
-const W_ = { ivory: "#F2EEE6", paper: "#FBF9F5", ink: "#121110", mute: "#7d776d", line: "rgba(18,17,16,0.12)", gold: "#B08D3C" }; // the site
 const POP = "Poppins", SERIF = "Serif", SANS = "Inter";
 const inOut = Easing.bezier(0.65, 0, 0.35, 1);
 const watch = (sku) => staticFile(`w/${sku}.png`);
@@ -39,180 +38,205 @@ function Reveal({ f, start, text, stagger = 3, style }) {
 const Label = ({ children, style }) => <div style={{ fontFamily: "Mono", fontSize: 13, letterSpacing: "0.3em", textTransform: "uppercase", ...style }}>{children}</div>;
 const fade = (f, start, dist = 30) => { const p = after(f, start, [0, 18], [0, 1], { easing: easeOut }); return { opacity: p, transform: `translateY(${(1 - p) * dist}px)` }; };
 
-// ════════════════════════════════════ the website: an editorial concept (1600 × 900 per screen)
+// ════════════════════════════════════ the website: the launch film, as a site you can use (1600 × 900 per screen)
 const PW = 1600, PH = 900;
-const RAIL = [["SO33W700", "Full Moon"], ["SO33M100", "Mission to the Moon"], ["SO33J100", "Mission to the Sun"], ["SO33N700", "Super Blue"], ["SO33R100", "Mission to Mars"], ["SO33P700", "Pink Moon"], ["SO33L100", "Uranus"]];
-const STRAPS = [
-  { file: "vertech-black", chip: "#151515", bg: "#E9E5DD", name: "Vertech Black" },
-  { file: "vertech-orange", chip: "#F26B1D", bg: "#F3D2BC", name: "Vertech Orange" },
-  { file: "vertech-capri-blue", chip: "#4FB3E8", bg: "#CFE6F2", name: "Capri Blue" },
-  { file: "vertech-white", chip: "#F2F2F0", bg: "#E4E2DC", name: "Vertech White" },
-  { file: "vertech-black-and-red-stitches", chip: "#1A1A1A", ring: "#D3262B", bg: "#EBD3D0", name: "Black · Red Stitch" },
+const L = { ink: "#09090a", line: "#26262c", chalk: "#f4f3f0", mute: "#8d8d95", gold: "#c9a227", goldSoft: "#e2c469" };
+const GROT = "Grotesk";
+const PLANETS = [
+  { sku: "SO33J100", word: "SUN", bg: "#F2C230", fg: "#1A1300" },
+  { sku: "SO33R100", word: "MARS", bg: "#D42A22", fg: "#FFF6F2" },
+  { sku: "SO33N100", word: "NEPTUNE", bg: "#132D69", fg: "#EAF0FF" },
+  { sku: "SO33L100", word: "URANUS", bg: "#9ED5E1", fg: "#0B2530" },
+  { sku: "SO33P100", word: "VENUS", bg: "#E8B6BE", fg: "#3A1018" },
+  { sku: "SO33P700", word: "PINK MOON", bg: "#E23E86", fg: "#FFF0F6" },
 ];
+const ORBIT = ["SO33W700", "SO33R100", "SO33J100", "SO33N700", "SO33P700", "SO33L100", "SO33C100", "SO33G100", "SO33P100", "SO33B700", "SO33M700", "SO33N100"];
+const WALL = ["SO33M100", "SO33R100", "SO33J100", "SO33N700", "SO33P700", "SO33L100", "SO33W700", "SO33C100", "SO33G100", "SO33P100", "SO33B700", "SO33M700", "SO33N100"];
+const STRAPS = [
+  { file: "vertech-black", chip: "#151515", tint: "#1b1b1f", name: "black" },
+  { file: "vertech-white", chip: "#F2F2F0", tint: "#3a3a40", name: "white" },
+  { file: "vertech-capri-blue", chip: "#4FB3E8", tint: "#0f3550", name: "capri blue" },
+  { file: "vertech-black-and-red-stitches", chip: "#1A1A1A", ring: "#D3262B", tint: "#3a1214", name: "black · red stitch" },
+  { file: "vertech-orange", chip: "#F26B1D", tint: "#5a2408", name: "orange" },
+];
+const shakeAt = (f, s, amp) => { const t = f - s; if (t < 0 || t > 20) return [0, 0]; const k = amp * Math.exp(-t / 4); return [(random(`x${f}`) - 0.5) * 2 * k, (random(`y${f}`) - 0.5) * 2 * k]; };
 
 function Site({ f }) {
   const [scroll] = keyed(f, SCROLL);
   const [prev] = keyed(f - 1, SCROLL);
-  const vel = scroll - prev;
-  const skew = Math.max(-2, Math.min(2, vel * 0.03)); // the page leans into fast scrolls
-  // strap state
+  const skew = Math.max(-2, Math.min(2, (scroll - prev) * 0.03));
+  const [mx, my] = keyed(f, CURSOR, Easing.bezier(0.45, 0, 0.2, 1));
+  // missions: which name is hovered
+  let pi = -1; T.hovers.forEach((h, i) => { if (f >= h) pi = i; });
+  const pl = PLANETS[Math.max(0, pi)];
+  const pHit = pi < 0 ? 0 : f - T.hovers[pi];
+  // strap
   let k = 0; T.swaps.forEach((s, i) => { if (f >= s) k = i + 1; });
   const strap = STRAPS[k], prevStrap = STRAPS[Math.max(0, k - 1)];
   const lastSwap = k > 0 ? T.swaps[k - 1] : 0;
-  const wipe = k === 0 ? 1 : interpolate(f - lastSwap, [0, 8], [0, 1], { ...clamp, easing: easeOut });
-  const railX = interpolate(f, [T.rail0, T.rail1], [0, -1180], { ...clamp, easing: Easing.bezier(0.45, 0, 0.25, 1) });
-  const ring = (f * 0.25) % 360;
+  const wipe = k === 0 ? 1 : interpolate(f - lastSwap, [0, 6], [0, 1], { ...clamp, easing: easeOut });
+  // hero: the hand draws the ring, the Moon lands
+  const hand = interpolate(f, [-20, -6], [0, 360], { ...clamp, easing: inOut });
+  const slam = f < -6 ? 0 : interpolate(spring({ frame: f + 6, fps: 30, config: { damping: 12, stiffness: 200 } }), [0, 1], [1.5, 1]);
+  const [hx, hy] = shakeAt(f, -6, 14);
+  // orbit: dragged by the cursor
+  const drag = interpolate(f, [ARRIVE.orbit + 20, ARRIVE.orbit + 60], [0, 1], { ...clamp, easing: inOut });
+  const orbitRot = (f - ARRIVE.orbit) * 0.012 + drag * 2.4;
+  const cnt = Math.round(interpolate(f, [ARRIVE.orbit, ARRIVE.orbit + 34], [0, 32], { ...clamp, easing: Easing.out(Easing.cubic) }));
+  // wall: the light follows the cursor
+  const wallY = 3600;
   return (
-    <div style={{ width: PW, height: PH, position: "relative", overflow: "hidden", background: W_.ivory, fontFamily: SANS, color: W_.ink }}>
+    <div style={{ width: PW, height: PH, position: "relative", overflow: "hidden", background: L.ink, fontFamily: SANS, color: L.chalk }}>
       <div style={{ position: "absolute", left: 0, right: 0, top: -scroll, transform: `skewY(${skew}deg)`, transformOrigin: `50% ${scroll + PH / 2}px` }}>
-        {/* ─── 1. hero */}
-        <section style={{ position: "absolute", top: 0, left: 0, width: PW, height: 900, overflow: "hidden", background: `radial-gradient(ellipse at 70% 45%, #fffdf8 0%, ${W_.ivory} 60%)` }}>
-          {/* rotating tachymeter ring */}
-          <svg width="900" height="900" viewBox="-450 -450 900 900" style={{ position: "absolute", left: 1190 - 450, top: 450 - 450 + scroll * 0.2, transform: `rotate(${ring}deg)` }}>
-            <circle r="360" fill="none" stroke={W_.ink} strokeOpacity="0.12" strokeWidth="1.5" />
-            <circle r="410" fill="none" stroke={W_.gold} strokeOpacity="0.5" strokeWidth="1" strokeDasharray="2 10" />
-            {Array.from({ length: 60 }, (_, i) => { const a = (i / 60) * Math.PI * 2, r0 = i % 5 ? 344 : 330; return <line key={i} x1={Math.cos(a) * r0} y1={Math.sin(a) * r0} x2={Math.cos(a) * 360} y2={Math.sin(a) * 360} stroke={W_.ink} strokeOpacity={i % 5 ? 0.2 : 0.5} strokeWidth={i % 5 ? 1 : 2} />; })}
-            {["60", "70", "80", "100", "120", "150", "200", "300", "500"].map((t, i) => { const a = -Math.PI / 2 + (i / 9) * Math.PI * 2; return <text key={t} x={Math.cos(a) * 385} y={Math.sin(a) * 385 + 5} fill={W_.ink} fillOpacity="0.35" fontSize="14" fontFamily="Mono" textAnchor="middle">{t}</text>; })}
-          </svg>
-          <Img src={watch("SO33M100")} style={{ position: "absolute", left: 1190 - 430 * AR, top: 20 + scroll * 0.45, height: 860, transform: `rotate(${-14 + Math.sin(f / 40) * 2}deg) translateY(${Math.sin(f / 30) * 8}px)`, filter: "drop-shadow(0 40px 50px rgba(60,45,20,0.28))" }} />
-          {/* nav */}
-          <div style={{ position: "absolute", left: 80, right: 80, top: 34, display: "flex", justifyContent: "space-between", alignItems: "center", ...fade(f, -14, 10) }}>
-            <span style={{ fontFamily: SERIF, fontSize: 34, letterSpacing: "0.06em" }}>WTC</span>
-            <span style={{ display: "flex", gap: 42, fontSize: 13, letterSpacing: "0.18em", textTransform: "uppercase" }}>{["Collection", "Strap Studio", "Journal", "About"].map((n) => <span key={n}>{n}</span>)}</span>
-            <span style={{ fontSize: 13, letterSpacing: "0.18em", textTransform: "uppercase" }}>Bag (0)</span>
-          </div>
-          <div style={{ position: "absolute", left: 80, top: 190 }}>
-            <Label style={{ color: W_.gold, ...fade(f, -14, 10) }}>Omega × Swatch · Bioceramic</Label>
-            <div style={{ marginTop: 26, fontFamily: SERIF, fontSize: 210, lineHeight: 0.86, letterSpacing: "-0.035em" }}>
-              <div><Reveal f={f} start={-16} text="Time," /></div>
-              <div style={{ fontStyle: "italic", marginLeft: 120 }}><Reveal f={f} start={-10} text="curated." /></div>
-            </div>
-            <div style={{ marginTop: 40, width: 420, fontSize: 17, lineHeight: 1.65, color: W_.mute, ...fade(f, -6) }}>Every watch sourced, checked in hand and shipped complete — with everything it came with.</div>
-            <div style={{ marginTop: 34, display: "inline-flex", alignItems: "center", gap: 16, fontSize: 14, letterSpacing: "0.2em", textTransform: "uppercase", ...fade(f, -2) }}>
-              <span style={{ borderBottom: `1.5px solid ${W_.ink}`, paddingBottom: 6 }}>Explore the collection</span><span style={{ transform: `translateX(${Math.sin(f / 6) * 4}px)` }}>→</span>
-            </div>
-          </div>
-          {/* marquee */}
-          <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 64, background: W_.ink, color: W_.ivory, overflow: "hidden", display: "flex", alignItems: "center" }}>
-            <div style={{ whiteSpace: "nowrap", fontFamily: SERIF, fontSize: 30, fontStyle: "italic", transform: `translateX(${-(f * 4) % 1200}px)` }}>
-              {Array.from({ length: 6 }, () => "Mission to the Moon  ✦  Full Moon  ✦  Super Blue  ✦  Mission to Mars  ✦  ").join("")}
-            </div>
-          </div>
-        </section>
-        {/* ─── 2. the collection: a rail that runs sideways */}
-        <section style={{ position: "absolute", top: 900, left: 0, width: PW, height: 900, overflow: "hidden", background: W_.paper }}>
-          <div style={{ position: "absolute", left: 80, top: 70, display: "flex", alignItems: "baseline", gap: 30 }}>
-            <span style={{ fontFamily: SERIF, fontSize: 120, letterSpacing: "-0.03em", lineHeight: 1 }}><Reveal f={f} start={ARRIVE.rail - 6} text="The Collection" /></span>
-            <Label style={{ color: W_.mute, ...fade(f, ARRIVE.rail) }}>32 pieces · 2026</Label>
-          </div>
-          <div style={{ position: "absolute", left: 80, top: 250, display: "flex", gap: 34, transform: `translateX(${railX}px)` }}>
-            {RAIL.map(([sku, name], i) => {
-              const p = after(f, ARRIVE.rail + i * 3, [0, 20], [0, 1], { easing: easeOut });
-              const cxCard = 80 + railX + i * (380 + 34) + 190;
-              const focus = Math.max(0, 1 - Math.abs(cxCard - 800) / 700);
-              return (
-                <div key={sku} style={{ position: "relative", width: 380, height: 560, flex: "none", borderRadius: 4, background: i % 2 ? "#ECE7DE" : "#F4F0E9", overflow: "hidden",
-                  opacity: p, transform: `translateY(${(1 - p) * 120 - focus * 14}px)` }}>
-                  <Label style={{ position: "absolute", left: 22, top: 22, fontSize: 11, color: W_.mute }}>No. {String(i + 1).padStart(2, "0")}</Label>
-                  <Img src={watch(sku)} style={{ position: "absolute", height: 430, left: 190 - 215 * AR, top: 30, transform: `rotate(${(cxCard - 800) * -0.012}deg) scale(${0.92 + focus * 0.1})`, filter: "drop-shadow(0 24px 24px rgba(60,45,20,0.22))" }} />
-                  <div style={{ position: "absolute", left: 22, right: 22, bottom: 24, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                    <span style={{ fontFamily: SERIF, fontSize: 30 }}>{name}</span><span style={{ fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", color: W_.mute }}>View →</span>
-                  </div>
-                </div>
-              );
+        {/* ─── 1. hero: tick ring + the Moon */}
+        <section style={{ position: "absolute", top: 0, left: 0, width: PW, height: 900, overflow: "hidden", background: `radial-gradient(circle at 66% 50%, rgba(201,162,39,0.30), transparent 50%), ${L.ink}` }}>
+          <svg width="900" height="900" viewBox="-450 -450 900 900" style={{ position: "absolute", left: 1060 - 450, top: 0 + scroll * 0.2, transform: `rotate(${f * 0.3}deg)` }}>
+            {Array.from({ length: 60 }, (_, i) => {
+              if (i * 6 > hand) return null;
+              const a = ((i * 6 - 90) * Math.PI) / 180, big = i % 5 === 0, r0 = big ? 340 : 360;
+              return <line key={i} x1={Math.cos(a) * r0} y1={Math.sin(a) * r0} x2={Math.cos(a) * 380} y2={Math.sin(a) * 380} stroke={big ? L.gold : L.chalk} strokeWidth={big ? 5 : 2} strokeOpacity={big ? 0.9 : 0.45} strokeLinecap="round" />;
             })}
+            <circle r="400" fill="none" stroke={L.gold} strokeOpacity="0.25" strokeWidth="1.5" />
+          </svg>
+          <div style={{ position: "absolute", inset: 0, transform: `translate(${hx}px, ${hy}px)` }}>
+            <Img src={watch("SO33M100")} style={{ position: "absolute", left: 1060 - 520 * AR, top: -70 + scroll * 0.4, height: 1040, transform: `scale(${slam}) rotate(${(slam - 1) * -14 + Math.sin(f / 40) * 1.5}deg)`, filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.7))" }} />
           </div>
-          {/* rail progress */}
-          <div style={{ position: "absolute", left: 80, right: 80, bottom: 46, height: 2, background: W_.line }}><div style={{ width: `${18 + (-railX / 1180) * 82}%`, height: 2, background: W_.ink }} /></div>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, #09090a 0%, rgba(9,9,10,0.85) 30%, transparent 55%)" }} />
+          <div style={{ position: "absolute", left: 80, right: 80, top: 34, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontFamily: SERIF, fontSize: 34, letterSpacing: "0.05em" }}>WTC</span>
+            <span style={{ display: "flex", gap: 40, fontSize: 14, color: L.mute }}>{["Missions", "Collection", "Strap Studio", "Journal"].map((n) => <span key={n}>{n}</span>)}</span>
+            <span style={{ fontSize: 14, padding: "10px 20px", borderRadius: 99, border: `1px solid ${L.line}` }}>Bag</span>
+          </div>
+          <div style={{ position: "absolute", left: 80, top: 250 }}>
+            <Label style={{ color: L.goldSoft }}>Omega × Swatch · 32 watches</Label>
+            <div style={{ marginTop: 24, fontFamily: GROT, fontWeight: 700, fontSize: 132, lineHeight: 0.92, letterSpacing: "-0.045em", textTransform: "uppercase" }}>
+              <div><Reveal f={f} start={-14} text="Every watch," /></div>
+            </div>
+            <div style={{ fontFamily: SERIF, fontStyle: "italic", fontSize: 140, lineHeight: 1, color: L.goldSoft }}><Reveal f={f} start={-8} text="one insider." /></div>
+            <div style={{ marginTop: 44, display: "flex", gap: 14, ...fade(f, -2) }}>
+              <div style={{ padding: "20px 34px", borderRadius: 99, background: f >= 46 && f < 66 ? L.goldSoft : L.chalk, color: L.ink, fontSize: 17, fontWeight: 600 }}>Shop the collection</div>
+              <div style={{ padding: "20px 34px", borderRadius: 99, border: `1px solid ${L.line}`, fontSize: 17 }}>Try the Strap Studio</div>
+            </div>
+          </div>
         </section>
-        {/* ─── 3. the detail: a dial macro through an opening circle */}
-        <section style={{ position: "absolute", top: 1800, left: 0, width: PW, height: 900, overflow: "hidden", background: W_.ink, color: W_.ivory }}>
-          {(() => {
-            const r = interpolate(sp(f, ARRIVE.detail, { damping: 20, stiffness: 70 }), [0, 1], [0, 360]);
-            const zoom = interpolate(f, [ARRIVE.detail, 240], [2.6, 3.0], clamp);
+        {/* ─── 2. missions: hover a name, the room takes its colour */}
+        <section style={{ position: "absolute", top: 900, left: 0, width: PW, height: 900, overflow: "hidden", background: pi < 0 ? "#111114" : pl.bg }}>
+          {pi >= 0 && <div style={{ position: "absolute", inset: 0, background: pl.bg, clipPath: `circle(${interpolate(pHit, [0, 7], [0, 160], { ...clamp, easing: easeOut })}% at ${mx}px ${my - 900 + scroll}px)` }} />}
+          {pi >= 0 && (() => {
+            const inP = interpolate(pHit, [0, 6], [0, 1], { ...clamp, easing: easeOut });
+            const size = Math.min(1080 / (pl.word.length * 0.6), 460);
             return (
-              <div style={{ position: "absolute", left: 1060 - 380, top: 450 - 380, width: 760, height: 760 }}>
-                <div style={{ position: "absolute", inset: 0, clipPath: `circle(${r}px at 50% 50%)`, overflow: "hidden", background: "#0d0d0f" }}>
-                  <Img src={watch("SO33M100")} style={{ position: "absolute", height: 760 * zoom, left: 380 - (760 * zoom * AR) / 2, top: 380 - 760 * zoom * 0.5, transform: `rotate(${(f - ARRIVE.detail) * 0.08}deg)` }} />
-                </div>
-                <svg width="760" height="760" style={{ position: "absolute", inset: 0, overflow: "visible" }}>
-                  <circle cx="380" cy="380" r={Math.max(1, r + 18)} fill="none" stroke={W_.gold} strokeWidth="1.5" strokeDasharray={`${2 * Math.PI * (r + 18)}`} strokeDashoffset={`${2 * Math.PI * (r + 18) * (1 - after(f, ARRIVE.detail + 6, [0, 30], [0, 1], { easing: easeOut }))}`} transform="rotate(-90 380 380)" />
-                </svg>
-              </div>
+              <>
+                <div style={{ position: "absolute", left: 470, right: 0, top: 450 - size * 0.55, textAlign: "center", whiteSpace: "nowrap", fontFamily: GROT, fontWeight: 700, fontSize: size, lineHeight: 1, letterSpacing: "-0.05em", color: pl.fg, opacity: 0.9,
+                  transform: `translateX(${(1 - inP) * -200 - pHit * 2}px)`, WebkitTextStroke: pi % 2 ? `4px ${pl.fg}` : "none", ...(pi % 2 ? { color: "transparent" } : {}) }}>{pl.word}</div>
+                <Img src={watch(pl.sku)} style={{ position: "absolute", height: 1100, left: 1030 - 550 * AR, top: -100, transform: `translateX(${(1 - inP) * 500}px) rotate(${(1 - inP) * 16 + pHit * 0.2}deg)`, filter: `blur(${(1 - inP) * 16}px) drop-shadow(0 30px 50px rgba(0,0,0,0.4))` }} />
+              </>
             );
           })()}
-          <div style={{ position: "absolute", left: 80, top: 190 }}>
-            <Label style={{ color: W_.gold, ...fade(f, ARRIVE.detail) }}>Checked in hand</Label>
-            <div style={{ marginTop: 24, fontFamily: SERIF, fontSize: 112, lineHeight: 0.95, letterSpacing: "-0.03em" }}>
-              <div><Reveal f={f} start={ARRIVE.detail + 2} text="Every piece," /></div>
-              <div style={{ fontStyle: "italic", color: "#E2C469" }}><Reveal f={f} start={ARRIVE.detail + 8} text="inspected." /></div>
-            </div>
-            <div style={{ display: "flex", gap: 54, marginTop: 70 }}>
-              {[[200, "+", "Customers"], [26, "", "In stock"], [100, "%", "Complete sets"]].map(([v, s, l], i) => (
-                <div key={l} style={fade(f, ARRIVE.detail + 14 + i * 4)}>
-                  <div style={{ fontFamily: SERIF, fontSize: 70 }}>{Math.round(interpolate(f, [ARRIVE.detail + 14, ARRIVE.detail + 50], [0, v], { ...clamp, easing: Easing.out(Easing.cubic) }))}{s}</div>
-                  <Label style={{ fontSize: 11, color: "rgba(242,238,230,0.55)", marginTop: 6 }}>{l}</Label>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-        {/* ─── 4. strap studio: the room takes the strap's colour */}
-        <section style={{ position: "absolute", top: 2700, left: 0, width: PW, height: 900, overflow: "hidden", background: prevStrap.bg }}>
-          <div style={{ position: "absolute", inset: 0, background: strap.bg, clipPath: `circle(${wipe * 140}% at 1060px 450px)` }} />
-          <div style={{ position: "absolute", left: 1060 - 230, top: 30, width: 460, height: 840, WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%)", ...fade(f, ARRIVE.strap - 4, 80) }}>
-            {k > 0 && <Img src={staticFile(`s/${prevStrap.file}.png`)} style={{ position: "absolute", height: 840, left: 230 - 420 * 0.558, top: 0 }} />}
-            <Img src={staticFile(`s/${strap.file}.png`)} style={{ position: "absolute", height: 840, left: 230 - 420 * 0.558, top: 0, clipPath: `inset(0 0 ${(1 - wipe) * 100}% 0)`, filter: "drop-shadow(0 30px 40px rgba(0,0,0,0.2))" }} />
-          </div>
-          <div style={{ position: "absolute", left: 80, top: 200 }}>
-            <Label style={{ color: W_.mute, ...fade(f, ARRIVE.strap) }}>Strap Studio</Label>
-            <div style={{ marginTop: 24, fontFamily: SERIF, fontSize: 120, lineHeight: 0.92, letterSpacing: "-0.03em" }}>
-              <div><Reveal f={f} start={ARRIVE.strap + 2} text="Try any strap." /></div>
-              <div style={{ fontStyle: "italic" }}><Reveal f={f} start={ARRIVE.strap + 8} text="Before you buy." /></div>
-            </div>
-            <div style={{ display: "flex", gap: 16, marginTop: 60 }}>
-              {STRAPS.map((s, j) => {
-                const p = after(f, ARRIVE.strap + 12 + j * 2, [0, 12], [0, 1], { easing: easeOut });
-                return <div key={j} style={{ width: 54, height: 54, borderRadius: 99, background: s.chip, transform: `scale(${(0.4 + 0.6 * p) * (j === k ? 1.12 : 1)})`, opacity: p,
-                  boxShadow: `0 0 0 ${s.ring ? 4 : 1}px ${s.ring || "rgba(0,0,0,0.15)"}${j === k ? `, 0 0 0 9px ${strap.bg}, 0 0 0 11px ${W_.ink}` : ""}` }} />;
+          <div style={{ position: "absolute", left: 80, top: 120 }}>
+            <Label style={{ color: pi < 0 ? L.goldSoft : pl.fg, opacity: 0.85 }}>The missions — hover one</Label>
+            <div style={{ marginTop: 30 }}>
+              {PLANETS.map((p, i) => {
+                const on = i === pi;
+                const r = after(f, ARRIVE.missions - 4 + i * 2, [0, 14], [0, 1], { easing: easeOut });
+                return <div key={p.word} style={{ fontFamily: GROT, fontWeight: 700, fontSize: 62, lineHeight: 1.08, letterSpacing: "-0.03em", textTransform: "uppercase",
+                  color: pi < 0 ? L.chalk : pl.fg, opacity: r * (pi < 0 || on ? 1 : 0.35), transform: `translateX(${(1 - r) * -60 + (on ? 24 : 0)}px)` }}>
+                  {on ? "→ " : ""}{p.word}
+                </div>;
               })}
             </div>
-            <div style={{ marginTop: 26, fontFamily: SERIF, fontStyle: "italic", fontSize: 34, ...fade(f, ARRIVE.strap + 18) }}>{strap.name}</div>
           </div>
         </section>
-        {/* ─── 5. finale */}
-        <section style={{ position: "absolute", top: 3600, left: 0, width: PW, height: 900, overflow: "hidden", background: W_.ivory, textAlign: "center" }}>
-          <Label style={{ marginTop: 200, color: W_.gold, ...fade(f, ARRIVE.finale) }}>Watch Trade Chronicles</Label>
-          <div style={{ marginTop: 26, fontFamily: SERIF, fontSize: 250, lineHeight: 0.9, letterSpacing: "-0.04em" }}>
-            <Reveal f={f} start={ARRIVE.finale + 2} text="Find" style={{ justifyContent: "center" }} />{" "}
-            <span style={{ fontStyle: "italic" }}><Reveal f={f} start={ARRIVE.finale + 7} text="yours." /></span>
+        {/* ─── 3. orbit: drag to spin */}
+        <section style={{ position: "absolute", top: 1800, left: 0, width: PW, height: 900, overflow: "hidden", background: `radial-gradient(ellipse at 50% 45%, rgba(201,162,39,0.28), transparent 50%), ${L.ink}` }}>
+          {(() => {
+            const open = sp(f, ARRIVE.orbit - 6, { damping: 14, stiffness: 90 });
+            const rx = 640 * open, ry = 170 * open, cxo = 800, cyo = 470;
+            const items = ORBIT.map((sku, i) => { const a = orbitRot + (i / ORBIT.length) * Math.PI * 2, z = Math.sin(a); return { sku, x: cxo + Math.cos(a) * rx, y: cyo + z * ry, z, s: 0.55 + 0.45 * (z + 1) / 2 }; }).sort((a, b) => a.z - b.z);
+            const draw = (it) => <Img key={it.sku} src={watch(it.sku)} style={{ position: "absolute", height: 330 * it.s, left: it.x - (330 * it.s * AR) / 2, top: it.y - 165 * it.s, filter: `brightness(${0.45 + 0.55 * it.s})` }} />;
+            const land = f < ARRIVE.orbit + 34 ? 1 : interpolate(spring({ frame: f - ARRIVE.orbit - 34, fps: 30, config: { damping: 9, stiffness: 200 } }), [0, 1], [1.2, 1]);
+            return (
+              <>
+                <svg width={PW} height="900" style={{ position: "absolute", inset: 0 }}><ellipse cx={cxo} cy={cyo} rx={Math.max(1, rx)} ry={Math.max(1, ry)} fill="none" stroke={L.gold} strokeOpacity="0.35" strokeDasharray="3 9" /></svg>
+                {items.filter((i) => i.z < 0).map(draw)}
+                <div style={{ position: "absolute", left: 0, right: 0, top: 230, textAlign: "center", transform: `scale(${land})` }}>
+                  <div style={{ fontFamily: GROT, fontWeight: 700, fontSize: 260, lineHeight: 1, letterSpacing: "-0.06em", textShadow: "0 0 40px #000" }}>{cnt}</div>
+                  <Label style={{ color: L.goldSoft, textShadow: "0 0 12px #000" }}>watches · one collection</Label>
+                </div>
+                {items.filter((i) => i.z >= 0).map(draw)}
+                <div style={{ position: "absolute", left: 0, right: 0, bottom: 50, textAlign: "center", fontFamily: SERIF, fontStyle: "italic", fontSize: 54 }}>
+                  <Reveal f={f} start={ARRIVE.orbit + 10} text="Checked in hand." style={{ justifyContent: "center" }} />{" "}
+                  <span style={{ color: L.goldSoft }}><Reveal f={f} start={ARRIVE.orbit + 18} text="Shipped complete." /></span>
+                </div>
+                <Label style={{ position: "absolute", right: 80, top: 60, color: L.mute, opacity: interpolate(drag, [0, 0.2, 0.8, 1], [1, 1, 1, 0.4]) }}>← drag to spin →</Label>
+              </>
+            );
+          })()}
+        </section>
+        {/* ─── 4. strap studio */}
+        <section style={{ position: "absolute", top: 2700, left: 0, width: PW, height: 900, overflow: "hidden", background: L.ink }}>
+          <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at 70% 50%, ${strap.tint}, ${L.ink} 70%)` }} />
+          <div style={{ position: "absolute", left: 1120 - 250, top: 30, width: 500, height: 840, WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%)", transform: `scale(${k > 0 ? interpolate(f - lastSwap, [0, 2, 8], [1.03, 1.03, 1], clamp) : 1})` }}>
+            {k > 0 && <Img src={staticFile(`s/${prevStrap.file}.png`)} style={{ position: "absolute", height: 840, left: 250 - 420 * 0.558, top: 0 }} />}
+            <Img src={staticFile(`s/${strap.file}.png`)} style={{ position: "absolute", height: 840, left: 250 - 420 * 0.558, top: 0, clipPath: `inset(0 0 ${(1 - wipe) * 100}% 0)` }} />
+            {k > 0 && wipe < 1 && <div style={{ position: "absolute", left: 40, right: 40, top: wipe * 840 - 2, height: 4, background: L.goldSoft, boxShadow: `0 0 24px 6px ${L.gold}88` }} />}
           </div>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 18, marginTop: 50, padding: "24px 46px", borderRadius: 999, background: f >= T.ctaClick ? W_.gold : W_.ink, color: W_.ivory, fontSize: 16, letterSpacing: "0.22em", textTransform: "uppercase",
-            transform: `scale(${(f >= T.ctaClick && f < T.ctaClick + 4 ? 0.95 : 1) * (0.8 + 0.2 * sp(f, ARRIVE.finale + 14))})`, opacity: sp(f, ARRIVE.finale + 14) }}>Shop the collection <span>→</span></div>
-          <div style={{ position: "absolute", left: 80, right: 80, bottom: 40, display: "flex", justifyContent: "space-between", fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", color: W_.mute, borderTop: `1px solid ${W_.line}`, paddingTop: 22 }}>
-            <span>© Watch Trade Chronicles</span><span>Instagram · WhatsApp · Journal</span><span>watchtradechronicles.com</span>
+          <div style={{ position: "absolute", left: 100, top: 230 }}>
+            <Label style={{ color: L.goldSoft }}>Strap Studio</Label>
+            <div style={{ marginTop: 20, fontFamily: GROT, fontWeight: 700, fontSize: 120, lineHeight: 0.95, letterSpacing: "-0.045em", textTransform: "uppercase" }}><Reveal f={f} start={ARRIVE.strap - 2} text="Try it on" /></div>
+            <div style={{ fontFamily: SERIF, fontStyle: "italic", fontSize: 116, color: L.goldSoft, lineHeight: 1.05 }}><Reveal f={f} start={ARRIVE.strap + 4} text="before you buy." /></div>
+            <div style={{ display: "flex", gap: 18, marginTop: 50 }}>
+              {STRAPS.map((s, j) => <div key={j} style={{ width: 56, height: 56, borderRadius: 99, background: s.chip, boxShadow: `0 0 0 ${s.ring ? 4 : 1.5}px ${s.ring || "rgba(255,255,255,0.2)"}${j === k ? `, 0 0 0 10px ${L.ink}, 0 0 0 12px ${L.gold}` : ""}`, transform: `scale(${j === k ? 1.08 : 1})` }} />)}
+            </div>
+            <Label style={{ marginTop: 26, color: L.mute }}>{strap.name}</Label>
+          </div>
+        </section>
+        {/* ─── 5. the wall: the light follows you */}
+        <section style={{ position: "absolute", top: wallY, left: 0, width: PW, height: 900, overflow: "hidden", background: L.ink }}>
+          <div style={{ position: "absolute", left: -120, top: -80, width: PW + 240, transform: "rotate(-6deg)", display: "flex", flexWrap: "wrap", gap: 18 }}>
+            {Array.from({ length: 30 }, (_, i) => {
+              const sku = WALL[i % WALL.length];
+              const col = i % 10, row = Math.floor(i / 10);
+              const x = col * 182 - 30, y = row * 330 + 100;
+              const d = Math.hypot(x - mx, y - (my - wallY + scroll));
+              const lit = Math.max(0, 1 - d / 420);
+              const a = after(f, ARRIVE.wall - 6 + Math.hypot(col - 4.5, row - 1) * 1.5, [0, 12], [0, 1], { easing: easeOut });
+              return <Img key={i} src={watch(sku)} style={{ width: 164, height: 278, objectFit: "contain", opacity: a, transform: `translateY(${(1 - a) * 50}px) scale(${1 + lit * 0.08})`, filter: `brightness(${0.4 + lit * 0.9})` }} />;
+            })}
+          </div>
+          <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle 360px at ${mx}px ${my - wallY + scroll}px, rgba(226,196,105,0.22), transparent 70%)` }} />
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(9,9,10,0.85) 0%, rgba(9,9,10,0.5) 34%, transparent 62%)" }} />
+          <div style={{ position: "absolute", left: 0, right: 0, top: 290, textAlign: "center" }}>
+            <div style={{ fontFamily: GROT, fontWeight: 700, fontSize: 110, letterSpacing: "-0.045em", textTransform: "uppercase", lineHeight: 1 }}><Reveal f={f} start={ARRIVE.wall} text="The whole collection." style={{ justifyContent: "center" }} /></div>
+            <div style={{ fontFamily: SERIF, fontStyle: "italic", fontSize: 104, color: L.goldSoft }}><Reveal f={f} start={ARRIVE.wall + 6} text="One place." style={{ justifyContent: "center" }} /></div>
+            <div style={{ display: "inline-block", marginTop: 30, padding: "22px 44px", borderRadius: 99, background: f >= T.ctaClick ? L.goldSoft : L.gold, color: L.ink, fontFamily: GROT, fontWeight: 700, fontSize: 22, letterSpacing: "0.04em", textTransform: "uppercase",
+              transform: `scale(${(f >= T.ctaClick && f < T.ctaClick + 4 ? 0.94 : 1) * (0.8 + 0.2 * sp(f, ARRIVE.wall + 12))})`, opacity: sp(f, ARRIVE.wall + 12) }}>Order now →</div>
           </div>
         </section>
       </div>
-      {/* scroll progress + a cursor that only shows where something is clicked */}
-      <div style={{ position: "absolute", right: 14, top: 120, bottom: 120, width: 2, background: "rgba(18,17,16,0.1)" }}><div style={{ position: "absolute", left: 0, top: `${(scroll / 3600) * 80}%`, width: 2, height: "20%", background: W_.gold }} /></div>
-      <Cursor f={f} />
+      <div style={{ position: "absolute", right: 14, top: 120, bottom: 120, width: 2, background: "rgba(255,255,255,0.08)" }}><div style={{ position: "absolute", left: 0, top: `${(scroll / 3600) * 80}%`, width: 2, height: "20%", background: L.gold }} /></div>
+      <Cursor f={f} x={mx} y={my} />
     </div>
   );
 }
 
-const CURSOR = [[0, 1400, 760], [40, 300, 720], [60, 330, 640], [240, 330, 640], [T.swaps[0] - 2, 80 + 70 + 22, 200 + 380], [T.swaps[1] - 2, 80 + 2 * 70 + 27, 200 + 380], [T.swaps[2] - 2, 80 + 3 * 70 + 27, 200 + 380], [T.swaps[3] - 2, 80 + 4 * 70 + 27, 200 + 380], [340, 900, 640], [T.ctaClick - 2, 830, 610], [450, 840, 615]];
+const CURSOR = [
+  [0, 1300, 760], [36, 280, 640], [64, 300, 600], [76, 360, 300],
+  ...[0, 1, 2, 3, 4, 5].map((i) => [T.hovers[i], 200 + i * 6, 170 + i * 67 + 34]),
+  [160, 300, 500], [ARRIVE.orbit + 20, 420, 520], [ARRIVE.orbit + 60, 1180, 520], [ARRIVE.orbit + 66, 1200, 520],
+  ...T.swaps.map((s, j) => [s - 2, 100 + (j + 1) * 74 + 28, 584]),
+  [330, 900, 420], [344, 500, 300], [T.ctaClick - 2, 800, 610], [450, 810, 615],
+];
 const CLICKS = [...T.swaps, T.ctaClick];
-function Cursor({ f }) {
-  const [x, y] = keyed(f, CURSOR, Easing.bezier(0.45, 0, 0.2, 1));
+function Cursor({ f, x, y }) {
   const press = CLICKS.some((c) => f >= c && f < c + 4);
-  const show = interpolate(f, [0, 6, 64, 70, 250, 256], [1, 1, 1, 0, 0, 1], clamp);
+  const grab = f >= ARRIVE.orbit + 20 && f < ARRIVE.orbit + 62;
   return (
     <>
-      {CLICKS.map((c) => f >= c && f < c + 16 && <div key={c} style={{ position: "absolute", left: x - 34, top: y - 34, width: 68, height: 68, borderRadius: 99, border: `2px solid ${W_.gold}`, transform: `scale(${interpolate(f - c, [0, 16], [0.3, 1.6], clamp)})`, opacity: interpolate(f - c, [0, 16], [1, 0], clamp) }} />)}
-      <svg width="34" height="34" viewBox="0 0 24 24" style={{ position: "absolute", left: x - 4, top: y - 2, opacity: show, transform: `scale(${press ? 0.85 : 1})`, filter: "drop-shadow(0 3px 4px rgba(0,0,0,0.35))" }}>
-        <path d="M4 2l15 11-7 1-4 7z" fill="#111" stroke="#fff" strokeWidth="1.4" strokeLinejoin="round" />
-      </svg>
+      {CLICKS.map((c) => f >= c && f < c + 16 && <div key={c} style={{ position: "absolute", left: x - 34, top: y - 34, width: 68, height: 68, borderRadius: 99, border: `2px solid ${L.goldSoft}`, transform: `scale(${interpolate(f - c, [0, 16], [0.3, 1.6], clamp)})`, opacity: interpolate(f - c, [0, 16], [1, 0], clamp) }} />)}
+      {grab
+        ? <div style={{ position: "absolute", left: x - 20, top: y - 20, width: 40, height: 40, borderRadius: 99, background: "rgba(226,196,105,0.25)", border: `2px solid ${L.goldSoft}` }} />
+        : <svg width="34" height="34" viewBox="0 0 24 24" style={{ position: "absolute", left: x - 4, top: y - 2, transform: `scale(${press ? 0.85 : 1})`, filter: "drop-shadow(0 3px 4px rgba(0,0,0,0.6))" }}><path d="M4 2l15 11-7 1-4 7z" fill="#fff" stroke="#000" strokeWidth="1.3" strokeLinejoin="round" /></svg>}
     </>
   );
 }
@@ -340,6 +364,7 @@ export const Main = () => {
   useFonts([
     [POP, "poppins-latin-700-normal.woff2", { weight: "700" }],
     [POP, "poppins-latin-600-normal.woff2", { weight: "600" }],
+    ["Grotesk", "space-grotesk-latin-700-normal.woff2", { weight: "700" }],
     [SERIF, "instrument-serif-latin-400-normal.woff2", { style: "normal" }],
     [SERIF, "instrument-serif-latin-400-italic.woff2", { style: "italic" }],
     [SANS, "inter-latin-400-normal.woff2", { weight: "400" }],
