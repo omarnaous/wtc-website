@@ -15,10 +15,10 @@ export const T = {
 // what's on screen in the film (seconds on the film's own clock) -> label under the screen
 export const TECH = [
   [1.5, 5.5, "Kinetic typography"],
-  [5.5, 9.5, "Animated counters"],
-  [9.5, 14, "Product try-on"],
-  [17.5, 21.5, "Website launch"],
-  [21.5, 25, "Logo reveal"],
+  [5.5, 9.6, "Animated counters"],
+  [9.6, 17.6, "Product try-on"],
+  [17.6, 21.0, "Website launch"],
+  [21.0, 25, "Logo reveal"],
 ];
 // the data beat: real survey figures, shown with their source; each one animates as the voice says it
 const wordAt = (w) => VO.words.find((x) => x.w.startsWith(w))?.start ?? A.conv;

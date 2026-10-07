@@ -32,8 +32,9 @@ cues = [
     *[W(ff(s) - 6, ff(s) + 4, 0.08, 0.25 if i % 2 else -0.25) for i, s in enumerate((1.5, 5.5, 9.5, 17.5, 21.5))],
     # data beat
     W(conv - 4, conv + 10, 0.14),
-    {"type": "counter", "start": p85 - 4, "end": p85 + 26, "gain": 0.18},
-    {"type": "vine_boom", "frame": p85 + 26, "gain": 0.55},             # 85% lands
+    {"type": "counter", "start": conv + 16, "end": p85 - 2, "gain": 0.12},   # slot-machine digits roll while the question hangs
+    {"type": "vine_boom", "frame": p85, "gain": 0.55},                  # 85%! lands
+    {"type": "pop", "frame": p85 + 8, "gain": 0.14},                    # the crowd lights up
     W(p83 - 16, p83 - 4, 0.1),                                          # ring panel slides up
     {"type": "graph_rise", "start": p83 - 2, "end": p83 + 28, "gain": 0.09, "f0": 300, "f1": 1000},
     {"type": "coins", "frame": p83 + 28, "gain": 0.4, "count": 12, "dur": 0.6},

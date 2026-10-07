@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 42.167,
+ "duration": 34.733,
  "seed": 21,
  "fade_out": 1.0,
  "cues": [
@@ -16,7 +16,7 @@
   {
    "type": "lofi",
    "start": 285,
-   "end": 1265,
+   "end": 1042,
    "bpm": 92,
    "gain": 0.18
   },
@@ -74,87 +74,92 @@
   },
   {
    "type": "whoosh",
-   "start": 399,
-   "end": 409,
+   "start": 372,
+   "end": 382,
    "gain": 0.08,
    "pan": -0.25
   },
   {
    "type": "whoosh",
-   "start": 585,
-   "end": 595,
+   "start": 456,
+   "end": 466,
    "gain": 0.08,
    "pan": 0.25
   },
   {
    "type": "whoosh",
-   "start": 705,
-   "end": 715,
+   "start": 555,
+   "end": 565,
    "gain": 0.08,
    "pan": -0.25
   },
   {
    "type": "whoosh",
-   "start": 782,
-   "end": 796,
+   "start": 608,
+   "end": 622,
    "gain": 0.14,
    "pan": 0
   },
   {
    "type": "counter",
-   "start": 820,
-   "end": 850,
-   "gain": 0.18
+   "start": 628,
+   "end": 711,
+   "gain": 0.12
   },
   {
    "type": "vine_boom",
-   "frame": 850,
+   "frame": 713,
    "gain": 0.55
   },
   {
+   "type": "pop",
+   "frame": 721,
+   "gain": 0.14
+  },
+  {
    "type": "whoosh",
-   "start": 908,
-   "end": 920,
+   "start": 736,
+   "end": 748,
    "gain": 0.1,
    "pan": 0
   },
   {
    "type": "graph_rise",
-   "start": 922,
-   "end": 952,
+   "start": 750,
+   "end": 780,
    "gain": 0.09,
    "f0": 300,
    "f1": 1000
   },
   {
    "type": "coins",
-   "frame": 952,
+   "frame": 780,
    "gain": 0.4,
    "count": 12,
    "dur": 0.6
   },
   {
    "type": "whoosh",
-   "start": 999,
-   "end": 1013,
+   "start": 832,
+   "end": 846,
    "gain": 0.12,
    "pan": 0
   },
   {
    "type": "stamp",
-   "frame": 1025,
+   "frame": 858,
    "gain": 0.5
   },
   {
    "type": "whoosh",
-   "start": 1031,
-   "end": 1043,
+   "start": 864,
+   "end": 876,
    "gain": 0.08,
    "pan": 0
   },
   {
    "type": "click",
-   "frame": 1043,
+   "frame": 876,
    "gain": 0.16,
    "freq": 1300
   }

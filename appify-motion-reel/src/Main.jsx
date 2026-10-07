@@ -86,8 +86,12 @@ function Conversion({ f }) {
   const { people: P1, marketers: P2 } = DATA;
   const head = spring({ frame: f - T.conv - 9, fps: 30, config: { damping: 13 } });
   const out = interpolate(f, [T.cta, T.cta + 12], [0, 1], { ...clamp, easing: easeIn });
-  const n1 = interpolate(f, [P1.at - 4, P1.at + 26], [0, P1.pct], { ...clamp, easing: easeOut });
-  const lit = Math.round((n1 / 100) * 20);
+  const revealed = f >= P1.at;
+  const spin = Math.floor(10 + random(`spin${Math.floor(f / 2)}`) * 89);           // slot-machine digits while the question hangs
+  const slam = spring({ frame: f - P1.at, fps: 30, config: { damping: 8, stiffness: 280 } });
+  const n1 = revealed ? P1.pct : spin;
+  const litP = interpolate(f, [P1.at, P1.at + 16], [0, 1], { ...clamp, easing: easeOut });
+  const lit = Math.round(litP * (P1.pct / 100) * 20);
   const panel2 = spring({ frame: f - P2.at + 14, fps: 30, config: { damping: 14 } });
   const n2 = interpolate(f, [P2.at - 2, P2.at + 28], [0, P2.pct], { ...clamp, easing: easeOut });
   const R = 104, CIRC = 2 * Math.PI * R;
@@ -99,15 +103,15 @@ function Conversion({ f }) {
   });
   return (
     <AbsoluteFill style={{ opacity: 1 - out, transform: `translateY(${-out * 80}px)` }}>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 236, textAlign: "center", ...MONO, fontSize: 28, color: C.uv, letterSpacing: "0.22em", opacity: head }}>THE DATA</div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 286, textAlign: "center", ...DISPLAY, fontSize: 84, color: C.ink, opacity: head, transform: `translateY(${(1 - head) * 30}px)` }}>Video <span style={{ color: C.uv }}>sells.</span></div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 220, textAlign: "center", ...MONO, fontSize: 28, color: C.uv, letterSpacing: "0.22em", opacity: head }}>QUICK QUESTION</div>
+      <div style={{ position: "absolute", left: 60, right: 60, top: 268, textAlign: "center", ...DISPLAY, fontSize: 58, lineHeight: 1.1, color: C.ink, opacity: head, transform: `translateY(${(1 - head) * 30}px)` }}>How many people say a video <span style={{ color: C.uv }}>convinced them to buy?</span></div>
       {/* 85%: a crowd lights up */}
       <div style={{ position: "absolute", left: 60, top: 410, width: 960, height: 420, borderRadius: 32, background: "#fff", border: "2px solid rgba(10,9,19,.08)", boxShadow: "0 24px 60px rgba(10,9,19,.10)", opacity: head }}>
-        <div style={{ position: "absolute", left: 40, top: 26, ...DISPLAY, fontSize: 120, color: C.uv, fontVariantNumeric: "tabular-nums" }}>{Math.round(n1)}%</div>
-        <div style={{ position: "absolute", left: 360, top: 50, width: 560, ...DISPLAY, fontSize: 40, lineHeight: 1.15, color: C.ink }}>{P1.text}</div>
+        <div style={{ position: "absolute", left: 40, top: 26, ...DISPLAY, fontSize: 120, color: revealed ? C.uv : "rgba(10,9,19,.35)", fontVariantNumeric: "tabular-nums", filter: revealed ? "none" : "blur(2px)", transform: `scale(${revealed ? 1 + 0.25 * Math.max(0, 1 - slam) : 1})`, transformOrigin: "30% 60%" }}>{n1}%</div>
+        <div style={{ position: "absolute", left: 360, top: 50, width: 560, ...DISPLAY, fontSize: 40, lineHeight: 1.15, color: C.ink, opacity: revealed ? 1 : 0.35 }}>{revealed ? P1.text : "Take a guess…"}</div>
         <div style={{ position: "absolute", left: 40, top: 196, width: 880, display: "grid", gridTemplateColumns: "repeat(10, 1fr)", rowGap: 10, justifyItems: "center" }}>
           {Array.from({ length: 20 }, (_, i) => {
-            const k = i < lit ? Math.max(0, 1 - (n1 / 100 * 20 - i)) : 0;
+            const k = i < lit ? Math.max(0, 1 - (litP * (P1.pct / 100) * 20 - i)) : 0;
             return <Person key={i} on={i < lit} k={Math.min(1, k)} />;
           })}
         </div>

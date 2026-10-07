@@ -13,8 +13,8 @@ FPS, SR = 30, 24000
 VOICE = "am_puck"
 PACE = 1.2 / 1.1                # same read speed as the Subscription Killer reel
 GAP = 0.15                      # same breath between sentences as Subscription Killer
-# the film plays at its real speed (its sound is part of the product); only the dark transition 15.6-17.4 s is cut
-CUT = [(0.0, 15.6), (17.4, 25.0)]
+# the film plays at its real speed (its sound is part of the product), cut down to its highlights
+CUT = [(0.0, 8.6), (9.6, 12.4), (17.6, 20.4), (21.0, 24.2)]   # real-speed highlight cut: kinetic+counters, try-on, website, logo
 FILM = round(sum(b - a for a, b in CUT) * 30)
 def f2r(sec):                    # film-clock seconds -> frames after the film starts in the reel
     t = 0.0
@@ -25,18 +25,19 @@ def f2r(sec):                    # film-clock seconds -> frames after the film s
 P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: dict(
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
 # delivery settings mirror the Subscription Killer reel (speed ~1.0-1.12, shift -1..2, range 1.5-1.7)
+# script: hook question -> open loop -> payoff over the film -> quiz on the data -> CTA question
 HOOK = [P("Still posting boring product photos and expecting engagement?", speed=1.1, shift=1, rng=1.5, mel="rise", gain=1)]
 # film lines: P(...) plus an optional "after": film-clock second the line may not start before
 FILM_LINES = [
-    P("So watch what happens when it moves.", speed=1.05, shift=2, rng=1.6, mel="arch", gain=2),
-    dict(P("Every number ticks up, every product comes alive, and suddenly people just can't look away.", shift=1, rng=1.6, mel="arch"), after=5.5),
-    dict(P("That's the launch film we made for W.T.C., and it turned a simple store launch into a moment people remember.",
-           "That's the launch film we made for WTC, and it turned a simple store launch into a moment people remember.", shift=0.5, rng=1.6, mel="arch", gain=0.5), after=12.0),
+    P("What if your product could do this?", speed=1.05, shift=2, rng=1.6, mel="rise", gain=2),
+    dict(P("See how every number counts up, and every product comes alive? That's what stops the scroll.", shift=1, rng=1.6, mel="arch", gain=0.5), after=5.5),
+    dict(P("This is the launch film we made for W.T.C. Now imagine it with your brand.",
+           "This is the launch film we made for WTC. Now imagine it with your brand.", shift=1, rng=1.6, mel="arch", gain=1), after=17.6),
 ]
-CONV = [P("And it works, because eighty-five percent of people say a video convinced them to buy, and eighty-three percent of marketers say it grew their sales.",
-          "And it works, because 85% of people say a video convinced them to buy, and 83% of marketers say it grew their sales.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1)]
-CTA = [P("Want your brand to stop the scroll? Send us a direct message with the word Motion, and grab our limited time motion graphics offer before it's gone.",
-         "Want your brand to stop the scroll? Send us a direct message with the word \"Motion\", and grab our limited-time motion graphics offer before it's gone.", shift=0.5, rng=1.6, mel="fall", gain=0.5)]
+CONV = [P("Quick question, how many people say a video convinced them to buy? Eighty-five percent! And eighty-three percent of marketers say it grew their sales.",
+          "Quick question: how many people say a video convinced them to buy? 85%! And 83% of marketers say it grew their sales.", speed=1.08, shift=1, rng=1.7, mel="arch", gain=1)]
+CTA = [P("Ready to stop the scroll? Direct message us the word Motion, and grab our limited time offer before it's gone.",
+         "Ready to stop the scroll? Direct message us the word \"Motion\" and grab our limited-time offer before it's gone.", shift=1, rng=1.6, mel="fall", gain=1)]
 
 
 def smooth(a, b, u):
@@ -128,7 +129,7 @@ for start, p, y in placed:
         voiced = env > env.max() * 0.08
         vt = np.cumsum(voiced) / max(1, voiced.sum())
         cw = p["cap"].split()
-        weights = np.array([max(2, len(w.strip('.,?!"\'$'))) + 1.5 for w in cw], float)
+        weights = np.array([(16 if "%" in w else max(2, len(w.strip('.,?!"\'$:')))) + 1.5 for w in cw], float)  # "85%" is said as 'eighty-five percent'
         edges = np.concatenate([[0], np.cumsum(weights) / weights.sum()])
         for j, w in enumerate(cw):
             a = np.searchsorted(vt, edges[j]); b = np.searchsorted(vt, edges[j + 1])
@@ -141,5 +142,11 @@ sf.write("vo/vo.wav", out, SR)
 hop = SR // FPS
 rms = np.array([np.sqrt(np.mean(out[i * hop:(i + 1) * hop] ** 2)) for i in range(total)])
 env = np.clip(rms / (np.percentile(rms[rms > 0.01], 90) + 1e-9), 0, 1)
+# snap the spoken numbers to the real voice onset after the pause (the word estimate above is approximate)
+for w in words:
+    if "%" in w["w"]:
+        st = int(w["start"])
+        for i in range(max(1, st - 8), min(total - 1, st + 18)):
+            if env[i - 1] < 0.06 and env[i] > 0.3: w["start"] = float(i); break
 json.dump({"duration": total, "anchors": A, "mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
 print("anchors", A, f"total {total / FPS:.1f}s, film voice ends {film_end_voice - A['show']} of {FILM} film frames")
