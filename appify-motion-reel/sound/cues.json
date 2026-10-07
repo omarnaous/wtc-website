@@ -1,13 +1,13 @@
 {
  "fps": 30,
- "duration": 33.0,
+ "duration": 39.9,
  "seed": 9,
  "fade_out": 0.8,
  "cues": [
   {
    "type": "lofi",
    "start": 0,
-   "end": 104,
+   "end": 131,
    "bpm": 92,
    "lp": 1100,
    "drums": 0.6,
@@ -20,88 +20,130 @@
   },
   {
    "type": "whoosh",
-   "start": 76,
-   "end": 92,
+   "start": 104,
+   "end": 120,
    "gain": 0.16
   },
   {
    "type": "buzz",
-   "frame": 90,
-   "gain": 0.16,
+   "frame": 118,
+   "gain": 0.14,
    "dur": 0.25
   },
   {
    "type": "scratch",
-   "frame": 101,
+   "frame": 129,
    "gain": 0.45
   },
   {
    "type": "impact",
-   "frame": 105,
+   "frame": 133,
    "gain": 0.5
   },
   {
    "type": "whoosh",
-   "start": 110,
-   "end": 124,
+   "start": 138,
+   "end": 152,
    "gain": 0.12
   },
   {
    "type": "pop",
-   "frame": 165,
+   "frame": 193,
    "gain": 0.16
   },
   {
    "type": "pop",
-   "frame": 285,
+   "frame": 313,
    "gain": 0.16
   },
   {
    "type": "pop",
-   "frame": 405,
+   "frame": 433,
    "gain": 0.16
   },
   {
    "type": "pop",
-   "frame": 645,
+   "frame": 673,
    "gain": 0.16
   },
   {
    "type": "pop",
-   "frame": 765,
+   "frame": 793,
    "gain": 0.16
-  },
-  {
-   "type": "whoosh",
-   "start": 866,
-   "end": 880,
-   "gain": 0.14
   },
   {
    "type": "lofi",
-   "start": 870,
-   "end": 990,
+   "start": 867,
+   "end": 1197,
    "bpm": 92,
-   "gain": 0.4
+   "gain": 0.42
+  },
+  {
+   "type": "whoosh",
+   "start": 863,
+   "end": 877,
+   "gain": 0.14
   },
   {
    "type": "pop",
-   "frame": 874,
+   "frame": 876,
    "gain": 0.16
   },
   {
    "type": "pop",
-   "frame": 880,
+   "frame": 885,
+   "gain": 0.16
+  },
+  {
+   "type": "graph_rise",
+   "start": 891,
+   "end": 937,
+   "gain": 0.09,
+   "f0": 300,
+   "f1": 1000
+  },
+  {
+   "type": "counter",
+   "start": 893,
+   "end": 937,
+   "gain": 0.16
+  },
+  {
+   "type": "coins",
+   "frame": 937,
+   "gain": 0.32,
+   "count": 10,
+   "dur": 0.5
+  },
+  {
+   "type": "pop",
+   "frame": 937,
+   "gain": 0.22
+  },
+  {
+   "type": "whoosh",
+   "start": 995,
+   "end": 1009,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 1003,
+   "gain": 0.16
+  },
+  {
+   "type": "pop",
+   "frame": 1009,
    "gain": 0.16
   },
   {
    "type": "stamp",
-   "frame": 892,
+   "frame": 1021,
    "gain": 0.4
   },
   {
    "type": "click",
-   "frame": 908,
+   "frame": 1037,
    "gain": 0.16,
    "freq": 1300
   }

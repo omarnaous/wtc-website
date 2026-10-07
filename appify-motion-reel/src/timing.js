@@ -1,13 +1,16 @@
-// Fixed timeline, 30 fps, 33 s: the WTC film plays in full from SHOW, so everything is placed on its clock.
-// vo/vo.py and sound/cues.json use the same frames.
+// The voice leads: vo/vo.py places every scene on the continuous voice-over and writes the anchors to vo.json.
+import VO from "./vo.json";
 export const FPS = 30;
-export const DURATION = 990;
+export const DURATION = VO.duration;
+const A = VO.anchors;
 export const T = {
-  hook: 0,        // a plain product photo in a feed post
-  swipe: 78,      // a thumb scrolls it away
-  turn: 105,      // record scratch: "Watch this."
-  show: 120,      // the WTC launch film starts (25 s)
-  cta: 870,       // film ends: want one? DM "Motion"
+  hook: A.hook,       // a plain product photo in a feed post
+  swipe: A.turn - 27, // it gets scrolled away
+  turn: A.turn,       // record scratch: "Watch this."
+  show: A.show,       // the WTC launch film starts
+  conv: A.conv,       // conversion beat: plain photo vs motion ad
+  cta: A.cta,         // want one? DM "Motion"
+  end: A.end,
 };
 // what's on screen in the film (seconds on the film's own clock) -> label under the screen
 export const TECH = [
@@ -17,4 +20,6 @@ export const TECH = [
   [17.5, 21.5, "Website launch"],
   [21.5, 25, "Logo reveal"],
 ];
-export const warp = (f) => f; // Presenter's gestures are written on this timeline directly
+// illustrative conversion example for the conv beat (not client data; labelled on screen)
+export const CONV = { from: 1.2, to: 3.6 };
+export const warp = (f) => f;

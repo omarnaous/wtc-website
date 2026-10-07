@@ -1,29 +1,32 @@
-"""Voice-over for the motion-graphics showcase reel. The WTC film has a fixed timeline, so here each line
-starts on a fixed frame (src/timing.js) and must finish before the next beat; the voice is Kokoro (am_puck),
-re-intonated per sentence with Praat PSOLA like the Subscription Killer reel.
-Writes vo/vo.wav and src/vo.json (mouth envelope + caption word timings).
+"""Voice-over for the motion-graphics showcase reel: one continuous read in full sentences, no dead air.
+The voice leads: the hook lasts as long as its line, the WTC film starts right after the turn, its narration
+runs back to back over the film, then the conversion beat and the CTA follow straight on.
+Kokoro (am_puck), re-intonated per sentence with Praat PSOLA. Writes vo/vo.wav and src/vo.json
+(scene anchors + mouth envelope + caption word timings); timing.js reads the anchors.
 usage: python3 vo/vo.py <kokoro-dir>"""
 import json, sys, numpy as np, soundfile as sf
 import parselmouth
 from parselmouth.praat import call
 from kokoro_onnx import Kokoro
 
-FPS, SR, DUR_FRAMES = 30, 24000, 990
+FPS, SR = 30, 24000
 VOICE = "am_puck"
 PACE = 1.2 / 1.1
+GAP = 0.14                      # seconds between sentences: a breath, not a stop
+FILM = 750                      # the WTC film is 25 s
 P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: dict(
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
-# (start frame, must end by frame, sentence)
-LINES = [
-    (6, 100, P("Still posting plain photos of your products?", speed=1.1, shift=1, rng=1.6, mel="rise", gain=1)),
-    (108, 200, P("Watch what we made for W.T.C.", "Watch what we made for WTC.", speed=1.05, shift=1.5, rng=1.6, mel="arch", gain=1)),
-    (290, 400, P("Every number counts up, and every word hits the beat.", shift=1, rng=1.6, mel="arch")),
-    (408, 520, P("Their products come alive, right in the frame.", shift=0.5, rng=1.6, mel="arch")),
-    (645, 760, P("And it launches their new website in style.", shift=1, rng=1.6, mel="arch", gain=0.5)),
-    (766, 865, P("Ending on a logo people remember.", shift=0, rng=1.5, mel="fall")),
-    (876, 985, P("Want an ad like this for your brand? D.M. us Motion for a free sample.",
-                 "Want an ad like this for your brand? DM us \"Motion\" for a free sample.", speed=1.1, shift=1, rng=1.6, mel="fall", gain=1)),
+HOOK = [P("Are you still posting plain photos of your products and hoping people stop scrolling?", shift=1, rng=1.6, mel="rise", gain=1)]
+FILM_LINES = [
+    P("Watch what we made for W.T.C., a launch film where every word hits the beat and every number counts up on screen.",
+      "Watch what we made for WTC, a launch film where every word hits the beat and every number counts up on screen.", shift=1, rng=1.6, mel="arch", gain=0.5),
+    P("Their products come alive right in the frame, so customers can try every strap before they buy.", shift=0.5, rng=1.6, mel="arch"),
+    P("Then the whole collection rolls in, and it launches their new online store in style.", shift=1, rng=1.6, mel="arch"),
+    P("We designed every scene, animated every detail and timed every move to the music, so it feels like a real brand launch that ends on a logo people remember.", shift=0, rng=1.5, mel="fall"),
 ]
+CONV = [P("That's the point of motion, because when more people stop scrolling, more people end up buying.", shift=1, rng=1.6, mel="arch", gain=1)]
+CTA = [P("Want an ad like this for your brand? Send us a D.M. with the word Motion and we'll make you a free sample.",
+         "Want an ad like this for your brand? Send us a DM with the word \"Motion\" and we'll make you a free sample.", shift=1, rng=1.6, mel="fall", gain=1)]
 
 
 def smooth(a, b, u):
@@ -82,29 +85,45 @@ def room(x):
 
 
 k = Kokoro(f"{sys.argv[1]}/kokoro-v1.0.onnx", f"{sys.argv[1]}/voices-v1.0.bin")
-out = np.zeros(int(DUR_FRAMES / FPS * SR)); words = []
-for li, (start, end, p) in enumerate(LINES):
-    budget, speed = (end - start) / FPS, p["speed"]
-    for _ in range(6):  # speak a touch faster if the line would run into the next beat
-        y = intonate(tts(p["text"], speed), p)
-        if len(y) / SR <= budget or speed >= 1.35: break
-        speed *= 1.05
+F = lambda sec: int(round(sec * FPS))
+say = lambda ps: [intonate(tts(p["text"], p["speed"]), p) for p in ps]
+hook, film, conv, cta = say(HOOK), say(FILM_LINES), say(CONV), say(CTA)
+dur = lambda ys: sum(len(y) for y in ys) / SR + GAP * (len(ys) - 1)
+A = {"hook": 0}
+v_hook = 6
+A["turn"] = v_hook + F(dur(hook)) + 4
+A["show"] = A["turn"] + 15
+v_film = A["show"] + 8
+film_end_voice = v_film + F(dur(film))
+v_conv = max(film_end_voice + F(GAP), A["show"] + FILM - 60)      # cut in over the last 2 s of the logo hold
+A["conv"] = v_conv
+v_cta = v_conv + F(dur(conv) + GAP)
+A["cta"] = max(v_cta - 4, A["conv"] + 75)
+v_cta = max(v_cta, A["cta"] + 2)
+total = v_cta + F(dur(cta)) + 40
+A["end"] = total
+out = np.zeros(int(total / FPS * SR) + SR); words = []
+li = 0
+for start, ps, ys in [(v_hook, HOOK, hook), (v_film, FILM_LINES, film), (v_conv, CONV, conv), (v_cta, CTA, cta)]:
     pos = int(start / FPS * SR)
-    out[pos:pos + len(y)] += y[: len(out) - pos]
-    print(f"{start:4d} {len(y) / SR:4.2f}s / {budget:4.2f}s  speed {speed * PACE:.2f}  {p['text'][:48]}")
-    env = np.convolve(np.abs(y), np.ones(480) / 480, "same")
-    voiced = env > env.max() * 0.08
-    vt = np.cumsum(voiced) / max(1, voiced.sum())
-    cw = p["cap"].split()
-    weights = np.array([max(2, len(w.strip('.,?!"\'$'))) + 1.5 for w in cw], float)
-    edges = np.concatenate([[0], np.cumsum(weights) / weights.sum()])
-    for j, w in enumerate(cw):
-        a = np.searchsorted(vt, edges[j]); b = np.searchsorted(vt, edges[j + 1])
-        words.append({"w": w, "line": li, "start": round((pos + a) / SR * FPS, 2), "end": round((pos + b) / SR * FPS, 2)})
+    for p, y in zip(ps, ys):
+        out[pos:pos + len(y)] += y
+        env = np.convolve(np.abs(y), np.ones(480) / 480, "same")
+        voiced = env > env.max() * 0.08
+        vt = np.cumsum(voiced) / max(1, voiced.sum())
+        cw = p["cap"].split()
+        weights = np.array([max(2, len(w.strip('.,?!"\'$'))) + 1.5 for w in cw], float)
+        edges = np.concatenate([[0], np.cumsum(weights) / weights.sum()])
+        for j, w in enumerate(cw):
+            a = np.searchsorted(vt, edges[j]); b = np.searchsorted(vt, edges[j + 1])
+            words.append({"w": w, "line": li, "start": round((pos + a) / SR * FPS, 2), "end": round((pos + b) / SR * FPS, 2)})
+        print(f"{pos / SR * FPS:6.0f}  {len(y) / SR:4.2f}s  {p['text'][:56]}")
+        pos += len(y) + int(GAP * SR); li += 1
+out = out[: int(total / FPS * SR)]
 out = room(out); out = out / np.abs(out).max() * 0.9
 sf.write("vo/vo.wav", out, SR)
 hop = SR // FPS
-rms = np.array([np.sqrt(np.mean(out[i * hop:(i + 1) * hop] ** 2)) for i in range(DUR_FRAMES)])
+rms = np.array([np.sqrt(np.mean(out[i * hop:(i + 1) * hop] ** 2)) for i in range(total)])
 env = np.clip(rms / (np.percentile(rms[rms > 0.01], 90) + 1e-9), 0, 1)
-json.dump({"duration": DUR_FRAMES, "mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
-print("words", len(words))
+json.dump({"duration": total, "anchors": A, "mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
+print("anchors", A, f"total {total / FPS:.1f}s, film voice ends {film_end_voice - A['show']} frames into the film")

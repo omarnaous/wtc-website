@@ -5,22 +5,23 @@ import { Dev } from "./Dev.jsx";
 import VO from "./vo.json";
 import { clamp } from "./fx.jsx";
 import { sparkPath } from "./brand.js";
-import { warp } from "./timing.js";
+import { warp, T } from "./timing.js";
 
 const MOODS0 = [
-  [0, { brow: 2, lid: 0.35, smile: 0.2, look: 6 }],     // unimpressed at the plain photo
-  [105, { brow: 20, lid: 0.1, smile: 1, look: 7 }],     // watch this!
-  [130, { brow: 14, lid: 0.12, smile: 1, look: 8 }],    // proud, watching the film
-  [870, { brow: 12, lid: 0.05, smile: 1, look: 6 }],    // friendly close
+  [0, { brow: 2, lid: 0.35, smile: 0.2, look: 6 }],         // unimpressed at the plain photo
+  [T.turn, { brow: 20, lid: 0.1, smile: 1, look: 7 }],      // watch this!
+  [T.show + 10, { brow: 14, lid: 0.12, smile: 1, look: 8 }],// proud, watching the film
+  [T.cta, { brow: 12, lid: 0.05, smile: 1, look: 6 }],      // friendly close
 ];
-// [type, start, end] on the reel's own timeline
+// [type, start, end]
 const ACTS0 = [
-  ["point", 20, 80], ["shock", 86, 104], ["jump", 105, 121], ["happy", 105, 125],
-  ["point", 130, 196], ["thumbs", 292, 346], ["happy", 410, 440], ["point", 648, 712],
-  ["jump", 768, 784], ["thumbs", 776, 830],
-  ["wave", 872, 900], ["point", 912, 985], ["wink", 950, 970],
+  ["point", 20, T.swipe], ["shock", T.swipe + 6, T.turn - 1], ["jump", T.turn, T.turn + 16], ["happy", T.turn, T.turn + 20],
+  ["point", T.show + 8, T.show + 80], ["thumbs", T.show + 200, T.show + 250], ["happy", T.show + 330, T.show + 360],
+  ["point", T.show + 480, T.show + 560], ["thumbs", T.show + 640, T.show + 700],
+  ["point", T.conv + 20, T.conv + 66], ["jump", T.conv + 70, T.conv + 86], ["happy", T.conv + 70, T.conv + 96],
+  ["wave", T.cta + 2, T.cta + 30], ["point", T.cta + 44, T.end - 10], ["wink", T.cta + 90, T.cta + 110],
 ];
-const EMOTES0 = [["?", 30, 80], ["!", 105, 135], ["spark", 410, 450], ["spark", 768, 810], ["spark", 912, 985]];
+const EMOTES0 = [["?", 30, T.swipe], ["!", T.turn, T.turn + 30], ["spark", T.show + 330, T.show + 370], ["$", T.conv + 70, T.conv + 110], ["spark", T.cta + 44, T.end - 10]];
 
 const MOODS = MOODS0.map(([f, m]) => [warp(f), m]);
 const ACTS = ACTS0.map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);
