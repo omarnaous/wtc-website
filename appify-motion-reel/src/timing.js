@@ -27,6 +27,16 @@ export const DATA = {
   people: { pct: 85, at: wordAt("85%"), text: "of people say a video has convinced them to buy" },
   marketers: { pct: 83, at: wordAt("83%"), text: "of marketers say video directly increased their sales" },
 };
-export const RATE = A.rate || 1; // the film plays this much faster so the reel fits 35 s
-export const filmFrame = (sec) => A.show + Math.round((sec * 30) / RATE); // film-clock seconds -> reel frame
+// the film plays at real speed with one cut (CUT segments on the film's clock, see vo/vo.py)
+export const CUT = A.cut || [[0, 25]];
+export const filmFrame = (sec) => { // film-clock seconds -> reel frame
+  let t = 0;
+  for (const [a, b] of CUT) { if (sec <= b) return A.show + Math.round((t + Math.max(0, sec - a)) * 30); t += b - a; }
+  return A.show + Math.round(t * 30);
+};
+export const filmClock = (f) => { // reel frame -> film-clock seconds
+  let t = (f - A.show) / 30;
+  for (const [a, b] of CUT) { if (t <= b - a) return a + t; t -= b - a; }
+  return CUT[CUT.length - 1][1];
+};
 export const warp = (f) => f;

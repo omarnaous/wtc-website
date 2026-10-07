@@ -3,16 +3,22 @@ Same sound palette as the Subscription Killer reel: lo-fi groove at 92 BPM (muff
 record-scratch turn, full from the reveal), swishes on slides, a vine boom on the big number, coins and counters."""
 import json
 vo = json.load(open("src/vo.json")); A = vo["anchors"]
-turn, show, conv, cta, end, rate = A["turn"], A["show"], A["conv"], A["cta"], A["end"], A.get("rate", 1)
-ff = lambda sec: show + round(sec * 30 / rate)   # film-clock seconds -> reel frame
+turn, show, conv, cta, end = A["turn"], A["show"], A["conv"], A["cta"], A["end"]
+CUT = A.get("cut", [[0, 25]])
+def ff(sec):  # film-clock seconds -> reel frame (same as filmFrame in timing.js)
+    t = 0.0
+    for a, b in CUT:
+        if sec <= b: return show + round((t + max(0.0, sec - a)) * 30)
+        t += b - a
+    return show + round(t * 30)
 swipe = turn - 27
 at = lambda w: next(x["start"] for x in vo["words"] if x["w"].startswith(w))
 p85, p83 = round(at("85%")), round(at("83%"))
 W = lambda a, b, g=0.1, pan=0: {"type": "whoosh", "start": a, "end": b, "gain": g, "pan": pan}
 cues = [
     # bed
-    {"type": "lofi", "start": 0, "end": turn - 6, "bpm": 92, "lp": 1100, "drums": 0.7, "gain": 0.55},
-    {"type": "lofi", "start": conv, "end": end, "bpm": 92, "gain": 0.55},   # the film carries its own music in between
+    {"type": "lofi", "start": 0, "end": turn - 6, "bpm": 92, "lp": 1100, "drums": 0.7, "gain": 0.3},
+    {"type": "lofi", "start": conv, "end": end, "bpm": 92, "gain": 0.3},    # low: the voice leads; the film carries its own music in between
     # hook
     {"type": "pop", "frame": 0, "gain": 0.2},
     W(swipe - 2, swipe + 14, 0.14),                                    # post scrolled away
