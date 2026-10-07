@@ -25,6 +25,6 @@ film_duck = 1 - 0.84 * lvl                             # full level in the silen
 sfx_duck = 1 - 0.6 * lvl                               # the bed sits ~-8 dB under the voice, as in Subscription Killer
 FILM_GAIN = 1.25                                        # the film's soundtrack plays under the voice (lo-fi bed only before and after it)
 mix = bed * film_duck[:, None] * FILM_GAIN + sfx * sfx_duck[:, None] * 0.35 + np.stack([vo, vo], 1) * 1.25
-mix = mix / np.abs(mix).max(); mix = np.tanh(mix * 1.8) / np.tanh(1.8); mix *= 10 ** (-4 / 20)   # 4 dB headroom: the film's transients overshoot ~3 dB in the AAC encode
+mix = mix / np.abs(mix).max(); mix = np.tanh(mix * 1.8) / np.tanh(1.8); mix *= 10 ** (-1.5 / 20)   # headroom so the AAC encode stays below 0 dBFS true peak
 sf.write("public/sound.wav", mix, sr, subtype="PCM_16")
 print("mixed", round(len(mix) / sr, 2), "s")
