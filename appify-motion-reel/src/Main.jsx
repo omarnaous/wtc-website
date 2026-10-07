@@ -1,6 +1,6 @@
 // Motion-graphics showcase: a plain photo gets scrolled past, then the WTC launch film plays in full
 // in a screen frame while labels name each technique; Dev narrates and closes on the offer.
-import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Audio, Img, Loop, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { T, TECH, DATA, RATE, filmFrame } from "./timing.js";
 import { C, DISPLAY, MONO, Words } from "./ui.jsx";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, Grain, Vignette } from "./fx.jsx";
@@ -129,21 +129,36 @@ function Conversion({ f }) {
 function Cta({ f, cta, url }) {
   const e = (d) => spring({ frame: f - T.cta - d, fps: 30, config: { damping: 12, stiffness: 190 } });
   const rise = (p) => ({ opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 50}px)` });
-  const wmW = 300, wmH = wmW * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
+  const wmW = 360, wmH = wmW * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
+  const screen = e(14), W2 = 920, H2 = Math.round(920 * 9 / 16);
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: 300, display: "grid", justifyItems: "center", textAlign: "center" }}>
-      <div style={{ ...DISPLAY, fontSize: 100, color: C.ink, ...rise(e(4)) }}>Want an ad</div>
-      <div style={{ ...DISPLAY, fontSize: 100, color: C.uv, marginTop: 6, ...rise(e(10)) }}>like this?</div>
-      <div style={{ marginTop: 48, padding: "24px 40px", borderRadius: 28, background: C.uv, boxShadow: "0 20px 60px rgba(91,43,255,.5)", ...rise(e(22)) }}>
-        <div style={{ ...DISPLAY, fontSize: 48, color: "#fff" }}>Direct message us “{cta}”</div>
-        <div style={{ ...DISPLAY, fontSize: 36, color: "rgba(255,255,255,.88)", marginTop: 10 }}>Limited-time offer on motion graphics packages</div>
+    <>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 220, textAlign: "center", ...DISPLAY, fontSize: 104, color: C.ink, lineHeight: 1.02, ...rise(e(2)) }}>
+        Want an ad <span style={{ color: C.uv }}>like this?</span>
       </div>
-      <div style={{ ...MONO, fontSize: 26, color: C.mute, marginTop: 30, ...rise(e(30)) }}>LOGO REVEALS · PRODUCT ADS · LAUNCH FILMS · REELS</div>
-      <div style={{ display: "grid", justifyItems: "center", gap: 12, marginTop: 50, ...rise(e(38)) }}>
+      {/* the film keeps playing, small, as a reminder of what they'd get */}
+      <div style={{ position: "absolute", left: (1080 - W2) / 2 - 12, top: 430, width: W2 + 24, height: H2 + 24, borderRadius: 30, background: "#14121F", border: "2px solid rgba(10,9,19,.6)", boxShadow: "0 30px 80px rgba(91,43,255,.35)", opacity: Math.min(1, screen * 1.4), transform: `scale(${0.9 + 0.1 * screen})` }}>
+        <div style={{ position: "absolute", left: 12, top: 12, width: W2, height: H2, borderRadius: 20, overflow: "hidden", background: "#000" }}>
+          <Sequence from={T.cta} layout="none">
+            <Loop durationInFrames={5 * 30} layout="none">
+              <OffthreadVideo src={staticFile("wtc.mp4")} muted startFrom={9 * 30} style={{ width: W2, height: H2 }} />
+            </Loop>
+          </Sequence>
+        </div>
+      </div>
+      <div style={{ position: "absolute", left: 60, right: 60, top: 430 + H2 + 60, display: "grid", justifyItems: "center", ...rise(e(22)) }}>
+        <div style={{ padding: "26px 44px", borderRadius: 30, background: C.uv, boxShadow: "0 20px 60px rgba(91,43,255,.5)", textAlign: "center" }}>
+          <div style={{ ...DISPLAY, fontSize: 58, color: "#fff" }}>Direct message us “{cta}”</div>
+          <div style={{ ...DISPLAY, fontSize: 33, color: "rgba(255,255,255,.9)", marginTop: 12, whiteSpace: "nowrap" }}>Limited-time offer on motion graphics packages</div>
+        </div>
+        <div style={{ ...MONO, fontSize: 26, color: C.mute, marginTop: 26 }}>LOGO REVEALS · PRODUCT ADS · LAUNCH FILMS · REELS</div>
+      </div>
+      {/* logo sits beside Dev, under his caption */}
+      <div style={{ position: "absolute", left: 330, width: 700, top: 1520, display: "grid", justifyItems: "center", gap: 14, ...rise(e(34)) }}>
         <svg viewBox={WORDMARK.viewBox} width={wmW} height={wmH}><path d={WORDMARK.letters} fill={C.ink} /><path d={WORDMARK.spark} fill={C.uv} /></svg>
-        <div style={{ ...MONO, fontSize: 28, color: C.ink, letterSpacing: "0.18em" }}>{url}</div>
+        <div style={{ ...MONO, fontSize: 30, color: C.ink, letterSpacing: "0.18em" }}>{url}</div>
       </div>
-    </div>
+    </>
   );
 }
 

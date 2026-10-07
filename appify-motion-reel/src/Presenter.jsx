@@ -21,7 +21,7 @@ const ACTS0 = [
   ["point", DATA.people.at - 4, DATA.people.at + 40], ["thumbs", DATA.marketers.at, DATA.marketers.at + 50], ["happy", DATA.marketers.at + 28, DATA.marketers.at + 56],
   ["wave", T.cta + 2, T.cta + 30], ["point", T.cta + 44, T.end - 10], ["wink", T.cta + 90, T.cta + 110],
 ];
-const EMOTES0 = [["?", 30, T.swipe], ["!", T.turn, T.turn + 30], ["spark", filmFrame(10), filmFrame(12.5)], ["spark", T.cta + 44, T.end - 10]];
+const EMOTES0 = [["?", 30, T.swipe], ["!", T.turn, T.turn + 30], ["spark", filmFrame(10), filmFrame(12.5)]];
 
 const MOODS = MOODS0.map(([f, m]) => [warp(f), m]);
 const ACTS = ACTS0.map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);

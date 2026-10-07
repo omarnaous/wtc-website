@@ -18,11 +18,12 @@ FILM = 750                      # the WTC film is 25 s
 P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: dict(
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
 HOOK = [P("Are you still posting plain photos of your products and hoping people stop scrolling?", shift=1, rng=1.6, mel="rise", gain=1)]
+# film lines: P(...) plus an optional "after": film-clock second the line may not start before
+# (the kinetic-typography opening plays in silence after the first line, so the film's sound carries it)
 FILM_LINES = [
-    P("Watch what we made for W.T.C., where every word hits the beat and every number counts up on screen.",
-      "Watch what we made for WTC, where every word hits the beat and every number counts up on screen.", shift=1, rng=1.6, mel="arch", gain=0.5),
-    P("Their products come alive, the whole collection rolls in, and their new online store launches in style.", shift=0.5, rng=1.6, mel="arch"),
-    P("Every scene is designed and timed to the music, right down to a logo people remember.", shift=0, rng=1.5, mel="fall"),
+    P("Watch what we made for W.T.C.", "Watch what we made for WTC.", speed=1.05, shift=1.5, rng=1.6, mel="arch", gain=1),
+    dict(P("Every number counts up on screen, their products come alive, and the whole collection rolls in.", shift=1, rng=1.6, mel="arch"), after=5.5),
+    dict(P("Then their new online store launches in style, right down to a logo people remember.", shift=0, rng=1.5, mel="fall"), after=16.0),
 ]
 CONV = [P("And it works, because eighty-five percent of people say a video has convinced them to buy, and eighty-three percent of marketers say it grew their sales.",
           "And it works, because 85% of people say a video has convinced them to buy, and 83% of marketers say it grew their sales.", speed=1.12, shift=1, rng=1.6, mel="arch", gain=1)]
@@ -94,13 +95,16 @@ A = {"hook": 0}
 v_hook = 6
 A["turn"] = v_hook + F(dur(hook)) + 4
 A["show"] = A["turn"] + 15
-v_film = A["show"] + 8
-film_end_voice = v_film + F(dur(film))
 # solve the film's playback speed so the whole reel lands on TARGET frames
 rest = F(dur(conv) + GAP) + F(dur(cta)) + 40 + 4
 window = TARGET - A["show"] - rest + 30          # +30: the data beat cuts in over the last second of the film
 rate = min(1.6, max(1.0, FILM / max(1, window)))
 A["rate"] = round(rate, 4)
+# place the film lines back to back, but never before their "after" point on the film's clock
+film_starts, t = [], A["show"] + 8
+for p, y in zip(FILM_LINES, film):
+    t = max(t, A["show"] + F(p.get("after", 0) / rate)); film_starts.append(t); t += F(len(y) / SR + GAP)
+film_end_voice = t - F(GAP)
 v_conv = max(film_end_voice + F(GAP), A["show"] + round(FILM / rate) - 30)   # cut in over the last second of the logo
 A["conv"] = v_conv
 v_cta = v_conv + F(dur(conv) + GAP)
@@ -110,9 +114,9 @@ total = v_cta + F(dur(cta)) + 40
 A["end"] = total
 out = np.zeros(int(total / FPS * SR) + SR); words = []
 li = 0
-for start, ps, ys in [(v_hook, HOOK, hook), (v_film, FILM_LINES, film), (v_conv, CONV, conv), (v_cta, CTA, cta)]:
-    pos = int(start / FPS * SR)
-    for p, y in zip(ps, ys):
+placed = [(v_hook, HOOK[0], hook[0])] + list(zip(film_starts, FILM_LINES, film)) + [(v_conv, CONV[0], conv[0]), (v_cta, CTA[0], cta[0])]
+for start, p, y in placed:
+        pos = int(start / FPS * SR)
         out[pos:pos + len(y)] += y
         env = np.convolve(np.abs(y), np.ones(480) / 480, "same")
         voiced = env > env.max() * 0.08
@@ -124,7 +128,7 @@ for start, ps, ys in [(v_hook, HOOK, hook), (v_film, FILM_LINES, film), (v_conv,
             a = np.searchsorted(vt, edges[j]); b = np.searchsorted(vt, edges[j + 1])
             words.append({"w": w, "line": li, "start": round((pos + a) / SR * FPS, 2), "end": round((pos + b) / SR * FPS, 2)})
         print(f"{pos / SR * FPS:6.0f}  {len(y) / SR:4.2f}s  {p['text'][:56]}")
-        pos += len(y) + int(GAP * SR); li += 1
+        li += 1
 out = out[: int(total / FPS * SR)]
 out = room(out); out = out / np.abs(out).max() * 0.9
 sf.write("vo/vo.wav", out, SR)

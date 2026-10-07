@@ -18,9 +18,9 @@ vo, vsr = sf.read("vo/vo.wav")
 vo = resample_poly(vo, sr, vsr)[: len(sfx)]; vo = np.pad(vo, (0, len(sfx) - len(vo)))
 env = uniform_filter1d(np.abs(vo), int(0.25 * sr))
 lvl = np.clip(env / (np.percentile(env, 95) + 1e-9), 0, 1)
-film_duck = 1 - 0.75 * lvl                             # the film's music dips ~-12 dB under the voice
+film_duck = 1 - 0.84 * lvl                             # full level in the silences (the sound is part of the product), ~-16 dB under the voice
 sfx_duck = 1 - 0.6 * lvl                               # the bed sits ~-8 dB under the voice, as in Subscription Killer
-FILM_GAIN = 0.8                                        # the film's soundtrack plays under the voice (lo-fi bed only before and after it)
+FILM_GAIN = 1.25                                        # the film's soundtrack plays under the voice (lo-fi bed only before and after it)
 mix = bed * film_duck[:, None] * FILM_GAIN + sfx * sfx_duck[:, None] * 0.55 + np.stack([vo, vo], 1) * 1.25
 mix = mix / np.abs(mix).max(); mix = np.tanh(mix * 1.8) / np.tanh(1.8); mix *= 10 ** (-1 / 20)
 sf.write("public/sound.wav", mix, sr, subtype="PCM_16")
