@@ -19,7 +19,9 @@ muff = mg.lofi(mg.Ctx(11), {"start": 0, "end": 450, "bpm": 90, "lp": 900, "drums
 nobeat = mg.lofi(mg.Ctx(11), {"start": 0, "end": 450, "bpm": 90, "lp": 5200, "drums": 0.0, "keys": 1.0, "bass": 0.6}, 30)
 n = min(len(full), N); tt = np.arange(n) / SR
 k_open = np.interp(tt, [0, f(60), f(76), 99], [0, 0, 1, 1])            # muffled on the hero, opens as the page moves
-k_drop = np.interp(tt, [0, f(370), f(376), f(392), f(398), 99], [0, 0, 1, 1, 0, 0])  # drums out under the end-card hit
+POV = "--pov" in sys.argv
+k_drop = np.interp(tt, [0, f(370), f(376), f(392), f(398), 99], [0, 0, 1, 1, 0, 0]) * (0 if POV else 1)
+if POV: k_open = np.interp(tt, [0, f(4), f(40), 99], [0.35, 0.35, 1, 1])  # opens as the dial pulls out  # drums out under the end-card hit
 bed = muff[:n] * (1 - k_open) + full[:n] * k_open
 bed = bed * (1 - k_drop) + nobeat[:n] * k_drop
 groove = np.zeros((N, 2)); groove[:n, 0] = bed; groove[:n, 1] = np.roll(bed, int(0.012 * SR))  # a touch of width
@@ -45,20 +47,24 @@ fol.put(ratchet(f(234) - f(190), 26, 10), f(190), 0.35, pan=0.2)   # dragging th
 fol.put(reverb(bell(76, 0.4, 1.2), 1.6, 0.4), f(204), 0.16)        # the count lands
 for s_ in (266, 280, 294, 306): fol.put(mouse(), f(s_), 0.5, pan=0.15); fol.put(velcro(0.22), f(s_) + 0.01, 0.5, pan=0.25)
 fol.put(mouse(), f(362), 0.7, pan=0.15); fol.put(ping(2637), f(364), 0.14, pan=0.25)
-# end card
-fol.put(air(0.7, 1.2), f(370), 0.5)
-fol.put(clack(), f(382), 0.8)
-for i, m in enumerate((72, 79, 84)): fol.put(reverb(bell(m, 0.45, 1.4), 2.0, 0.4), f(381) + i * 0.08, 0.2, pan=(-0.3, 0, 0.3)[i])
-for i in range(3): fol.put(pop(), f(398 + i * 4), 0.3, pan=-0.3 + i * 0.3)
-fol.put(mouse(), f(412), 0.4); fol.put(reverb(bell(91, 0.3, 0.7), 1.2, 0.4), f(413), 0.12)
+if POV:
+    fol.put(air(f(426) - f(376), 1.0), f(376), 0.5)   # the page glides back to the top
+    fol.put(air(0.8, 0.8), f(424), 0.35)              # ...and dives into the dial (the loop point)
+else:
+    # end card
+    fol.put(air(0.7, 1.2), f(370), 0.5)
+    fol.put(clack(), f(382), 0.8)
+    for i, m in enumerate((72, 79, 84)): fol.put(reverb(bell(m, 0.45, 1.4), 2.0, 0.4), f(381) + i * 0.08, 0.2, pan=(-0.3, 0, 0.3)[i])
+    for i in range(3): fol.put(pop(), f(398 + i * 4), 0.3, pan=-0.3 + i * 0.3)
+    fol.put(mouse(), f(412), 0.4); fol.put(reverb(bell(91, 0.3, 0.7), 1.2, 0.4), f(413), 0.12)
 
 mix = groove * 1.0 + fol.st()[:N] * 0.8
 mix = np.stack([hp(mix[:, 0], 35), hp(mix[:, 1], 35)], 1)
-fade = int(0.8 * SR); mix[-fade:] *= (np.linspace(1, 0, fade) ** 2)[:, None]
+fade = int((0.08 if POV else 0.8) * SR); mix[-fade:] *= (np.linspace(1, 0, fade) ** 2)[:, None]
 mix = np.tanh(mix * 0.9)
 mix *= 10 ** (-17 / 20) / np.sqrt((mix ** 2).mean())
 pk = np.abs(mix).max()
 if pk > 10 ** (-1 / 20): mix *= 10 ** (-1 / 20) / pk
-out = sys.argv[1] if len(sys.argv) > 1 else "public/sound.wav"
+out = [a for a in sys.argv[1:] if not a.startswith("--")][0] if len(sys.argv) > 1 else "public/sound.wav"
 wavfile.write(out, SR, (mix * 32767).astype(np.int16))
 print(f"wrote {out}: {DUR}s rms {20*np.log10(np.sqrt((mix**2).mean())):.1f} dB")

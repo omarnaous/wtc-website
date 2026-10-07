@@ -61,9 +61,12 @@ const STRAPS = [
 ];
 const shakeAt = (f, s, amp) => { const t = f - s; if (t < 0 || t > 20) return [0, 0]; const k = amp * Math.exp(-t / 4); return [(random(`x${f}`) - 0.5) * 2 * k, (random(`y${f}`) - 0.5) * 2 * k]; };
 
-function Site({ f }) {
-  const [scroll] = keyed(f, SCROLL);
-  const [prev] = keyed(f - 1, SCROLL);
+function Site({ f, keys = SCROLL, pov = false }) {
+  const [scroll] = keyed(f, keys);
+  const [prev] = keyed(f - 1, keys);
+  // POV cut: opens on a macro of the dial and pulls out; at the end it dives back in, so the Reel loops.
+  const macro = !pov ? 1 : f < 60 ? interpolate(f, [6, 46], [3.4, 1], { ...clamp, easing: inOut }) : interpolate(f, [424, 450], [1, 3.4], { ...clamp, easing: inOut });
+  const d = pov ? 40 : 0; // the hero copy waits for the pull-out
   const skew = Math.max(-2, Math.min(2, (scroll - prev) * 0.03));
   const [mx, my] = keyed(f, CURSOR, Easing.bezier(0.45, 0, 0.2, 1));
   // missions: which name is hovered
@@ -76,9 +79,9 @@ function Site({ f }) {
   const lastSwap = k > 0 ? T.swaps[k - 1] : 0;
   const wipe = k === 0 ? 1 : interpolate(f - lastSwap, [0, 6], [0, 1], { ...clamp, easing: easeOut });
   // hero: the hand draws the ring, the Moon lands
-  const hand = interpolate(f, [-20, -6], [0, 360], { ...clamp, easing: inOut });
-  const slam = f < -6 ? 0 : interpolate(spring({ frame: f + 6, fps: 30, config: { damping: 12, stiffness: 200 } }), [0, 1], [1.5, 1]);
-  const [hx, hy] = shakeAt(f, -6, 14);
+  const hand = interpolate(f, [-20 + d, -6 + d], [0, 360], { ...clamp, easing: inOut });
+  const slam = pov ? macro : f < -6 ? 0 : interpolate(spring({ frame: f + 6, fps: 30, config: { damping: 12, stiffness: 200 } }), [0, 1], [1.5, 1]);
+  const [hx, hy] = pov ? [0, 0] : shakeAt(f, -6, 14);
   // orbit: dragged by the cursor
   const drag = interpolate(f, [ARRIVE.orbit + 20, ARRIVE.orbit + 60], [0, 1], { ...clamp, easing: inOut });
   const orbitRot = (f - ARRIVE.orbit) * 0.012 + drag * 2.4;
@@ -99,21 +102,21 @@ function Site({ f }) {
             <circle r="400" fill="none" stroke={L.gold} strokeOpacity="0.25" strokeWidth="1.5" />
           </svg>
           <div style={{ position: "absolute", inset: 0, transform: `translate(${hx}px, ${hy}px)` }}>
-            <Img src={watch("SO33M100")} style={{ position: "absolute", left: 1060 - 520 * AR, top: -70 + scroll * 0.4, height: 1040, transform: `scale(${slam}) rotate(${(slam - 1) * -14 + Math.sin(f / 40) * 1.5}deg)`, filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.7))" }} />
+            <Img src={watch("SO33M100")} style={{ position: "absolute", left: 1060 - 520 * AR, top: -70 + scroll * 0.4, height: 1040, transformOrigin: "50% 50%", transform: `scale(${slam}) rotate(${(slam - 1) * -14 + Math.sin(f / 40) * 1.5}deg)`, filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.7))" }} />
           </div>
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, #09090a 0%, rgba(9,9,10,0.85) 30%, transparent 55%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, #09090a 0%, rgba(9,9,10,0.85) 30%, transparent 55%)", opacity: pov ? interpolate(macro, [1, 2], [1, 0], clamp) : 1 }} />
           <div style={{ position: "absolute", left: 80, right: 80, top: 34, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontFamily: SERIF, fontSize: 34, letterSpacing: "0.05em" }}>WTC</span>
             <span style={{ display: "flex", gap: 40, fontSize: 14, color: L.mute }}>{["Missions", "Collection", "Strap Studio", "Journal"].map((n) => <span key={n}>{n}</span>)}</span>
             <span style={{ fontSize: 14, padding: "10px 20px", borderRadius: 99, border: `1px solid ${L.line}` }}>Bag</span>
           </div>
-          <div style={{ position: "absolute", left: 80, top: 250 }}>
+          <div style={{ position: "absolute", left: 80, top: 250, opacity: pov ? interpolate(macro, [1, 1.5], [1, 0], clamp) : 1 }}>
             <Label style={{ color: L.goldSoft }}>Omega × Swatch · 32 watches</Label>
             <div style={{ marginTop: 24, fontFamily: GROT, fontWeight: 700, fontSize: 132, lineHeight: 0.92, letterSpacing: "-0.045em", textTransform: "uppercase" }}>
-              <div><Reveal f={f} start={-14} text="Every watch," /></div>
+              <div><Reveal f={f} start={-14 + d} text="Every watch," /></div>
             </div>
-            <div style={{ fontFamily: SERIF, fontStyle: "italic", fontSize: 140, lineHeight: 1, color: L.goldSoft }}><Reveal f={f} start={-8} text="one insider." /></div>
-            <div style={{ marginTop: 44, display: "flex", gap: 14, ...fade(f, -2) }}>
+            <div style={{ fontFamily: SERIF, fontStyle: "italic", fontSize: 140, lineHeight: 1, color: L.goldSoft }}><Reveal f={f} start={-8 + d} text="one insider." /></div>
+            <div style={{ marginTop: 44, display: "flex", gap: 14, ...fade(f, -2 + d) }}>
               <div style={{ padding: "20px 34px", borderRadius: 99, background: f >= 46 && f < 66 ? L.goldSoft : L.chalk, color: L.ink, fontSize: 17, fontWeight: 600 }}>Shop the collection</div>
               <div style={{ padding: "20px 34px", borderRadius: 99, border: `1px solid ${L.line}`, fontSize: 17 }}>Try the Strap Studio</div>
             </div>
@@ -248,23 +251,23 @@ function Cursor({ f, x, y }) {
 const SCREEN_MATRIX = "matrix3d(0.741358231, 0.168790567, 0, 0.000259431861, 0.0704474376, 0.753864745, 0, 7.54837916e-05, 0, 0, 1, 0, 19.3788815, 508.322968, 0, 1)";
 const SCR = { cx: 451, cy: 788 };
 // What colour the screen is throwing onto the desk, section by section.
-function spill(f) {
+function spill(f, keys = SCROLL) {
   let pi = -1; T.hovers.forEach((h, i) => { if (f >= h) pi = i; });
-  const [y] = keyed(f, SCROLL);
+  const [y] = keyed(f, keys);
   if (y < 450) return "rgba(201,162,39,0.35)";
   if (y < 1350) return pi < 0 ? "rgba(120,120,140,0.2)" : PLANETS[pi].bg;
   if (y < 2250) return "rgba(201,162,39,0.35)";
   if (y < 3150) { let k = 0; T.swaps.forEach((s, i) => { if (f >= s) k = i + 1; }); return STRAPS[k].chip; }
   return "rgba(226,196,105,0.4)";
 }
-function Desk({ f }) {
-  const glow = spill(f);
+function Desk({ f, keys = SCROLL, pov = false }) {
+  const glow = spill(f, keys);
   return (
     <AbsoluteFill>
       <Img src={staticFile("desk.jpg")} style={{ position: "absolute", left: 0, top: 0, width: 1746 * (1920 / 2576), height: 1920 }} />
       {/* the site, on the screen */}
       <div style={{ position: "absolute", left: 0, top: 0, width: PW, height: PH, transformOrigin: "0 0", transform: SCREEN_MATRIX, overflow: "hidden", background: "#000" }}>
-        <div style={{ filter: "brightness(0.94) contrast(0.97) saturate(0.95)" }}><Site f={f} /></div>
+        <div style={{ filter: "brightness(0.94) contrast(0.97) saturate(0.95)" }}><Site f={f} keys={keys} pov={pov} /></div>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 28%, transparent 42%, transparent 75%, rgba(150,190,255,0.06) 100%)" }} />
       </div>
       {/* the screen's light on the stand and the desk */}
@@ -383,3 +386,42 @@ function EndCardBackdrop({ f }) {
   if (o <= 0) return null;
   return <AbsoluteFill style={{ opacity: o, background: `radial-gradient(ellipse at 50% 55%, #2a1d78 0%, ${A.navy} 55%, #07051a 100%)` }} />;
 }
+
+// ════════════════════════════════════ POV cut: one caption, handheld, no end card, loops
+const POV_KEYS = [...SCROLL.filter(([fr]) => fr <= 338), [376, 3600], [426, 0], [450, 0]];
+export const POV_CAPTION = ["Websites should", "feel like this 😮‍💨"];
+export const Pov = () => {
+  useFonts([
+    ["Anton", "anton-latin-400-normal.woff2", { weight: "400" }],
+    [POP, "poppins-latin-600-normal.woff2", { weight: "600" }],
+    ["Grotesk", "space-grotesk-latin-700-normal.woff2", { weight: "700" }],
+    [SERIF, "instrument-serif-latin-400-normal.woff2", { style: "normal" }],
+    [SERIF, "instrument-serif-latin-400-italic.woff2", { style: "italic" }],
+    [SANS, "inter-latin-400-normal.woff2", { weight: "400" }],
+    [SANS, "inter-latin-600-normal.woff2", { weight: "600" }],
+    ["Mono", "GeistMono-500.ttf"],
+  ]);
+  const f = useCurrentFrame();
+  const t = f / 30;
+  // a phone held by hand: layered slow sines, a little roll, breathing push (periodic over 15 s so it loops)
+  const L = 15;
+  const w = (k, ph) => Math.sin((t / L) * Math.PI * 2 * k + ph);
+  const tx = 52 + w(7, 0.3) * 5 + w(13, 1.1) * 2.2 + w(23, 2.0) * 0.9;
+  const ty = w(9, 0.8) * 4 + w(17, 2.4) * 1.8 + w(29, 0.2) * 0.7;
+  const rot = w(5, 1.7) * 0.35 + w(11, 0.4) * 0.15;
+  const scale = 1.16 + w(2, 0) * 0.012;
+  return (
+    <AbsoluteFill style={{ background: "#0b0d12" }}>
+      <Audio src={staticFile("sound-pov.wav")} />
+      <AbsoluteFill style={{ transform: `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(${scale})`, transformOrigin: `${SCR.cx}px ${SCR.cy}px` }}>
+        <Desk f={f} keys={POV_KEYS} pov />
+      </AbsoluteFill>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 150, display: "flex", justifyContent: "center" }}>
+        <div style={{ background: "#000", borderRadius: 26, padding: "18px 38px 22px", fontFamily: "Anton, 'Noto Color Emoji', sans-serif", fontSize: 92, lineHeight: 1.08, color: "#fff", textAlign: "center", letterSpacing: "0.005em" }}>
+          {POV_CAPTION.map((l) => <div key={l}>{l}</div>)}
+        </div>
+      </div>
+      <Grain f={f} opacity={0.06} />
+    </AbsoluteFill>
+  );
+};
