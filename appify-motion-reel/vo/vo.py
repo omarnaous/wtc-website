@@ -24,9 +24,10 @@ FILM_LINES = [
     P("Then the whole collection rolls in, and it launches their new online store in style.", shift=1, rng=1.6, mel="arch"),
     P("We designed every scene, animated every detail and timed every move to the music, so it feels like a real brand launch that ends on a logo people remember.", shift=0, rng=1.5, mel="fall"),
 ]
-CONV = [P("That's the point of motion, because when more people stop scrolling, more people end up buying.", shift=1, rng=1.6, mel="arch", gain=1)]
-CTA = [P("Want an ad like this for your brand? Send us a D.M. with the word Motion and we'll make you a free sample.",
-         "Want an ad like this for your brand? Send us a DM with the word \"Motion\" and we'll make you a free sample.", shift=1, rng=1.6, mel="fall", gain=1)]
+CONV = [P("And it works, because eighty-five percent of people say a video has convinced them to buy, and eighty-three percent of marketers say video directly increased their sales.",
+          "And it works, because 85% of people say a video has convinced them to buy, and 83% of marketers say video directly increased their sales.", speed=1.12, shift=1, rng=1.6, mel="arch", gain=1)]
+CTA = [P("Want an ad like this for your brand? Send us a direct message with the word Motion, and benefit from our limited time offer on motion graphics packages.",
+         "Want an ad like this for your brand? Send us a direct message with the word \"Motion\", and benefit from our limited-time offer on motion graphics packages.", shift=1, rng=1.6, mel="fall", gain=1)]
 
 
 def smooth(a, b, u):
@@ -98,7 +99,7 @@ film_end_voice = v_film + F(dur(film))
 v_conv = max(film_end_voice + F(GAP), A["show"] + FILM - 60)      # cut in over the last 2 s of the logo hold
 A["conv"] = v_conv
 v_cta = v_conv + F(dur(conv) + GAP)
-A["cta"] = max(v_cta - 4, A["conv"] + 75)
+A["cta"] = max(v_cta - 4, A["conv"] + 120)
 v_cta = max(v_cta, A["cta"] + 2)
 total = v_cta + F(dur(cta)) + 40
 A["end"] = total

@@ -20,6 +20,11 @@ export const TECH = [
   [17.5, 21.5, "Website launch"],
   [21.5, 25, "Logo reveal"],
 ];
-// illustrative conversion example for the conv beat (not client data; labelled on screen)
-export const CONV = { from: 1.2, to: 3.6 };
+// the data beat: real survey figures, shown with their source; each one animates as the voice says it
+const wordAt = (w) => VO.words.find((x) => x.w.startsWith(w))?.start ?? A.conv;
+export const DATA = {
+  source: "Source: Wyzowl, State of Video Marketing 2026",
+  people: { pct: 85, at: wordAt("85%"), text: "of people say a video has convinced them to buy" },
+  marketers: { pct: 83, at: wordAt("83%"), text: "of marketers say video directly increased their sales" },
+};
 export const warp = (f) => f;

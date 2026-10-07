@@ -16,4 +16,5 @@ node render.mjs                                                     # out/Motion
 
 - Timeline, technique labels (film clock): `src/timing.js`. Lines and their frames: `vo/vo.py` (`LINES`).
 - Client name, CTA keyword, URL: `src/Root.jsx`. Dev's gestures: `src/Presenter.jsx`.
-- The conversion beat (plain photo 1.2% vs motion ad 3.6%) is an illustrative example, labelled on screen: `CONV` in `src/timing.js`.
+- The data beat uses Wyzowl State of Video Marketing 2026 figures (85% / 83%), source shown on screen: `DATA` in `src/timing.js`.
+- Sound: same palette as Subscription Killer (lo-fi bed + hits); the film is muted (`FILM_GAIN` in `vo/mix.py`).
