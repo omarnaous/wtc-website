@@ -11,8 +11,8 @@ from kokoro_onnx import Kokoro
 
 FPS, SR = 30, 24000
 VOICE = "am_puck"
-PACE = 1.25 / 1.1
-GAP = 0.14                      # seconds between sentences: a breath, not a stop
+PACE = 1.2 / 1.1                # same read speed as the Subscription Killer reel
+GAP = 0.15                      # same breath between sentences as Subscription Killer
 # the film plays at its real speed (its sound is part of the product); only the dark transition 15.6-17.4 s is cut
 CUT = [(0.0, 15.6), (17.4, 25.0)]
 FILM = round(sum(b - a for a, b in CUT) * 30)
@@ -24,21 +24,19 @@ def f2r(sec):                    # film-clock seconds -> frames after the film s
     return round(t * 30)
 P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: dict(
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
-HOOK = [P("Your product is great, but in a plain photo, nobody even stops to look at it.", speed=1.08, shift=1.5, rng=1.8, mel="arch", gain=1.5)]
+# delivery settings mirror the Subscription Killer reel (speed ~1.0-1.12, shift -1..2, range 1.5-1.7)
+HOOK = [P("Still posting boring product photos and expecting engagement?", speed=1.1, shift=1, rng=1.5, mel="rise", gain=1)]
 # film lines: P(...) plus an optional "after": film-clock second the line may not start before
 FILM_LINES = [
-    P("So watch what happens when it moves.", speed=1.0, shift=2, rng=1.8, mel="arch", gain=2),
-    dict(P("Every number ticks up, every product comes alive, and suddenly people just can't look away.", speed=1.1, shift=2, rng=1.9, mel="arch", gain=1), after=5.5),
+    P("So watch what happens when it moves.", speed=1.05, shift=2, rng=1.6, mel="arch", gain=2),
+    dict(P("Every number ticks up, every product comes alive, and suddenly people just can't look away.", shift=1, rng=1.6, mel="arch"), after=5.5),
     dict(P("That's the launch film we made for W.T.C., and it turned a simple store launch into a moment people remember.",
-           "That's the launch film we made for WTC, and it turned a simple store launch into a moment people remember.", speed=1.1, shift=1, rng=1.7, mel="fall", gain=1), after=12.0),
+           "That's the launch film we made for WTC, and it turned a simple store launch into a moment people remember.", shift=0.5, rng=1.6, mel="arch", gain=0.5), after=12.0),
 ]
 CONV = [P("And it works, because eighty-five percent of people say a video convinced them to buy, and eighty-three percent of marketers say it grew their sales.",
-          "And it works, because 85% of people say a video convinced them to buy, and 83% of marketers say it grew their sales.", speed=1.12, shift=1.5, rng=1.8, mel="arch", gain=1)]
+          "And it works, because 85% of people say a video convinced them to buy, and 83% of marketers say it grew their sales.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1)]
 CTA = [P("Want your brand to stop the scroll? Send us a direct message with the word Motion, and grab our limited time motion graphics offer before it's gone.",
-         "Want your brand to stop the scroll? Send us a direct message with the word \"Motion\", and grab our limited-time motion graphics offer before it's gone.", speed=1.1, shift=1.5, rng=1.8, mel="fall", gain=1.5)]
-
-
-
+         "Want your brand to stop the scroll? Send us a direct message with the word \"Motion\", and grab our limited-time motion graphics offer before it's gone.", shift=0.5, rng=1.6, mel="fall", gain=0.5)]
 
 
 def smooth(a, b, u):
@@ -112,6 +110,7 @@ film_starts, t = [], A["show"] + 8
 for p, y in zip(FILM_LINES, film):
     t = max(t, A["show"] + f2r(p.get("after", 0))); film_starts.append(t); t += F(len(y) / SR + GAP)
 film_end_voice = t - F(GAP)
+A["talk"] = film_starts[1]        # Dev starts talking again after the kinetic opening: the film's sound stops here
 v_conv = max(film_end_voice + F(GAP), A["show"] + FILM - 30)   # cut in over the last second of the logo
 A["conv"] = v_conv
 v_cta = v_conv + F(dur(conv) + GAP)

@@ -1,24 +1,24 @@
 {
  "fps": 30,
- "duration": 41.933,
+ "duration": 42.167,
  "seed": 21,
  "fade_out": 1.0,
  "cues": [
   {
    "type": "lofi",
    "start": 0,
-   "end": 115,
+   "end": 99,
    "bpm": 92,
    "lp": 1100,
    "drums": 0.7,
-   "gain": 0.3
+   "gain": 0.18
   },
   {
    "type": "lofi",
-   "start": 802,
-   "end": 1258,
+   "start": 285,
+   "end": 1265,
    "bpm": 92,
-   "gain": 0.3
+   "gain": 0.18
   },
   {
    "type": "pop",
@@ -27,108 +27,108 @@
   },
   {
    "type": "whoosh",
-   "start": 92,
-   "end": 108,
+   "start": 76,
+   "end": 92,
    "gain": 0.14,
    "pan": 0
   },
   {
    "type": "buzz",
-   "frame": 106,
+   "frame": 90,
    "gain": 0.2
   },
   {
    "type": "scratch",
-   "frame": 115,
+   "frame": 99,
    "gain": 0.45
   },
   {
    "type": "riser",
-   "start": 123,
-   "end": 136,
+   "start": 107,
+   "end": 120,
    "gain": 0.2
   },
   {
    "type": "bass_drop",
-   "frame": 136,
+   "frame": 120,
    "gain": 0.7
   },
   {
    "type": "impact",
-   "frame": 136,
+   "frame": 120,
    "gain": 0.35
   },
   {
    "type": "whoosh",
-   "start": 175,
-   "end": 185,
+   "start": 159,
+   "end": 169,
    "gain": 0.08,
    "pan": -0.25
   },
   {
    "type": "whoosh",
-   "start": 295,
-   "end": 305,
+   "start": 279,
+   "end": 289,
    "gain": 0.08,
    "pan": 0.25
   },
   {
    "type": "whoosh",
-   "start": 415,
-   "end": 425,
+   "start": 399,
+   "end": 409,
    "gain": 0.08,
    "pan": -0.25
   },
   {
    "type": "whoosh",
-   "start": 601,
-   "end": 611,
+   "start": 585,
+   "end": 595,
    "gain": 0.08,
    "pan": 0.25
   },
   {
    "type": "whoosh",
-   "start": 721,
-   "end": 731,
+   "start": 705,
+   "end": 715,
    "gain": 0.08,
    "pan": -0.25
   },
   {
    "type": "whoosh",
-   "start": 798,
-   "end": 812,
+   "start": 782,
+   "end": 796,
    "gain": 0.14,
    "pan": 0
   },
   {
    "type": "counter",
-   "start": 833,
-   "end": 863,
+   "start": 820,
+   "end": 850,
    "gain": 0.18
   },
   {
    "type": "vine_boom",
-   "frame": 863,
+   "frame": 850,
    "gain": 0.55
   },
   {
    "type": "whoosh",
-   "start": 914,
-   "end": 926,
+   "start": 908,
+   "end": 920,
    "gain": 0.1,
    "pan": 0
   },
   {
    "type": "graph_rise",
-   "start": 928,
-   "end": 958,
+   "start": 922,
+   "end": 952,
    "gain": 0.09,
    "f0": 300,
    "f1": 1000
   },
   {
    "type": "coins",
-   "frame": 958,
+   "frame": 952,
    "gain": 0.4,
    "count": 12,
    "dur": 0.6

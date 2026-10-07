@@ -16,8 +16,8 @@ function Hook({ f }) {
   const gone = interpolate(f, [T.swipe + 12, T.swipe + 18], [0, 1], clamp);
   return (
     <AbsoluteFill>
-      <Words text="Still posting" y={250} size={96} color={C.ink} start={2} />
-      <Words text="plain photos?" y={360} size={110} color={C.uv} start={8} />
+      <Words text="Still posting boring" y={250} size={84} color={C.ink} start={2} />
+      <Words text="product photos?" y={350} size={104} color={C.uv} start={8} />
       {/* a plain feed post */}
       <div style={{ position: "absolute", left: 230, top: 510, width: 620, borderRadius: 26, background: "#fff", overflow: "hidden", boxShadow: "0 30px 60px rgba(10,9,19,.18)", border: "2px solid rgba(10,9,19,.08)", opacity: Math.min(1, inP * 1.5) * (1 - away), transform: `translateY(${(1 - inP) * 80 - away * 900}px) rotate(${away * -6}deg)` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 22px" }}>
