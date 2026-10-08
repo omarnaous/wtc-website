@@ -15,8 +15,8 @@ const MOODS0 = [
   [T.turn, { brow: 20, lid: 0.1, smile: 1, look: 7 }],        // now watch what happens...
   [T.talk, { brow: 22, lid: 0.05, smile: 1, look: 0 }],       // did you just stop scrolling? (at the camera)
   [T.why, { brow: 14, lid: 0.1, smile: 1, look: 7 }],
-  [T.twist, { brow: 18, lid: 0.45, smile: 0.5, look: 6 }],    // mocking: "cool, but my product isn't a watch"
-  [T.dm, { brow: 10, lid: 0.15, smile: 0.8, look: 0 }],       // doesn't matter. watch.
+  [T.twist, { brow: 12, lid: 0.15, smile: 0.8, look: 0 }],    // "and no, you don't need to sell watches"
+  [T.morph, { brow: 22, lid: 0.05, smile: 1, look: 7 }],      // real quick.
   [T.conv, { brow: 14, lid: 0.1, smile: 0.8, look: 7 }],
   [T.cta, { brow: 12, lid: 0.05, smile: 1, look: 6 }],        // friendly close
 ];
@@ -26,11 +26,11 @@ const ACTS0 = [
   ["point", T.turn + 6, T.show - 2],
   ["shock", T.talk, T.talk + 22], ["jump", T.talk + 2, T.talk + 18], ["point", T.talk + 20, T.why - 2],
   ["happy", T.why, T.why + 26], ["point", T.svc, T.reveal - 4], ["thumbs", T.reveal, T.reveal + 60],
-  ["lean", T.twist + 6, T.dm - 4], ["point", T.morph, T.morph + 40], ["wink", T.morph + 2, T.morph + 18],
+  ["point", T.twist + 6, T.dm - 2], ["lean", T.dm, T.morph - 4], ["point", T.morph, T.morph + 40], ["wink", T.morph + 2, T.morph + 18],
   ["point", T.study, DATA.people.at + 40],
-  ["wave", T.cta + 2, T.cta + 28], ["point", T.q2, T.refund], ["thumbs", T.refund + 10, T.fun - 2], ["point", T.fun, T.end - 6],
+  ["wave", T.cta + 2, T.cta + 28], ["point", T.q2, T.refund - 2], ["thumbs", T.refund + 10, T.end - 6],
 ];
-const EMOTES0 = [["?", 30, T.brutal], ["sweat", T.brutal, T.damage], ["!", T.talk, T.talk + 34], ["?", T.twist + 6, T.dm], ["spark", T.morph + 4, T.morph + 40]];
+const EMOTES0 = [["?", 30, T.brutal], ["sweat", T.brutal, T.damage], ["!", T.talk, T.talk + 34], ["spark", T.morph + 4, T.morph + 40]];
 
 const MOODS = MOODS0.map(([f, m]) => [warp(f), m]);
 const ACTS = ACTS0.map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);

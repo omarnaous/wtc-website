@@ -26,27 +26,27 @@ P = lambda spoken, cap=None, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: di
     text=spoken, cap=cap or spoken, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
 # delivery settings mirror the Subscription Killer reel (speed ~1.0-1.12, shift -1..2, range 1.5-1.7)
 # beats: (key, sentence, pause after in seconds)
-HOOK = [("hook", P("POV: you posted your product... and the only like is from your mom.", "POV: you posted your product… and the only like is from your mom.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.25),
+HOOK = [("hook", P("POV: you finally post your product... and the only like is from your mom.", "POV: you finally post your product… and the only like is from your mom.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.25),
         ("brutal", P("Brutal.", speed=0.95, shift=-1.5, rng=1.3, mel="fall", gain=0.5), 0.12),
-        ("swipe", P("Even the algorithm scrolled past.", speed=1.02, shift=-1, rng=1.4, mel="dip"), 0.0)]
+        ("swipe", P("Even the algorithm scrolled past it.", speed=1.02, shift=-1, rng=1.4, mel="dip"), 0.0)]
 DAMAGE = 36                      # frames of the "emotional damage" crash-zoom (silent, the sting plays)
-TURN = [("turn", P("Okay, now watch what happens when it moves.", speed=1.02, shift=1.5, rng=1.7, mel="arch", gain=1.5), 0.0)]
+TURN = [("turn", P("Okay, okay. Now watch what happens when it actually moves.", speed=1.02, shift=1.5, rng=1.7, mel="arch", gain=1.5), 0.0)]
 FILM_LINES = [
     ("wow", dict(P("Wait... did you just stop scrolling?", "Wait… did you just stop scrolling?", speed=1.0, shift=1.5, rng=1.7, mel="rise", gain=1), after=5.5), 0.2),
-    ("why", P("That's what we do.", speed=1.02, shift=0.5, rng=1.5, mel="fall", gain=0.5), 0.12),
-    ("svc", P("Custom motion graphics for your brand. Product ads, launch ads, logo reveals.", "Custom motion graphics for your brand: product ads, launch ads, logo reveals.", speed=1.05, shift=1, rng=1.6, mel="arch", gain=0.5), 0.2)]
-REVEAL = [("reveal", P("This one? A website launch ad we made for Watch Trade Chronicles.", speed=1.05, shift=1.5, rng=1.6, mel="arch", gain=1), 0.0)]
-TWIST = [("but", P("Cool, but my product isn't a watch...", "\u201cCool, but my product isn't a watch\u2026\u201d", speed=1.0, shift=3.5, rng=2.1, mel="rise", gain=0.5), 0.35),   # mocking voice
-         ("dm", P("Doesn't matter.", speed=1.0, shift=0, rng=1.5, mel="fall", gain=1), 0.12),
-         ("exactly", P("Watch.", speed=0.95, shift=1, rng=1.4, mel="fall", gain=1.5), 1.0)]
-PROOF = [("proof", P("And don't take my word for it.", speed=1.05, shift=0, rng=1.5, mel="fall", gain=0.5), 0.15),
+    ("why", P("Yeah, that's kind of our thing here at Appify.", speed=1.05, shift=0.5, rng=1.6, mel="arch", gain=0.5), 0.12),
+    ("svc", P("We make motion graphics for brands. Product ads, launch ads, logo reveals.", "We make motion graphics for brands: product ads, launch ads, logo reveals.", speed=1.05, shift=1, rng=1.6, mel="arch", gain=0.5), 0.2)]
+REVEAL = [("reveal", P("This one's a website launch ad we did for Watch Trade Chronicles.", speed=1.05, shift=1.5, rng=1.6, mel="arch", gain=1), 0.0)]
+TWIST = [("but", P("And no, you don't need to sell watches.", speed=1.03, shift=0.5, rng=1.6, mel="fall", gain=0.5), 0.15),
+         ("dm", P("Whatever your product is, we'll take your graphics from zero to a thousand...", "Whatever your product is, we'll take your graphics from zero to a thousand…", speed=1.06, shift=1, rng=1.6, mel="rise", gain=0.5), 0.1),
+         ("exactly", P("real quick.", "Real quick.", speed=1.0, shift=1.5, rng=1.5, mel="fall", gain=1.5), 1.0)]
+PROOF = [("proof", P("And honestly, don't just take my word for it.", speed=1.05, shift=0, rng=1.5, mel="fall", gain=0.5), 0.15),
          ("study", P("Wise Owl's twenty twenty-six video marketing report found that eighty-five percent of people say a video convinced them to buy.",
                      "Wyzowl's 2026 video marketing report found that 85% of people say a video convinced them to buy.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.3)]
-CTA = [("q1", P("Photos get scrolled.", speed=1.0, shift=0, rng=1.5, mel="fall", gain=0.5), 0.2),
-       ("q2", P("Motion gets watched.", speed=1.0, shift=1.5, rng=1.7, mel="fall", gain=1), 0.35),
-       ("refund", P("And if you don't love it, you get a full refund.", speed=1.05, shift=0.5, rng=1.6, mel="arch", gain=0.5), 0.12),
-       ("zero", P("Zero risk.", speed=0.98, shift=1, rng=1.5, mel="fall", gain=1), 0.3),
-       ("fun", P("Comment motion. We'll make yours move.", "Comment \u201cMOTION\u201d. We'll make yours move.", speed=1.02, shift=1, rng=1.6, mel="fall", gain=1), 0.0)]
+CTA = [("q1", P("So yeah... photos get scrolled.", "So yeah… photos get scrolled.", speed=1.02, shift=0, rng=1.5, mel="fall", gain=0.5), 0.15),
+       ("q2", P("Motion gets watched.", speed=1.0, shift=1.5, rng=1.7, mel="fall", gain=1), 0.3),
+       ("fun", P("Comment motion, and we'll make yours move.", "Comment \u201cMOTION\u201d and we'll make yours move.", speed=1.02, shift=1, rng=1.6, mel="fall", gain=1), 0.25),
+       ("refund", P("And if you don't love it? You get a full refund.", speed=1.03, shift=0.5, rng=1.6, mel="arch", gain=0.5), 0.12),
+       ("zero", P("Zero risk.", speed=0.98, shift=1, rng=1.5, mel="fall", gain=1), 0.0)]
 
 
 def smooth(a, b, u):
@@ -136,7 +136,7 @@ A["film"] = FILM; A["cut"] = [list(c) for c in CUT]
 A["twist"] = max(t + F(GAP) + 6, A["show"] + FILM)     # the film plays to its end (or the reveal line does), then the twist
 t = A["twist"] + 6
 put(TWIST)
-A["morph"] = A["exactly"]                              # the plain sneaker turns into a motion ad on "Watch."
+A["morph"] = A["exactly"]                              # the plain sneaker turns into a motion ad on "real quick."
 A["conv"] = t
 t = A["conv"] + 4
 put(PROOF)

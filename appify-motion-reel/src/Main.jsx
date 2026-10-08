@@ -9,6 +9,7 @@ import { WORDMARK, sparkPath } from "./brand.js";
 import { Sneaker } from "./products.jsx";
 import { Presenter } from "./Presenter.jsx";
 
+const APPIFY_AT = wordAt("appify", T.why);
 const SX = 30, SY = 420, SW = 1020, SH = Math.round(1020 * 9 / 16); // the screen the film plays in
 
 function Hook({ f }) {
@@ -120,6 +121,17 @@ function Showcase({ f, client, film }) {
           </div>
         </div>
       )}
+      {/* "...here at Appify": the wordmark pops in next to Dev */}
+      {f >= APPIFY_AT - 2 && f < T.reveal + 6 && (() => {
+        const p = spring({ frame: f - APPIFY_AT + 2, fps: 30, config: { damping: 9, stiffness: 260 } });
+        const o = interpolate(f, [T.reveal - 4, T.reveal + 6], [1, 0], clamp);
+        const w = 250, h = w * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
+        return (
+          <div style={{ position: "absolute", left: 330, top: 1196, padding: "14px 26px", borderRadius: 22, background: "#fff", border: "4px solid #0A0913", boxShadow: "0 8px 0 #0A0913", opacity: Math.min(1, p * 2) * o, transform: `rotate(${interpolate(p, [0, 1], [-14, -3])}deg) scale(${interpolate(p, [0, 1], [1.8, 1])})`, transformOrigin: "0 100%" }}>
+            <svg viewBox={WORDMARK.viewBox} width={w} height={h} style={{ display: "block" }}><path d={WORDMARK.letters} fill={C.ink} /><path d={WORDMARK.spark} fill={C.uv} /></svg>
+          </div>
+        );
+      })()}
       {TECH.map(([a, b, label], i) => {
         if (i !== cur || (f >= T.why - 6 && f < T.reveal)) return null;
         const p = spring({ frame: f - filmFrame(a), fps: 30, config: { damping: 11, stiffness: 220 } });
@@ -145,7 +157,7 @@ function Person({ on, k }) {
   );
 }
 
-// Twist: "...but my product isn't WTC" -> "Exactly." A flat grey sneaker photo turns into a motion ad.
+// Twist: "you don't need to sell watches... zero to a thousand, real quick." A flat grey sneaker photo turns into a motion ad.
 function Twist({ f }) {
   const inP = spring({ frame: f - T.twist, fps: 30, config: { damping: 14 } });
   const out = interpolate(f, [T.conv, T.conv + 10], [0, 1], { ...clamp, easing: easeIn });
@@ -155,6 +167,7 @@ function Twist({ f }) {
   const hero = spring({ frame: m - 6, fps: 30, config: { damping: 9, stiffness: 200 } });
   const word = (i) => spring({ frame: m - 10 - i * 4, fps: 30, config: { damping: 10, stiffness: 240 } });
   const price = interpolate(m, [16, 34], [0, 129], { ...clamp, easing: easeOut });
+  const level = interpolate(m, [8, 34], [0, 1000], { ...clamp, easing: easeOut });   // "from zero to a thousand... real quick"
   const spinY = m >= 0 ? interpolate(hero, [0, 1], [-90, 0]) + Math.sin(m / 14) * 10 : 0;
   const tiltR = m >= 0 ? Math.sin(m / 10) * 4 - 6 : 0;
   const after = m >= 0;
@@ -181,6 +194,12 @@ function Twist({ f }) {
           <div style={{ position: "absolute", left: 60, bottom: 60, padding: "12px 28px", borderRadius: 99, background: "#fff", ...DISPLAY, fontSize: 64, color: C.ink, fontVariantNumeric: "tabular-nums", opacity: Math.min(1, color * 2) }}>${Math.round(price)}</div>
         )}
         {after && <div style={{ position: "absolute", right: 40, top: 30, ...MONO, fontSize: 20, color: "rgba(255,255,255,.75)", opacity: color }}>EXAMPLE · MADE IN THIS REEL</div>}
+        {after && (
+          <div style={{ position: "absolute", right: 60, bottom: 56, textAlign: "right", opacity: Math.min(1, color * 2) }}>
+            <div style={{ ...MONO, fontSize: 22, color: "rgba(255,255,255,.75)", letterSpacing: "0.18em" }}>GRAPHICS LEVEL</div>
+            <div style={{ ...DISPLAY, fontSize: 84, color: "#fff", fontVariantNumeric: "tabular-nums", transform: `scale(${1 + 0.15 * Math.max(0, 1 - Math.abs(m - 34) / 6)})`, transformOrigin: "100% 50%" }}>{Math.round(level)}</div>
+          </div>
+        )}
       </div>
       <Burst f={f} cx={540} cy={700} start={T.morph + 6} count={70} speed={30} colors={["#fff", C.iris, C.sky]} seed="morph" scale={0.9} />
       <Shockwave f={f} cx={540} cy={700} start={T.morph + 6} max={900} width={6} rgb="91,43,255" dur={22} />

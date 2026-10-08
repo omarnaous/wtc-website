@@ -13,10 +13,10 @@ export const T = {
   talk: A.talk,       // "Wait... did you just stop scrolling?" (film sound stops)
   why: A.why,         // "That's what we do." + the services
   svc: A.svc,
-  reveal: A.reveal,   // "This one? A website launch ad we made for Watch Trade Chronicles."
-  twist: A.twist,     // "Cool, but my product isn't a watch..." the plain sneaker
-  dm: A.dm,          // "Doesn't matter."
-  morph: A.morph,     // "Watch." it turns into a motion ad
+  reveal: A.reveal,   // "This one's a website launch ad we did for Watch Trade Chronicles."
+  twist: A.twist,     // "And no, you don't need to sell watches." the plain sneaker
+  dm: A.dm,          // "Whatever your product is... zero to a thousand"
+  morph: A.morph,     // "real quick." it turns into a motion ad
   conv: A.conv,       // don't take my word for it: the Wyzowl report
   study: A.study,
   cta: A.cta,         // photos get scrolled / motion gets watched
