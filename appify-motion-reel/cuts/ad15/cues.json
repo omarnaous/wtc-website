@@ -1,0 +1,122 @@
+{
+ "fps": 30,
+ "duration": 14.733,
+ "seed": 21,
+ "fade_out": 1.0,
+ "cues": [
+  {
+   "type": "lofi",
+   "start": 0,
+   "end": 80,
+   "bpm": 92,
+   "lp": 1100,
+   "drums": 0.7,
+   "gain": 0.18
+  },
+  {
+   "type": "lofi",
+   "start": 158,
+   "end": 442,
+   "bpm": 92,
+   "gain": 0.18
+  },
+  {
+   "type": "pop",
+   "frame": 4,
+   "gain": 0.18
+  },
+  {
+   "type": "blip",
+   "frame": 69,
+   "gain": 0.16
+  },
+  {
+   "type": "pop",
+   "frame": 70,
+   "gain": 0.16
+  },
+  {
+   "type": "whoosh",
+   "start": 68,
+   "end": 84,
+   "gain": 0.14,
+   "pan": 0
+  },
+  {
+   "type": "sting",
+   "frame": 80,
+   "gain": 0.55,
+   "step": 0.26666666666666666,
+   "hold": 0.75
+  },
+  {
+   "type": "impact",
+   "frame": 96,
+   "gain": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 111,
+   "end": 118,
+   "gain": 0.12,
+   "pan": 0
+  },
+  {
+   "type": "bass_drop",
+   "frame": 118,
+   "gain": 0.7
+  },
+  {
+   "type": "impact",
+   "frame": 118,
+   "gain": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 154,
+   "end": 168,
+   "gain": 0.1,
+   "pan": 0
+  },
+  {
+   "type": "impact",
+   "frame": 162,
+   "gain": 0.25
+  },
+  {
+   "type": "whoosh",
+   "start": 283,
+   "end": 297,
+   "gain": 0.12,
+   "pan": 0
+  },
+  {
+   "type": "whoosh",
+   "start": 157,
+   "end": 167,
+   "gain": 0.07,
+   "pan": -0.25
+  },
+  {
+   "type": "pop",
+   "frame": 165,
+   "gain": 0.2
+  },
+  {
+   "type": "stamp",
+   "frame": 308,
+   "gain": 0.5
+  },
+  {
+   "type": "pop",
+   "frame": 329,
+   "gain": 0.22
+  },
+  {
+   "type": "click",
+   "frame": 351,
+   "gain": 0.3,
+   "freq": 1100
+  }
+ ]
+}

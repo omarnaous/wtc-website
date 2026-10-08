@@ -1,0 +1,213 @@
+{
+ "fps": 30,
+ "duration": 30.7,
+ "seed": 21,
+ "fade_out": 1.0,
+ "cues": [
+  {
+   "type": "lofi",
+   "start": 0,
+   "end": 171,
+   "bpm": 92,
+   "lp": 1100,
+   "drums": 0.7,
+   "gain": 0.18
+  },
+  {
+   "type": "lofi",
+   "start": 375,
+   "end": 921,
+   "bpm": 92,
+   "gain": 0.18
+  },
+  {
+   "type": "pop",
+   "frame": 4,
+   "gain": 0.18
+  },
+  {
+   "type": "blip",
+   "frame": 102,
+   "gain": 0.16
+  },
+  {
+   "type": "pop",
+   "frame": 103,
+   "gain": 0.16
+  },
+  {
+   "type": "whoosh",
+   "start": 127,
+   "end": 143,
+   "gain": 0.14,
+   "pan": 0
+  },
+  {
+   "type": "sting",
+   "frame": 171,
+   "gain": 0.55,
+   "step": 0.26666666666666666,
+   "hold": 0.75
+  },
+  {
+   "type": "impact",
+   "frame": 187,
+   "gain": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 202,
+   "end": 209,
+   "gain": 0.12,
+   "pan": 0
+  },
+  {
+   "type": "bass_drop",
+   "frame": 285,
+   "gain": 0.7
+  },
+  {
+   "type": "impact",
+   "frame": 285,
+   "gain": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 477,
+   "end": 491,
+   "gain": 0.1,
+   "pan": 0
+  },
+  {
+   "type": "impact",
+   "frame": 485,
+   "gain": 0.25
+  },
+  {
+   "type": "whoosh",
+   "start": 737,
+   "end": 751,
+   "gain": 0.12,
+   "pan": 0
+  },
+  {
+   "type": "lofi",
+   "start": 207,
+   "end": 281,
+   "bpm": 92,
+   "lp": 1100,
+   "drums": 0.7,
+   "gain": 0.18,
+   "bar0": 2
+  },
+  {
+   "type": "riser",
+   "start": 220,
+   "end": 273,
+   "gain": 0.18
+  },
+  {
+   "type": "stamp",
+   "frame": 269,
+   "gain": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 324,
+   "end": 334,
+   "gain": 0.07,
+   "pan": -0.25
+  },
+  {
+   "type": "pop",
+   "frame": 407,
+   "gain": 0.18,
+   "pan": -0.3
+  },
+  {
+   "type": "pop",
+   "frame": 428,
+   "gain": 0.18,
+   "pan": 0
+  },
+  {
+   "type": "pop",
+   "frame": 446,
+   "gain": 0.18,
+   "pan": 0.3
+  },
+  {
+   "type": "pop",
+   "frame": 385,
+   "gain": 0.2
+  },
+  {
+   "type": "whoosh",
+   "start": 588,
+   "end": 602,
+   "gain": 0.12,
+   "pan": 0
+  },
+  {
+   "type": "riser",
+   "start": 618,
+   "end": 689,
+   "gain": 0.12
+  },
+  {
+   "type": "scratch",
+   "frame": 687,
+   "gain": 0.35
+  },
+  {
+   "type": "bass_drop",
+   "frame": 699,
+   "gain": 0.5
+  },
+  {
+   "type": "counter",
+   "start": 701,
+   "end": 727,
+   "gain": 0.1,
+   "pan": 0.3
+  },
+  {
+   "type": "impact",
+   "frame": 727,
+   "gain": 0.25
+  },
+  {
+   "type": "pop",
+   "frame": 703,
+   "gain": 0.2
+  },
+  {
+   "type": "pop",
+   "frame": 707,
+   "gain": 0.2
+  },
+  {
+   "type": "counter",
+   "start": 709,
+   "end": 727,
+   "gain": 0.08,
+   "pan": -0.3
+  },
+  {
+   "type": "stamp",
+   "frame": 786,
+   "gain": 0.5
+  },
+  {
+   "type": "pop",
+   "frame": 808,
+   "gain": 0.22
+  },
+  {
+   "type": "click",
+   "frame": 830,
+   "gain": 0.3,
+   "freq": 1100
+  }
+ ]
+}

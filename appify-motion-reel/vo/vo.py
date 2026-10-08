@@ -3,7 +3,7 @@ The voice leads: the hook lasts as long as its line, the WTC film starts right a
 runs back to back over the film, then the conversion beat and the CTA follow straight on.
 Kokoro (am_puck), re-intonated per sentence with Praat PSOLA. Writes vo/vo.wav and src/vo.json
 (scene anchors + mouth envelope + caption word timings); timing.js reads the anchors.
-usage: python3 vo/vo.py <kokoro-dir>"""
+usage: python3 vo/vo.py <kokoro-dir> [reel|ad30|ad15]   (the ad cuts: offer up front, Send Message end card)"""
 import json, sys, numpy as np, soundfile as sf
 import parselmouth
 from parselmouth.praat import call
@@ -47,6 +47,25 @@ CTA = [("q1", P("So yeah... photos get scrolled.", "So yeah… photos get scroll
        ("fun", P("Comment motion, and we'll make yours move.", "Comment \u201cMOTION\u201d and we'll make yours move.", speed=1.02, shift=1, rng=1.6, mel="fall", gain=1), 0.25),
        ("refund", P("And if you don't love it? You get a full refund.", speed=1.03, shift=0.5, rng=1.6, mel="arch", gain=0.5), 0.12),
        ("zero", P("Zero risk.", speed=0.98, shift=1, rng=1.5, mel="fall", gain=1), 0.0)]
+
+# --- Meta ad cuts: the offer within the first seconds, ends on the refund + "Tap Send Message"
+AD30 = dict(
+    hook=[("hook", P("POV: you finally post your product... and the only like is from your mom.", "POV: you finally post your product… and the only like is from your mom.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.25),
+          ("swipe", P("Even the algorithm scrolled past it.", speed=1.02, shift=-1, rng=1.4, mel="dip"), 0.0)],
+    turn=[("turn", P("Okay, now watch what happens when it actually moves.", speed=1.02, shift=1.5, rng=1.7, mel="arch", gain=1.5), 0.0)],
+    film=[("talk", P("We're Appify. We do product ads, launch ads, logo reveals.", "We're Appify. We do product ads, launch ads, logo reveals.", speed=1.05, shift=1, rng=1.6, mel="arch", gain=1), 0.2)],
+    reveal=[("reveal", P("This one's a launch ad we did for Watch Trade Chronicles.", speed=1.05, shift=1.5, rng=1.6, mel="arch", gain=1), 0.0)],
+    twist=[("dm", P("Whatever you sell, we'll take your graphics from zero to a hundred...", "Whatever you sell, we'll take your graphics from zero to a hundred…", speed=1.06, shift=1, rng=1.6, mel="rise", gain=0.5), 0.1),
+           ("exactly", P("real quick.", "Real quick.", speed=1.0, shift=1.5, rng=1.5, mel="fall", gain=1.5), 0.9)],
+    cta=[("refund", P("And if you don't love it? You get a full refund.", speed=1.03, shift=0.5, rng=1.6, mel="arch", gain=0.5), 0.25),
+         ("fun", P("Tap send message, and let's make yours move.", "Tap “Send Message” and let's make yours move.", speed=1.02, shift=1, rng=1.6, mel="fall", gain=1), 0.0)],
+)
+AD15 = dict(
+    hook=[("hook", P("POV: the only like on your product is from your mom.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.0)],
+    film=[("talk", P("We're Appify. We turn products into motion ads that stop the scroll, like this one.", speed=1.06, shift=1, rng=1.6, mel="arch", gain=1), 0.25)],
+    cta=[("refund", P("Don't love it? Full refund.", speed=1.02, shift=0.5, rng=1.6, mel="fall", gain=0.5), 0.2),
+         ("fun", P("Tap send message, and let's make yours move.", "Tap “Send Message” and let's make yours move.", speed=1.02, shift=1, rng=1.6, mel="fall", gain=1), 0.0)],
+)
 
 
 def smooth(a, b, u):
@@ -117,32 +136,74 @@ def put(group, film_after=None):
         if "after" in p and film_after: t = max(t, film_after(p["after"]))
         A[key] = t; placed.append((t, p, y)); t += F(len(y) / SR) + F(pause)
     return t
-put(HOOK)
-A["damage"] = t + 3                                    # crash-zoom on Dev's face: EMOTIONAL DAMAGE
-t = A["damage"] + DAMAGE + 3
-put(TURN)
-A["show"] = t + 2                                      # hard cut into the film right after "...when it moves."
-A["rate"] = 1
-t = A["show"] + 6
-put(FILM_LINES[:1], film_after=lambda sec: A["show"] + f2r(sec))
-A["talk"] = A["wow"]                                   # the film's own sound stops when Dev reacts
-put(FILM_LINES[1:])
-# stretch the try-on segment so the logo shot (film 21.3 s) starts as the reveal line does
-CUT[1][1] = round(CUT[1][0] + min(21.3 - 9.6, max(1.8, (t - A["show"]) / FPS - (CUT[0][1] - CUT[0][0]))), 2)
-t = max(t, A["show"] + f2r(21.3))
-put(REVEAL)
-FILM = round(sum(b - a for a, b in CUT) * 30)
-A["film"] = FILM; A["cut"] = [list(c) for c in CUT]
-A["twist"] = max(t + F(GAP) + 6, A["show"] + FILM)     # the film plays to its end (or the reveal line does), then the twist
-t = A["twist"] + 6
-put(TWIST)
-A["morph"] = A["exactly"]                              # the plain sneaker turns into a motion ad on "real quick."
-A["conv"] = t
-t = A["conv"] + 4
-put(PROOF)
-A["cta"] = t - 6
-put(CTA)
-total = t + 45
+VARIANT = sys.argv[2] if len(sys.argv) > 2 else "reel"
+if VARIANT == "reel":
+    put(HOOK)
+    A["damage"] = t + 3                                    # crash-zoom on Dev's face: EMOTIONAL DAMAGE
+    t = A["damage"] + DAMAGE + 3
+    put(TURN)
+    A["show"] = t + 2                                      # hard cut into the film right after "...when it moves."
+    A["rate"] = 1
+    t = A["show"] + 6
+    put(FILM_LINES[:1], film_after=lambda sec: A["show"] + f2r(sec))
+    A["talk"] = A["wow"]                                   # the film's own sound stops when Dev reacts
+    put(FILM_LINES[1:])
+    # stretch the try-on segment so the logo shot (film 21.3 s) starts as the reveal line does
+    CUT[1][1] = round(CUT[1][0] + min(21.3 - 9.6, max(1.8, (t - A["show"]) / FPS - (CUT[0][1] - CUT[0][0]))), 2)
+    t = max(t, A["show"] + f2r(21.3))
+    put(REVEAL)
+    FILM = round(sum(b - a for a, b in CUT) * 30)
+    A["film"] = FILM; A["cut"] = [list(c) for c in CUT]
+    A["twist"] = max(t + F(GAP) + 6, A["show"] + FILM)     # the film plays to its end (or the reveal line does), then the twist
+    t = A["twist"] + 6
+    put(TWIST)
+    A["morph"] = A["exactly"]                              # the plain sneaker turns into a motion ad on "real quick."
+    A["conv"] = t
+    t = A["conv"] + 4
+    put(PROOF)
+    A["cta"] = t - 6
+    put(CTA)
+    total = t + 45
+    A["end"] = total
+elif VARIANT == "ad30":
+    S = AD30
+    put(S["hook"])
+    A["fly"] = A["swipe"] + 10                         # the post gets flung away on "scrolled"
+    A["damage"] = t + 3
+    t = A["damage"] + DAMAGE + 3
+    put(S["turn"])
+    A["show"] = t + 2
+    t = A["show"] + 90                                 # 3 s of the film with its own sound, then Dev talks over it
+    put(S["film"])
+    A["why"] = A["svc"] = A["talk"]                    # the service chips pop as he names them
+    CUT[:] = [[0.0, round((t - A["show"]) / FPS + 0.1, 2)], [21.3, 25.0]]   # opening + counters while he talks, then the logo shot
+    t = max(t, A["show"] + f2r(21.3))
+    put(S["reveal"])
+    A["film"] = round(sum(b - a for a, b in CUT) * 30); A["cut"] = [list(c) for c in CUT]
+    A["twist"] = max(t + F(GAP) + 6, A["show"] + A["film"])
+    t = A["twist"] + 6
+    put(S["twist"])
+    A["morph"] = A["exactly"]
+    A["cta"] = A["twist_end"] = t
+    t += 4
+    put(S["cta"])
+    total = t + 45
+elif VARIANT == "ad15":
+    S = AD15
+    put(S["hook"])
+    A["fly"] = t - 8                                   # flung away as the line ends, straight into the crash-zoom
+    A["damage"] = t + 2
+    A["show"] = A["damage"] + DAMAGE + 2               # no "watch this" beat: cut straight into the film
+    t = A["show"] + 40                                 # 1.3 s of the film's own sound, then the offer
+    put(S["film"])
+    CUT[:] = [[4.0, 8.6], [21.3, round(21.3 + max(1.0, (t - A["show"]) / FPS + 0.3 - 4.6), 2)]]   # counters, then the logo shot
+    A["reveal"] = A["talk"]                            # "Made by Appify" lands on "We're Appify"
+    A["film"] = round(sum(b - a for a, b in CUT) * 30); A["cut"] = [list(c) for c in CUT]
+    A["cta"] = A["twist"] = A["badge_end"] = max(t, A["show"] + A["film"] - 10)
+    t = A["cta"] + 4
+    put(S["cta"])
+    total = t + 45
+if VARIANT != "reel": A["ad"] = 1
 A["end"] = total
 out = np.zeros(int(total / FPS * SR) + SR); words = []
 for li, (start, p, y) in enumerate(placed):
@@ -170,5 +231,5 @@ for w in words:
         st = int(w["start"])
         for i in range(max(1, st - 8), min(total - 1, st + 18)):
             if env[i - 1] < 0.06 and env[i] > 0.3: w["start"] = float(i); break
-json.dump({"duration": total, "anchors": A, "mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
+json.dump({"id": {"reel": "MotionShowcase", "ad30": "MotionAd30", "ad15": "MotionAd15"}[VARIANT], "duration": total, "anchors": A, "mouth": [round(float(x), 3) for x in env], "words": words}, open("src/vo.json", "w"))
 print("anchors", A, f"total {total / FPS:.1f}s")

@@ -5,7 +5,7 @@ from scipy.signal import resample_poly
 from scipy.ndimage import uniform_filter1d
 import json
 A = json.load(open("src/vo.json"))["anchors"]
-SHOW, CONV = A["show"] / 30, A.get("talk", A["conv"]) / 30   # film sound plays from the start of the film until Dev talks again after the kinetic opening
+SHOW, CONV = A["show"] / 30, (A.get("talk") or A["conv"]) / 30   # film sound plays from the start of the film until Dev talks again after the kinetic opening
 sfx, sr = sf.read("sound/sfx.wav")
 CUT = A.get("cut", [[0, 25]])
 src, fsr = sf.read("sound/wtc.wav")              # the film's soundtrack at real speed, with the same cut as the picture

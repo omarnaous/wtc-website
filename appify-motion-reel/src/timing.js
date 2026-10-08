@@ -25,6 +25,11 @@ export const T = {
   zero: A.zero,
   fun: A.fun,         // comment MOTION
   end: A.end,
+  // ad cuts only (undefined in the reel)
+  fly: A.fly,         // when the post gets flung away
+  badgeEnd: A.badge_end ?? A.reveal + 6,
+  twistEnd: A.twist_end ?? A.conv,
+  ad: A.ad,           // Send Message end card instead of the comment CTA
 };
 export const DAMAGE = 36;
 // what's on screen in the film (seconds on the film's own clock) -> label under the screen

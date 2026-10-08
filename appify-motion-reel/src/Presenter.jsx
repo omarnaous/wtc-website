@@ -22,19 +22,22 @@ const MOODS0 = [
 ];
 // [type, start, end]
 const ACTS0 = [
-  ["point", 16, T.brutal - 4], ["lean", T.brutal, T.damage - 2], ["shock", T.damage + 8, T.damage + DAMAGE - 2],
+  ["point", 16, (T.brutal ?? T.fly) - 4], ["lean", T.brutal, T.damage - 2], ["shock", T.damage + 8, T.damage + DAMAGE - 2],
   ["point", T.turn + 6, T.show - 2],
   ["shock", T.talk, T.talk + 22], ["jump", T.talk + 2, T.talk + 18], ["point", T.talk + 20, T.why - 2],
   ["happy", T.why, T.why + 26], ["point", T.svc, T.reveal - 4], ["thumbs", T.reveal, T.reveal + 60],
   ["point", T.twist + 6, T.dm - 2], ["lean", T.dm, T.morph - 4], ["point", T.morph, T.morph + 40], ["wink", T.morph + 2, T.morph + 18],
   ["point", T.study, DATA.people.at + 40],
-  ["wave", T.cta + 2, T.cta + 28], ["point", T.q2, T.refund - 2], ["thumbs", T.refund + 10, T.end - 6],
+  ...(T.ad ? [["thumbs", T.refund + 6, T.fun - 4], ["point", T.fun, T.end - 6]]
+          : [["wave", T.cta + 2, T.cta + 28], ["point", T.q2, T.refund - 2], ["thumbs", T.refund + 10, T.end - 6]]),
 ];
-const EMOTES0 = [["?", 30, T.brutal], ["sweat", T.brutal, T.damage], ["!", T.talk, T.talk + 34], ["spark", T.morph + 4, T.morph + 40]];
+const EMOTES0 = [["?", 30, T.brutal ?? T.fly], ["sweat", T.brutal ?? T.fly, T.damage], ["!", T.talk, T.talk + 34], ["spark", T.morph + 4, T.morph + 40]];
 
-const MOODS = MOODS0.map(([f, m]) => [warp(f), m]);
-const ACTS = ACTS0.map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);
-const EMOTES = EMOTES0.map(([k, a, b]) => [k, warp(a), Math.max(warp(a) + 8, warp(b))]);
+// the ad cuts skip some beats: drop anything keyed to an anchor they don't have
+const ok = (...xs) => xs.every(Number.isFinite);
+const MOODS = MOODS0.filter(([f]) => ok(f)).map(([f, m]) => [warp(f), m]).sort((a, b) => a[0] - b[0]);
+const ACTS = ACTS0.filter(([, a, b]) => ok(a, b)).map(([t, a, b]) => [t, warp(a), Math.max(warp(a) + 8, warp(b))]);
+const EMOTES = EMOTES0.filter(([, a, b]) => ok(a, b)).map(([k, a, b]) => [k, warp(a), Math.max(warp(a) + 8, warp(b))]);
 
 const env = (f, a, b, r = 6) => { r = Math.min(r, (b - a) / 2 - 0.01); return interpolate(f, [a, a + r, b - r, b], [0, 1, 1, 0], clamp); };
 const act = (f, type) => ACTS.filter((x) => x[0] === type).reduce((v, [, a, b]) => Math.max(v, env(f, a, b)), 0);

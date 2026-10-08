@@ -9,13 +9,13 @@ import { WORDMARK, sparkPath } from "./brand.js";
 import { Sneaker } from "./products.jsx";
 import { Presenter } from "./Presenter.jsx";
 
-const APPIFY_AT = wordAt("appify", T.why);
+const APPIFY_AT = wordAt("appify", T.why ?? T.talk);
 const SX = 30, SY = 420, SW = 1020, SH = Math.round(1020 * 9 / 16); // the screen the film plays in
 
 function Hook({ f }) {
   const inP = spring({ frame: f - 4, fps: 30, config: { damping: 14 } });
   const mom = wordAt("mom", T.hook);
-  const fly = wordAt("scrolled", T.swipe) - 6;
+  const fly = T.fly ?? wordAt("scrolled", T.swipe) - 6;
   const away = interpolate(f, [fly, fly + 14], [0, 1], { ...clamp, easing: easeIn });
   const gone = interpolate(f, [fly + 12, fly + 18], [0, 1], clamp);
   const heart = spring({ frame: f - mom, fps: 30, config: { damping: 8, stiffness: 260 } });
@@ -122,9 +122,9 @@ function Showcase({ f, client, film }) {
         </div>
       )}
       {/* "...here at Appify": the wordmark pops in next to Dev */}
-      {f >= APPIFY_AT - 2 && f < T.reveal + 6 && (() => {
+      {f >= APPIFY_AT - 2 && f < T.badgeEnd && (() => {
         const p = spring({ frame: f - APPIFY_AT + 2, fps: 30, config: { damping: 9, stiffness: 260 } });
-        const o = interpolate(f, [T.reveal - 4, T.reveal + 6], [1, 0], clamp);
+        const o = interpolate(f, [T.badgeEnd - 10, T.badgeEnd], [1, 0], clamp);
         const w = 250, h = w * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
         return (
           <div style={{ position: "absolute", left: 330, top: 1196, padding: "14px 26px", borderRadius: 22, background: "#fff", border: "4px solid #0A0913", boxShadow: "0 8px 0 #0A0913", opacity: Math.min(1, p * 2) * o, transform: `rotate(${interpolate(p, [0, 1], [-14, -3])}deg) scale(${interpolate(p, [0, 1], [1.8, 1])})`, transformOrigin: "0 100%" }}>
@@ -160,7 +160,7 @@ function Person({ on, k }) {
 // Twist: "you don't need to sell watches... zero to a hundred, real quick." A flat grey sneaker photo turns into a motion ad.
 function Twist({ f }) {
   const inP = spring({ frame: f - T.twist, fps: 30, config: { damping: 14 } });
-  const out = interpolate(f, [T.conv, T.conv + 10], [0, 1], { ...clamp, easing: easeIn });
+  const out = interpolate(f, [T.twistEnd, T.twistEnd + 10], [0, 1], { ...clamp, easing: easeIn });
   const m = f - T.morph;
   const flip = interpolate(m, [0, 10], [0, 1], { ...clamp, easing: easeOut });
   const color = interpolate(m, [4, 14], [0, 1], clamp);
@@ -333,6 +333,68 @@ function Cta({ f, cta, url }) {
   );
 }
 
+// Ad end card: what we do, the film looping, the refund sticker, and a Send Message button that gets tapped.
+function Plane({ size = 54, color = "#fff" }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24"><path d="M2.5,11.2 L21,3 L14.6,21 L11.3,13.4 Z M11.3,13.4 L21,3" fill="none" stroke={color} strokeWidth="2.2" strokeLinejoin="round" strokeLinecap="round" /></svg>;
+}
+function AdCta({ f, url }) {
+  const e = (d) => spring({ frame: f - T.cta - d, fps: 30, config: { damping: 12, stiffness: 190 } });
+  const rise = (p) => ({ opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 50}px)` });
+  const full = wordAt("full", T.refund);
+  const badge = spring({ frame: f - full + 2, fps: 30, config: { damping: 9, stiffness: 260 } });
+  const tap = wordAt("tap", T.fun);
+  const btn = spring({ frame: f - tap + 6, fps: 30, config: { damping: 10, stiffness: 220 } });
+  const click = tap + 16;
+  const press = interpolate(f, [click - 2, click, click + 5], [1, 0.92, 1], clamp);
+  const cur = interpolate(f, [tap, click - 2], [0, 1], { ...clamp, easing: easeOut });
+  const ring = interpolate(f, [click, click + 18], [0, 1], clamp);
+  const wmW = 360, wmH = wmW * (WORDMARK.bottom - WORDMARK.top + 40) / (WORDMARK.width + 40);
+  const W2 = 760, H2 = Math.round(760 * 9 / 16), BY = 540 + H2 + 70;
+  return (
+    <>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 218, textAlign: "center", ...MONO, fontSize: 28, color: C.uv, letterSpacing: "0.24em", ...rise(e(10)) }}>APPIFY · MOTION GRAPHICS</div>
+      <div style={{ position: "absolute", left: 40, right: 40, top: 270, textAlign: "center", ...DISPLAY, fontSize: 104, lineHeight: 1.02, color: C.ink, ...rise(e(13)) }}>
+        Make your product <span style={{ color: C.uv }}>move.</span>
+      </div>
+      <div style={{ position: "absolute", left: (1080 - W2) / 2 - 12, top: 540, width: W2 + 24, height: H2 + 24, borderRadius: 28, background: "#14121F", border: "2px solid rgba(10,9,19,.6)", boxShadow: "0 30px 80px rgba(91,43,255,.35)", ...rise(e(16)) }}>
+        <div style={{ position: "absolute", left: 12, top: 12, width: W2, height: H2, borderRadius: 18, overflow: "hidden", background: "#000" }}>
+          <Sequence from={T.cta} layout="none">
+            <Loop durationInFrames={5 * 30} layout="none">
+              <OffthreadVideo src={staticFile("wtc.mp4")} muted startFrom={9 * 30} style={{ width: W2, height: H2 }} />
+            </Loop>
+          </Sequence>
+        </div>
+      </div>
+      {f >= full - 2 && (
+        <div style={{ position: "absolute", left: 790, top: 446, width: 250, height: 250, borderRadius: 999, background: "#fff", border: "8px solid #0A0913", boxShadow: "0 12px 0 #0A0913", display: "grid", placeItems: "center", alignContent: "center", gap: 2,
+          opacity: Math.min(1, badge * 2), transform: `rotate(${interpolate(badge, [0, 1], [-30, 10])}deg) scale(${interpolate(badge, [0, 1], [2, 1])})` }}>
+          <Shield />
+          <div style={{ ...DISPLAY, fontSize: 64, color: C.ink }}>100%</div>
+          <div style={{ ...MONO, fontSize: 24, fontWeight: 600, color: C.ink, letterSpacing: "0.16em" }}>REFUND</div>
+        </div>
+      )}
+      {/* the Send Message button, tapped by a cursor */}
+      <div style={{ position: "absolute", left: 0, right: 0, top: BY, display: "grid", justifyItems: "center", opacity: Math.min(1, btn * 1.5), transform: `scale(${interpolate(btn, [0, 1], [1.3, 1]) * press})` }}>
+        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 22, padding: "26px 56px", borderRadius: 999, background: C.uv, boxShadow: "0 22px 60px rgba(91,43,255,.55)" }}>
+          <Plane />
+          <span style={{ ...DISPLAY, fontSize: 70, color: "#fff", whiteSpace: "nowrap" }}>Send Message</span>
+          {f >= click && <div style={{ position: "absolute", inset: -6, borderRadius: 999, border: `6px solid rgba(91,43,255,${1 - ring})`, transform: `scale(${1 + ring * 0.25})` }} />}
+        </div>
+        <div style={{ ...MONO, fontSize: 26, color: C.mute, marginTop: 22, letterSpacing: "0.06em" }}>Full refund if you don't love it</div>
+      </div>
+      {f >= tap && (
+        <svg width="70" height="86" viewBox="0 0 70 86" style={{ position: "absolute", left: interpolate(cur, [0, 1], [1000, 700]), top: interpolate(cur, [0, 1], [1460, BY + 60]), transform: `scale(${f >= click - 2 && f < click + 5 ? 0.88 : 1})`, opacity: interpolate(f, [tap, tap + 4], [0, 1], clamp) }}>
+          <path d="M6,4 L6,66 L22,52 L33,78 L45,73 L34,48 L56,48 Z" fill="#fff" stroke="#0A0913" strokeWidth="5" strokeLinejoin="round" />
+        </svg>
+      )}
+      <div style={{ position: "absolute", left: 330, width: 700, top: 1520, display: "grid", justifyItems: "center", gap: 14, ...rise(e(24)) }}>
+        <svg viewBox={WORDMARK.viewBox} width={wmW} height={wmH}><path d={WORDMARK.letters} fill={C.ink} /><path d={WORDMARK.spark} fill={C.uv} /></svg>
+        <div style={{ ...MONO, fontSize: 30, color: C.ink, letterSpacing: "0.18em" }}>{url}</div>
+      </div>
+    </>
+  );
+}
+
 export const Main = (props) => {
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-400.ttf", { weight: "400" }], ["UI", "Geist-600.ttf", { weight: "600" }]]);
   const f = useCurrentFrame();
@@ -345,13 +407,13 @@ export const Main = (props) => {
       <AbsoluteFill style={{ background: C.paper, backgroundImage: `linear-gradient(${C.gridMajor} 2px, transparent 2px), linear-gradient(90deg, ${C.gridMajor} 2px, transparent 2px), linear-gradient(${C.grid} 1px, transparent 1px), linear-gradient(90deg, ${C.grid} 1px, transparent 1px)`, backgroundSize: "180px 180px, 180px 180px, 36px 36px, 36px 36px", backgroundPosition: `0 ${f * 0.8}px, 0 ${f * 0.8}px, 0 ${f * 0.8}px, 0 ${f * 0.8}px` }} />
       <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}>
         {f < T.show && <Hook f={f} />}
-        {f >= T.show - 16 && f < T.show && (
+        {T.turn != null && f >= T.show - 16 && f < T.show && (
           <div style={{ position: "absolute", left: 0, right: 0, top: 560, textAlign: "center", ...DISPLAY, fontSize: 200, lineHeight: 0.95, color: C.ink, opacity: interpolate(f, [T.show - 16, T.show - 13], [0, 1], clamp), transform: `scale(${interpolate(f, [T.show - 16, T.show - 9], [1.6, 1], { ...clamp, easing: easeOut })}) rotate(-4deg)` }}>WATCH<br /><span style={{ color: C.uv }}>THIS.</span></div>
         )}
         {f >= T.show && f < T.twist + 9 && <Showcase f={f} client={props.client} film={props.film} />}
-        {f >= T.twist && f < T.conv + 11 && <Twist f={f} />}
-        {f >= T.conv && f < T.cta + 14 && <Proof f={f} />}
-        {f >= T.cta && <Cta f={f} cta={props.cta} url={props.url} />}
+        {T.morph != null && f >= T.twist && f < T.twistEnd + 11 && <Twist f={f} />}
+        {T.study != null && f >= T.conv && f < T.cta + 14 && <Proof f={f} />}
+        {f >= T.cta && (T.ad ? <AdCta f={f} url={props.url} /> : <Cta f={f} cta={props.cta} url={props.url} />)}
       </AbsoluteFill>
       <Presenter />
       </AbsoluteFill>
