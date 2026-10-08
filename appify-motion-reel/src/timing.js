@@ -15,7 +15,7 @@ export const T = {
   svc: A.svc,
   reveal: A.reveal,   // "This one's a website launch ad we did for Watch Trade Chronicles."
   twist: A.twist,     // "And no, you don't need to sell watches." the plain sneaker
-  dm: A.dm,          // "Whatever your product is... zero to a thousand"
+  dm: A.dm,          // "Whatever your product is... zero to a hundred"
   morph: A.morph,     // "real quick." it turns into a motion ad
   conv: A.conv,       // don't take my word for it: the Wyzowl report
   study: A.study,

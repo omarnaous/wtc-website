@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 53.967,
+ "duration": 50.067,
  "seed": 21,
  "fade_out": 1.0,
  "cues": [
@@ -16,7 +16,7 @@
   {
    "type": "lofi",
    "start": 227,
-   "end": 315,
+   "end": 301,
    "bpm": 92,
    "lp": 1100,
    "drums": 0.7,
@@ -25,8 +25,8 @@
   },
   {
    "type": "lofi",
-   "start": 484,
-   "end": 1619,
+   "start": 470,
+   "end": 1502,
    "bpm": 92,
    "gain": 0.18
   },
@@ -74,197 +74,197 @@
   {
    "type": "riser",
    "start": 240,
-   "end": 307,
+   "end": 293,
    "gain": 0.18
   },
   {
    "type": "stamp",
-   "frame": 303,
+   "frame": 289,
    "gain": 0.4
   },
   {
    "type": "bass_drop",
-   "frame": 319,
+   "frame": 305,
    "gain": 0.7
   },
   {
    "type": "impact",
-   "frame": 319,
+   "frame": 305,
    "gain": 0.4
   },
   {
    "type": "whoosh",
-   "start": 358,
-   "end": 368,
+   "start": 344,
+   "end": 354,
    "gain": 0.07,
    "pan": -0.25
   },
   {
    "type": "whoosh",
-   "start": 478,
-   "end": 488,
+   "start": 464,
+   "end": 474,
    "gain": 0.07,
    "pan": 0.25
   },
   {
    "type": "vine_boom",
-   "frame": 484,
+   "frame": 470,
    "gain": 0.35
   },
   {
    "type": "pop",
-   "frame": 654,
+   "frame": 588,
    "gain": 0.18,
    "pan": -0.3
   },
   {
    "type": "pop",
-   "frame": 675,
+   "frame": 609,
    "gain": 0.18,
    "pan": 0
   },
   {
    "type": "pop",
-   "frame": 693,
+   "frame": 626,
    "gain": 0.18,
    "pan": 0.3
   },
   {
    "type": "whoosh",
-   "start": 722,
-   "end": 736,
+   "start": 653,
+   "end": 667,
    "gain": 0.1,
    "pan": 0
   },
   {
    "type": "impact",
-   "frame": 730,
+   "frame": 661,
    "gain": 0.25
   },
   {
    "type": "whoosh",
-   "start": 833,
-   "end": 847,
+   "start": 764,
+   "end": 778,
    "gain": 0.12,
    "pan": 0
   },
   {
    "type": "riser",
-   "start": 916,
-   "end": 1000,
+   "start": 847,
+   "end": 929,
    "gain": 0.12
   },
   {
    "type": "scratch",
-   "frame": 998,
+   "frame": 927,
    "gain": 0.35
   },
   {
    "type": "bass_drop",
-   "frame": 1010,
+   "frame": 939,
    "gain": 0.5
   },
   {
    "type": "counter",
-   "start": 1012,
-   "end": 1038,
+   "start": 941,
+   "end": 967,
    "gain": 0.1,
    "pan": 0.3
   },
   {
    "type": "impact",
-   "frame": 1038,
+   "frame": 967,
    "gain": 0.25
   },
   {
    "type": "pop",
-   "frame": 1014,
+   "frame": 943,
    "gain": 0.2
   },
   {
    "type": "pop",
-   "frame": 1018,
+   "frame": 947,
    "gain": 0.2
   },
   {
    "type": "counter",
-   "start": 1020,
-   "end": 1038,
+   "start": 949,
+   "end": 967,
    "gain": 0.08,
    "pan": -0.3
   },
   {
    "type": "whoosh",
-   "start": 1053,
-   "end": 1069,
+   "start": 982,
+   "end": 998,
    "gain": 0.12,
    "pan": 0
   },
   {
    "type": "whoosh",
-   "start": 1059,
-   "end": 1122,
+   "start": 988,
+   "end": 1090,
    "gain": 0.05,
    "pan": 0.3
   },
   {
    "type": "sweep",
-   "start": 1206,
-   "end": 1218,
+   "start": 1108,
+   "end": 1120,
    "gain": 0.08
   },
   {
    "type": "counter",
-   "start": 1210,
-   "end": 1230,
+   "start": 1112,
+   "end": 1132,
    "gain": 0.15
   },
   {
    "type": "impact",
-   "frame": 1214,
+   "frame": 1116,
    "gain": 0.4
   },
   {
    "type": "pop",
-   "frame": 1220,
+   "frame": 1122,
    "gain": 0.14
   },
   {
    "type": "stamp",
-   "frame": 1238,
+   "frame": 1140,
    "gain": 0.45
   },
   {
    "type": "whoosh",
-   "start": 1325,
-   "end": 1339,
+   "start": 1208,
+   "end": 1222,
    "gain": 0.12,
    "pan": 0
   },
   {
    "type": "click",
-   "frame": 1381,
+   "frame": 1264,
    "gain": 0.16,
    "freq": 900
   },
   {
    "type": "stamp",
-   "frame": 1528,
+   "frame": 1411,
    "gain": 0.5
   },
   {
    "type": "pop",
-   "frame": 1551,
+   "frame": 1434,
    "gain": 0.2
   },
   {
    "type": "stamp",
-   "frame": 1417,
+   "frame": 1300,
    "gain": 0.5
   },
   {
    "type": "click",
-   "frame": 1441,
+   "frame": 1324,
    "gain": 0.14,
    "freq": 1300
   }

@@ -44,16 +44,16 @@ cues = [
     {"type": "impact", "frame": A["reveal"] + 4, "gain": 0.25},                # Made by Appify lands
     # twist
     W(A["twist"] - 4, A["twist"] + 10, 0.12),
-    {"type": "riser", "start": A["dm"] + 20, "end": A["morph"] - 4, "gain": 0.12},           # zero to a thousand...
+    {"type": "riser", "start": A["dm"] + 20, "end": A["morph"] - 4, "gain": 0.12},           # zero to a hundred...
     {"type": "scratch", "frame": A["morph"] - 6, "gain": 0.35},                # ...real quick.
     {"type": "bass_drop", "frame": A["morph"] + 6, "gain": 0.5},
-    {"type": "counter", "start": A["morph"] + 8, "end": A["morph"] + 34, "gain": 0.1, "pan": 0.3},              # graphics level 0 -> 1000
+    {"type": "counter", "start": A["morph"] + 8, "end": A["morph"] + 34, "gain": 0.1, "pan": 0.3},              # graphics level 0 -> 100
     {"type": "impact", "frame": A["morph"] + 34, "gain": 0.25},
     {"type": "pop", "frame": A["morph"] + 10, "gain": 0.2}, {"type": "pop", "frame": A["morph"] + 14, "gain": 0.2},   # NEW DROP.
     {"type": "counter", "start": A["morph"] + 16, "end": A["morph"] + 34, "gain": 0.08, "pan": -0.3},                          # $129 counts up
     # proof: the report slides in, the magnifier scans, highlight, 85% pops off the page, SOURCE stamp
     W(A["conv"] - 2, A["conv"] + 14, 0.12),
-    W(A["conv"] + 4, A["study"], 0.05, 0.3),
+    W(A["conv"] + 4, A["study"] + 10, 0.05, 0.3),
     {"type": "sweep", "start": p85 - 4, "end": p85 + 8, "gain": 0.08},
     {"type": "counter", "start": p85, "end": p85 + 20, "gain": 0.15},
     {"type": "impact", "frame": p85 + 4, "gain": 0.4},

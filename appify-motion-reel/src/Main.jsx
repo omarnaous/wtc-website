@@ -157,7 +157,7 @@ function Person({ on, k }) {
   );
 }
 
-// Twist: "you don't need to sell watches... zero to a thousand, real quick." A flat grey sneaker photo turns into a motion ad.
+// Twist: "you don't need to sell watches... zero to a hundred, real quick." A flat grey sneaker photo turns into a motion ad.
 function Twist({ f }) {
   const inP = spring({ frame: f - T.twist, fps: 30, config: { damping: 14 } });
   const out = interpolate(f, [T.conv, T.conv + 10], [0, 1], { ...clamp, easing: easeIn });
@@ -167,7 +167,7 @@ function Twist({ f }) {
   const hero = spring({ frame: m - 6, fps: 30, config: { damping: 9, stiffness: 200 } });
   const word = (i) => spring({ frame: m - 10 - i * 4, fps: 30, config: { damping: 10, stiffness: 240 } });
   const price = interpolate(m, [16, 34], [0, 129], { ...clamp, easing: easeOut });
-  const level = interpolate(m, [8, 34], [0, 1000], { ...clamp, easing: easeOut });   // "from zero to a thousand... real quick"
+  const level = interpolate(m, [8, 34], [0, 100], { ...clamp, easing: easeOut });   // "from zero to a hundred... real quick"
   const spinY = m >= 0 ? interpolate(hero, [0, 1], [-90, 0]) + Math.sin(m / 14) * 10 : 0;
   const tiltR = m >= 0 ? Math.sin(m / 10) * 4 - 6 : 0;
   const after = m >= 0;
@@ -223,8 +223,8 @@ function Proof({ f }) {
   const P1 = DATA.people;
   const head = spring({ frame: f - T.conv - 2, fps: 30, config: { damping: 13 } });
   const out = interpolate(f, [T.cta, T.cta + 12], [0, 1], { ...clamp, easing: easeIn });
-  const rep = wordAt("report", T.study);
-  const lt = [T.conv + 4, T.study, rep, P1.at - 6, P1.at + 12];
+  const rep = wordAt("found", T.study);
+  const lt = [T.conv + 4, wordAt("study", T.conv), T.study, P1.at - 6, P1.at + 12];
   const lx = interpolate(f, lt, [1250, 330, 760, 330, 1300], { ...clamp, easing: easeOut });
   const ly = interpolate(f, lt, [700, 400, 420, 620, 420], { ...clamp, easing: easeOut });
   const hl = interpolate(f, [P1.at - 4, P1.at + 8], [0, 100], { ...clamp, easing: easeOut });
