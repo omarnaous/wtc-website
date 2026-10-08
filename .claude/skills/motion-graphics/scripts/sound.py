@@ -8,7 +8,7 @@ usage:
 
 Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
            printer coin register rip glitch click pop typing cash cash_count blip sweep,
-           viral-reel hits: vine_boom scratch bass_drop stamp buzz,
+           viral-reel hits: vine_boom scratch bass_drop stamp buzz sting,
            money: coin_drop coins cash_riffle; charts: graph_tick graph_rise counter,
            and a music bed for voice-overs: lofi (start/end, bpm, lp, drums/keys/bass).
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
@@ -269,6 +269,28 @@ def buzz(c, q):
     env = np.minimum(1, t / 0.005) * np.minimum(1, (n / SR - t) / 0.04)
     return lp(sq * 0.4, 1600) * env
 
+def sting(c, q):
+    """Dramatic 'dun dun DUNNN' (meme zoom): three brass-like stabs with timpani, the last one held with a
+    tremolo. "step" = seconds between stabs (default 0.27), "hold" = length of the last one."""
+    step, hold = q.get("step", 0.27), q.get("hold", 1.1)
+    chords = [(146.8, 174.6, 220.0), (146.8, 174.6, 220.0), (138.6, 164.8, 196.0, 233.1)]  # Dm, Dm, C#dim7
+    n = int((2 * step + hold + 0.8) * SR); out = np.zeros(n)
+    for k, ch in enumerate(chords):
+        dur = hold if k == 2 else step * 0.85; m = int(dur * SR); t = np.arange(m) / SR
+        env = np.minimum(1, t / 0.012) * (np.exp(-t / 0.5) if k < 2 else (1 - t / dur) ** 0.6)
+        if k == 2: env = env * (1 + 0.25 * np.sin(2 * np.pi * 7 * t))
+        tone = np.zeros(m)
+        for f in ch:
+            for d in (0.997, 1.003):
+                ph = f * d * t; tone += 2 * (ph - np.floor(ph + 0.5))
+        bright = lp(tone, 900) * 0.6 + lp(tone, 2600) * 0.4 * np.exp(-t / 0.08)   # brass: the filter opens on the attack
+        mt = int(0.6 * SR); tt = np.arange(mt) / SR
+        timp = np.sin(2 * np.pi * np.cumsum(70 * (1 + 0.3 * np.exp(-tt / 0.04))) / SR) * np.exp(-tt / (0.35 if k < 2 else 0.6))
+        i = int(k * step * SR)
+        out[i:i + m] += np.tanh(bright * env * 0.5) * (1.0 if k < 2 else 1.15)
+        out[i:i + mt] += timp * 0.9
+    return c.reverb(out, 1.2, 0.2)
+
 NOTE = {n: i for i, n in enumerate(["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"])}
 def _hz(name):  # "A3" -> 220.0
     return 440 * 2 ** ((NOTE[name[:-1]] + 12 * (int(name[-1]) + 1) - 69) / 12)
@@ -435,7 +457,7 @@ def render(spec, out):
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
                    "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
                    "cash": cash, "blip": blip, "vine_boom": vine_boom, "scratch": scratch, "bass_drop": bass_drop,
-                   "stamp": stamp, "buzz": buzz, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
+                   "stamp": stamp, "buzz": buzz, "sting": sting, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
                    "graph_tick": graph_tick}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)

@@ -4,20 +4,29 @@ export const FPS = 30;
 export const DURATION = VO.duration;
 const A = VO.anchors;
 export const T = {
-  hook: A.hook,       // POV: a plain product photo
-  swipe: A.swipe,     // "Yeah... good luck with that." it gets scrolled away
-  turn: A.turn,       // "But what if we made your product do... this?"
-  show: A.show,       // hard cut into the WTC film
-  talk: A.talk,       // "Okay... that got my attention." (film sound stops)
-  reveal: A.reveal,   // "This is the launch film we made for WTC." header comes in
-  twist: A.twist,     // "And before you say..." the plain sneaker
-  morph: A.morph,     // "Exactly." it turns into a motion ad
-  conv: A.conv,       // the 85% proof
-  cta: A.cta,         // still posting product photos? / or making people stop scrolling?
+  hook: A.hook,       // POV: a plain product photo, one like (mom)
+  brutal: A.brutal,   // "Brutal."
+  swipe: A.swipe,     // "Even the algorithm scrolled past." it gets flung away
+  damage: A.damage,   // crash-zoom on Dev: EMOTIONAL DAMAGE
+  turn: A.turn,       // "Okay, now watch what happens when it moves."
+  show: A.show,       // hard cut into the film
+  talk: A.talk,       // "Wait... did you just stop scrolling?" (film sound stops)
+  why: A.why,         // "That's what we do." + the services
+  svc: A.svc,
+  reveal: A.reveal,   // "This one? A website launch ad we made for Watch Trade Chronicles."
+  twist: A.twist,     // "Cool, but my product isn't a watch..." the plain sneaker
+  dm: A.dm,          // "Doesn't matter."
+  morph: A.morph,     // "Watch." it turns into a motion ad
+  conv: A.conv,       // don't take my word for it: the Wyzowl report
+  study: A.study,
+  cta: A.cta,         // photos get scrolled / motion gets watched
   q2: A.q2,
-  fun: A.fun,
+  refund: A.refund,   // full refund, zero risk
+  zero: A.zero,
+  fun: A.fun,         // comment MOTION
   end: A.end,
 };
+export const DAMAGE = 36;
 // what's on screen in the film (seconds on the film's own clock) -> label under the screen
 export const TECH = [
   [1.5, 5.5, "Kinetic typography"],
@@ -26,10 +35,11 @@ export const TECH = [
   [21.3, 25, "Logo reveal"],
 ];
 // the proof: a real survey figure, shown with its source; it lands as the voice says it
-const wordAt = (w) => VO.words.find((x) => x.w.startsWith(w))?.start ?? A.conv;
+// first caption word starting with `w` at or after frame `from`
+export const wordAt = (w, from = 0) => VO.words.find((x) => x.start >= from - 1 && x.w.replace(/^[“"]/, "").toLowerCase().startsWith(w.toLowerCase()))?.start ?? from;
 export const DATA = {
   source: "Source: Wyzowl, State of Video Marketing 2026",
-  people: { pct: 85, at: wordAt("85%"), text: "of people say a video convinced them to buy" },
+  people: { pct: 85, at: wordAt("85%", A.study), text: "of people say a video convinced them to buy" },
 };
 export const CUT = A.cut || [[0, 25]];
 export const filmFrame = (sec) => { // film-clock seconds -> reel frame

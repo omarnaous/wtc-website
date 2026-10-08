@@ -40,6 +40,7 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 | `cash_count` | bills flicking between `start`/`end` (`rate`) | a money counter ticking up |
 | `blip` | soft rounded data tick (`freq`, step it up) | chart bars or points appearing |
 | `sweep` | soft tone gliding `f0`→`f1` between `start`/`end` | a chart line drawing |
+| `sting` | dramatic 'dun dun DUNNN': two brass stabs and a held diminished chord with timpani (`step`, `hold`) | the meme crash-zoom ("emotional damage"), once per reel |
 | `vine_boom` | deep saturated sub thump (the viral meme boom) | one punchline or shocking number, max 1-2 per reel |
 | `scratch` | record scratch | the 'wait, what?' turn |
 | `bass_drop` | 808 slide down | the big reveal / title slam |

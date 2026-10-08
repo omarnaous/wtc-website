@@ -3,8 +3,8 @@ import { Main } from "./Main.jsx";
 import { FPS, DURATION } from "./timing.js";
 
 export const props = {
-  client: "WTC",
-  film: "Launch film",
+  client: "Watch Trade Chronicles",
+  film: "Website launch ad",
   cta: "Motion",
   url: "www.appify-lb.com",
 };
