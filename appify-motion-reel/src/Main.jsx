@@ -224,7 +224,7 @@ function Proof({ f }) {
   const head = spring({ frame: f - T.conv - 2, fps: 30, config: { damping: 13 } });
   const out = interpolate(f, [T.cta, T.cta + 12], [0, 1], { ...clamp, easing: easeIn });
   const rep = wordAt("found", T.study);
-  const lt = [T.conv + 4, wordAt("study", T.conv), T.study, P1.at - 6, P1.at + 12];
+  const lt = [T.conv + 4, Math.min(wordAt("study", T.conv), T.study - 2), T.study, P1.at - 6, P1.at + 12];
   const lx = interpolate(f, lt, [1250, 330, 760, 330, 1300], { ...clamp, easing: easeOut });
   const ly = interpolate(f, lt, [700, 400, 420, 620, 420], { ...clamp, easing: easeOut });
   const hl = interpolate(f, [P1.at - 4, P1.at + 8], [0, 100], { ...clamp, easing: easeOut });

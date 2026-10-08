@@ -55,8 +55,8 @@ AD30 = dict(
     turn=[("turn", P("Okay, now watch what happens when it actually moves.", speed=1.02, shift=1.5, rng=1.7, mel="arch", gain=1.5), 0.0)],
     film=[("talk", P("We're Appify. We do product ads, launch ads, logo reveals.", "We're Appify. We do product ads, launch ads, logo reveals.", speed=1.05, shift=1, rng=1.6, mel="arch", gain=1), 0.2)],
     reveal=[("reveal", P("This one's a launch ad we did for Watch Trade Chronicles.", speed=1.05, shift=1.5, rng=1.6, mel="arch", gain=1), 0.0)],
-    twist=[("dm", P("Whatever you sell, we'll take your graphics from zero to a hundred...", "Whatever you sell, we'll take your graphics from zero to a hundred…", speed=1.06, shift=1, rng=1.6, mel="rise", gain=0.5), 0.1),
-           ("exactly", P("real quick.", "Real quick.", speed=1.0, shift=1.5, rng=1.5, mel="fall", gain=1.5), 0.9)],
+    proof=[("proof", P("Still not sold?", speed=1.0, shift=1.5, rng=1.6, mel="rise", gain=0.5), 0.12),
+           ("study", P("A twenty twenty-six study by Wise Owl found that eighty-five percent of people say a video convinced them to buy.", "A 2026 study by Wyzowl found that 85% of people say a video convinced them to buy.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.3)],
     cta=[("refund", P("And if you don't love it? You get a full refund.", speed=1.03, shift=0.5, rng=1.6, mel="arch", gain=0.5), 0.25),
          ("fun", P("Tap send message, and let's make yours move.", "Tap “Send Message” and let's make yours move.", speed=1.02, shift=1, rng=1.6, mel="fall", gain=1), 0.0)],
 )
@@ -173,19 +173,17 @@ elif VARIANT == "ad30":
     t = A["damage"] + DAMAGE + 3
     put(S["turn"])
     A["show"] = t + 2
-    t = A["show"] + 90                                 # 3 s of the film with its own sound, then Dev talks over it
+    t = A["show"] + 75                                 # 2.5 s of the film with its own sound, then Dev talks over it
     put(S["film"])
     A["why"] = A["svc"] = A["talk"]                    # the service chips pop as he names them
     CUT[:] = [[0.0, round((t - A["show"]) / FPS + 0.1, 2)], [21.3, 25.0]]   # opening + counters while he talks, then the logo shot
     t = max(t, A["show"] + f2r(21.3))
     put(S["reveal"])
     A["film"] = round(sum(b - a for a, b in CUT) * 30); A["cut"] = [list(c) for c in CUT]
-    A["twist"] = max(t + F(GAP) + 6, A["show"] + A["film"])
-    t = A["twist"] + 6
-    put(S["twist"])
-    A["morph"] = A["exactly"]
-    A["cta"] = A["twist_end"] = t
-    t += 4
+    A["twist"] = A["conv"] = max(t + F(GAP) + 6, A["show"] + A["film"])   # the film ends, the Wyzowl report slides in
+    t = A["conv"] + 4
+    put(S["proof"])
+    A["cta"] = t - 6
     put(S["cta"])
     total = t + 45
 elif VARIANT == "ad15":
