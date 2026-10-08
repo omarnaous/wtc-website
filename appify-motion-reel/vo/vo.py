@@ -53,10 +53,11 @@ AD30 = dict(
     hook=[("hook", P("POV: you finally post your product... and the only like is from your mom.", "POV: you finally post your product… and the only like is from your mom.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.25),
           ("swipe", P("Even the algorithm scrolled past it.", speed=1.02, shift=-1, rng=1.4, mel="dip"), 0.0)],
     turn=[("turn", P("Okay, now watch what happens when it actually moves.", speed=1.02, shift=1.5, rng=1.7, mel="arch", gain=1.5), 0.0)],
-    film=[("talk", P("We're Appify. We do product ads, launch ads, logo reveals.", "We're Appify. We do product ads, launch ads, logo reveals.", speed=1.05, shift=1, rng=1.6, mel="arch", gain=1), 0.2)],
+    film=[("talk", P("Since we've got your attention: we're Appify, and we build motion graphics. Product ads, launch ads, logo reveals.", "Since we've got your attention: we're Appify, and we build motion graphics: product ads, launch ads, logo reveals.", speed=1.07, shift=1, rng=1.6, mel="arch", gain=1), 0.2)],
     reveal=[("reveal", P("This one's a launch ad we did for Watch Trade Chronicles.", speed=1.05, shift=1.5, rng=1.6, mel="arch", gain=1), 0.0)],
-    proof=[("proof", P("Still not sold?", speed=1.0, shift=1.5, rng=1.6, mel="rise", gain=0.5), 0.12),
-           ("study", P("A twenty twenty-six study by Wise Owl found that eighty-five percent of people say a video convinced them to buy.", "A 2026 study by Wyzowl found that 85% of people say a video convinced them to buy.", speed=1.08, shift=1, rng=1.6, mel="arch", gain=1), 0.3)],
+    proof=[("proof", P("Still not sold?", speed=1.0, shift=1.5, rng=1.6, mel="rise", gain=0.5), 0.15),
+           ("study", P("Wise Owl's twenty twenty-six study found that eighty-five percent of people say a video convinced them to buy, and eighty-three percent of marketers say video has directly increased their sales.",
+                       "Wyzowl's 2026 study found that 85% of people say a video convinced them to buy, and 83% of marketers say video has directly increased their sales.", speed=1.1, shift=1, rng=1.6, mel="arch", gain=1), 0.3)],
     cta=[("refund", P("And if you don't love it? You get a full refund.", speed=1.03, shift=0.5, rng=1.6, mel="arch", gain=0.5), 0.25),
          ("fun", P("Tap send message, and let's make yours move.", "Tap “Send Message” and let's make yours move.", speed=1.02, shift=1, rng=1.6, mel="fall", gain=1), 0.0)],
 )
@@ -180,7 +181,8 @@ elif VARIANT == "ad30":
     t = max(t, A["show"] + f2r(21.3))
     put(S["reveal"])
     A["film"] = round(sum(b - a for a, b in CUT) * 30); A["cut"] = [list(c) for c in CUT]
-    A["twist"] = A["conv"] = max(t + F(GAP) + 6, A["show"] + A["film"])   # the film ends, the Wyzowl report slides in
+    A["twist"] = A["conv"] = max(t + F(GAP) + 6, A["show"] + A["film"] - 12)   # leave while the film still plays: STILL NOT SOLD? then the study as a chart
+    A["chart"] = 1
     t = A["conv"] + 4
     put(S["proof"])
     A["cta"] = t - 6

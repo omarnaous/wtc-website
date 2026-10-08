@@ -62,7 +62,21 @@ if has("morph"):  # twist: the plain sneaker becomes a motion ad
         {"type": "pop", "frame": A["morph"] + 10, "gain": 0.2}, {"type": "pop", "frame": A["morph"] + 14, "gain": 0.2},   # NEW DROP.
         {"type": "counter", "start": A["morph"] + 16, "end": A["morph"] + 34, "gain": 0.08, "pan": -0.3},  # $129 counts up
     ]
-if has("study"):  # the report slides in, the magnifier scans, highlight, 85% pops off the page, SOURCE stamp
+if A.get("chart"):  # STILL NOT SOLD? slam, the report drops in, the bars grow on 85% and 83%
+    src = at("wyzowl", A["study"])
+    cues += [
+        W(A["conv"] - 4, A["conv"] + 6, 0.14),
+        {"type": "stamp", "frame": A["conv"] + 2, "gain": 0.55},
+        {"type": "impact", "frame": A["conv"] + 2, "gain": 0.3},
+        W(A["study"] - 2, A["study"] + 12, 0.12),
+        {"type": "stamp", "frame": src + 6, "gain": 0.4},                     # SOURCE
+    ]
+    for w in ("85%", "83%"):
+        p = at(w, A["study"])
+        cues += [{"type": "graph_rise", "start": p - 2, "end": p + 22, "gain": 0.14},
+                 {"type": "counter", "start": p - 2, "end": p + 22, "gain": 0.1},
+                 {"type": "impact", "frame": p + 20, "gain": 0.3}]
+elif has("study"):  # the report slides in, the magnifier scans, highlight, 85% pops off the page, SOURCE stamp
     p85 = at("85%", A["study"])
     cues += [
         W(A["conv"] - 2, A["conv"] + 14, 0.12),

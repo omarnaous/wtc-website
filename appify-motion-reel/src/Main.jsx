@@ -273,6 +273,63 @@ function Proof({ f }) {
   );
 }
 
+// Proof as a chart (ad cut): STILL NOT SOLD? slams in as the film leaves, then the Wyzowl report header drops in
+// and two bars grow to the real figures as Dev says each one.
+function ProofChart({ f }) {
+  const P1 = DATA.people, P2 = DATA.marketers;
+  const slam = spring({ frame: f - T.conv - 2, fps: 30, config: { damping: 8, stiffness: 300 } });
+  const slamOut = interpolate(f, [T.study - 2, T.study + 8], [0, 1], { ...clamp, easing: easeIn });
+  const [jx, jy] = shake(f, T.conv + 2, 10, 8);
+  const head = spring({ frame: f - T.study - 2, fps: 30, config: { damping: 13 } });
+  const card = spring({ frame: f - T.study - 8, fps: 30, config: { damping: 13 } });
+  const src = wordAt("wyzowl", T.study);
+  const st = spring({ frame: f - src - 6, fps: 30, config: { damping: 9, stiffness: 300 } });
+  const out = interpolate(f, [T.cta, T.cta + 12], [0, 1], { ...clamp, easing: easeIn });
+  const Bar = ({ d, y, color }) => {
+    const g = interpolate(f, [d.at - 2, d.at + 22], [0, 1], { ...clamp, easing: easeOut });
+    const pop = spring({ frame: f - d.at - 20, fps: 30, config: { damping: 8, stiffness: 300 } });
+    const on = f >= d.at - 2;
+    const TW = 840;
+    return (
+      <div style={{ position: "absolute", left: 50, top: y, width: TW }}>
+        <div style={{ ...DISPLAY, fontSize: 36, lineHeight: 1.15, letterSpacing: "-0.02em", color: on ? C.ink : "rgba(10,9,19,.3)" }}>{d.label}</div>
+        <div style={{ position: "relative", marginTop: 18, width: TW, height: 96, borderRadius: 48, background: "rgba(10,9,19,.06)" }}>
+          <div style={{ position: "absolute", left: 0, top: 0, height: 96, width: TW * (d.pct / 100) * g, minWidth: g > 0 ? 96 : 0, borderRadius: 48, background: `linear-gradient(90deg, ${C.iris}, ${color})`, boxShadow: `0 14px 36px rgba(91,43,255,${0.35 * g})` }} />
+          <div style={{ position: "absolute", top: 8, left: Math.max(16, TW * (d.pct / 100) * g - 210), width: 190, textAlign: "right", ...DISPLAY, fontSize: 78, color: "#fff", fontVariantNumeric: "tabular-nums", opacity: g > 0.05 ? 1 : 0, transform: `scale(${1 + 0.18 * Math.max(0, 1 - pop)})`, transformOrigin: "100% 50%" }}>{Math.round(d.pct * g)}%</div>
+        </div>
+      </div>
+    );
+  };
+  return (
+    <AbsoluteFill style={{ opacity: 1 - out, transform: `translateY(${-out * 80}px)` }}>
+      {/* STILL NOT SOLD? */}
+      {f < T.study + 10 && (
+        <div style={{ position: "absolute", left: 0, right: 0, top: 520, textAlign: "center", lineHeight: 0.95, opacity: Math.min(1, slam * 2) * (1 - slamOut),
+          transform: `translate(${jx}px, ${jy - slamOut * 500}px) scale(${interpolate(slam, [0, 1], [2.4, 1]) * (1 - 0.4 * slamOut)}) rotate(-5deg)` }}>
+          <div style={{ ...DISPLAY, fontSize: 170, color: C.ink }}>STILL NOT</div>
+          <div style={{ ...DISPLAY, fontSize: 210, color: C.uv }}>SOLD?</div>
+        </div>
+      )}
+      {/* the study */}
+      <div style={{ position: "absolute", left: 60, top: 222, width: 960, height: 196, borderRadius: 22, background: "#fff", border: "2px solid rgba(10,9,19,.08)", boxShadow: "0 24px 60px rgba(10,9,19,.12)", overflow: "hidden", opacity: Math.min(1, head * 1.5), transform: `translateY(${(1 - head) * -160}px) rotate(${interpolate(head, [0, 1], [-4, -1])}deg)` }}>
+        <div style={{ position: "absolute", left: 0, top: 0, right: 0, height: 12, background: C.uv }} />
+        <div style={{ position: "absolute", left: 44, top: 40, ...MONO, fontSize: 22, color: C.mute, letterSpacing: "0.2em" }}>WYZOWL · RESEARCH REPORT</div>
+        <div style={{ position: "absolute", left: 44, top: 78, width: 620, ...DISPLAY, fontSize: 50, lineHeight: 1.05, color: C.ink }}>The State of Video Marketing 2026</div>
+        {f >= src + 6 && (
+          <div style={{ position: "absolute", right: 40, top: 66, padding: "10px 20px", border: "5px solid #1FA971", borderRadius: 12, ...MONO, fontSize: 30, fontWeight: 600, color: "#1FA971", opacity: Math.min(1, st * 2), transform: `rotate(10deg) scale(${interpolate(st, [0, 1], [2.4, 1])})` }}>SOURCE ✓</div>
+        )}
+      </div>
+      {/* the chart */}
+      <div style={{ position: "absolute", left: 60, top: 452, width: 960, height: 640, borderRadius: 30, background: "#fff", border: "2px solid rgba(10,9,19,.08)", boxShadow: "0 24px 60px rgba(10,9,19,.10)", opacity: Math.min(1, card * 1.5), transform: `translateY(${(1 - card) * 80}px)` }}>
+        <div style={{ position: "absolute", left: 50, top: 40, ...MONO, fontSize: 24, color: C.uv, letterSpacing: "0.2em" }}>WHAT VIDEO DOES · 2026 DATA</div>
+        <Bar d={P1} y={110} color={C.uv} />
+        <Bar d={P2} y={370} color="#3A1BB0" />
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1112, textAlign: "center", ...MONO, fontSize: 22, color: C.mute, opacity: card }}>{DATA.source.toUpperCase()}</div>
+    </AbsoluteFill>
+  );
+}
+
 function Shield() {
   return <svg width="46" height="54" viewBox="0 0 46 54"><path d="M23,3 L42,10 V26 Q42,42 23,51 Q4,42 4,26 V10 Z" fill="#1FA971" stroke="#0A0913" strokeWidth="4" /><path d="M14,27 L21,34 L33,20" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
@@ -412,7 +469,7 @@ export const Main = (props) => {
         )}
         {f >= T.show && f < T.twist + 9 && <Showcase f={f} client={props.client} film={props.film} />}
         {T.morph != null && f >= T.twist && f < T.twistEnd + 11 && <Twist f={f} />}
-        {T.study != null && f >= T.conv && f < T.cta + 14 && <Proof f={f} />}
+        {T.study != null && f >= T.conv && f < T.cta + 14 && (T.chart ? <ProofChart f={f} /> : <Proof f={f} />)}
         {f >= T.cta && (T.ad ? <AdCta f={f} url={props.url} /> : <Cta f={f} cta={props.cta} url={props.url} />)}
       </AbsoluteFill>
       <Presenter />

@@ -30,6 +30,7 @@ export const T = {
   badgeEnd: A.badge_end ?? A.reveal + 6,
   twistEnd: A.twist_end ?? A.conv,
   ad: A.ad,           // Send Message end card instead of the comment CTA
+  chart: A.chart,     // the study as an animated bar chart (30 s ad)
 };
 export const DAMAGE = 36;
 // what's on screen in the film (seconds on the film's own clock) -> label under the screen
@@ -44,7 +45,8 @@ export const TECH = [
 export const wordAt = (w, from = 0) => VO.words.find((x) => x.start >= from - 1 && x.w.replace(/^[“"]/, "").toLowerCase().startsWith(w.toLowerCase()))?.start ?? from;
 export const DATA = {
   source: "Source: Wyzowl, State of Video Marketing 2026",
-  people: { pct: 85, at: wordAt("85%", A.study), text: "of people say a video convinced them to buy" },
+  people: { pct: 85, at: wordAt("85%", A.study), text: "of people say a video convinced them to buy", label: "People who say a video convinced them to buy" },
+  marketers: { pct: 83, at: wordAt("83%", A.study), text: "of marketers say video has directly increased sales", label: "Marketers who say video has directly increased sales" },
 };
 export const CUT = A.cut || [[0, 25]];
 export const filmFrame = (sec) => { // film-clock seconds -> reel frame

@@ -27,7 +27,7 @@ const ACTS0 = [
   ["shock", T.talk, T.talk + 22], ["jump", T.talk + 2, T.talk + 18], ["point", T.talk + 20, T.why - 2],
   ["happy", T.why, T.why + 26], ["point", T.svc, T.reveal - 4], ["thumbs", T.reveal, T.reveal + 60],
   ["point", T.twist + 6, T.dm - 2], ["lean", T.dm, T.morph - 4], ["point", T.morph, T.morph + 40], ["wink", T.morph + 2, T.morph + 18],
-  ["point", T.study, DATA.people.at + 40],
+  ...(T.chart ? [["shock", T.conv + 2, T.conv + 20], ["lean", T.conv + 20, T.study - 2], ["point", T.study, (DATA.marketers.at ?? T.cta) + 30]] : [["point", T.study, DATA.people.at + 40]]),
   ...(T.ad ? [["thumbs", T.refund + 6, T.fun - 4], ["point", T.fun, T.end - 6]]
           : [["wave", T.cta + 2, T.cta + 28], ["point", T.q2, T.refund - 2], ["thumbs", T.refund + 10, T.end - 6]]),
 ];

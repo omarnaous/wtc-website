@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 32.4,
+ "duration": 39.033,
  "seed": 21,
  "fade_out": 1.0,
  "cues": [
@@ -16,7 +16,7 @@
   {
    "type": "lofi",
    "start": 360,
-   "end": 972,
+   "end": 1171,
    "bpm": 92,
    "gain": 0.18
   },
@@ -73,20 +73,20 @@
   },
   {
    "type": "whoosh",
-   "start": 462,
-   "end": 476,
+   "start": 547,
+   "end": 561,
    "gain": 0.1,
    "pan": 0
   },
   {
    "type": "impact",
-   "frame": 470,
+   "frame": 555,
    "gain": 0.25
   },
   {
    "type": "whoosh",
-   "start": 786,
-   "end": 800,
+   "start": 985,
+   "end": 999,
    "gain": 0.12,
    "pan": 0
   },
@@ -120,81 +120,103 @@
   },
   {
    "type": "pop",
-   "frame": 392,
+   "frame": 481,
    "gain": 0.18,
    "pan": -0.3
   },
   {
    "type": "pop",
-   "frame": 413,
+   "frame": 499,
    "gain": 0.18,
    "pan": 0
   },
   {
    "type": "pop",
-   "frame": 431,
+   "frame": 516,
    "gain": 0.18,
    "pan": 0.3
   },
   {
    "type": "pop",
-   "frame": 370,
+   "frame": 415,
    "gain": 0.2
   },
   {
    "type": "whoosh",
-   "start": 575,
-   "end": 591,
+   "start": 646,
+   "end": 656,
+   "gain": 0.14,
+   "pan": 0
+  },
+  {
+   "type": "stamp",
+   "frame": 652,
+   "gain": 0.55
+  },
+  {
+   "type": "impact",
+   "frame": 652,
+   "gain": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 681,
+   "end": 695,
    "gain": 0.12,
    "pan": 0
   },
   {
-   "type": "whoosh",
-   "start": 581,
-   "end": 620,
-   "gain": 0.05,
-   "pan": 0.3
-  },
-  {
-   "type": "sweep",
-   "start": 674,
-   "end": 686,
-   "gain": 0.08
-  },
-  {
-   "type": "counter",
-   "start": 678,
-   "end": 698,
-   "gain": 0.15
-  },
-  {
-   "type": "impact",
-   "frame": 682,
+   "type": "stamp",
+   "frame": 689,
    "gain": 0.4
   },
   {
-   "type": "pop",
-   "frame": 688,
+   "type": "graph_rise",
+   "start": 757,
+   "end": 781,
    "gain": 0.14
   },
   {
-   "type": "stamp",
-   "frame": 706,
-   "gain": 0.45
+   "type": "counter",
+   "start": 757,
+   "end": 781,
+   "gain": 0.1
+  },
+  {
+   "type": "impact",
+   "frame": 779,
+   "gain": 0.3
+  },
+  {
+   "type": "graph_rise",
+   "start": 861,
+   "end": 885,
+   "gain": 0.14
+  },
+  {
+   "type": "counter",
+   "start": 861,
+   "end": 885,
+   "gain": 0.1
+  },
+  {
+   "type": "impact",
+   "frame": 883,
+   "gain": 0.3
   },
   {
    "type": "stamp",
-   "frame": 837,
+   "frame": 1036,
    "gain": 0.5
   },
   {
    "type": "pop",
-   "frame": 859,
+   "frame": 1058,
    "gain": 0.22
   },
   {
    "type": "click",
-   "frame": 881,
+   "frame": 1080,
    "gain": 0.3,
    "freq": 1100
   }
