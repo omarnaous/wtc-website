@@ -1,6 +1,9 @@
 // Reusable effects. All are pure functions of the frame, safe for parallel rendering.
 import { useEffect, useState } from "react";
 import { AbsoluteFill, Easing, interpolate, random, delayRender, continueRender } from "remotion";
+import sora from "../fonts/Sora-600.ttf";
+import mono from "../fonts/GeistMono-500.ttf";
+const FONT_URL = { "Sora-600.ttf": sora, "GeistMono-500.ttf": mono };
 
 export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" };
 export const easeOut = Easing.bezier(0.16, 1, 0.3, 1);
@@ -16,7 +19,7 @@ export const after = (f, start, input, output, opts = {}) =>
 export function useFonts(faces) {
   const [handle] = useState(() => delayRender("fonts"));
   useEffect(() => {
-    Promise.all(faces.map(([family, file, desc]) => new FontFace(family, `url(${import.meta.env.BASE_URL}fonts/${file})`, desc).load()))
+    Promise.all(faces.map(([family, file, desc]) => new FontFace(family, `url(${FONT_URL[file]})`, desc).load()))
       .then((loaded) => { loaded.forEach((ff) => document.fonts.add(ff)); continueRender(handle); })
       .catch((e) => { console.error(e); continueRender(handle); });
   }, []);

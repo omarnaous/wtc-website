@@ -1,10 +1,11 @@
-@font-face { font-family: "Display"; src: url("/fonts/Sora-600.ttf") format("truetype"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "UI"; src: url("/fonts/Geist-400.ttf") format("truetype"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "UI"; src: url("/fonts/Geist-500.ttf") format("truetype"); font-weight: 500; font-display: swap; }
-@font-face { font-family: "UI"; src: url("/fonts/Geist-600.ttf") format("truetype"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "Mono"; src: url("/fonts/GeistMono-500.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Display"; src: url("./fonts/Sora-600.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "UI"; src: url("./fonts/Geist-400.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "UI"; src: url("./fonts/Geist-500.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "UI"; src: url("./fonts/Geist-600.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Mono"; src: url("./fonts/GeistMono-500.ttf") format("truetype"); font-weight: 500; font-display: swap; }
 
 :root {
+  color-scheme: light;
   --ink: #0A0913; --ink2: #17142B; --ink3: #221D40; --paper: #F3F1FA; --white: #fff;
   --uv: #5B2BFF; --uv-d: #3A1BB0; --iris: #8F72FF; --sky: #74C6FF; --alert: #F0384F; --mute: #6D6788; --wa: #1FA971;
   --grid: rgba(91,43,255,.09); --grid-major: rgba(91,43,255,.17);
@@ -64,8 +65,8 @@ h1, h2, h3 { font-family: "Display", sans-serif; font-weight: 600; letter-spacin
 .intro-skip:hover { color: #fff; border-color: #fff; }
 
 /* ── nav ── */
-.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; gap: 28px; padding: 16px max(16px, calc((100vw - var(--wrap)) / 2)); transition: background .3s, box-shadow .3s, padding .3s; }
-.nav.solid { background: rgba(243,241,250,.82); backdrop-filter: blur(14px); box-shadow: 0 1px 0 rgba(10,9,19,.08); padding-block: 10px; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; gap: 28px; padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, calc((100vw - var(--wrap)) / 2)) 16px; transition: background .3s, box-shadow .3s, padding .3s; }
+.nav.solid { background: rgba(243,241,250,.82); backdrop-filter: blur(14px); box-shadow: 0 1px 0 rgba(10,9,19,.08); padding-top: calc(10px + env(safe-area-inset-top, 0px)); padding-bottom: 10px; }
 .nav-logo { color: var(--ink); display: flex; }
 .nav-logo:hover .wm-spark { transform: rotate(90deg); }
 .wm-spark { transform-box: fill-box; transform-origin: center; transition: transform .6s var(--spring); }

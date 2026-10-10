@@ -24,21 +24,21 @@ export function Contact() {
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
   const toggle = (s) => set("services", form.services.includes(s) ? form.services.filter((x) => x !== s) : [...form.services, s]);
 
-  const submit = (e) => {
-    e.preventDefault();
-    if (!form.name.trim()) return setErr("What's your name?");
-    if (form.day == null || !form.time) return setErr("Pick a day and a time.");
-    setErr("");
-    const lines = [
-      "Hi Appify! I'd like to book a call.",
-      `• Name: ${form.name.trim()}`,
-      form.business.trim() && `• Business: ${form.business.trim()}`,
-      form.services.length && `• Interested in: ${form.services.join(", ")}`,
-      `• Preferred time: ${fmtDay(days[form.day])}, ${fmtTime(form.time)}`,
-      form.notes.trim() && `• Notes: ${form.notes.trim()}`,
-    ].filter(Boolean);
-    window.open(waLink(lines.join("\n")), "_blank", "noopener");
-    setSent(true); dev.current?.act("thumbs"); dev.current?.act("jump"); dev.current?.say("Sent! We'll confirm on WhatsApp.");
+  // The button is a real link (not window.open, which pop-up blockers and sandboxed frames refuse):
+  // its href is the WhatsApp message for whatever is filled in right now.
+  const problem = !form.name.trim() ? "What's your name?" : form.day == null || !form.time ? "Pick a day and a time." : "";
+  const message = problem ? "" : [
+    "Hi Appify! I'd like to book a call.",
+    `• Name: ${form.name.trim()}`,
+    form.business.trim() && `• Business: ${form.business.trim()}`,
+    form.services.length && `• Interested in: ${form.services.join(", ")}`,
+    `• Preferred time: ${fmtDay(days[form.day])}, ${fmtTime(form.time)}`,
+    form.notes.trim() && `• Notes: ${form.notes.trim()}`,
+  ].filter(Boolean).join("\n");
+  const book = (e) => {
+    if (problem) { e.preventDefault(); setErr(problem); return; }
+    setErr(""); setSent(true);
+    dev.current?.act("thumbs"); dev.current?.act("jump"); dev.current?.say("Sent! We'll confirm on WhatsApp.");
   };
 
   return (
@@ -53,11 +53,11 @@ export function Contact() {
           </div>
           <div className="contact-dev"><DevLive ref={dev} width={210} lines={["Pick a time, I'll tell the team.", "Mornings or afternoons, your call.", "We reply fast. Promise."]} every={5.5} bubbleSide="right" /></div>
         </div>
-        <form className="book" onSubmit={submit} data-reveal noValidate>
+        <form className="book" onSubmit={(e) => e.preventDefault()} data-reveal noValidate>
           <div className="book-head"><span className="book-dot" /> Book a call</div>
           <div className="row2">
-            <label>Your name<input value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Omar" autoComplete="name" /></label>
-            <label>Business <span className="opt">optional</span><input value={form.business} onChange={(e) => set("business", e.target.value)} placeholder="Brand or company" /></label>
+            <label>Your name<input id="book-name" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Omar" autoComplete="name" /></label>
+            <label>Business <span className="opt">optional</span><input id="book-business" value={form.business} onChange={(e) => set("business", e.target.value)} placeholder="Brand or company" /></label>
           </div>
           <fieldset><legend>What do you need?</legend>
             <div className="chips">{SERVICES.map((s) => <button type="button" key={s} className={`chip ${form.services.includes(s) ? "on" : ""}`} onClick={() => toggle(s)}>{s}</button>)}</div>
@@ -72,10 +72,10 @@ export function Contact() {
           <fieldset><legend>Pick a time <span className="opt">Lebanon time</span></legend>
             <div className="slots">{BOOKING.slots.map((s) => <button type="button" key={s} className={`chip ${form.time === s ? "on" : ""}`} onClick={() => set("time", s)}>{fmtTime(s)}</button>)}</div>
           </fieldset>
-          <label>Anything else? <span className="opt">optional</span><textarea rows={3} value={form.notes} onChange={(e) => set("notes", e.target.value)} placeholder="A link, a deadline, an idea…" /></label>
+          <label>Anything else? <span className="opt">optional</span><textarea id="book-notes" rows={3} value={form.notes} onChange={(e) => set("notes", e.target.value)} placeholder="A link, a deadline, an idea…" /></label>
           {err && <div className="err" role="alert">{err}</div>}
           {isPlaceholderNumber && <div className="warn">Placeholder WhatsApp number: set yours in src/config.js before launch.</div>}
-          <button className="btn btn-wa btn-lg btn-block magnetic" type="submit"><WhatsAppIcon /> {sent ? "Open WhatsApp again" : "Book on WhatsApp"}</button>
+          <a className="btn btn-wa btn-lg btn-block magnetic book-go" href={problem ? "#contact" : waLink(message)} target="_blank" rel="noreferrer" onClick={book}><WhatsAppIcon /> {sent ? "Open WhatsApp again" : "Book on WhatsApp"}</a>
           <p className="fine">Opens WhatsApp with your request written out. Nothing is stored on this site.</p>
         </form>
       </div>
