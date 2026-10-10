@@ -31,3 +31,8 @@ npm run build     # dist/ is a static site: Netlify, Vercel or Cloudflare Pages 
 
 Remotion is free for individuals and companies of up to 3 people; larger teams need a company license
 (https://remotion.pro/license).
+
+## Deploy to Firebase Hosting
+1. Create a project at https://console.firebase.google.com (Hosting needs no paid plan).
+2. On your computer, in this folder: `npm install`, `npx firebase-tools login`, then `npm run deploy:firebase -- <project-id>`.
+3. The site goes live at `https://<project-id>.web.app`. Add appify-lb.com later under Hosting > Add custom domain.
