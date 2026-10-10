@@ -36,3 +36,6 @@ Remotion is free for individuals and companies of up to 3 people; larger teams n
 1. Create a project at https://console.firebase.google.com (Hosting needs no paid plan).
 2. On your computer, in this folder: `npm install`, `npx firebase-tools login`, then `npm run deploy:firebase -- <project-id>`.
 3. The site goes live at `https://<project-id>.web.app`. Add appify-lb.com later under Hosting > Add custom domain.
+
+## Deploy to Cloudflare Pages
+Set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` (or run `npx wrangler login`), then `npm run deploy:cloudflare`. The site goes live at `https://appify-portfolio.pages.dev`; add appify-lb.com under the Pages project > Custom domains.

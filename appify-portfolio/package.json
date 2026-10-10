@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "build:artifact": "vite build --mode artifact && node scripts/artifact-page.mjs",
-    "deploy:firebase": "bash scripts/deploy-firebase.sh"
+    "deploy:firebase": "bash scripts/deploy-firebase.sh",
+    "deploy:cloudflare": "bash scripts/deploy-cloudflare.sh"
   },
   "dependencies": {
     "@remotion/player": "4.0.532",
