@@ -23,11 +23,11 @@ function Stage({ W, H, children, style }) {
 }
 const Grid = ({ f }) => <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(143,114,255,.08) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(143,114,255,.08) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px", backgroundPosition: `540px ${f * 0.8}px` }} />;
 const Glow = ({ y = 50, a = 0.5 }) => <AbsoluteFill style={{ background: `radial-gradient(circle at 50% ${y}%, rgba(91,43,255,${a}), transparent 62%)` }} />;
-function DevHead({ size }) {   // Dev's face in a circle (chat avatar)
-  const w = size * 1.9;
+function DevHead({ size }) {   // Dev's head and shoulders in a circle (chat avatar), framed like the profile picture
+  const k = size / 430, w = 420 * k;            // ~430 Dev units (hair to chest) fill the circle
   return (
-    <div style={{ width: size, height: size, borderRadius: 99, overflow: "hidden", background: C.uv, position: "relative", flex: `0 0 ${size}px`, border: "3px solid rgba(255,255,255,.25)" }}>
-      <div style={{ position: "absolute", left: size / 2 - (300 - 90) * (w / 420), top: size * 0.08 - (150 - 50) * (w / 420) }}><Dev width={w} brow={16} lid={0.08} smile={1} /></div>
+    <div style={{ width: size, height: size, borderRadius: 99, overflow: "hidden", position: "relative", flex: `0 0 ${size}px`, background: "radial-gradient(circle at 50% 38%, #9C84FF 0%, #5B2BFF 50%, #2A1287 100%)", boxShadow: "0 0 0 3px rgba(255,255,255,.9), 0 8px 24px rgba(0,0,0,.35)" }}>
+      <div style={{ position: "absolute", left: size / 2 - (300 - 90) * k, top: size * 0.5 - (300 - 50) * k }}><Dev width={w} brow={16} lid={0.08} smile={1} /></div>
     </div>
   );
 }

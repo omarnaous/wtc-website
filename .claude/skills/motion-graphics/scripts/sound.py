@@ -551,7 +551,7 @@ def _saw(f, n, harm=28, phase=0.0):
     for k in range(1, K + 1): out += np.sin(2 * np.pi * k * f * t + phase * k) / k
     return out * 0.6
 
-HOUSE_PROG = [("A2", ["A3", "C4", "E4", "G4"]), ("F2", ["A3", "C4", "F4", "E4"]), ("C2", ["G3", "C4", "E4", "G4"]), ("G2", ["G3", "B3", "D4", "E4"])]
+HOUSE_PROG = [("A2", ["A3", "C4", "E4", "G4"]), ("F2", ["F3", "A3", "C4", "E4"]), ("C2", ["G3", "C4", "E4", "G4"]), ("G2", ["G3", "B3", "D4", "E4"])]
 HOUSE_MIX = {   # layer gains per section
     "intro": {"pad": 1.0, "hat": 0.45, "kick": 0, "clap": 0, "bass": 0, "stab": 0, "ohat": 0},
     "gap":   {"pad": 0.25, "hat": 0, "kick": 0, "clap": 0, "bass": 0, "stab": 0, "ohat": 0},
