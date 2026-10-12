@@ -421,3 +421,44 @@ export const Main = () => {
     </AbsoluteFill>
   );
 };
+
+// ── cover / thumbnail: a still. Everything that matters sits in the centre 1080x1350 band (the profile-grid crop);
+// on 9:16 the wordmark sits above it and the comment prompt below it.
+const COVER_T = [40, 38, 34, 40, 20, 33, 26, 3, 40];   // the frame of each style that reads best as a still
+export const Cover = () => {
+  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }]]);
+  const { width: W, height: H } = useVideoConfig();
+  const u = W / 1080, tall = H > 1600, bt = (H - 1350 * u) / 2;
+  const tile = (tall ? 272 : 262) * u, gap = 20 * u, gw = 3 * tile + 2 * gap, gx = (W - gw) / 2, gy = bt + (tall ? 400 : 440) * u;
+  const S0 = 1080;   // each style renders as a 1080x1080 frame, scaled into its tile
+  return (
+    <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
+      <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(143,114,255,.08) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(143,114,255,.08) 1.5px, transparent 1.5px)", backgroundSize: `${60 * u}px ${60 * u}px`, backgroundPosition: `${W / 2}px 0` }} />
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% ${((gy + gw / 2) / H) * 100}%, rgba(91,43,255,.6), transparent 60%)` }} />
+      {tall && <svg viewBox={WORDMARK.viewBox} width={330 * u} height={330 * u * 1167 / 3224} style={{ position: "absolute", left: (W - 330 * u) / 2, top: bt - 215 * u }}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.iris} /></svg>}
+      <div style={{ position: "absolute", left: 0, right: 0, top: bt + 40 * u, textAlign: "center" }}>
+        {!tall && <div style={{ ...M, fontSize: 24 * u, color: C.iris, marginBottom: 14 * u }}>appify · motion graphics</div>}
+        <div style={{ ...D, fontSize: 150 * u, color: "#fff" }}>9 MOTION</div>
+        <div style={{ ...D, fontSize: 150 * u, color: C.sky, display: "inline-flex", alignItems: "center", gap: 16 * u }}>STYLES<Spark size={96 * u} color={C.iris} /></div>
+        <div style={{ ...M, fontSize: 28 * u, color: "rgba(255,255,255,.85)", marginTop: 18 * u }}>pick one for your brand ↓</div>
+      </div>
+      {SCENES.map((Sc, k) => {
+        const r = Math.floor(k / 3), c = k % 3;
+        return (
+          <div key={k} style={{ position: "absolute", left: gx + c * (tile + gap), top: gy + r * (tile + gap), width: tile, height: tile, borderRadius: 30 * u, overflow: "hidden", background: BG[k], boxShadow: `0 ${20 * u}px ${50 * u}px rgba(0,0,0,.45)`, border: `${3 * u}px solid rgba(143,114,255,.35)` }}>
+            <div style={{ position: "absolute", left: 0, top: 0, width: S0, height: S0, transform: `scale(${tile / S0})`, transformOrigin: "0 0" }}>
+              <AbsoluteFill style={{ background: BG[k] }}><AbsoluteFill style={{ transform: `translateY(${k === 3 ? 90 : 0}px)` }}><Sc t={COVER_T[k]} W={S0} H={S0} u={1} /></AbsoluteFill></AbsoluteFill>
+            </div>
+            <div style={{ position: "absolute", left: 14 * u, top: 14 * u, width: 64 * u, height: 64 * u, borderRadius: 99, background: C.sky, color: C.ink, display: "grid", placeItems: "center", ...D, fontSize: 38 * u, boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>{k + 1}</div>
+          </div>
+        );
+      })}
+      {tall && (
+        <div style={{ position: "absolute", left: 0, right: 0, top: bt + 1350 * u + 40 * u, display: "grid", justifyItems: "center" }}>
+          <div style={{ padding: `${20 * u}px ${44 * u}px`, borderRadius: 26 * u, background: C.uv, ...D, fontSize: 56 * u, color: "#fff", boxShadow: "0 20px 50px rgba(91,43,255,.45)" }}>Comment “MOTION”</div>
+        </div>
+      )}
+      <Vignette strength={0.16} />
+    </AbsoluteFill>
+  );
+};
