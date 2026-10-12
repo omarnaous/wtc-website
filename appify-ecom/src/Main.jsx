@@ -369,8 +369,8 @@ function EndCard({ f, W, H }) {
         </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 650, display: "grid", justifyItems: "center", transform: `scale(${interpolate(cta, [0, 1], [1.5, 1]) * pulse})`, opacity: Math.min(1, cta * 2) }}>
           <div style={{ padding: "28px 60px", borderRadius: 32, background: C.uv, textAlign: "center", boxShadow: "0 20px 60px rgba(91,43,255,.55)" }}>
-            <div style={{ ...D, fontSize: 90, color: "#fff" }}>DM “LAUNCH”</div>
-            <div style={{ ...UI, fontSize: 36, color: C.sky, marginTop: 12 }}>for a free prototype</div>
+            <div style={{ ...D, fontSize: 84, color: "#fff", whiteSpace: "nowrap" }}>DM “ECOMMERCE”</div>
+            <div style={{ ...UI, fontSize: 36, color: C.sky, marginTop: 12 }}>and we'll build yours</div>
           </div>
         </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 960, display: "grid", justifyItems: "center", gap: 14, ...rise(sp(t, 42, 12, 220)) }}>
@@ -404,6 +404,43 @@ export const Main = () => {
       {i > 0 && f >= at && f < at + 4 && <Flash f={f} start={at} peak={0.22} />}
       <Vignette strength={0.18} />
       <Grain f={f} opacity={0.035} />
+    </AbsoluteFill>
+  );
+};
+
+// ── cover / thumbnail (same template as the other Appify covers): everything inside the centre 1080x1440 band ──
+export const Cover = () => {
+  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }]]);
+  const { width: W, height: H } = useVideoConfig();
+  const k = Math.min(1, H / 1440), bt = (H - 1440 * k) / 2;
+  const devW = 340, devH = devW * 830 / 420;
+  return (
+    <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
+      <Grid f={0} />
+      <AbsoluteFill style={{ background: "radial-gradient(circle at 60% 55%, rgba(91,43,255,.55), transparent 60%)" }} />
+      <div style={{ position: "absolute", left: (W - 1080 * k) / 2, top: bt, width: 1080, height: 1440, transform: `scale(${k})`, transformOrigin: "0 0" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 60, display: "flex", justifyContent: "center" }}>
+          <div style={{ ...M, fontSize: 26, color: C.sky, padding: "12px 26px", borderRadius: 99, border: "3px solid rgba(116,198,255,.5)", display: "flex", alignItems: "center", gap: 12 }}><Spark size={24} color={C.iris} />ecommerce</div>
+        </div>
+        {/* the prompt */}
+        <div style={{ position: "absolute", right: 50, left: 110, top: 150, padding: "34px 40px", borderRadius: "46px 46px 14px 46px", background: `linear-gradient(135deg, ${C.uv}, ${C.iris})`, boxShadow: "0 24px 70px rgba(91,43,255,.5)", ...D, fontSize: 84, lineHeight: 1.05, color: "#fff" }}>Hey Appify, I want an <span style={{ color: C.sky }}>ecommerce website</span></div>
+        {/* the finished store */}
+        <div style={{ position: "absolute", left: 550, top: 500, width: 560, height: 1040, transform: "scale(.71) rotate(7deg)", transformOrigin: "0 0", borderRadius: 72, background: "#000", padding: 12, boxShadow: "0 60px 120px rgba(0,0,0,.6), 0 0 0 3px rgba(143,114,255,.4)" }}>
+          <div style={{ position: "relative", width: SW, height: SCR, borderRadius: 60, overflow: "hidden" }}>
+            <Store f={0} day={6} t={20} />
+            <div style={{ position: "absolute", left: (SW - 160) / 2, top: 14, width: 160, height: 34, borderRadius: 99, background: "#000" }} />
+          </div>
+        </div>
+        <div style={{ position: "absolute", left: 455, top: 505, padding: "16px 26px", borderRadius: 22, background: C.sky, transform: "rotate(-6deg)", boxShadow: "0 16px 40px rgba(0,0,0,.4)", textAlign: "center" }}>
+          <div style={{ ...D, fontSize: 52, color: C.ink }}>$360 once</div>
+          <div style={{ ...M, fontSize: 18, color: C.ink, marginTop: 6 }}>live in 7 days</div>
+        </div>
+        {/* Dev says less */}
+        <div style={{ position: "absolute", left: 20, top: 1410 - devH * 0.98 }}><Dev width={devW} thumbs={1} brow={16} lid={0.08} smile={1} look={6} happy={1} /></div>
+        <div style={{ position: "absolute", left: 40, top: 1410 - devH * 1.02 - 40, padding: "18px 26px", background: "#fff", border: `5px solid ${C.ink}`, borderRadius: 18, boxShadow: `0 8px 0 ${C.ink}`, fontFamily: "Mono", fontSize: 40, color: C.ink, whiteSpace: "nowrap" }}>say less.</div>
+        <svg viewBox={WORDMARK.viewBox} width={200} height={200 * 1167 / 3224} style={{ position: "absolute", right: 60, top: 1340 }}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.iris} /></svg>
+      </div>
+      <Vignette strength={0.16} />
     </AbsoluteFill>
   );
 };
