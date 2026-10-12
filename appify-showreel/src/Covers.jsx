@@ -1,7 +1,7 @@
 // Instagram covers: one template for every post so the profile grid reads as one brand.
 // 9:16 stills; everything that matters sits in the centre 1080x1440 band (the 3:4 profile-grid crop).
 // Same parts on every cover: kicker pill, big Sora hook with one accent line, one visual, Dev with a speech bubble,
-// the wordmark. Covers alternate dark / light in posting order so the 3-column grid forms a checkerboard.
+// the wordmark. All covers share the dark ink + uv-glow background so the grid reads as one series.
 import { AbsoluteFill, Img, staticFile, useVideoConfig } from "remotion";
 import { useFonts } from "./fx.jsx";
 import { WORDMARK, sparkPath } from "./brand.js";
@@ -79,9 +79,9 @@ export const CoverLogo = () => (
 // ── post 2 · subscription killer: still paying $39/month ──────────────────────────────────────────
 const MONTHS = ["AUG", "JUL", "JUN", "MAY", "APR", "MAR", "FEB"];
 export const CoverStore = () => (
-  <Frame kicker="store owners">
-    <Hook lines={[["Still paying", 112, C.ink], ["$39/month", 176, C.alert], ["for your store?", 112, C.ink]]} />
-    <div style={{ position: "absolute", left: 480, top: 800, width: 500, padding: "34px 34px 28px", background: "#fff", borderRadius: 10, boxShadow: "0 30px 60px rgba(10,9,19,.18)", transform: "rotate(4deg)", fontFamily: "Mono", color: C.ink }}>
+  <Frame dark kicker="store owners">
+    <Hook lines={[["Still paying", 112, "#fff"], ["$39/month", 176, C.alert], ["for your store?", 112, "#fff"]]} />
+    <div style={{ position: "absolute", left: 480, top: 800, width: 500, padding: "34px 34px 28px", background: "#fff", borderRadius: 10, boxShadow: "0 40px 80px rgba(0,0,0,.5)", transform: "rotate(4deg)", fontFamily: "Mono", color: C.ink }}>
       <div style={{ height: 22, margin: "-34px -34px 24px", background: C.ink, borderRadius: "10px 10px 0 0" }} />
       {MONTHS.map((m) => (
         <div key={m} style={{ display: "flex", justifyContent: "space-between", fontSize: 26, padding: "9px 0", borderBottom: "2px dashed rgba(10,9,19,.12)" }}>
@@ -117,11 +117,11 @@ const COVER_T = [40, 38, 34, 40, 20, 33, 26, 3, 40];
 export const CoverShowreel = () => {
   const tile = 214, gap = 16, gx = 1080 - 50 - (3 * tile + 2 * gap), gy = 560;
   return (
-    <Frame kicker="motion graphics">
-      <Hook lines={[["9 MOTION", 160, C.ink]]} top={150} />
-      <div style={{ position: "absolute", left: 0, right: 0, top: 305, display: "flex", justifyContent: "center", alignItems: "center", gap: 16, ...D, fontSize: 160, color: C.uv }}>STYLES<Spark size={100} color={C.iris} /></div>
+    <Frame dark kicker="motion graphics">
+      <Hook lines={[["9 MOTION", 160, "#fff"]]} top={150} />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 305, display: "flex", justifyContent: "center", alignItems: "center", gap: 16, ...D, fontSize: 160, color: C.sky }}>STYLES<Spark size={100} color={C.iris} /></div>
       {SCENES.map((Sc, k) => (
-        <div key={k} style={{ position: "absolute", left: gx + (k % 3) * (tile + gap), top: gy + Math.floor(k / 3) * (tile + gap), width: tile, height: tile, borderRadius: 26, overflow: "hidden", background: SCENE_BG[k], boxShadow: "0 16px 36px rgba(10,9,19,.25)" }}>
+        <div key={k} style={{ position: "absolute", left: gx + (k % 3) * (tile + gap), top: gy + Math.floor(k / 3) * (tile + gap), width: tile, height: tile, borderRadius: 26, overflow: "hidden", background: SCENE_BG[k], boxShadow: "0 16px 36px rgba(0,0,0,.45)", border: "3px solid rgba(143,114,255,.35)" }}>
           <div style={{ position: "absolute", width: 1080, height: 1080, transform: `scale(${tile / 1080})`, transformOrigin: "0 0" }}>
             <AbsoluteFill style={{ background: SCENE_BG[k], transform: `translateY(${k === 3 ? 90 : 0}px)` }}><Sc t={COVER_T[k]} W={1080} H={1080} u={1} /></AbsoluteFill>
           </div>
