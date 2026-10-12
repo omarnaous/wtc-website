@@ -1,0 +1,260 @@
+{
+ "fps": 30,
+ "duration": 20.0,
+ "seed": 13,
+ "fade_out": 0.8,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 30,
+   "gain": 0.56,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 34,
+   "gain": 0.49,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "stamp",
+   "frame": 40,
+   "gain": 0.16
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 62,
+   "gain": 0.49,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "riser",
+   "start": 76,
+   "end": 90,
+   "gain": 0.05
+  },
+  {
+   "type": "reverse_swell",
+   "start": 72,
+   "end": 90,
+   "gain": 0.13,
+   "notes": [
+    "F3",
+    "A3",
+    "C4",
+    "E4"
+   ]
+  },
+  {
+   "type": "impact",
+   "frame": 90,
+   "gain": 0.18
+  },
+  {
+   "type": "thump",
+   "frame": 90,
+   "gain": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 100,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 108,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 145,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 153,
+   "gain": 0.385,
+   "rate": 0.74915,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 190,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 198,
+   "gain": 0.385,
+   "rate": 1.12246,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 235,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 243,
+   "gain": 0.385,
+   "rate": 0.94387,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 280,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 288,
+   "gain": 0.385,
+   "rate": 1.25992,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 325,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 333,
+   "gain": 0.385,
+   "rate": 1.49831,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 112,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 202,
+   "gain": 0.385,
+   "rate": 1.12246,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 292,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 395,
+   "gain": 0.56,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "thump",
+   "frame": 400,
+   "gain": 0.22
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 411,
+   "gain": 0.42,
+   "rate": 0.94387,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 418,
+   "gain": 0.42,
+   "rate": 1.18921,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 425,
+   "gain": 0.42,
+   "rate": 1.41421,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 432,
+   "gain": 0.42,
+   "rate": 1.7818,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 439,
+   "gain": 0.42,
+   "rate": 2.11893,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 480,
+   "gain": 0.56,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "thump",
+   "frame": 504,
+   "gain": 0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/success.ogg",
+   "frame": 504,
+   "gain": 0.56,
+   "rate": 0.8909,
+   "pan": 0.0
+  }
+ ]
+}
