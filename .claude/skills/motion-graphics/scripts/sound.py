@@ -767,10 +767,10 @@ def render(spec, out):
         st = np.stack([lp(st[:, 0], spec["lowpass"]), lp(st[:, 1], spec["lowpass"])], 1)
     st = np.tanh(st * 1.1)
     peak = np.abs(st).max() or 1
-    st *= 10 ** (-1 / 20) / peak
+    st *= 10 ** (spec.get("peak_db", -1) / 20) / peak   # "peak_db": master peak level (default -1 dBFS)
     wavfile.write(out, SR, (st * 32767).astype(np.int16))
     rms = 20 * np.log10(np.sqrt((st ** 2).mean()) + 1e-12)
-    print(f"wrote {out}: {total:.2f}s, peak -1.0 dBFS, rms {rms:.1f} dB, {len(spec['cues'])} cues")
+    print(f"wrote {out}: {total:.2f}s, peak {spec.get('peak_db', -1):.1f} dBFS, rms {rms:.1f} dB, {len(spec['cues'])} cues")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()

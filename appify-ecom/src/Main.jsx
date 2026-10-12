@@ -2,7 +2,7 @@
 // assembles itself on a phone, one day every 3 beats (design, products, checkout, admin, analytics, motion, live).
 // Scenes are cut with the Appify spark.
 import { AbsoluteFill, Audio, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { MSG, TYPE0, TYPE_RATE, SEND, DOTS, REPLY, BUILD, DAYS, DAY_LEN, dayAt, PRICE, END, CUTS } from "./timing.js";
+import { MSG, TYPE0, TYPE_RATE, SEND, DOTS, REPLY, BUILD, DAYS, DAY_LEN, dayAt, PRICE, TABLE, END, CUTS, MONTHLY, LIFETIME, YEARS } from "./timing.js";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Burst, Grain, Vignette } from "./fx.jsx";
 import { WORDMARK, sparkPath } from "./brand.js";
 import { Dev } from "./Dev.jsx";
@@ -295,7 +295,61 @@ function Price({ f, W, H }) {
   );
 }
 
-// ── 4 · end card: your turn ────────────────────────────────────────────────────────────────────────
+// ── 4 · comparison table: subscription builder vs Appify, then how much cheaper ─────────────────────
+const money = (n) => "$" + Math.round(n).toLocaleString("en-US");
+const BUILDER_TOTAL = MONTHLY * 12 * YEARS, SAVE = BUILDER_TOTAL - LIFETIME, CHEAPER = Math.round((SAVE / BUILDER_TOTAL) * 100);
+const COMPARE = [
+  ["Price", `$${MONTHLY}/month`, `$${LIFETIME} once`],
+  [`${YEARS} years`, money(BUILDER_TOTAL), money(LIFETIME)],
+  ["Design", "Template", "Custom UI/UX"],
+  ["Admin panel", "Their dashboard", "Your own"],
+  ["Analytics", "Basic", "Custom"],
+  ["Hosting", "While you pay", "Free"],
+  ["Ownership", "Rented", "Yours"],
+];
+const ROW0 = 14, ROW_GAP = 7, BANNER = ROW0 + COMPARE.length * ROW_GAP + 6;   // frames after TABLE
+function Table({ f, W, H }) {
+  const t = f - TABLE, head = sp(t, 2, 12, 220), ban = sp(t, BANNER, 8, 300);
+  const pct = Math.round(CHEAPER * interpolate(t, [BANNER, BANNER + 14], [0, 1], { ...clamp, easing: easeOut }));
+  const [sx, sy] = shake(t, BANNER, 14, 4);
+  const X0 = 40, X1 = 360, X2 = 710, X3 = 1040, RH = 104, Y0 = 150;
+  return (
+    <AbsoluteFill style={{ background: C.ink }}>
+      <Grid f={f} /><Glow y={45} a={0.45} />
+      <Stage W={W} H={H} style={{ translate: `${sx}px ${sy}px` }}>
+        {/* the Appify column glows the whole height */}
+        <div style={{ position: "absolute", left: X2 - 10, top: 40, width: X3 - X2 + 10, height: Y0 + COMPARE.length * RH - 20, borderRadius: 34, background: "linear-gradient(180deg, rgba(91,43,255,.55), rgba(143,114,255,.22))", border: "3px solid rgba(205,190,255,.55)", boxShadow: "0 20px 70px rgba(91,43,255,.4)", opacity: Math.min(1, head * 2) }} />
+        <div style={{ position: "absolute", left: X1, width: X2 - X1 - 20, top: 66, textAlign: "center", ...M, fontSize: 22, color: C.mute, ...rise(head) }}>subscription<br />builder</div>
+        <div style={{ position: "absolute", left: X2, width: X3 - X2, top: 70, display: "flex", justifyContent: "center", alignItems: "center", gap: 10, ...rise(head) }}>
+          <svg viewBox={WORDMARK.viewBox} width={200} height={200 * 1167 / 3224}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.sky} /></svg>
+        </div>
+        {COMPARE.map(([label, bad, good], k) => {
+          const p = sp(t, ROW0 + k * ROW_GAP, 13, 230), y = Y0 + k * RH, money2 = k < 2;
+          return (
+            <div key={label} style={{ position: "absolute", left: 0, top: y, width: 1080, height: RH, opacity: Math.min(1, p * 2), transform: `translateY(${(1 - Math.min(1, p)) * 30}px)` }}>
+              <div style={{ position: "absolute", left: X0, right: 1080 - X3, top: RH - 2, height: 2, background: "rgba(255,255,255,.08)" }} />
+              <div style={{ position: "absolute", left: X0, width: X1 - X0, top: 0, height: RH, display: "flex", alignItems: "center", ...UI, fontSize: 30, color: "rgba(255,255,255,.75)" }}>{label}</div>
+              <div style={{ position: "absolute", left: X1, width: X2 - X1 - 20, top: 0, height: RH, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, ...D, fontSize: money2 ? 40 : 32, color: money2 ? "#FF6B7F" : "rgba(255,255,255,.5)" }}>
+                <span style={{ ...D, fontSize: 26, color: "#F0384F" }}>✕</span>{bad}
+              </div>
+              <div style={{ position: "absolute", left: X2, width: X3 - X2, top: 0, height: RH, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, ...D, fontSize: money2 ? 42 : 34, color: "#fff" }}>
+                <span style={{ width: 40, height: 40, borderRadius: 99, background: C.sky, color: C.ink, display: "grid", placeItems: "center", fontSize: 24, transform: `scale(${sp(t, ROW0 + k * ROW_GAP + 4, 8, 300)})` }}>✓</span>{good}
+              </div>
+            </div>
+          );
+        })}
+        {/* how much cheaper */}
+        <div style={{ position: "absolute", left: 40, right: 40, top: Y0 + COMPARE.length * RH + 40, padding: "30px 0 26px", borderRadius: 36, background: C.sky, textAlign: "center", boxShadow: "0 24px 70px rgba(116,198,255,.35)", opacity: Math.min(1, ban * 3), transform: `scale(${interpolate(ban, [0, 1], [1.4, 1])})` }}>
+          <div style={{ ...D, fontSize: 132, color: C.ink, fontVariantNumeric: "tabular-nums" }}>{pct}% cheaper</div>
+          <div style={{ ...D, fontSize: 44, color: C.ink, marginTop: 12 }}>You keep {money(SAVE)} over {YEARS} years</div>
+        </div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: Y0 + COMPARE.length * RH + 345, textAlign: "center", ...M, fontSize: 20, color: C.mute, opacity: interpolate(t, [BANNER + 8, BANNER + 14], [0, 1], clamp) }}>vs a typical ${MONTHLY}/month builder plan · {YEARS * 12} months</div>
+      </Stage>
+    </AbsoluteFill>
+  );
+}
+
+// ── 5 · end card: your turn ────────────────────────────────────────────────────────────────────────
 const ASK = "Hey Appify, I want…";
 function EndCard({ f, W, H }) {
   const t = f - END, n = Math.max(0, Math.min(ASK.length, Math.floor((t - 6) * 1.3)));
@@ -335,7 +389,7 @@ export const Main = () => {
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }]]);
   const f = useCurrentFrame();
   const { width: W, height: H } = useVideoConfig();
-  const scenes = [Hook, Build, Price, EndCard];
+  const scenes = [Hook, Build, Price, Table, EndCard];
   const i = CUTS.filter((c) => f >= c).length;
   const at = i ? CUTS[i - 1] : 0, inCut = i > 0 && f < at + 9;
   const p = interpolate(f, [at, at + 9], [0, 1], { ...clamp, easing: easeIn });

@@ -8,16 +8,17 @@ import json, re, sys, os
 src = open("src/timing.js").read()
 g = lambda k: float(re.search(rf"export const {k} = (-?[\d.]+)", src).group(1))
 TYPE0, RATE = g("TYPE0"), float(re.search(r"TYPE_RATE = ([\d.]+)", src).group(1))
-SEND, DOTS, REPLY, GAP, BUILD, DAY_LEN, END = [int(g(k)) for k in ["SEND", "DOTS", "REPLY", "GAP", "BUILD", "DAY_LEN", "END"]]
+SEND, DOTS, REPLY, GAP, BUILD, DAY_LEN, TABLE, END, DUR = [int(g(k)) for k in ["SEND", "DOTS", "REPLY", "GAP", "BUILD", "DAY_LEN", "TABLE", "END", "DURATION"]]
 MSG = re.search(r'export const MSG = "([^"]+)"', src).group(1)
 PRICE = BUILD + 7 * DAY_LEN
 day = lambda i: BUILD + i * DAY_LEN
 SFX = "sound/sfx"   # relative: run from the project folder
-S = lambda name, frame, gain=1.0, rate=1.0, pan=0.0: {"type": "sample", "file": f"{SFX}/{name}.ogg", "frame": frame, "gain": gain, "rate": rate, "pan": pan}
+SFX_GAIN = 0.7   # all UI sounds a touch lower under the music
+S = lambda name, frame, gain=1.0, rate=1.0, pan=0.0: {"type": "sample", "file": f"{SFX}/{name}.ogg", "frame": frame, "gain": round(gain * SFX_GAIN, 3), "rate": rate, "pan": pan}
 sfx_only = "--sfx" in sys.argv
 cues = [] if sfx_only else [
-    {"type": "house", "start": 0, "end": 600, "bpm": 120, "gain": 0.5,
-     "sections": [[0, "intro"], [GAP, "gap"], [BUILD, "drop"], [PRICE, "break"], [END, "outro"]],
+    {"type": "house", "start": 0, "end": DUR, "bpm": 120, "gain": 0.5,
+     "sections": [[0, "intro"], [GAP, "gap"], [BUILD, "drop"], [PRICE, "break"], [TABLE, "drop"], [END, "outro"]],
      "lp_auto": [[0, 1300], [GAP, 1300], [BUILD - 1, 1800], [BUILD + 1, 12000]]},
 ]
 # Tuning: the bed is A minor, one chord per bar (60 frames): Am, F, C, G, repeat. The UI sounds are the uisfx
@@ -55,11 +56,16 @@ cues += [
     S("success", d(6) + 12, 0.7),                 # D + B over C
     {"type": "impact", "frame": PRICE + 6, "gain": 0.2}, {"type": "thump", "frame": PRICE + 6, "gain": 0.3},
     S("achievement", PRICE + 14, 0.7),            # F# D A over G
+    # comparison table (bars Am then F): a soft click per row, the "% cheaper" banner lands with a hit
+    S("swipe", TABLE, 0.8),
+    *[S("press", TABLE + 14 + k * 7, 0.55) for k in range(7)],
+    {"type": "impact", "frame": TABLE + 69, "gain": 0.16}, {"type": "thump", "frame": TABLE + 69, "gain": 0.26},
+    S("reward", TABLE + 71, 0.8, ST(1)),          # B+E -> C+F over F
     S("swipe", END, 0.8),
     *[S("typing", END + 6 + k * 2, 1.1, 0.95 + 0.1 * (k % 3) / 2) for k in range(8)],
     S("success", END + 32, 0.8, ST(-2)),          # D+B -> C+A over Am
 ]
-spec = {"fps": 30, "duration": 20, "seed": 9, "fade_out": 0.8, "cues": cues}
+spec = {"fps": 30, "duration": DUR / 30, "seed": 9, "fade_out": 0.8, "peak_db": -3, "cues": cues}
 out = "sound/cues-sfx.json" if sfx_only else "sound/cues.json"
 json.dump(spec, open(out, "w"), indent=1)
 print(out, len(cues), "cues")

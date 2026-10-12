@@ -1,6 +1,6 @@
-// 20 s at 30 fps on a 120 BPM tech-house grid (one beat = 15 frames, a bar = 60). sound/build_cues.py reads this file.
+// 24 s at 30 fps on a 120 BPM tech-house grid (one beat = 15 frames, a bar = 60). sound/build_cues.py reads this file.
 export const FPS = 30;
-export const DURATION = 600;
+export const DURATION = 720;
 export const BEAT = 15;
 export const MSG = "Hey Appify, I want an ecommerce website";
 export const TYPE0 = -6, TYPE_RATE = 1.1;          // typing starts before frame 0 so the first frame already reads "Hey Appi…"
@@ -14,5 +14,9 @@ export const DAY_LEN = 45;
 export const DAYS = ["UI/UX design", "Products & cart", "Checkout & payments", "Admin panel", "Custom analytics", "Motion graphics", "Live"];
 export const dayAt = (i) => BUILD + i * DAY_LEN;
 export const PRICE = BUILD + DAYS.length * DAY_LEN;   // 435: $360 once
-export const END = 495;          // your turn: DM LAUNCH
-export const CUTS = [BUILD, PRICE, END];
+export const TABLE = 495;        // Appify vs subscription builders, row by row, then how much cheaper
+export const END = 615;          // your turn: DM LAUNCH
+export const CUTS = [BUILD, PRICE, TABLE, END];
+export const MONTHLY = 39;       // typical builder plan (same figure as the lifetime-plan ad)
+export const LIFETIME = 360;
+export const YEARS = 3;
