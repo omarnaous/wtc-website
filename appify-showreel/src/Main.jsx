@@ -1,7 +1,7 @@
-// "8 motion styles in 15 seconds. Comment your number." A numbered showreel: each style lives for 3 beats,
+// "9 things we can animate for your brand." A numbered showreel: each style lives for 3 beats,
 // and the Appify spark is the cut between them (the next style is revealed through a growing spark).
 import { AbsoluteFill, Audio, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { BEAT, END, STYLES, STYLE_LEN, styleStart } from "./timing.js";
+import { BEAT, END, N, STYLES, STYLE_LEN, styleStart } from "./timing.js";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, RgbSplit, Grain, Vignette } from "./fx.jsx";
 import { MARK, WORDMARK, WSPARK, sparkPath } from "./brand.js";
 import { Dev } from "./Dev.jsx";
@@ -11,12 +11,13 @@ const D = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.045em", l
 const M = { fontFamily: "Mono", letterSpacing: "0.16em", textTransform: "uppercase" };
 const lerp = (a, b, t) => a + (b - a) * t;
 const sp = (f, at, damping = 10, stiffness = 240) => spring({ frame: f - at, fps: 30, config: { damping, stiffness } });
-const BG = [C.ink, C.uv, C.paper, C.ink3, C.sky, C.ink, "#050505", C.ink];
+const BG = [C.ink, C.uv, C.paper, C.ink3, C.sky, C.coral, C.ink, "#050505", C.ink];
+const LIGHT = [2, 4];   // styles drawn on a light background
 
 // ── 1 · kinetic type ──────────────────────────────────────────────────────────────────────────────
 function Kinetic({ t, W, H, u }) {
   const words = [["WE", C.white], ["MAKE", C.iris], ["THINGS", C.white], ["MOVE.", C.lime]];
-  const i = Math.min(3, Math.floor(t / 10.5)), lt = t - i * 10.5;
+  const i = Math.min(3, Math.floor(t / 11.25)), lt = t - i * 11.25;
   const [w, col] = words[i];
   const p = sp(lt, 0, 9, 320), blur = Math.max(0, 14 - lt * 4);
   const size = Math.min(W * 0.9 / (w.length * 0.62), 420 * u);
@@ -215,24 +216,45 @@ function Logo({ t, W, H, u }) {
   );
 }
 
+// ── 6 · mascot animation: Dev jumps in, waves, talks, thumbs up ───────────────────────────────────
+function Mascot({ t, W, H, u }) {
+  const inP = sp(t, 0, 9, 200), w = 400 * u, h = w * 830 / 420;
+  const wave = interpolate(t, [6, 9, 26, 29], [0, 1, 1, 0], clamp), thumbs = interpolate(t, [29, 32, 44, 45], [0, 1, 1, 1], clamp);
+  const line = "I'm animated too!", typed = line.slice(0, Math.max(0, Math.floor((t - 8) * 1.4)));
+  const talking = typed.length > 0 && typed.length < line.length;
+  const jump = t >= 30 && t < 40 ? -Math.sin(((t - 30) / 10) * Math.PI) * 60 * u : 0;
+  return (
+    <AbsoluteFill>
+      <div style={{ position: "absolute", left: W / 2 - 220 * u, top: H * 0.5 + h * 0.36, width: 440 * u, height: 50 * u, borderRadius: "50%", background: "rgba(10,9,19,.18)", transform: `scale(${Math.min(1, inP) * (1 + jump / (300 * u))})` }} />
+      <div style={{ position: "absolute", left: W / 2 - w / 2, top: H * 0.5 - h * 0.48 + jump, transform: `translateY(${(1 - Math.min(1, inP)) * 900 * u}px)` }}>
+        <Dev width={w} wave={wave} waveAng={Math.sin(t / 2) * 24} thumbs={thumbs} tilt={Math.sin(t / 6) * 2} bob={talking ? -Math.abs(Math.sin(t)) * 4 : 0}
+          open={talking ? 0.3 + 0.5 * Math.abs(Math.sin(t * 1.7)) : 0} brow={16} lid={0.08} smile={1} look={4} happy={t > 38 ? 1 : 0} />
+      </div>
+      {typed && <div style={{ position: "absolute", left: W / 2 + 40 * u, top: H * 0.5 - h * 0.6, padding: `${20 * u}px ${28 * u}px`, background: "#fff", border: `${5 * u}px solid ${C.ink}`, borderRadius: 18 * u, boxShadow: `0 ${8 * u}px 0 ${C.ink}`, fontFamily: "Mono", fontSize: 38 * u, color: C.ink, whiteSpace: "nowrap" }}>{typed}</div>}
+    </AbsoluteFill>
+  );
+}
+
 function Spark({ size, color = C.iris, style }) {
   return <svg width={size} height={size} viewBox="0 0 100 100" style={style}><path d={sparkPath(50, 50, 48, 0.22)} fill={color} /></svg>;
 }
-const SCENES = [Kinetic, Liquid, UI, Data, Type3D, Particles, Glitch, Logo];
+const SCENES = [Kinetic, Liquid, UI, Data, Type3D, Mascot, Particles, Glitch, Logo];
 
 // ── hook + HUD + end card ─────────────────────────────────────────────────────────────────────────
 function Hook({ f, W, H, u }) {
-  const a = sp(f, 0, 9, 300), b = sp(f, 9, 9, 300), c = sp(f, 17, 10, 260);
+  const a = sp(f, 0, 9, 300), b = sp(f, 12, 9, 300), c = sp(f, 24, 9, 280), d = sp(f, 33, 10, 260);
+  const pop = (p, k = 2) => ({ transform: `scale(${interpolate(p, [0, 1], [k, 1])})`, opacity: Math.min(1, p * 3) });
   return (
-    <AbsoluteFill style={{ background: C.ink, display: "grid", alignContent: "center", justifyItems: "center", gap: 10 * u }}>
-      <div style={{ ...D, fontSize: 210 * u, color: "#fff", transform: `scale(${interpolate(a, [0, 1], [2.2, 1])})`, opacity: Math.min(1, a * 3) }}><span style={{ color: C.lime }}>8</span> STYLES</div>
-      <div style={{ ...D, fontSize: 120 * u, color: C.iris, transform: `scale(${interpolate(b, [0, 1], [2, 1])})`, opacity: Math.min(1, b * 3) }}>15 SECONDS</div>
-      <div style={{ ...M, fontSize: 30 * u, color: "rgba(255,255,255,.75)", marginTop: 30 * u, opacity: Math.min(1, c * 2), transform: `translateY(${(1 - Math.min(1, c)) * 30}px)` }}>Pick your favourite ↓</div>
+    <AbsoluteFill style={{ background: C.ink, display: "grid", alignContent: "center", justifyItems: "center", gap: 6 * u }}>
+      <div style={{ ...D, fontSize: 250 * u, color: C.lime, ...pop(a, 2.4) }}>9</div>
+      <div style={{ ...D, fontSize: 120 * u, color: "#fff", ...pop(b) }}>THINGS WE</div>
+      <div style={{ ...D, fontSize: 120 * u, color: C.iris, ...pop(c) }}>CAN ANIMATE</div>
+      <div style={{ ...M, fontSize: 30 * u, color: "rgba(255,255,255,.75)", marginTop: 30 * u, opacity: Math.min(1, d * 2), transform: `translateY(${(1 - Math.min(1, d)) * 30}px)` }}>for your brand · pick one ↓</div>
     </AbsoluteFill>
   );
 }
 function HUD({ f, i, W, H, u, tall }) {
-  const t = f - styleStart(i), dark = i !== 2 && i !== 4;
+  const t = f - styleStart(i), dark = !LIGHT.includes(i);
   const p = sp(t, 0, 12, 260);
   const ink = dark ? "#fff" : C.ink;
   const y = tall ? 240 * u : 70 * u;
@@ -240,7 +262,7 @@ function HUD({ f, i, W, H, u, tall }) {
     <>
       <div style={{ position: "absolute", left: 60 * u, top: y, display: "flex", alignItems: "baseline", gap: 12 * u }}>
         <span style={{ ...D, fontSize: 150 * u, color: dark ? C.lime : C.uv, display: "inline-block", transform: `translateY(${(1 - Math.min(1, p)) * -80}px)` }}>{String(i + 1).padStart(2, "0")}</span>
-        <span style={{ ...M, fontSize: 26 * u, color: ink, opacity: 0.55 }}>/08</span>
+        <span style={{ ...M, fontSize: 26 * u, color: ink, opacity: 0.55 }}>/0{N}</span>
       </div>
       <div style={{ position: "absolute", right: 60 * u, top: y + 50 * u, padding: `${12 * u}px ${22 * u}px`, borderRadius: 99, border: `${3 * u}px solid ${ink}`, ...M, fontSize: 24 * u, color: ink, transform: `translateX(${(1 - Math.min(1, p)) * 300}px)` }}>{STYLES[i]}</div>
       <div style={{ position: "absolute", left: 60 * u, right: 60 * u, bottom: tall ? 380 * u : 70 * u, display: "flex", gap: 10 * u }}>
@@ -249,38 +271,40 @@ function HUD({ f, i, W, H, u, tall }) {
     </>
   );
 }
-const GLYPHS = ["Aa", "◐", "▭", "▁▃▅", "3D", "✺", "▚", "✦"];
+const GLYPHS = ["Aa", "◐", "▭", "▁▃▅", "3D", "☺", "✺", "▚", "✦"];
 function EndCard({ f, W, H, u, tall }) {
   const t = f - END;
   const title = sp(t, 0, 11, 220);
-  const cols = 4, tile = 200 * u, gap = 22 * u, gw = cols * tile + (cols - 1) * gap, gx = (W - gw) / 2, gy = tall ? H * 0.34 : H * 0.3;
-  const box = sp(t, 26, 10, 240);
-  const devP = sp(t, 14, 12, 180);
+  const cols = 3, tile = (tall ? 190 : 140) * u, gap = 22 * u, gw = cols * tile + (cols - 1) * gap, gx = (W - gw) / 2, gy = tall ? H * 0.27 : H * 0.24;
+  const box = sp(t, 30, 9, 240), devP = sp(t, 16, 12, 180);
+  const pulse = 1 + 0.03 * Math.sin(Math.max(0, t - 40) / 4);
+  const by = gy + 3 * tile + 2 * gap + (tall ? 70 : 40) * u;
   return (
     <AbsoluteFill style={{ background: C.paper }}>
       <AbsoluteFill style={{ backgroundImage: `linear-gradient(rgba(91,43,255,.12) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(91,43,255,.12) 1.5px, transparent 1.5px)`, backgroundSize: `${60 * u}px ${60 * u}px`, backgroundPosition: `0 ${t * 1.2}px` }} />
-      <div style={{ position: "absolute", left: 0, right: 0, top: tall ? H * 0.15 : H * 0.07, textAlign: "center", ...D, fontSize: 104 * u, color: C.ink, transform: `scale(${interpolate(title, [0, 1], [1.5, 1])})`, opacity: Math.min(1, title * 2) }}>Which one's<br /><span style={{ color: C.uv }}>your style?</span></div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: tall ? H * 0.13 : H * 0.05, textAlign: "center", ...D, fontSize: (tall ? 100 : 84) * u, color: C.ink, transform: `scale(${interpolate(title, [0, 1], [1.5, 1])})`, opacity: Math.min(1, title * 2) }}>Which one do<br /><span style={{ color: C.uv }}>you want?</span></div>
       {STYLES.map((s, k) => {
-        const p = sp(t, 6 + k * 2, 10, 260), r = Math.floor(k / cols), c = k % cols;
+        const p = sp(t, 6 + k * 2, 10, 260), r = Math.floor(k / cols), c = k % cols, light = LIGHT.includes(k);
         return (
-          <div key={s} style={{ position: "absolute", left: gx + c * (tile + gap), top: gy + r * (tile + gap), width: tile, height: tile, borderRadius: 34 * u, background: BG[k], display: "grid", placeItems: "center", transform: `scale(${Math.min(1, p)}) rotate(${(1 - Math.min(1, p)) * 20}deg)`, boxShadow: "0 18px 40px rgba(10,9,19,.18)" }}>
-            <span style={{ ...D, fontSize: 70 * u, color: k === 2 || k === 4 ? C.ink : "#fff", opacity: 0.25 }}>{GLYPHS[k]}</span>
-            <span style={{ position: "absolute", left: 18 * u, top: 12 * u, ...D, fontSize: 64 * u, color: k === 2 || k === 4 ? C.uv : C.lime }}>{k + 1}</span>
+          <div key={s} style={{ position: "absolute", left: gx + c * (tile + gap), top: gy + r * (tile + gap), width: tile, height: tile, borderRadius: 32 * u, background: BG[k], transform: `scale(${Math.min(1, p)}) rotate(${(1 - Math.min(1, p)) * 20}deg)`, boxShadow: "0 18px 40px rgba(10,9,19,.18)", overflow: "hidden" }}>
+            <span style={{ position: "absolute", right: 14 * u, bottom: 8 * u, ...D, fontSize: tile * 0.42, color: light ? C.ink : "#fff", opacity: 0.22 }}>{GLYPHS[k]}</span>
+            <span style={{ position: "absolute", left: 16 * u, top: 10 * u, ...D, fontSize: tile * 0.34, color: light ? C.uv : C.lime }}>{k + 1}</span>
+            <span style={{ position: "absolute", left: 16 * u, right: 12 * u, bottom: 14 * u, fontFamily: "UI", fontWeight: 600, fontSize: tile * 0.1, lineHeight: 1.1, color: light ? C.ink : "rgba(255,255,255,.85)" }}>{s}</span>
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 0, right: 0, top: gy + 2 * tile + gap + 50 * u, textAlign: "center", ...M, fontSize: 30 * u, color: C.ink, opacity: interpolate(t, [20, 26], [0, 1], clamp) }}>Comment the number ↓</div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: gy + 2 * tile + gap + 120 * u, display: "grid", justifyItems: "center", transform: `scale(${interpolate(box, [0, 1], [1.4, 1])})`, opacity: Math.min(1, box * 2) }}>
-        <div style={{ padding: `${24 * u}px ${48 * u}px`, borderRadius: 30 * u, background: C.uv, boxShadow: "0 20px 50px rgba(91,43,255,.45)", textAlign: "center" }}>
-          <div style={{ ...D, fontSize: 70 * u, color: "#fff" }}>DM “LAUNCH”</div>
-          <div style={{ fontFamily: "UI", fontWeight: 600, fontSize: 30 * u, color: "rgba(255,255,255,.9)", marginTop: 8 * u }}>for a free prototype</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: by, display: "grid", justifyItems: "center", transform: `scale(${interpolate(box, [0, 1], [1.5, 1]) * pulse})`, opacity: Math.min(1, box * 2) }}>
+        <div style={{ padding: `${24 * u}px ${52 * u}px`, borderRadius: 30 * u, background: C.uv, boxShadow: "0 20px 50px rgba(91,43,255,.45)", textAlign: "center" }}>
+          <div style={{ ...M, fontSize: 24 * u, color: "rgba(255,255,255,.75)", marginBottom: 6 * u }}>Want one for your brand?</div>
+          <div style={{ ...D, fontSize: (tall ? 76 : 64) * u, color: "#fff" }}>Comment “MOTION”</div>
+          <div style={{ fontFamily: "UI", fontWeight: 600, fontSize: 30 * u, color: C.lime, marginTop: 8 * u }}>+ your favourite number</div>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 30 * u, bottom: tall ? 170 * u : 10 * u, transform: `translateY(${(1 - Math.min(1, devP)) * 500}px)` }}>
-        <Dev width={(tall ? 220 : 150) * u} point={1} brow={16} lid={0.08} smile={1} look={6} bob={Math.sin(t / 6) * 2} tilt={Math.sin(t / 10) * 2} />
+      <div style={{ position: "absolute", left: 30 * u, bottom: tall ? 80 * u : 6 * u, transform: `translateY(${(1 - Math.min(1, devP)) * 500}px)` }}>
+        <Dev width={(tall ? 220 : 140) * u} point={1} brow={16} lid={0.08} smile={1} look={6} bob={Math.sin(t / 6) * 2} tilt={Math.sin(t / 10) * 2} />
       </div>
-      <div style={{ position: "absolute", right: 60 * u, bottom: tall ? 400 * u : 60 * u, display: "grid", justifyItems: "end", gap: 10 * u, opacity: interpolate(t, [30, 38], [0, 1], clamp) }}>
-        <svg viewBox={WORDMARK.viewBox} width={300 * u} height={300 * u * 1167 / 3224}><path d={WORDMARK.letters} fill={C.ink} /><path d={WORDMARK.spark} fill={C.uv} /></svg>
+      <div style={{ position: "absolute", left: 0, right: 0, top: by + (tall ? 260 : 215) * u, display: "grid", justifyItems: "center", gap: 8 * u, opacity: interpolate(t, [36, 44], [0, 1], clamp) }}>
+        <svg viewBox={WORDMARK.viewBox} width={(tall ? 260 : 170) * u} height={(tall ? 260 : 170) * u * 1167 / 3224}><path d={WORDMARK.letters} fill={C.ink} /><path d={WORDMARK.spark} fill={C.uv} /></svg>
         <div style={{ ...M, fontSize: 22 * u, color: C.mute }}>@appifylb</div>
       </div>
     </AbsoluteFill>
@@ -292,14 +316,14 @@ export const Main = () => {
   const f = useCurrentFrame();
   const { width: W, height: H } = useVideoConfig();
   const u = W / 1080, tall = H > 1600;
-  const i = f < styleStart(0) ? -1 : f >= END ? 8 : Math.floor((f - styleStart(0)) / STYLE_LEN);
+  const i = f < styleStart(0) ? -1 : f >= END ? N : Math.floor((f - styleStart(0)) / STYLE_LEN);
   // the spark cut: the next scene is revealed through a spark that grows from the centre in 9 frames
   const cut = (at) => { const p = interpolate(f, [at, at + 9], [0, 1], { ...clamp, easing: easeIn }); const R = p * Math.hypot(W, H) * 1.25; return `path('${sparkPath(W / 2, H * 0.48, Math.max(1, R), 0.3)}')`; };
   const layer = (k) => {
     if (k === -1) return <Hook f={f} W={W} H={H} u={u} />;
-    if (k === 8) return <EndCard f={f} W={W} H={H} u={u} tall={tall} />;
+    if (k === N) return <EndCard f={f} W={W} H={H} u={u} tall={tall} />;
     const S = SCENES[k], t = f - styleStart(k);
-    const [sx, sy] = shake(t, k === 5 ? 20 : 0, k === 5 ? 26 : 10, 4);
+    const [sx, sy] = shake(t, SCENES[k] === Particles ? 20 : 0, SCENES[k] === Particles ? 26 : 10, 4);
     return (
       <AbsoluteFill style={{ background: BG[k] }}>
         <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}><S t={t} W={W} H={H} u={u} /></AbsoluteFill>
@@ -307,7 +331,7 @@ export const Main = () => {
       </AbsoluteFill>
     );
   };
-  const cur = i, prev = i - 1, at = i === 8 ? END : i >= 0 ? styleStart(i) : 0;
+  const cur = i, prev = i - 1, at = i === N ? END : i >= 0 ? styleStart(i) : 0;
   const inCut = i >= 0 && f < at + 9;
   return (
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>

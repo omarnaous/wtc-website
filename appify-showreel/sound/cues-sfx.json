@@ -1,0 +1,99 @@
+{
+ "fps": 30,
+ "duration": 20.0,
+ "seed": 21,
+ "fade_out": 1.0,
+ "lowpass": 7000,
+ "cues": [
+  {
+   "type": "whoosh",
+   "start": 39,
+   "end": 49,
+   "gain": 0.06,
+   "pan": -0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 84,
+   "end": 94,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 129,
+   "end": 139,
+   "gain": 0.06,
+   "pan": -0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 174,
+   "end": 184,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 219,
+   "end": 229,
+   "gain": 0.06,
+   "pan": -0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 264,
+   "end": 274,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 309,
+   "end": 319,
+   "gain": 0.06,
+   "pan": -0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 354,
+   "end": 364,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 399,
+   "end": 409,
+   "gain": 0.06,
+   "pan": -0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 444,
+   "end": 454,
+   "gain": 0.06,
+   "pan": 0.3
+  },
+  {
+   "type": "impact",
+   "frame": 335,
+   "gain": 0.22
+  },
+  {
+   "type": "impact",
+   "frame": 427,
+   "gain": 0.16
+  },
+  {
+   "type": "glint",
+   "frame": 429,
+   "gain": 0.05
+  },
+  {
+   "type": "stamp",
+   "frame": 480,
+   "gain": 0.22
+  }
+ ]
+}
