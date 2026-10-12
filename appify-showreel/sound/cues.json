@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 20.0,
+ "duration": 23.0,
  "seed": 21,
  "fade_out": 1.0,
  "lowpass": 9000,
@@ -8,7 +8,7 @@
   {
    "type": "lofi_tape",
    "start": 0,
-   "end": 450,
+   "end": 540,
    "bpm": 80.0,
    "gain": 0.42,
    "lp_auto": [
@@ -17,23 +17,23 @@
      800
     ],
     [
-     37,
+     18,
      900
     ],
     [
-     47,
+     46,
      6800
     ]
    ],
    "stop": [
-    436,
-    450
+    526,
+    540
    ]
   },
   {
    "type": "lofi_tape",
-   "start": 478,
-   "end": 600,
+   "start": 568,
+   "end": 690,
    "bpm": 80.0,
    "gain": 0.36,
    "lp": 1900,
@@ -52,34 +52,43 @@
   },
   {
    "type": "swoosh",
-   "start": 8,
-   "end": 24,
+   "start": 6,
+   "end": 23,
+   "peak": 0.82,
+   "f": 3200,
+   "gain": 0.16
+  },
+  {
+   "type": "glint",
+   "frame": 20,
+   "gain": 0.06
+  },
+  {
+   "type": "thump",
+   "frame": 34,
+   "gain": 0.12
+  },
+  {
+   "type": "swoosh",
+   "start": 98,
+   "end": 114,
    "peak": 0.4,
    "f": 3600,
    "gain": 0.16
   },
   {
    "type": "glint",
-   "frame": 32,
+   "frame": 122,
    "gain": 0.04
-  },
-  {
-   "type": "swoosh",
-   "start": 38,
-   "end": 54,
-   "peak": 0.45,
-   "f": 2400,
-   "gain": 0.2,
-   "pan": -0.35
   },
   {
    "type": "swoosh",
    "start": 83,
    "end": 99,
    "peak": 0.45,
-   "f": 3100,
+   "f": 2800,
    "gain": 0.2,
-   "pan": 0.35
+   "pan": -0.35
   },
   {
    "type": "reverse_swell",
@@ -103,18 +112,18 @@
    "start": 128,
    "end": 144,
    "peak": 0.45,
-   "f": 2000,
+   "f": 2400,
    "gain": 0.2,
-   "pan": -0.35
+   "pan": 0.35
   },
   {
    "type": "swoosh",
    "start": 173,
    "end": 189,
    "peak": 0.45,
-   "f": 2800,
+   "f": 3100,
    "gain": 0.2,
-   "pan": 0.35
+   "pan": -0.35
   },
   {
    "type": "reverse_swell",
@@ -138,18 +147,18 @@
    "start": 218,
    "end": 234,
    "peak": 0.45,
-   "f": 3400,
+   "f": 2000,
    "gain": 0.2,
-   "pan": -0.35
+   "pan": 0.35
   },
   {
    "type": "swoosh",
    "start": 263,
    "end": 279,
    "peak": 0.45,
-   "f": 2200,
+   "f": 2800,
    "gain": 0.2,
-   "pan": 0.35
+   "pan": -0.35
   },
   {
    "type": "reverse_swell",
@@ -173,18 +182,18 @@
    "start": 308,
    "end": 324,
    "peak": 0.45,
-   "f": 2600,
+   "f": 3400,
    "gain": 0.2,
-   "pan": -0.35
+   "pan": 0.35
   },
   {
    "type": "swoosh",
    "start": 353,
    "end": 369,
    "peak": 0.45,
-   "f": 3000,
+   "f": 2200,
    "gain": 0.2,
-   "pan": 0.35
+   "pan": -0.35
   },
   {
    "type": "reverse_swell",
@@ -208,18 +217,30 @@
    "start": 398,
    "end": 414,
    "peak": 0.45,
-   "f": 1900,
+   "f": 2600,
    "gain": 0.2,
-   "pan": -0.35
+   "pan": 0.35
   },
   {
    "type": "swoosh",
    "start": 443,
    "end": 459,
    "peak": 0.45,
-   "f": 2500,
+   "f": 3000,
    "gain": 0.2,
-   "pan": 0.35
+   "pan": -0.35
+  },
+  {
+   "type": "reverse_swell",
+   "start": 430,
+   "end": 450,
+   "gain": 0.13,
+   "notes": [
+    "E3",
+    "G3",
+    "B3",
+    "D4"
+   ]
   },
   {
    "type": "thump",
@@ -227,29 +248,52 @@
    "gain": 0.16
   },
   {
+   "type": "swoosh",
+   "start": 488,
+   "end": 504,
+   "peak": 0.45,
+   "f": 1900,
+   "gain": 0.2,
+   "pan": 0.35
+  },
+  {
+   "type": "swoosh",
+   "start": 533,
+   "end": 549,
+   "peak": 0.45,
+   "f": 2500,
+   "gain": 0.2,
+   "pan": -0.35
+  },
+  {
+   "type": "thump",
+   "frame": 540,
+   "gain": 0.16
+  },
+  {
    "type": "impact",
-   "frame": 335,
+   "frame": 425,
    "gain": 0.22
   },
   {
    "type": "thump",
-   "frame": 335,
+   "frame": 425,
    "freq": 45,
    "gain": 0.25
   },
   {
    "type": "impact",
-   "frame": 427,
+   "frame": 517,
    "gain": 0.14
   },
   {
    "type": "glint",
-   "frame": 429,
+   "frame": 519,
    "gain": 0.05
   },
   {
    "type": "stamp",
-   "frame": 480,
+   "frame": 570,
    "gain": 0.2
   }
  ]

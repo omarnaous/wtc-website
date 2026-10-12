@@ -1,9 +1,10 @@
 // "9 things we can animate for your brand." A numbered showreel: each style lives for 3 beats,
 // and the Appify spark is the cut between them (the next style is revealed through a growing spark).
-import { AbsoluteFill, Audio, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { END, N, STYLES, STYLE_LEN, styleStart } from "./timing.js";
+import { AbsoluteFill, Audio, Easing, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { END, N, PICK, STYLE0, STYLES, STYLE_LEN, styleStart } from "./timing.js";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, RgbSplit, Grain, Vignette } from "./fx.jsx";
 import { MARK, WORDMARK, WSPARK, sparkPath } from "./brand.js";
+import { LETTERS } from "./letters.js";
 import { Dev } from "./Dev.jsx";
 
 const C = { ink: "#0A0913", ink2: "#17142B", ink3: "#221D40", paper: "#F3F1FA", uv: "#5B2BFF", iris: "#8F72FF", sky: "#74C6FF", alert: "#F0384F", coral: "#FF6A3D", lime: "#C6FF3D", white: "#fff", mute: "#6D6788" };
@@ -242,6 +243,54 @@ function Spark({ size, color = C.iris, style }) {
 const SCENES = [Kinetic, Liquid, UI, Data, Type3D, Mascot, Particles, Glitch, Logo];
 
 // ── hook + HUD + end card ─────────────────────────────────────────────────────────────────────────
+// The brand intro (1 bar): the spark slams in, flies up and lands as the i-dot of the wordmark while the letters rise,
+// then "WE MAKE / MOTION / GRAPHICS." lands word by word on the beat, and MOTION keeps moving.
+function Intro({ f, W, H, u, tall }) {
+  const ww = (tall ? 680 : 540) * u, k = ww / 3224, wx = (W - ww) / 2, wy = tall ? H * 0.17 : H * 0.07;
+  const wh = 1167 * k;
+  const dotX = wx + (WSPARK.x + 20) * k, dotY = wy + (WSPARK.y + 917) * k, dotR = WSPARK.r * k;
+  const cx = W / 2, cy = H * 0.46;
+  const slam = sp(f, 0, 9, 320);
+  const fly = interpolate(f, [7, 20], [0, 1], { ...clamp, easing: Easing.bezier(0.65, 0, 0.35, 1) });
+  const landed = f >= 20;
+  const sparkAt = (q) => [lerp(cx, dotX, q), lerp(cy, dotY, q) - Math.sin(q * Math.PI) * 160 * u, lerp(150 * u * interpolate(slam, [0, 1], [2.4, 1]), dotR, q)];
+  const fit = (w, base) => Math.min(base, (W * 0.88) / (w.length * 0.66));
+  const words = [["WE MAKE", "#fff", fit("WE MAKE", (tall ? 130 : 104) * u), 22], ["MOTION", C.sky, fit("MOTION", (tall ? 220 : 186) * u), 34], ["GRAPHICS.", "#fff", fit("GRAPHICS.", (tall ? 150 : 118) * u), 45]];
+  const top = tall ? H * 0.43 : H * 0.36;
+  const sub = sp(f, 56, 12, 220), line = interpolate(f, [40, 54], [0, 1], { ...clamp, easing: easeOut });
+  return (
+    <AbsoluteFill style={{ background: C.ink }}>
+      <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(143,114,255,.08) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(143,114,255,.08) 1.5px, transparent 1.5px)", backgroundSize: `${60 * u}px ${60 * u}px`, backgroundPosition: `${W / 2}px ${f * 0.8}px` }} />
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% ${landed ? 30 : 46}%, rgba(91,43,255,${0.55 + 0.15 * Math.sin(f / 5)}), transparent ${tall ? 50 : 60}%)` }} />
+      {/* wordmark: letters rise one by one, the spark is the i-dot */}
+      <svg viewBox={WORDMARK.viewBox} width={ww} height={wh} style={{ position: "absolute", left: wx, top: wy, overflow: "visible" }}>
+        {LETTERS.map((l, j) => { const p = sp(f, 10 + j * 2, 11, 240); return <path key={j} d={l.d} fill="#fff" opacity={Math.min(1, p * 2)} transform={`translate(0 ${(1 - Math.min(1, p)) * 500})`} />; })}
+        {landed && <path d={WORDMARK.spark} fill={C.iris} transform={`translate(${WSPARK.x} ${WSPARK.y}) scale(${interpolate(sp(f, 20, 8, 300), [0, 1], [1.8, 1])}) translate(${-WSPARK.x} ${-WSPARK.y})`} />}
+      </svg>
+      {!landed && [3, 2, 1, 0].map((g) => {   // the flying spark with a short trail
+        const [x, y, r] = sparkAt(Math.max(0, fly - g * 0.06));
+        return <svg key={g} width={W} height={H} style={{ position: "absolute", inset: 0, opacity: g ? 0.25 / g : 1 }}><path d={sparkPath(x, y, r, 0.2)} fill={C.iris} transform={`rotate(${(1 - Math.min(1, slam)) * -90 + f * 4 * (1 - fly)} ${x} ${y})`} style={{ filter: g ? "none" : `drop-shadow(0 0 ${30 * u}px rgba(143,114,255,.9))` }} /></svg>;
+      })}
+      <Shockwave f={f} cx={dotX} cy={dotY} start={20} max={260 * u} width={5 * u} rgb="143,114,255" dur={14} />
+      {/* WE MAKE / MOTION / GRAPHICS. */}
+      <div style={{ position: "absolute", left: 0, right: 0, top, display: "grid", justifyItems: "center", gap: 4 * u }}>
+        {words.map(([w, col, size, at], j) => {
+          const p = sp(f, at, 9, 300);
+          return (
+            <div key={w} style={{ ...D, fontSize: size, color: col, opacity: Math.min(1, p * 3), transform: `scale(${interpolate(p, [0, 1], [1.7, 1])})`, filter: `blur(${Math.max(0, 10 - (f - at) * 3)}px)`, display: "flex", position: "relative" }}>
+              {j === 1 ? w.split("").map((ch, q) => <span key={q} style={{ display: "inline-block", transform: `translateY(${f > 46 ? Math.sin((f - 46) / 3.2 - q * 0.7) * 16 * u : 0}px) rotate(${f > 46 ? Math.sin((f - 46) / 3.2 - q * 0.7 - 1) * 4 : 0}deg)` }}>{ch}</span>) : w}
+              {j === 1 && <i style={{ position: "absolute", left: "4%", right: "4%", bottom: -size * 0.04, height: 12 * u, borderRadius: 9, background: C.iris, transform: `scaleX(${line})`, transformOrigin: "0 50%" }} />}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: tall ? H * 0.8 : H * 0.86, textAlign: "center", ...M, fontSize: (tall ? 30 : 26) * u, color: "rgba(255,255,255,.8)", opacity: Math.min(1, sub * 2), transform: `translateY(${(1 - Math.min(1, sub)) * 30}px)` }}>
+        for your brand · @appifylb
+      </div>
+    </AbsoluteFill>
+  );
+}
+
 // The hook: the Appify spark slams in, "PICK A NUMBER." lands, then the spark bursts into the 9 numbers
 // (the same 9 the end card asks you to comment). Chip 1 lights up and the spark cut opens on style 01.
 function Hook({ f, W, H, u, tall }) {
@@ -341,11 +390,12 @@ export const Main = () => {
   const f = useCurrentFrame();
   const { width: W, height: H } = useVideoConfig();
   const u = W / 1080, tall = H > 1600;
-  const i = f < styleStart(0) ? -1 : f >= END ? N : Math.floor((f - styleStart(0)) / STYLE_LEN);
+  const i = f < PICK ? -2 : f < STYLE0 ? -1 : f >= END ? N : Math.floor((f - STYLE0) / STYLE_LEN);
   // the spark cut: the next scene is revealed through a spark that grows from the centre in 9 frames
   const cut = (at) => { const p = interpolate(f, [at, at + 9], [0, 1], { ...clamp, easing: easeIn }); const R = p * Math.hypot(W, H) * 1.25; return `path('${sparkPath(W / 2, H * 0.48, Math.max(1, R), 0.3)}')`; };
   const layer = (k) => {
-    if (k === -1) return <Hook f={f} W={W} H={H} u={u} tall={tall} />;
+    if (k === -2) return <Intro f={f} W={W} H={H} u={u} tall={tall} />;
+    if (k === -1) return <Hook f={f - PICK} W={W} H={H} u={u} tall={tall} />;
     if (k === N) return <EndCard f={f} W={W} H={H} u={u} tall={tall} />;
     const S = SCENES[k], t = f - styleStart(k);
     const [sx, sy] = shake(t, SCENES[k] === Particles ? 20 : 0, SCENES[k] === Particles ? 26 : 10, 4);
@@ -357,15 +407,15 @@ export const Main = () => {
       </AbsoluteFill>
     );
   };
-  const cur = i, prev = i - 1, at = i === N ? END : i >= 0 ? styleStart(i) : 0;
-  const inCut = i >= 0 && f < at + 9;
+  const cur = i, prev = i - 1, at = i === N ? END : i >= 0 ? styleStart(i) : i === -1 ? PICK : 0;
+  const inCut = i >= -1 && f < at + 9;
   return (
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
       <Audio src={staticFile("sound.wav")} />
       {inCut && layer(prev)}
       <AbsoluteFill style={inCut ? { clipPath: cut(at) } : undefined}>{layer(cur)}</AbsoluteFill>
       {inCut && (() => { const p = interpolate(f, [at, at + 9], [0, 1], clamp); return <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}><path d={sparkPath(W / 2, H * 0.48, Math.max(1, p * Math.hypot(W, H) * 1.25), 0.3)} fill="none" stroke={C.iris} strokeWidth={14 * u * (1 - p)} /></svg>; })()}
-      {i >= 0 && f >= at && f < at + 4 && <Flash f={f} start={at} peak={0.25} />}
+      {i >= -1 && f >= at && f < at + 4 && <Flash f={f} start={at} peak={0.25} />}
       <Vignette strength={0.16} />
       <Grain f={f} opacity={0.035} />
     </AbsoluteFill>
