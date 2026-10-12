@@ -1,0 +1,291 @@
+{
+ "fps": 30,
+ "duration": 20.0,
+ "seed": 5,
+ "fade_out": 1.2,
+ "cues": [
+  {
+   "type": "lofi",
+   "start": 0,
+   "end": 100,
+   "bpm": 112.5,
+   "lp": 900,
+   "drums": 0.0,
+   "gain": 0.2
+  },
+  {
+   "type": "lofi",
+   "start": 100,
+   "end": 176,
+   "bpm": 112.5,
+   "drums": 0.6,
+   "gain": 0.22,
+   "bar0": 1
+  },
+  {
+   "type": "lofi",
+   "start": 192,
+   "end": 416,
+   "bpm": 112.5,
+   "gain": 0.24,
+   "bar0": 2
+  },
+  {
+   "type": "lofi",
+   "start": 432,
+   "end": 600,
+   "bpm": 112.5,
+   "gain": 0.24,
+   "bar0": 0
+  },
+  {
+   "type": "beat",
+   "start": 256,
+   "end": 416,
+   "bpm": 112.5,
+   "pattern": "four-on-floor",
+   "gain": 0.16,
+   "hats": 0.25
+  },
+  {
+   "type": "beat",
+   "start": 432,
+   "end": 560,
+   "bpm": 112.5,
+   "pattern": "four-on-floor",
+   "gain": 0.16,
+   "hats": 0.25
+  },
+  {
+   "type": "tick",
+   "frame": 0,
+   "gain": 0.1,
+   "pan": -0.2
+  },
+  {
+   "type": "tick",
+   "frame": 16,
+   "gain": 0.1,
+   "pan": -0.2
+  },
+  {
+   "type": "tick",
+   "frame": 32,
+   "gain": 0.1,
+   "pan": -0.2
+  },
+  {
+   "type": "blip",
+   "frame": 48,
+   "gain": 0.16,
+   "freq": 1320
+  },
+  {
+   "type": "blip",
+   "frame": 53,
+   "gain": 0.16,
+   "freq": 1320
+  },
+  {
+   "type": "blip",
+   "frame": 58,
+   "gain": 0.16,
+   "freq": 1320
+  },
+  {
+   "type": "riser",
+   "start": 72,
+   "end": 100,
+   "gain": 0.16
+  },
+  {
+   "type": "whoosh",
+   "start": 92,
+   "end": 106,
+   "gain": 0.14,
+   "pan": 0
+  },
+  {
+   "type": "glint",
+   "frame": 102,
+   "gain": 0.12
+  },
+  {
+   "type": "impact",
+   "frame": 128,
+   "gain": 0.25
+  },
+  {
+   "type": "whoosh",
+   "start": 146,
+   "end": 178,
+   "gain": 0.1,
+   "pan": -0.4
+  },
+  {
+   "type": "rip",
+   "start": 188,
+   "end": 196,
+   "gain": 0.2
+  },
+  {
+   "type": "impact",
+   "frame": 192,
+   "gain": 0.35
+  },
+  {
+   "type": "cash",
+   "frame": 194,
+   "gain": 0.3
+  },
+  {
+   "type": "stamp",
+   "frame": 208,
+   "gain": 0.4
+  },
+  {
+   "type": "whoosh",
+   "start": 238,
+   "end": 252,
+   "gain": 0.1,
+   "pan": 0
+  },
+  {
+   "type": "blip",
+   "frame": 256,
+   "gain": 0.14,
+   "freq": 523.0
+  },
+  {
+   "type": "blip",
+   "frame": 272,
+   "gain": 0.14,
+   "freq": 587.0476512658021
+  },
+  {
+   "type": "blip",
+   "frame": 288,
+   "gain": 0.14,
+   "freq": 658.9387090950187
+  },
+  {
+   "type": "blip",
+   "frame": 304,
+   "gain": 0.14,
+   "freq": 739.6336931211288
+  },
+  {
+   "type": "blip",
+   "frame": 320,
+   "gain": 0.14,
+   "freq": 830.2107501793682
+  },
+  {
+   "type": "blip",
+   "frame": 336,
+   "gain": 0.14,
+   "freq": 931.8800591747948
+  },
+  {
+   "type": "blip",
+   "frame": 352,
+   "gain": 0.14,
+   "freq": 1046.0
+  },
+  {
+   "type": "pop",
+   "frame": 256,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 272,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 288,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 304,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 320,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 336,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 352,
+   "gain": 0.14
+  },
+  {
+   "type": "stamp",
+   "frame": 368,
+   "gain": 0.3
+  },
+  {
+   "type": "stamp",
+   "frame": 384,
+   "gain": 0.3
+  },
+  {
+   "type": "stamp",
+   "frame": 400,
+   "gain": 0.3
+  },
+  {
+   "type": "riser",
+   "start": 408,
+   "end": 431,
+   "gain": 0.18
+  },
+  {
+   "type": "bass_drop",
+   "frame": 432,
+   "gain": 0.55
+  },
+  {
+   "type": "impact",
+   "frame": 432,
+   "gain": 0.4
+  },
+  {
+   "type": "coin",
+   "frame": 438,
+   "gain": 0.25
+  },
+  {
+   "type": "glint",
+   "frame": 442,
+   "gain": 0.1
+  },
+  {
+   "type": "whoosh",
+   "start": 488,
+   "end": 504,
+   "gain": 0.14,
+   "pan": 0
+  },
+  {
+   "type": "chime",
+   "frame": 504,
+   "gain": 0.12,
+   "freq": 1568
+  },
+  {
+   "type": "chime",
+   "frame": 510,
+   "gain": 0.09,
+   "freq": 2093
+  }
+ ]
+}
