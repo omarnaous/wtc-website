@@ -6,84 +6,144 @@
  "lowpass": 7000,
  "cues": [
   {
-   "type": "whoosh",
-   "start": 39,
+   "type": "swish",
+   "start": 42,
+   "end": 53,
+   "gain": 0.22,
+   "pan": -0.35
+  },
+  {
+   "type": "swish",
+   "start": 87,
+   "end": 98,
+   "gain": 0.22,
+   "pan": 0.35
+  },
+  {
+   "type": "swish",
+   "start": 132,
+   "end": 143,
+   "gain": 0.22,
+   "pan": -0.35
+  },
+  {
+   "type": "swish",
+   "start": 177,
+   "end": 188,
+   "gain": 0.22,
+   "pan": 0.35
+  },
+  {
+   "type": "swish",
+   "start": 222,
+   "end": 233,
+   "gain": 0.22,
+   "pan": -0.35
+  },
+  {
+   "type": "swish",
+   "start": 267,
+   "end": 278,
+   "gain": 0.22,
+   "pan": 0.35
+  },
+  {
+   "type": "swish",
+   "start": 312,
+   "end": 323,
+   "gain": 0.22,
+   "pan": -0.35
+  },
+  {
+   "type": "swish",
+   "start": 357,
+   "end": 368,
+   "gain": 0.22,
+   "pan": 0.35
+  },
+  {
+   "type": "swish",
+   "start": 402,
+   "end": 413,
+   "gain": 0.22,
+   "pan": -0.35
+  },
+  {
+   "type": "slap",
+   "frame": 53,
+   "gain": 0.42,
+   "pan": -0.15
+  },
+  {
+   "type": "slap",
+   "frame": 98,
+   "gain": 0.42,
+   "pan": 0.15
+  },
+  {
+   "type": "slap",
+   "frame": 143,
+   "gain": 0.42,
+   "pan": -0.15
+  },
+  {
+   "type": "slap",
+   "frame": 188,
+   "gain": 0.42,
+   "pan": 0.15
+  },
+  {
+   "type": "slap",
+   "frame": 233,
+   "gain": 0.42,
+   "pan": -0.15
+  },
+  {
+   "type": "slap",
+   "frame": 278,
+   "gain": 0.42,
+   "pan": 0.15
+  },
+  {
+   "type": "slap",
+   "frame": 323,
+   "gain": 0.42,
+   "pan": -0.15
+  },
+  {
+   "type": "slap",
+   "frame": 368,
+   "gain": 0.42,
+   "pan": 0.15
+  },
+  {
+   "type": "slap",
+   "frame": 413,
+   "gain": 0.42,
+   "pan": -0.15
+  },
+  {
+   "type": "swish",
+   "start": 35,
    "end": 49,
-   "gain": 0.06,
-   "pan": -0.3
+   "gain": 0.16,
+   "pan": 0.2
   },
   {
-   "type": "whoosh",
-   "start": 84,
-   "end": 94,
-   "gain": 0.06,
-   "pan": 0.3
+   "type": "swish",
+   "start": 447,
+   "end": 458,
+   "gain": 0.26
   },
   {
-   "type": "whoosh",
-   "start": 129,
-   "end": 139,
-   "gain": 0.06,
-   "pan": -0.3
-  },
-  {
-   "type": "whoosh",
-   "start": 174,
-   "end": 184,
-   "gain": 0.06,
-   "pan": 0.3
-  },
-  {
-   "type": "whoosh",
-   "start": 219,
-   "end": 229,
-   "gain": 0.06,
-   "pan": -0.3
-  },
-  {
-   "type": "whoosh",
-   "start": 264,
-   "end": 274,
-   "gain": 0.06,
-   "pan": 0.3
-  },
-  {
-   "type": "whoosh",
-   "start": 309,
-   "end": 319,
-   "gain": 0.06,
-   "pan": -0.3
-  },
-  {
-   "type": "whoosh",
-   "start": 354,
-   "end": 364,
-   "gain": 0.06,
-   "pan": 0.3
-  },
-  {
-   "type": "whoosh",
-   "start": 399,
-   "end": 409,
-   "gain": 0.06,
-   "pan": -0.3
-  },
-  {
-   "type": "whoosh",
-   "start": 444,
-   "end": 454,
-   "gain": 0.06,
-   "pan": 0.3
+   "type": "slap",
+   "frame": 458,
+   "gain": 0.55
   },
   {
    "type": "impact",
    "frame": 335,
-   "gain": 0.22
-  },
-  {
-   "type": "impact",
-   "frame": 427,
-   "gain": 0.16
+   "gain": 0.2
   },
   {
    "type": "glint",

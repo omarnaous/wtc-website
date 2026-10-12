@@ -8,7 +8,7 @@ usage:
 
 Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
            printer coin register rip glitch click pop typing cash cash_count blip sweep,
-           viral-reel hits: vine_boom scratch bass_drop stamp buzz sting, drinks: clink pour,
+           viral-reel hits: vine_boom scratch bass_drop stamp buzz sting, drinks: clink pour, editorial cuts: swish slap,
            money: coin_drop coins cash_riffle; charts: graph_tick graph_rise counter,
            and a music bed for voice-overs: lofi (start/end, bpm, lp, drums/keys/bass).
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
@@ -309,6 +309,22 @@ def pour(c, q, fps):
     env = np.minimum(1, p / 0.06) * np.minimum(1, (1 - p) / 0.12)
     return (lo + hi + glug) * env
 
+def slap(c, q):
+    """A card or print slapped down on a table: a papery crack, a soft thump of the table, a short room."""
+    n = int(0.32 * SR); t = np.arange(n) / SR
+    crack = bp(c.noise(n), 2200, 9000) * decay(n, 0.006) * 0.7
+    body = lp(c.noise(n), 2400) * decay(n, 0.022)
+    thump = osc(70 + 50 * np.exp(-t / 0.015), n) * decay(n, 0.05) * 0.9
+    return c.reverb((crack + body + thump) * np.minimum(1, t / 0.0005), 0.5, 0.12)
+
+def swish(c, q, fps):
+    """Paper swish (start/end): a card flying through the air: band-passed air that rises, with a 35 Hz paper flutter."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); p = np.linspace(0, 1, n)
+    air = bp(c.noise(n), 900, 6500)
+    flutter = 1 + 0.35 * np.sin(2 * np.pi * 35 * np.arange(n) / SR)
+    env = (p ** 1.6) * np.minimum(1, (1 - p) / 0.08)
+    return air * flutter * env
+
 NOTE = {n: i for i, n in enumerate(["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"])}
 def _hz(name):  # "A3" -> 220.0
     return 440 * 2 ** ((NOTE[name[:-1]] + 12 * (int(name[-1]) + 1) - 69) / 12)
@@ -473,10 +489,11 @@ def render(spec, out):
         elif typ == "graph_rise": sig = graph_rise(c, q, fps)
         elif typ == "counter": sig = counter(c, q, fps)
         elif typ == "pour": sig = pour(c, q, fps)
+        elif typ == "swish": sig = swish(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
                    "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
                    "cash": cash, "blip": blip, "vine_boom": vine_boom, "scratch": scratch, "bass_drop": bass_drop,
-                   "stamp": stamp, "buzz": buzz, "sting": sting, "clink": clink, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
+                   "stamp": stamp, "buzz": buzz, "sting": sting, "clink": clink, "slap": slap, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
                    "graph_tick": graph_tick}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)

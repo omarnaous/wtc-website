@@ -40,6 +40,8 @@ Cue types and when to use them (match each scene's subject: printers for receipt
 | `cash_count` | bills flicking between `start`/`end` (`rate`) | a money counter ticking up |
 | `blip` | soft rounded data tick (`freq`, step it up) | chart bars or points appearing |
 | `sweep` | soft tone gliding `f0`→`f1` between `start`/`end` | a chart line drawing |
+| `swish` | paper swish (start/end): rising band-passed air with paper flutter | a card or print flying in; end it on the landing frame |
+| `slap` | a card slapped onto a table: papery crack + soft thump | the frame a card lands (pair with `swish`); the tactile alternative to whooshes and impacts |
 | `clink` | ice cube into a glass: bright inharmonic ping + tiny thud (`pitch`) | ASMR drink shots, one per cube |
 | `pour` | liquid pouring (start/end): filtered noise whose pitch rises as it fills, with gurgles | coffee/drinks filling a cup |
 | `sting` | dramatic 'dun dun DUNNN': two brass stabs and a held diminished chord with timpani (`step`, `hold`) | the meme crash-zoom ("emotional damage"), once per reel |

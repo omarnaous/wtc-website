@@ -15,15 +15,20 @@ sfx_only = "--sfx" in sys.argv
 cues = [] if sfx_only else [
     # the bed: muffled for the hook, opens up on the first cut, keeps going under the end card
     {"type": "lofi", "start": 0, "end": S0, "bpm": BPM, "lp": 1200, "drums": 0.5, "gain": 0.3},
-    {"type": "lofi", "start": S0, "end": DUR, "bpm": BPM, "drums": 0.8, "gain": 0.32, "bar0": 1},
+    {"type": "lofi", "start": S0, "end": DUR, "bpm": BPM, "drums": 0.8, "gain": 0.28, "bar0": 1},
     {"type": "beat", "start": S0, "end": END, "bpm": BPM, "pattern": "four-on-floor", "gain": 0.07, "hats": 0.12},
 ]
+LAND = 8   # frames from a card's start to its landing (Main.jsx)
 cues += [
-    *[W(st(i) - 6, st(i) + 4, 0.06, (-0.3, 0.3)[i % 2]) for i in range(N + 1)],   # one soft whoosh per spark cut
-    {"type": "impact", "frame": st(6) + 20, "gain": 0.22},                          # 07 launch FX: the boom
-    {"type": "impact", "frame": st(8) + 22, "gain": 0.16},                          # 09 the logo lands
-    {"type": "glint", "frame": st(8) + 24, "gain": 0.05},
-    {"type": "stamp", "frame": END + 30, "gain": 0.22},                             # Comment "MOTION"
+    # editorial cuts: each card swishes through the air and slaps down on the pile
+    *[{"type": "swish", "start": st(i) - 3, "end": st(i) + LAND, "gain": 0.22, "pan": (-0.35, 0.35)[i % 2]} for i in range(N)],
+    *[{"type": "slap", "frame": st(i) + LAND, "gain": 0.42, "pan": (-0.15, 0.15)[i % 2]} for i in range(N)],
+    {"type": "swish", "start": S0 - 10, "end": S0 + 4, "gain": 0.16, "pan": 0.2},   # the hook is pulled away
+    {"type": "swish", "start": END - 3, "end": END + LAND, "gain": 0.26},            # the end card, the last print
+    {"type": "slap", "frame": END + LAND, "gain": 0.55},
+    {"type": "impact", "frame": st(6) + 20, "gain": 0.2},                          # launch FX: the boom
+    {"type": "glint", "frame": st(8) + 24, "gain": 0.05},                          # the logo lands
+    {"type": "stamp", "frame": END + 30, "gain": 0.22},                            # Comment "MOTION"
 ]
 spec = {"fps": 30, "duration": DUR / 30, "seed": 21, "fade_out": 1.0, "lowpass": 7000, "cues": cues}
 out = "sound/cues-sfx.json" if sfx_only else "sound/cues.json"

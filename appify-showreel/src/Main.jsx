@@ -311,37 +311,92 @@ function EndCard({ f, W, H, u, tall }) {
   );
 }
 
+// ── the editorial card stack (after @basebeirut): every style is a print that slaps onto the pile ───
+const ROT = [-6, 5, -4, 6, -5, 4, -6, 5, -3];
+const LAND = 8;                                           // frames from a card's start to the moment it lands
+const A = { fontFamily: "Anton", letterSpacing: "0.005em", lineHeight: 0.92, textTransform: "uppercase" };
+function cardPose(k, f, W, H, tall) {
+  const t = f - styleStart(k);
+  const fly = interpolate(t, [0, LAND], [0, 1], { ...clamp, easing: easeOut });
+  const from = k % 2 ? [W * 0.9, H * 0.55, 28] : [-W * 0.9, H * 0.6, -26];
+  const settle = t > LAND ? Math.exp(-(t - LAND) / 4) * Math.sin((t - LAND) / 1.6) * 2.5 : 0;
+  // once the next card lands, this one is pushed a little and darkened under it
+  const under = interpolate(f, [styleStart(k + 1) + LAND - 2, styleStart(k + 1) + LAND + 6], [0, 1], clamp);
+  return {
+    x: (1 - fly) * from[0] + under * (k % 2 ? 30 : -30) * (W / 1080),
+    y: (1 - fly) * from[1] + under * 40 * (W / 1080),
+    rot: ROT[k] + (1 - fly) * from[2] + settle + under * (k % 2 ? 2 : -2),
+    scale: lerp(1.12, 1, fly), under,
+  };
+}
+function WeDo({ f, W, H, u }) {
+  const size = 330 * u, line = size * 0.92, off = (f * 2.2 * u) % (line * 2);
+  return (
+    <div style={{ position: "absolute", left: W * 0.6, top: -line * 2 + off, display: "grid" }}>
+      {Array.from({ length: Math.ceil(H / line) + 4 }, (_, k) => (
+        <div key={k} style={{ ...A, fontSize: size, color: k % 4 < 2 ? C.ink : "transparent", WebkitTextStroke: k % 4 < 2 ? "none" : `${5 * u}px ${C.ink}`, whiteSpace: "nowrap" }}>{k % 2 ? "DO" : "WE"}</div>
+      ))}
+    </div>
+  );
+}
+function Card({ k, f, W, H, u, tall }) {
+  const pose = cardPose(k, f, W, H, tall), S = SCENES[k], t = f - styleStart(k);
+  const s = tall ? 0.7 : 0.62, cw = W * s, ch = H * s, cx = W * 0.44, cy = H * (tall ? 0.53 : 0.54);
+  const [sx, sy] = shake(t, S === Particles ? 20 : 0, S === Particles ? 26 : 10, 4);
+  const label = STYLES[k].toUpperCase();
+  return (
+    <div style={{ position: "absolute", left: cx - cw / 2 + pose.x, top: cy - ch / 2 + pose.y, width: cw, height: ch, transform: `rotate(${pose.rot}deg) scale(${pose.scale})`, boxShadow: `0 ${30 * u}px ${70 * u}px rgba(10,9,19,${0.28 + 0.1 * pose.under})` }}>
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: BG[k] }}>
+        <div style={{ position: "absolute", left: 0, top: 0, width: W, height: H, transform: `scale(${s}) translate(${sx}px, ${sy}px)`, transformOrigin: "0 0" }}><S t={t} W={W} H={H} u={u} /></div>
+        <div style={{ position: "absolute", inset: 0, background: `rgba(10,9,19,${0.25 * pose.under})` }} />
+      </div>
+      {/* the label: a white slip over the corner, bold condensed caps with a purple full stop */}
+      <div style={{ position: "absolute", left: -24 * u, bottom: -38 * u, padding: `${18 * u}px ${30 * u}px ${14 * u}px`, background: "#fff", opacity: 1 - pose.under, transform: `rotate(-2deg) translateX(${interpolate(t, [2, LAND + 2], [-60, 0], { ...clamp, easing: easeOut }) * u}px)`, boxShadow: `0 ${10 * u}px ${24 * u}px rgba(10,9,19,.18)`, maxWidth: cw * 0.95 }}>
+        <div style={{ ...A, fontSize: (label.length > 16 ? 64 : 80) * u, color: C.ink, whiteSpace: "nowrap" }}>{label}<span style={{ color: C.uv }}>.</span></div>
+      </div>
+    </div>
+  );
+}
+function StackHUD({ f, i, W, H, u, tall }) {
+  const t = f - styleStart(i), p = sp(t, 2, 12, 260);
+  return (
+    <>
+      <div style={{ position: "absolute", left: 50 * u, top: tall ? 150 * u : 30 * u, display: "flex", alignItems: "baseline", gap: 10 * u }}>
+        <span style={{ ...A, fontSize: 150 * u, color: C.uv, display: "inline-block", transform: `translateY(${(1 - Math.min(1, p)) * -60}px)` }}>{String(i + 1).padStart(2, "0")}</span>
+        <span style={{ ...M, fontSize: 26 * u, color: C.ink, opacity: 0.55 }}>/0{N}</span>
+      </div>
+    </>
+  );
+}
+
 export const Main = () => {
-  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }]]);
+  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }], ["Anton", "Anton.ttf"]]);
   const f = useCurrentFrame();
   const { width: W, height: H } = useVideoConfig();
   const u = W / 1080, tall = H > 1600;
   const i = f < styleStart(0) ? -1 : f >= END ? N : Math.floor((f - styleStart(0)) / STYLE_LEN);
-  // the spark cut: the next scene is revealed through a spark that grows from the centre in 9 frames
-  const cut = (at) => { const p = interpolate(f, [at, at + 9], [0, 1], { ...clamp, easing: easeIn }); const R = p * Math.hypot(W, H) * 1.25; return `path('${sparkPath(W / 2, H * 0.48, Math.max(1, R), 0.3)}')`; };
-  const layer = (k) => {
-    if (k === -1) return <Hook f={f} W={W} H={H} u={u} />;
-    if (k === N) return <EndCard f={f} W={W} H={H} u={u} tall={tall} />;
-    const S = SCENES[k], t = f - styleStart(k);
-    const [sx, sy] = shake(t, SCENES[k] === Particles ? 20 : 0, SCENES[k] === Particles ? 26 : 10, 4);
-    return (
-      <AbsoluteFill style={{ background: BG[k] }}>
-        <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}><S t={t} W={W} H={H} u={u} /></AbsoluteFill>
-        <HUD f={f} i={k} W={W} H={H} u={u} tall={tall} />
-      </AbsoluteFill>
-    );
-  };
-  const cur = i, prev = i - 1, at = i === N ? END : i >= 0 ? styleStart(i) : 0;
-  const inCut = i >= 0 && f < at + 9;
+  // the hook is pulled away upward as the first card flies in; the end card is the last, full-size print
+  const hookOut = interpolate(f, [styleStart(0) - 4, styleStart(0) + 6], [0, 1], { ...clamp, easing: easeIn });
+  const endIn = interpolate(f, [END, END + LAND], [0, 1], { ...clamp, easing: easeOut });
+  const endSettle = f > END + LAND ? Math.exp(-(f - END - LAND) / 4) * Math.sin((f - END - LAND) / 1.6) * 1.5 : 0;
   return (
-    <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
+    <AbsoluteFill style={{ background: "#E9E2FF", overflow: "hidden" }}>
       <Audio src={staticFile("sound.wav")} />
-      {inCut && layer(prev)}
-      <AbsoluteFill style={inCut ? { clipPath: cut(at) } : undefined}>{layer(cur)}</AbsoluteFill>
-      {inCut && (() => { const p = interpolate(f, [at, at + 9], [0, 1], clamp); return <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}><path d={sparkPath(W / 2, H * 0.48, Math.max(1, p * Math.hypot(W, H) * 1.25), 0.3)} fill="none" stroke={C.iris} strokeWidth={14 * u * (1 - p)} /></svg>; })()}
-      {i >= 0 && f >= at && f < at + 4 && <Flash f={f} start={at} peak={0.25} />}
-      <Vignette strength={0.16} />
-      <Grain f={f} opacity={0.035} />
+      {f >= styleStart(0) - 4 && f < END + LAND + 2 && (
+        <AbsoluteFill>
+          <WeDo f={f} W={W} H={H} u={u} />
+          {i >= 0 && [i - 1, i].filter((k) => k >= 0 && k < N).map((k) => <Card key={k} k={k} f={f} W={W} H={H} u={u} tall={tall} />)}
+          {i >= 0 && i < N && <StackHUD f={f} i={i} W={W} H={H} u={u} tall={tall} />}
+        </AbsoluteFill>
+      )}
+      {f < styleStart(0) + 6 && (
+        <AbsoluteFill style={{ transform: `translateY(${-hookOut * H * 1.1}px) rotate(${-hookOut * 8}deg)`, boxShadow: "0 40px 80px rgba(10,9,19,.4)" }}><Hook f={f} W={W} H={H} u={u} /></AbsoluteFill>
+      )}
+      {f >= END && (
+        <AbsoluteFill style={{ transform: `translate(${(1 - endIn) * W * 0.9}px, ${(1 - endIn) * H * 0.4}px) rotate(${(1 - endIn) * 24 + endSettle}deg) scale(${lerp(1.1, 1, endIn)})`, boxShadow: "0 40px 80px rgba(10,9,19,.35)" }}><EndCard f={f} W={W} H={H} u={u} tall={tall} /></AbsoluteFill>
+      )}
+      <Vignette strength={0.12} />
+      <Grain f={f} opacity={0.04} />
     </AbsoluteFill>
   );
 };
