@@ -8,7 +8,7 @@ usage:
 
 Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
            printer coin register rip glitch click pop typing cash cash_count blip sweep,
-           viral-reel hits: vine_boom scratch bass_drop stamp buzz sting,
+           viral-reel hits: vine_boom scratch bass_drop stamp buzz sting, drinks: clink pour,
            money: coin_drop coins cash_riffle; charts: graph_tick graph_rise counter,
            and a music bed for voice-overs: lofi (start/end, bpm, lp, drums/keys/bass).
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
@@ -291,6 +291,24 @@ def sting(c, q):
         out[i:i + mt] += timp * 0.9
     return c.reverb(out, 1.2, 0.2)
 
+def clink(c, q):
+    """Ice cube into a glass: a few bright inharmonic partials with fast decay, a tiny thud. "pitch" scales it."""
+    k = q.get("pitch", 1.0); n = int(0.6 * SR); t = np.arange(n) / SR
+    parts = [(2350, 1.0, 0.09), (3720, 0.6, 0.06), (5210, 0.45, 0.04), (1480, 0.5, 0.12), (6980, 0.25, 0.025)]
+    out = sum(a * np.sin(2 * np.pi * fr * k * t + i) * np.exp(-t / d) for i, (fr, a, d) in enumerate(parts))
+    thud = lp(c.noise(n), 600) * decay(n, 0.02) * 0.8
+    return c.reverb((out * 0.5 + thud) * np.minimum(1, t / 0.0008), 0.8, 0.15)
+
+def pour(c, q, fps):
+    """Liquid pouring: band-passed noise that fills up (the pitch of the cavity rises as it fills), with gurgles."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); p = np.linspace(0, 1, n)
+    base = c.noise(n)
+    lo = bp(base, 300, 1400) * (0.7 + 0.3 * np.sin(2 * np.pi * 7 * p * n / SR))
+    hi = bp(base, 1800, 5200) * 0.35
+    glug = np.sin(2 * np.pi * np.cumsum(220 + 380 * p + 60 * np.sin(2 * np.pi * 9 * np.arange(n) / SR)) / SR) * 0.08
+    env = np.minimum(1, p / 0.06) * np.minimum(1, (1 - p) / 0.12)
+    return (lo + hi + glug) * env
+
 NOTE = {n: i for i, n in enumerate(["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"])}
 def _hz(name):  # "A3" -> 220.0
     return 440 * 2 ** ((NOTE[name[:-1]] + 12 * (int(name[-1]) + 1) - 69) / 12)
@@ -454,10 +472,11 @@ def render(spec, out):
         elif typ == "lofi": sig = lofi(c, q, fps)
         elif typ == "graph_rise": sig = graph_rise(c, q, fps)
         elif typ == "counter": sig = counter(c, q, fps)
+        elif typ == "pour": sig = pour(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
                    "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
                    "cash": cash, "blip": blip, "vine_boom": vine_boom, "scratch": scratch, "bass_drop": bass_drop,
-                   "stamp": stamp, "buzz": buzz, "sting": sting, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
+                   "stamp": stamp, "buzz": buzz, "sting": sting, "clink": clink, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
                    "graph_tick": graph_tick}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)
