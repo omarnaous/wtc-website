@@ -3,174 +3,244 @@
  "duration": 20.0,
  "seed": 21,
  "fade_out": 1.0,
- "lowpass": 7000,
+ "lowpass": 9000,
  "cues": [
   {
-   "type": "lofi",
+   "type": "lofi_tape",
    "start": 0,
-   "end": 45,
-   "bpm": 120.0,
-   "lp": 1200,
-   "drums": 0.5,
+   "end": 450,
+   "bpm": 80.0,
+   "gain": 0.42,
+   "lp_auto": [
+    [
+     0,
+     800
+    ],
+    [
+     37,
+     900
+    ],
+    [
+     47,
+     6800
+    ]
+   ],
+   "stop": [
+    436,
+    450
+   ]
+  },
+  {
+   "type": "lofi_tape",
+   "start": 478,
+   "end": 600,
+   "bpm": 80.0,
+   "gain": 0.36,
+   "lp": 1900,
+   "drums": 0.7,
+   "lead": 0
+  },
+  {
+   "type": "thump",
+   "frame": 0,
    "gain": 0.3
   },
   {
-   "type": "lofi",
-   "start": 45,
-   "end": 600,
-   "bpm": 120.0,
-   "drums": 0.8,
-   "gain": 0.28,
-   "bar0": 1
+   "type": "impact",
+   "frame": 1,
+   "gain": 0.12
   },
   {
-   "type": "beat",
-   "start": 45,
-   "end": 450,
-   "bpm": 120.0,
-   "pattern": "four-on-floor",
-   "gain": 0.07,
-   "hats": 0.12
+   "type": "swoosh",
+   "start": 8,
+   "end": 24,
+   "peak": 0.4,
+   "f": 3600,
+   "gain": 0.16
   },
   {
-   "type": "swish",
-   "start": 42,
-   "end": 53,
-   "gain": 0.22,
+   "type": "glint",
+   "frame": 32,
+   "gain": 0.04
+  },
+  {
+   "type": "swoosh",
+   "start": 38,
+   "end": 54,
+   "peak": 0.45,
+   "f": 2400,
+   "gain": 0.2,
    "pan": -0.35
   },
   {
-   "type": "swish",
-   "start": 87,
-   "end": 98,
-   "gain": 0.22,
+   "type": "swoosh",
+   "start": 83,
+   "end": 99,
+   "peak": 0.45,
+   "f": 3100,
+   "gain": 0.2,
    "pan": 0.35
   },
   {
-   "type": "swish",
-   "start": 132,
-   "end": 143,
-   "gain": 0.22,
+   "type": "reverse_swell",
+   "start": 70,
+   "end": 90,
+   "gain": 0.13,
+   "notes": [
+    "E3",
+    "G3",
+    "B3",
+    "D4"
+   ]
+  },
+  {
+   "type": "thump",
+   "frame": 90,
+   "gain": 0.16
+  },
+  {
+   "type": "swoosh",
+   "start": 128,
+   "end": 144,
+   "peak": 0.45,
+   "f": 2000,
+   "gain": 0.2,
    "pan": -0.35
   },
   {
-   "type": "swish",
-   "start": 177,
-   "end": 188,
-   "gain": 0.22,
+   "type": "swoosh",
+   "start": 173,
+   "end": 189,
+   "peak": 0.45,
+   "f": 2800,
+   "gain": 0.2,
    "pan": 0.35
   },
   {
-   "type": "swish",
-   "start": 222,
-   "end": 233,
-   "gain": 0.22,
+   "type": "reverse_swell",
+   "start": 160,
+   "end": 180,
+   "gain": 0.13,
+   "notes": [
+    "E3",
+    "G3",
+    "B3",
+    "D4"
+   ]
+  },
+  {
+   "type": "thump",
+   "frame": 180,
+   "gain": 0.16
+  },
+  {
+   "type": "swoosh",
+   "start": 218,
+   "end": 234,
+   "peak": 0.45,
+   "f": 3400,
+   "gain": 0.2,
    "pan": -0.35
   },
   {
-   "type": "swish",
-   "start": 267,
-   "end": 278,
-   "gain": 0.22,
+   "type": "swoosh",
+   "start": 263,
+   "end": 279,
+   "peak": 0.45,
+   "f": 2200,
+   "gain": 0.2,
    "pan": 0.35
   },
   {
-   "type": "swish",
-   "start": 312,
-   "end": 323,
-   "gain": 0.22,
+   "type": "reverse_swell",
+   "start": 250,
+   "end": 270,
+   "gain": 0.13,
+   "notes": [
+    "E3",
+    "G3",
+    "B3",
+    "D4"
+   ]
+  },
+  {
+   "type": "thump",
+   "frame": 270,
+   "gain": 0.16
+  },
+  {
+   "type": "swoosh",
+   "start": 308,
+   "end": 324,
+   "peak": 0.45,
+   "f": 2600,
+   "gain": 0.2,
    "pan": -0.35
   },
   {
-   "type": "swish",
-   "start": 357,
-   "end": 368,
-   "gain": 0.22,
+   "type": "swoosh",
+   "start": 353,
+   "end": 369,
+   "peak": 0.45,
+   "f": 3000,
+   "gain": 0.2,
    "pan": 0.35
   },
   {
-   "type": "swish",
-   "start": 402,
-   "end": 413,
-   "gain": 0.22,
+   "type": "reverse_swell",
+   "start": 340,
+   "end": 360,
+   "gain": 0.13,
+   "notes": [
+    "E3",
+    "G3",
+    "B3",
+    "D4"
+   ]
+  },
+  {
+   "type": "thump",
+   "frame": 360,
+   "gain": 0.16
+  },
+  {
+   "type": "swoosh",
+   "start": 398,
+   "end": 414,
+   "peak": 0.45,
+   "f": 1900,
+   "gain": 0.2,
    "pan": -0.35
   },
   {
-   "type": "slap",
-   "frame": 53,
-   "gain": 0.42,
-   "pan": -0.15
+   "type": "swoosh",
+   "start": 443,
+   "end": 459,
+   "peak": 0.45,
+   "f": 2500,
+   "gain": 0.2,
+   "pan": 0.35
   },
   {
-   "type": "slap",
-   "frame": 98,
-   "gain": 0.42,
-   "pan": 0.15
-  },
-  {
-   "type": "slap",
-   "frame": 143,
-   "gain": 0.42,
-   "pan": -0.15
-  },
-  {
-   "type": "slap",
-   "frame": 188,
-   "gain": 0.42,
-   "pan": 0.15
-  },
-  {
-   "type": "slap",
-   "frame": 233,
-   "gain": 0.42,
-   "pan": -0.15
-  },
-  {
-   "type": "slap",
-   "frame": 278,
-   "gain": 0.42,
-   "pan": 0.15
-  },
-  {
-   "type": "slap",
-   "frame": 323,
-   "gain": 0.42,
-   "pan": -0.15
-  },
-  {
-   "type": "slap",
-   "frame": 368,
-   "gain": 0.42,
-   "pan": 0.15
-  },
-  {
-   "type": "slap",
-   "frame": 413,
-   "gain": 0.42,
-   "pan": -0.15
-  },
-  {
-   "type": "swish",
-   "start": 35,
-   "end": 49,
-   "gain": 0.16,
-   "pan": 0.2
-  },
-  {
-   "type": "swish",
-   "start": 447,
-   "end": 458,
-   "gain": 0.26
-  },
-  {
-   "type": "slap",
-   "frame": 458,
-   "gain": 0.55
+   "type": "thump",
+   "frame": 450,
+   "gain": 0.16
   },
   {
    "type": "impact",
    "frame": 335,
-   "gain": 0.2
+   "gain": 0.22
+  },
+  {
+   "type": "thump",
+   "frame": 335,
+   "freq": 45,
+   "gain": 0.25
+  },
+  {
+   "type": "impact",
+   "frame": 427,
+   "gain": 0.14
   },
   {
    "type": "glint",
@@ -180,7 +250,7 @@
   {
    "type": "stamp",
    "frame": 480,
-   "gain": 0.22
+   "gain": 0.2
   }
  ]
 }

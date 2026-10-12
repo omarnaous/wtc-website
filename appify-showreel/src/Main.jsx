@@ -1,7 +1,7 @@
 // "9 things we can animate for your brand." A numbered showreel: each style lives for 3 beats,
 // and the Appify spark is the cut between them (the next style is revealed through a growing spark).
 import { AbsoluteFill, Audio, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { BEAT, END, N, STYLES, STYLE_LEN, styleStart } from "./timing.js";
+import { END, N, STYLES, STYLE_LEN, styleStart } from "./timing.js";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Shockwave, Burst, RgbSplit, Grain, Vignette } from "./fx.jsx";
 import { MARK, WORDMARK, WSPARK, sparkPath } from "./brand.js";
 import { Dev } from "./Dev.jsx";
@@ -11,12 +11,13 @@ const D = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.045em", l
 const M = { fontFamily: "Mono", letterSpacing: "0.16em", textTransform: "uppercase" };
 const lerp = (a, b, t) => a + (b - a) * t;
 const sp = (f, at, damping = 10, stiffness = 240) => spring({ frame: f - at, fps: 30, config: { damping, stiffness } });
-const BG = [C.ink, C.uv, C.paper, C.ink3, C.sky, C.coral, C.ink, "#050505", C.ink];
-const LIGHT = [2, 4];   // styles drawn on a light background
+// brand palette only: ink / uv / paper / sky, with iris + sky as the accents (no off-brand lime or coral)
+const BG = [C.ink, C.uv, C.paper, C.ink3, C.sky, C.paper, C.ink, "#050505", C.ink];
+const LIGHT = [2, 4, 5];   // styles drawn on a light background
 
 // ── 1 · kinetic type ──────────────────────────────────────────────────────────────────────────────
 function Kinetic({ t, W, H, u }) {
-  const words = [["WE", C.white], ["MAKE", C.iris], ["THINGS", C.white], ["MOVE.", C.lime]];
+  const words = [["WE", C.white], ["MAKE", C.iris], ["THINGS", C.white], ["MOVE.", C.sky]];
   const i = Math.min(3, Math.floor(t / 11.25)), lt = t - i * 11.25;
   const [w, col] = words[i];
   const p = sp(lt, 0, 9, 320), blur = Math.max(0, 14 - lt * 4);
@@ -107,14 +108,14 @@ function Data({ t, W, H, u }) {
   return (
     <AbsoluteFill>
       <div style={{ position: "absolute", left: 0, right: 0, top: y0 - ch - (H > 1600 ? 300 : 250) * u, textAlign: "center" }}>
-        <div style={{ ...D, fontSize: 230 * u, color: C.lime, fontVariantNumeric: "tabular-nums" }}>+{n}%</div>
+        <div style={{ ...D, fontSize: 230 * u, color: C.sky, fontVariantNumeric: "tabular-nums" }}>+{n}%</div>
         <div style={{ ...M, fontSize: 22 * u, color: "rgba(255,255,255,.5)", marginTop: 14 * u }}>Sample data</div>
       </div>
       <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
         {[0, 1, 2, 3].map((k) => <line key={k} x1={x0} x2={x0 + cw} y1={y0 - k * ch / 3} y2={y0 - k * ch / 3} stroke="rgba(255,255,255,.08)" strokeWidth={2 * u} />)}
         {vals.map((v, i) => { const p = sp(t, i * 2.5, 11, 200); const h = v * ch * Math.min(1.05, p); return <rect key={i} x={x0 + (i + 0.5) * cw / vals.length - bw / 2} y={y0 - h} width={bw} height={h} rx={14 * u} fill={i === vals.length - 1 ? C.iris : "rgba(143,114,255,.35)"} />; })}
-        <path d={path} fill="none" stroke={C.lime} strokeWidth={8 * u} strokeLinecap="round" strokeLinejoin="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - line} />
-        {line > 0 && <circle cx={lerp(pts[head][0], pts[Math.min(vals.length - 1, head + 1)][0], (line * (vals.length - 1)) % 1)} cy={lerp(pts[head][1], pts[Math.min(vals.length - 1, head + 1)][1], (line * (vals.length - 1)) % 1)} r={16 * u} fill={C.lime} />}
+        <path d={path} fill="none" stroke={C.sky} strokeWidth={8 * u} strokeLinecap="round" strokeLinejoin="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - line} />
+        {line > 0 && <circle cx={lerp(pts[head][0], pts[Math.min(vals.length - 1, head + 1)][0], (line * (vals.length - 1)) % 1)} cy={lerp(pts[head][1], pts[Math.min(vals.length - 1, head + 1)][1], (line * (vals.length - 1)) % 1)} r={16 * u} fill={C.sky} />}
       </svg>
     </AbsoluteFill>
   );
@@ -149,7 +150,7 @@ function Particles({ t, W, H, u }) {
     <AbsoluteFill>
       <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
         {Array.from({ length: 220 }, (_, i) => {
-          const a0 = random(`a${i}`) * Math.PI * 2, r0 = (200 + random(`r${i}`) * 700) * u, col = [C.iris, C.sky, "#fff", C.lime][i % 4];
+          const a0 = random(`a${i}`) * Math.PI * 2, r0 = (200 + random(`r${i}`) * 700) * u, col = [C.iris, C.sky, "#fff", "#B9AAFF"][i % 4];
           if (t < boom) {
             const a = a0 + pre * 5, r = r0 * (1 - pre * 0.96);
             return <circle key={i} cx={cx + Math.cos(a) * r} cy={cy + Math.sin(a) * r} r={(2 + random(`s${i}`) * 4) * u} fill={col} opacity={0.4 + 0.6 * pre} />;
@@ -185,7 +186,7 @@ function Glitch({ t, W, H, u }) {
           );
         })}
       </div>
-      {Array.from({ length: 6 }, (_, i) => random(`blk${seed}${i}`) > 0.5 ? <div key={i} style={{ position: "absolute", left: random(`bx${seed}${i}`) * W, top: random(`by${seed}${i}`) * H, width: (60 + random(`bw${seed}${i}`) * 300) * u, height: (8 + random(`bh${seed}${i}`) * 40) * u, background: [C.lime, C.uv, "#fff", "#ff2bd6"][i % 4], mixBlendMode: "screen", opacity: 0.8 }} /> : null)}
+      {Array.from({ length: 6 }, (_, i) => random(`blk${seed}${i}`) > 0.5 ? <div key={i} style={{ position: "absolute", left: random(`bx${seed}${i}`) * W, top: random(`by${seed}${i}`) * H, width: (60 + random(`bw${seed}${i}`) * 300) * u, height: (8 + random(`bh${seed}${i}`) * 40) * u, background: [C.sky, C.uv, "#fff", C.iris][i % 4], mixBlendMode: "screen", opacity: 0.8 }} /> : null)}
       <AbsoluteFill style={{ background: `repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 ${2 * u}px, transparent ${2 * u}px ${6 * u}px)` }} />
     </AbsoluteFill>
   );
@@ -241,15 +242,38 @@ function Spark({ size, color = C.iris, style }) {
 const SCENES = [Kinetic, Liquid, UI, Data, Type3D, Mascot, Particles, Glitch, Logo];
 
 // ── hook + HUD + end card ─────────────────────────────────────────────────────────────────────────
-function Hook({ f, W, H, u }) {
-  const a = sp(f, 0, 9, 300), b = sp(f, 12, 9, 300), c = sp(f, 24, 9, 280), d = sp(f, 33, 10, 260);
-  const pop = (p, k = 2) => ({ transform: `scale(${interpolate(p, [0, 1], [k, 1])})`, opacity: Math.min(1, p * 3) });
+// The hook: the Appify spark slams in, "PICK A NUMBER." lands, then the spark bursts into the 9 numbers
+// (the same 9 the end card asks you to comment). Chip 1 lights up and the spark cut opens on style 01.
+function Hook({ f, W, H, u, tall }) {
+  const cx = W / 2, cy = H * (tall ? 0.53 : 0.57), R = (tall ? 300 : 225) * u;
+  const slam = sp(f, 0, 9, 320), l1 = sp(f, -4, 10, 300), l2 = sp(f, 2, 10, 300), sub = sp(f, 22, 12, 220);
+  const burst = interpolate(f, [13, 15], [0, 1], clamp);
+  const sparkS = interpolate(slam, [0, 1], [2.6, 1]) * interpolate(f, [13, 20], [1, 0.38], { ...clamp, easing: easeOut });
+  const pop = (p, k = 1.8) => ({ transform: `scale(${interpolate(p, [0, 1], [k, 1])})`, opacity: Math.min(1, p * 3) });
+  const glow = 0.5 + 0.2 * Math.sin(f / 4);
+  const chip = (tall ? 132 : 110) * u;
   return (
-    <AbsoluteFill style={{ background: C.ink, display: "grid", alignContent: "center", justifyItems: "center", gap: 6 * u }}>
-      <div style={{ ...D, fontSize: 250 * u, color: C.lime, ...pop(a, 2.4) }}>9</div>
-      <div style={{ ...D, fontSize: 120 * u, color: "#fff", ...pop(b) }}>THINGS WE</div>
-      <div style={{ ...D, fontSize: 120 * u, color: C.iris, ...pop(c) }}>CAN ANIMATE</div>
-      <div style={{ ...M, fontSize: 30 * u, color: "rgba(255,255,255,.75)", marginTop: 30 * u, opacity: Math.min(1, d * 2), transform: `translateY(${(1 - Math.min(1, d)) * 30}px)` }}>for your brand · pick one ↓</div>
+    <AbsoluteFill style={{ background: C.ink }}>
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% ${(cy / H) * 100}%, rgba(91,43,255,${glow}), transparent ${tall ? 45 : 55}%)` }} />
+      <div style={{ position: "absolute", left: 0, right: 0, top: tall ? H * 0.15 : H * 0.06, textAlign: "center" }}>
+        <div style={{ ...D, fontSize: (tall ? 168 : 140) * u, color: "#fff", ...pop(l1) }}>PICK A</div>
+        <div style={{ ...D, fontSize: (tall ? 168 : 140) * u, color: C.sky, ...pop(l2) }}>NUMBER.</div>
+      </div>
+      <Spark size={300 * u} color={C.iris} style={{ position: "absolute", left: cx - 150 * u, top: cy - 150 * u, transform: `scale(${sparkS}) rotate(${(1 - Math.min(1, slam)) * -90 + f * 1.5}deg)`, filter: `drop-shadow(0 0 ${30 * u}px rgba(143,114,255,.9))` }} />
+      <Shockwave f={f} cx={cx} cy={cy} start={14} max={R * 1.8} width={6 * u} rgb="143,114,255" dur={16} />
+      {burst > 0 && Array.from({ length: 9 }, (_, k) => {
+        const p = sp(f, 14 + k * 1.2, 10, 240), a = -Math.PI / 2 + (k / 9) * Math.PI * 2, d = R * Math.min(1.06, p);
+        const on = k === 0 && f >= 32, x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
+        const s = on ? 1 + 0.12 * Math.sin((f - 32) / 1.6) + 0.1 : 1;
+        return (
+          <div key={k} style={{ position: "absolute", left: x - chip / 2, top: y - chip / 2, width: chip, height: chip, borderRadius: 99, display: "grid", placeItems: "center",
+            background: on ? C.sky : C.ink2, border: `${4 * u}px solid ${on ? C.sky : C.iris}`, ...D, fontSize: chip * 0.52, color: on ? C.ink : "#fff",
+            transform: `scale(${Math.min(1, p * 1.4) * s}) rotate(${(1 - Math.min(1, p)) * -120}deg)`, boxShadow: on ? `0 0 ${50 * u}px rgba(116,198,255,.8)` : "none" }}>{k + 1}</div>
+        );
+      })}
+      <div style={{ position: "absolute", left: 0, right: 0, top: cy + R + chip / 2 + (tall ? 90 : 40) * u, textAlign: "center", ...M, fontSize: (tall ? 32 : 28) * u, color: "rgba(255,255,255,.8)", opacity: Math.min(1, sub * 2), transform: `translateY(${(1 - Math.min(1, sub)) * 30}px)` }}>
+        9 ways we can animate your brand ↓
+      </div>
     </AbsoluteFill>
   );
 }
@@ -261,12 +285,13 @@ function HUD({ f, i, W, H, u, tall }) {
   return (
     <>
       <div style={{ position: "absolute", left: 60 * u, top: y, display: "flex", alignItems: "baseline", gap: 12 * u }}>
-        <span style={{ ...D, fontSize: 150 * u, color: dark ? C.lime : C.uv, display: "inline-block", transform: `translateY(${(1 - Math.min(1, p)) * -80}px)` }}>{String(i + 1).padStart(2, "0")}</span>
+        <span style={{ ...D, fontSize: 150 * u, color: dark ? C.sky : C.uv, display: "inline-block", transform: `translateY(${(1 - Math.min(1, p)) * -80}px)` }}>{String(i + 1).padStart(2, "0")}</span>
         <span style={{ ...M, fontSize: 26 * u, color: ink, opacity: 0.55 }}>/0{N}</span>
       </div>
       <div style={{ position: "absolute", right: 60 * u, top: y + 50 * u, padding: `${12 * u}px ${22 * u}px`, borderRadius: 99, border: `${3 * u}px solid ${ink}`, ...M, fontSize: 24 * u, color: ink, transform: `translateX(${(1 - Math.min(1, p)) * 300}px)` }}>{STYLES[i]}</div>
+      {i !== N - 1 && <svg viewBox={WORDMARK.viewBox} width={150 * u} height={150 * u * 1167 / 3224} style={{ position: "absolute", right: 60 * u, bottom: (tall ? 380 : 70) * u + 30 * u, opacity: 0.85 }}><path d={WORDMARK.letters} fill={ink} /><path d={WORDMARK.spark} fill={dark ? C.iris : C.uv} /></svg>}
       <div style={{ position: "absolute", left: 60 * u, right: 60 * u, bottom: tall ? 380 * u : 70 * u, display: "flex", gap: 10 * u }}>
-        {STYLES.map((_, k) => <div key={k} style={{ flex: 1, height: 8 * u, borderRadius: 9, background: k < i ? ink : k === i ? (dark ? C.lime : C.uv) : dark ? "rgba(255,255,255,.18)" : "rgba(10,9,19,.15)", transform: k === i ? `scaleX(${interpolate(t, [0, STYLE_LEN], [0.1, 1], clamp)})` : "none", transformOrigin: "0 50%" }} />)}
+        {STYLES.map((_, k) => <div key={k} style={{ flex: 1, height: 8 * u, borderRadius: 9, background: k < i ? ink : k === i ? (dark ? C.sky : C.uv) : dark ? "rgba(255,255,255,.18)" : "rgba(10,9,19,.15)", transform: k === i ? `scaleX(${interpolate(t, [0, STYLE_LEN], [0.1, 1], clamp)})` : "none", transformOrigin: "0 50%" }} />)}
       </div>
     </>
   );
@@ -288,7 +313,7 @@ function EndCard({ f, W, H, u, tall }) {
         return (
           <div key={s} style={{ position: "absolute", left: gx + c * (tile + gap), top: gy + r * (tile + gap), width: tile, height: tile, borderRadius: 32 * u, background: BG[k], transform: `scale(${Math.min(1, p)}) rotate(${(1 - Math.min(1, p)) * 20}deg)`, boxShadow: "0 18px 40px rgba(10,9,19,.18)", overflow: "hidden" }}>
             <span style={{ position: "absolute", right: 14 * u, bottom: 8 * u, ...D, fontSize: tile * 0.42, color: light ? C.ink : "#fff", opacity: 0.22 }}>{GLYPHS[k]}</span>
-            <span style={{ position: "absolute", left: 16 * u, top: 10 * u, ...D, fontSize: tile * 0.34, color: light ? C.uv : C.lime }}>{k + 1}</span>
+            <span style={{ position: "absolute", left: 16 * u, top: 10 * u, ...D, fontSize: tile * 0.34, color: light ? C.uv : C.sky }}>{k + 1}</span>
             <span style={{ position: "absolute", left: 16 * u, right: 12 * u, bottom: 14 * u, fontFamily: "UI", fontWeight: 600, fontSize: tile * 0.1, lineHeight: 1.1, color: light ? C.ink : "rgba(255,255,255,.85)" }}>{s}</span>
           </div>
         );
@@ -297,7 +322,7 @@ function EndCard({ f, W, H, u, tall }) {
         <div style={{ padding: `${24 * u}px ${52 * u}px`, borderRadius: 30 * u, background: C.uv, boxShadow: "0 20px 50px rgba(91,43,255,.45)", textAlign: "center" }}>
           <div style={{ ...M, fontSize: 24 * u, color: "rgba(255,255,255,.75)", marginBottom: 6 * u }}>Want one for your brand?</div>
           <div style={{ ...D, fontSize: (tall ? 76 : 64) * u, color: "#fff" }}>Comment “MOTION”</div>
-          <div style={{ fontFamily: "UI", fontWeight: 600, fontSize: 30 * u, color: C.lime, marginTop: 8 * u }}>+ your favourite number</div>
+          <div style={{ fontFamily: "UI", fontWeight: 600, fontSize: 30 * u, color: C.sky, marginTop: 8 * u }}>+ your favourite number</div>
         </div>
       </div>
       <div style={{ position: "absolute", left: 30 * u, bottom: tall ? 80 * u : 6 * u, transform: `translateY(${(1 - Math.min(1, devP)) * 500}px)` }}>
@@ -305,98 +330,44 @@ function EndCard({ f, W, H, u, tall }) {
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: by + (tall ? 260 : 215) * u, display: "grid", justifyItems: "center", gap: 8 * u, opacity: interpolate(t, [36, 44], [0, 1], clamp) }}>
         <svg viewBox={WORDMARK.viewBox} width={(tall ? 260 : 170) * u} height={(tall ? 260 : 170) * u * 1167 / 3224}><path d={WORDMARK.letters} fill={C.ink} /><path d={WORDMARK.spark} fill={C.uv} /></svg>
-        <div style={{ ...M, fontSize: 22 * u, color: C.mute }}>@appifylb</div>
+        <div style={{ ...M, fontSize: 22 * u, color: C.mute }}>@appifylb · Ideas, appified.</div>
       </div>
     </AbsoluteFill>
   );
 }
 
-// ── the editorial card stack (after @basebeirut): every style is a print that slaps onto the pile ───
-const ROT = [-6, 5, -4, 6, -5, 4, -6, 5, -3];
-const LAND = 8;                                           // frames from a card's start to the moment it lands
-const A = { fontFamily: "Anton", letterSpacing: "0.005em", lineHeight: 0.92, textTransform: "uppercase" };
-function cardPose(k, f, W, H, tall) {
-  const t = f - styleStart(k);
-  const fly = interpolate(t, [0, LAND], [0, 1], { ...clamp, easing: easeOut });
-  const from = k % 2 ? [W * 0.9, H * 0.55, 28] : [-W * 0.9, H * 0.6, -26];
-  const settle = t > LAND ? Math.exp(-(t - LAND) / 4) * Math.sin((t - LAND) / 1.6) * 2.5 : 0;
-  // once the next card lands, this one is pushed a little and darkened under it
-  const under = interpolate(f, [styleStart(k + 1) + LAND - 2, styleStart(k + 1) + LAND + 6], [0, 1], clamp);
-  return {
-    x: (1 - fly) * from[0] + under * (k % 2 ? 30 : -30) * (W / 1080),
-    y: (1 - fly) * from[1] + under * 40 * (W / 1080),
-    rot: ROT[k] + (1 - fly) * from[2] + settle + under * (k % 2 ? 2 : -2),
-    scale: lerp(1.12, 1, fly), under,
-  };
-}
-function WeDo({ f, W, H, u }) {
-  const size = 330 * u, line = size * 0.92, off = (f * 2.2 * u) % (line * 2);
-  return (
-    <div style={{ position: "absolute", left: W * 0.6, top: -line * 2 + off, display: "grid" }}>
-      {Array.from({ length: Math.ceil(H / line) + 4 }, (_, k) => (
-        <div key={k} style={{ ...A, fontSize: size, color: k % 4 < 2 ? C.ink : "transparent", WebkitTextStroke: k % 4 < 2 ? "none" : `${5 * u}px ${C.ink}`, whiteSpace: "nowrap" }}>{k % 2 ? "DO" : "WE"}</div>
-      ))}
-    </div>
-  );
-}
-function Card({ k, f, W, H, u, tall }) {
-  const pose = cardPose(k, f, W, H, tall), S = SCENES[k], t = f - styleStart(k);
-  const s = tall ? 0.7 : 0.62, cw = W * s, ch = H * s, cx = W * 0.44, cy = H * (tall ? 0.53 : 0.54);
-  const [sx, sy] = shake(t, S === Particles ? 20 : 0, S === Particles ? 26 : 10, 4);
-  const label = STYLES[k].toUpperCase();
-  return (
-    <div style={{ position: "absolute", left: cx - cw / 2 + pose.x, top: cy - ch / 2 + pose.y, width: cw, height: ch, transform: `rotate(${pose.rot}deg) scale(${pose.scale})`, boxShadow: `0 ${30 * u}px ${70 * u}px rgba(10,9,19,${0.28 + 0.1 * pose.under})` }}>
-      <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: BG[k] }}>
-        <div style={{ position: "absolute", left: 0, top: 0, width: W, height: H, transform: `scale(${s}) translate(${sx}px, ${sy}px)`, transformOrigin: "0 0" }}><S t={t} W={W} H={H} u={u} /></div>
-        <div style={{ position: "absolute", inset: 0, background: `rgba(10,9,19,${0.25 * pose.under})` }} />
-      </div>
-      {/* the label: a white slip over the corner, bold condensed caps with a purple full stop */}
-      <div style={{ position: "absolute", left: -24 * u, bottom: -38 * u, padding: `${18 * u}px ${30 * u}px ${14 * u}px`, background: "#fff", opacity: 1 - pose.under, transform: `rotate(-2deg) translateX(${interpolate(t, [2, LAND + 2], [-60, 0], { ...clamp, easing: easeOut }) * u}px)`, boxShadow: `0 ${10 * u}px ${24 * u}px rgba(10,9,19,.18)`, maxWidth: cw * 0.95 }}>
-        <div style={{ ...A, fontSize: (label.length > 16 ? 64 : 80) * u, color: C.ink, whiteSpace: "nowrap" }}>{label}<span style={{ color: C.uv }}>.</span></div>
-      </div>
-    </div>
-  );
-}
-function StackHUD({ f, i, W, H, u, tall }) {
-  const t = f - styleStart(i), p = sp(t, 2, 12, 260);
-  return (
-    <>
-      <div style={{ position: "absolute", left: 50 * u, top: tall ? 150 * u : 30 * u, display: "flex", alignItems: "baseline", gap: 10 * u }}>
-        <span style={{ ...A, fontSize: 150 * u, color: C.uv, display: "inline-block", transform: `translateY(${(1 - Math.min(1, p)) * -60}px)` }}>{String(i + 1).padStart(2, "0")}</span>
-        <span style={{ ...M, fontSize: 26 * u, color: C.ink, opacity: 0.55 }}>/0{N}</span>
-      </div>
-    </>
-  );
-}
-
 export const Main = () => {
-  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }], ["Anton", "Anton.ttf"]]);
+  useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }]]);
   const f = useCurrentFrame();
   const { width: W, height: H } = useVideoConfig();
   const u = W / 1080, tall = H > 1600;
   const i = f < styleStart(0) ? -1 : f >= END ? N : Math.floor((f - styleStart(0)) / STYLE_LEN);
-  // the hook is pulled away upward as the first card flies in; the end card is the last, full-size print
-  const hookOut = interpolate(f, [styleStart(0) - 4, styleStart(0) + 6], [0, 1], { ...clamp, easing: easeIn });
-  const endIn = interpolate(f, [END, END + LAND], [0, 1], { ...clamp, easing: easeOut });
-  const endSettle = f > END + LAND ? Math.exp(-(f - END - LAND) / 4) * Math.sin((f - END - LAND) / 1.6) * 1.5 : 0;
+  // the spark cut: the next scene is revealed through a spark that grows from the centre in 9 frames
+  const cut = (at) => { const p = interpolate(f, [at, at + 9], [0, 1], { ...clamp, easing: easeIn }); const R = p * Math.hypot(W, H) * 1.25; return `path('${sparkPath(W / 2, H * 0.48, Math.max(1, R), 0.3)}')`; };
+  const layer = (k) => {
+    if (k === -1) return <Hook f={f} W={W} H={H} u={u} tall={tall} />;
+    if (k === N) return <EndCard f={f} W={W} H={H} u={u} tall={tall} />;
+    const S = SCENES[k], t = f - styleStart(k);
+    const [sx, sy] = shake(t, SCENES[k] === Particles ? 20 : 0, SCENES[k] === Particles ? 26 : 10, 4);
+    return (
+      <AbsoluteFill style={{ background: BG[k] }}>
+        <AbsoluteFill style={{ backgroundImage: `linear-gradient(${LIGHT.includes(k) ? "rgba(91,43,255,.11)" : "rgba(143,114,255,.08)"} 1.5px, transparent 1.5px), linear-gradient(90deg, ${LIGHT.includes(k) ? "rgba(91,43,255,.11)" : "rgba(143,114,255,.08)"} 1.5px, transparent 1.5px)`, backgroundSize: `${60 * u}px ${60 * u}px`, backgroundPosition: `${W / 2}px ${t * 0.8}px` }} />
+        <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px)` }}><S t={t} W={W} H={H} u={u} /></AbsoluteFill>
+        <HUD f={f} i={k} W={W} H={H} u={u} tall={tall} />
+      </AbsoluteFill>
+    );
+  };
+  const cur = i, prev = i - 1, at = i === N ? END : i >= 0 ? styleStart(i) : 0;
+  const inCut = i >= 0 && f < at + 9;
   return (
-    <AbsoluteFill style={{ background: "#E9E2FF", overflow: "hidden" }}>
+    <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
       <Audio src={staticFile("sound.wav")} />
-      {f >= styleStart(0) - 4 && f < END + LAND + 2 && (
-        <AbsoluteFill>
-          <WeDo f={f} W={W} H={H} u={u} />
-          {i >= 0 && [i - 1, i].filter((k) => k >= 0 && k < N).map((k) => <Card key={k} k={k} f={f} W={W} H={H} u={u} tall={tall} />)}
-          {i >= 0 && i < N && <StackHUD f={f} i={i} W={W} H={H} u={u} tall={tall} />}
-        </AbsoluteFill>
-      )}
-      {f < styleStart(0) + 6 && (
-        <AbsoluteFill style={{ transform: `translateY(${-hookOut * H * 1.1}px) rotate(${-hookOut * 8}deg)`, boxShadow: "0 40px 80px rgba(10,9,19,.4)" }}><Hook f={f} W={W} H={H} u={u} /></AbsoluteFill>
-      )}
-      {f >= END && (
-        <AbsoluteFill style={{ transform: `translate(${(1 - endIn) * W * 0.9}px, ${(1 - endIn) * H * 0.4}px) rotate(${(1 - endIn) * 24 + endSettle}deg) scale(${lerp(1.1, 1, endIn)})`, boxShadow: "0 40px 80px rgba(10,9,19,.35)" }}><EndCard f={f} W={W} H={H} u={u} tall={tall} /></AbsoluteFill>
-      )}
-      <Vignette strength={0.12} />
-      <Grain f={f} opacity={0.04} />
+      {inCut && layer(prev)}
+      <AbsoluteFill style={inCut ? { clipPath: cut(at) } : undefined}>{layer(cur)}</AbsoluteFill>
+      {inCut && (() => { const p = interpolate(f, [at, at + 9], [0, 1], clamp); return <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}><path d={sparkPath(W / 2, H * 0.48, Math.max(1, p * Math.hypot(W, H) * 1.25), 0.3)} fill="none" stroke={C.iris} strokeWidth={14 * u * (1 - p)} /></svg>; })()}
+      {i >= 0 && f >= at && f < at + 4 && <Flash f={f} start={at} peak={0.25} />}
+      <Vignette strength={0.16} />
+      <Grain f={f} opacity={0.035} />
     </AbsoluteFill>
   );
 };

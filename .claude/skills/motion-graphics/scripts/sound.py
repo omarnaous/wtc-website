@@ -11,6 +11,8 @@ Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
            viral-reel hits: vine_boom scratch bass_drop stamp buzz sting, drinks: clink pour, editorial cuts: swish slap,
            money: coin_drop coins cash_riffle; charts: graph_tick graph_rise counter,
            and a music bed for voice-overs: lofi (start/end, bpm, lp, drums/keys/bass).
+           tape lo-fi bed: lofi_tape (FM Rhodes, swung boom-bap, wow/flutter, side-chain, lp_auto, tape stop),
+           cinematic cuts: swoosh (doppler pass-by), reverse_swell (into a cut), thump (soft sub landing).
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
 Requires numpy and scipy (pip install numpy scipy).
 """
@@ -383,6 +385,164 @@ def lofi(c, q, fps):
     out[:fi] *= np.linspace(0, 1, fi); out[-fo:] *= np.linspace(1, 0, fo)
     return out
 
+# ── tape lo-fi + cinematic transitions ─────────────────────────────────────────────────────────────
+def _auto_filter(x, freqs, kind="lowpass", block=256, order=2):
+    """Time-varying Butterworth filter: freqs is one cutoff (or [lo, hi]) per block; filter state carries across blocks."""
+    y = np.zeros_like(x); zi = None
+    for b in range(0, len(x), block):
+        f = freqs[min(b // block, len(freqs) - 1)]
+        sos = butter(order, f, kind, fs=SR, output="sos")
+        if zi is None: zi = np.zeros((sos.shape[0], 2))
+        y[b:b + block], zi = sosfilt(sos, x[b:b + block], zi=zi)
+    return y
+
+def _curve(points, n, start_frame, fps, block=256):
+    """[[frame, value], ...] (absolute frames) -> one value per block, linearly interpolated."""
+    fr = start_frame + np.arange(0, n, block) / SR * fps
+    xs, ys = zip(*points)
+    return np.interp(fr, xs, ys)
+
+LOFI_TAPE_PROG = [  # ii-V-I-VI in C: Dm9, G13, Cmaj9, A7(b13). (bass root, voicing)
+    ("D2", ["F3", "A3", "C4", "E4"]),
+    ("G2", ["F3", "B3", "E4", "A4"]),
+    ("C2", ["E3", "G3", "B3", "D4"]),
+    ("A2", ["G3", "C#4", "F4", "B4"]),
+]
+LOFI_TAPE_LEAD = [  # (beat offset, beats, note) for every other bar: a lazy pentatonic answer phrase
+    [(1.5, 0.5, "A4"), (2.0, 0.5, "C5"), (2.58, 1.3, "D5")],
+    [(0.5, 0.5, "E5"), (1.08, 0.5, "D5"), (1.58, 2.0, "A4")],
+]
+
+def lofi_tape(c, q, fps):
+    """Tape lo-fi hip-hop bed: FM Rhodes chords (ii-V-I-VI), round sub bass, swung boom-bap drums with a
+    dusty bit-crush, a sparse pentatonic lead, vinyl crackle + hiss, wow/flutter, kick side-chain.
+    "bpm" (80), "bar0", gains "keys"/"bass"/"drums"/"lead" (0..1), "lp" (Hz) or "lp_auto" [[frame, Hz], ...]
+    (absolute frames, e.g. a muffled intro that opens on the first cut), "stop" [frame_a, frame_b]: a tape stop
+    (pitch and speed fall to zero, then silence), "duck" side-chain depth (0.3)."""
+    bpm = q.get("bpm", 80); beat = 60 / bpm; bar = 4 * beat
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); pad_n = n + 2 * SR
+    keys = np.zeros(pad_n); bass = np.zeros(pad_n); drums = np.zeros(pad_n); lead = np.zeros(pad_n)
+    def put(buf, sig, t, g):
+        i = int(t * SR)
+        if 0 <= i < pad_n: m = min(len(sig), pad_n - i); buf[i:i + m] += sig[:m] * g
+    def rhodes(f, dur, vel=1.0):
+        m = int((dur + 0.25) * SR); t = np.arange(m) / SR
+        idx = (1.6 * vel) * np.exp(-t / 0.3) + 0.22
+        car = np.sin(2 * np.pi * f * t + idx * np.sin(2 * np.pi * f * t))
+        tine = 0.06 * np.sin(2 * np.pi * f * 7.02 * t) * np.exp(-t / 0.04)
+        env = np.minimum(1, t / 0.004) * np.exp(-t / 1.8) * np.clip((dur + 0.25 - t) / 0.25, 0, 1)
+        return np.tanh(1.3 * (car + tine) * env * vel) * (1 + 0.08 * np.sin(2 * np.pi * 4.2 * t))
+    def sub(f, dur):
+        m = int(dur * SR); t = np.arange(m) / SR
+        s = np.sin(2 * np.pi * f * t) + 0.35 * np.sin(4 * np.pi * f * t) + 0.1 * np.sin(6 * np.pi * f * t)
+        return np.tanh(1.4 * s) * np.minimum(1, t / 0.008) * np.exp(-t / 0.9) * np.clip((dur - t) / 0.04, 0, 1)
+    def flute(f, dur):
+        m = int((dur + 0.15) * SR); t = np.arange(m) / SR
+        vib = 1 + 0.004 * np.sin(2 * np.pi * 5.2 * t) * np.minimum(1, t / 0.3)
+        s = osc(f * vib, m) + 0.12 * osc(2 * f * vib, m)
+        breath = bp(c.noise(m), f * 0.8, min(f * 3, 9000)) * 0.08
+        env = np.minimum(1, t / 0.06) * np.clip((dur + 0.15 - t) / 0.15, 0, 1)
+        return lp((s + breath) * env, 3200)
+    mk = int(0.5 * SR); tk = np.arange(mk) / SR
+    kick = np.tanh(2.2 * np.sin(2 * np.pi * np.cumsum(56 + 95 * np.exp(-tk / 0.035)) / SR) * np.exp(-tk / 0.22))
+    kick += lp(c.noise(mk), 3000) * np.exp(-tk / 0.003) * 0.4
+    kick = lp(kick, 2600)
+    ms = int(0.35 * SR); ts = np.arange(ms) / SR
+    snare = (bp(c.noise(ms), 1100, 6500) * np.exp(-ts / 0.09) * 0.8
+             + (np.sin(2 * np.pi * 185 * ts) + 0.5 * np.sin(2 * np.pi * 330 * ts)) * np.exp(-ts / 0.05) * 0.6)
+    snare = c.reverb(snare, 0.6, 0.2)
+    mh = int(0.09 * SR); th = np.arange(mh) / SR
+    hat_c = hp(c.noise(mh), 6500) * np.exp(-th / 0.018)
+    hat_o = hp(c.noise(int(0.3 * SR)), 6000) * np.exp(-np.arange(int(0.3 * SR)) / SR / 0.11)
+    gk, gb, gd, gl = q.get("keys", 1.0), q.get("bass", 1.0), q.get("drums", 1.0), q.get("lead", 1.0)
+    sw = 0.08 * beat * 4 / 3   # swung offbeat 8ths land ~60/40
+    s16 = beat / 4
+    kicks = []
+    k, t = q.get("bar0", 0), 0.0
+    while t < n / SR + bar:
+        root, chord = LOFI_TAPE_PROG[k % 4]
+        v = 0.9 + 0.1 * c.rng.random()
+        for j, nt in enumerate(chord):   # lazy strum on 1, a softer push on the swung "and" of 2
+            put(keys, rhodes(_hz(nt), 1.6 * beat, v), t + j * 0.016, 0.19 * gk)
+            put(keys, rhodes(_hz(nt), 2.2 * beat, 0.7 * v), t + 1.5 * beat + sw + j * 0.012, 0.11 * gk)
+        put(bass, sub(_hz(root), 1.4 * beat), t, 0.42 * gb)
+        put(bass, sub(_hz(root), 0.45 * beat), t + 2.5 * beat + sw, 0.32 * gb)
+        put(bass, sub(_hz(root) * 1.5, 0.9 * beat), t + 3 * beat, 0.3 * gb)
+        for step in range(16):
+            ts_ = t + step * s16 + (sw if step % 4 == 2 else 0) + (sw * 0.5 if step % 2 else 0)
+            if step in (0, 10) or (step == 7 and k % 2): put(drums, kick, ts_, (0.85 if step != 7 else 0.5) * gd); kicks.append(ts_)
+            if step in (4, 12): put(drums, snare, ts_ + 0.012, 0.5 * gd)
+            if step == 15 and k % 4 == 3: put(drums, snare, ts_, 0.16 * gd)          # ghost into the turnaround
+            if step % 2 == 0: put(drums, hat_o if (step == 14 and k % 2) else hat_c, ts_, (0.16 if step % 4 else 0.22) * gd * (0.85 + 0.3 * c.rng.random()))
+        if k % 2 == 1:
+            for off, d, nt in LOFI_TAPE_LEAD[(k // 2) % 2]: put(lead, flute(_hz(nt), d * beat), t + off * beat, 0.15 * gl)
+        t += bar; k += 1
+    # side-chain the music to the kick, dusty-crush the drums
+    tt = np.arange(pad_n) / SR; duck = np.ones(pad_n); dd = q.get("duck", 0.3)
+    for tk_ in kicks:
+        i = int(tk_ * SR)
+        if i < pad_n: m = min(int(0.4 * SR), pad_n - i); duck[i:i + m] = np.minimum(duck[i:i + m], 1 - dd * np.exp(-np.arange(m) / SR / 0.13))
+    drums = 0.7 * drums + 0.3 * np.round(drums * 64) / 64
+    lead = c.reverb(lead, 2.2, 0.35)
+    keys = c.reverb(keys, 1.6, 0.18)
+    mix = hp((keys + bass + lead) * duck + 0.55 * lp(drums, 8500), 35)
+    # wow & flutter + optional tape stop, as a time-warped read of the mix
+    wow = 0.0016 * (1 + np.sin(2 * np.pi * 0.55 * tt)) + 0.00025 * np.sin(2 * np.pi * 6.3 * tt)
+    pos = tt - wow
+    if "stop" in q:
+        a = (q["stop"][0] - q["start"]) / fps; b = (q["stop"][1] - q["start"]) / fps; L_ = b - a
+        x = np.clip(tt - a, 0, L_)
+        warped = a + x - x ** 2 / (2 * L_)            # speed falls linearly from 1 to 0
+        pos = np.where(tt < a, pos, warped)
+    out = np.interp(pos * SR, np.arange(pad_n), mix)[:n]
+    if "stop" in q:
+        bi = int((q["stop"][1] - q["start"]) / fps * SR)
+        if bi < n: out[bi:] = 0
+        ai = int((q["stop"][0] - q["start"]) / fps * SR)
+        if ai < bi <= n: out[ai:bi] *= np.linspace(1, 0.2, bi - ai)
+    crackle = np.zeros(n)
+    for i in c.rng.integers(0, n, int(n / SR * 14)): crackle[i] = c.rng.uniform(-1, 1) * (3 if c.rng.random() < 0.05 else 1)
+    out += hp(lp(crackle, 6000), 400) * 0.22 + lp(c.noise(n), 4500) * 0.005
+    if "lp_auto" in q: out = _auto_filter(out, _curve(q["lp_auto"], n, q["start"], fps))
+    else: out = lp(out, q.get("lp", 7000))
+    fi, fo = int(0.03 * SR), int(0.5 * SR)
+    out[:fi] *= np.linspace(0, 1, fi)
+    if "stop" not in q: out[-fo:] *= np.linspace(1, 0, fo)
+    return out
+
+def swoosh(c, q, fps):
+    """Cinematic pass-by (start/end): air through a resonant band that rises as it approaches and drops as it
+    passes (doppler), with a little low body at the pass. "peak" (0..1, default 0.6) is where it passes,
+    "f" the pass frequency (default 2600 Hz) - vary it per cut so a run of transitions doesn't repeat."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); p = np.linspace(0, 1, n)
+    pk = q.get("peak", 0.6); f = q.get("f", 2600)
+    prog = np.where(p < pk, (p / pk) ** 2, 1 - 0.65 * (np.maximum(0, p - pk) / (1 - pk)) ** 0.7)
+    blocks = prog[::256]
+    centre = 350 + (f - 350) * blocks
+    band = [[max(60, c_ * 0.55), min(SR / 2 - 200, c_ * 1.6)] for c_ in centre]
+    air = _auto_filter(c.noise(n), band, "bandpass")
+    env = np.where(p < pk, (p / pk) ** 2.2, np.exp(-(p - pk) / (1 - pk) * 3.2))
+    body = osc(90 * np.exp(-np.maximum(0, p - pk) * 3), n) * np.exp(-np.abs(p - pk) * 9) * 0.35
+    return c.reverb((air + body) * env, 0.9, 0.22)
+
+def reverse_swell(c, q, fps):
+    """A reversed cymbal + Rhodes-chord tail that swells INTO the cut (start/end; it ends hard on "end").
+    "notes": chord note names (default Cmaj9) so it can sit in the key of the bed."""
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); L_ = int(2.2 * SR); t = np.arange(L_) / SR
+    cym = bp(c.noise(L_), 3500, 14000) * np.exp(-t / 0.7) * 0.5
+    ch = sum(np.sin(2 * np.pi * _hz(nt) * t + 0.8 * np.sin(2 * np.pi * _hz(nt) * t) * np.exp(-t / 0.3)) for nt in q.get("notes", ["E3", "G3", "B3", "D4"]))
+    tail = c.reverb((cym + 0.18 * ch * np.exp(-t / 1.1)) * np.minimum(1, t / 0.003), 2.0, 0.6)
+    rev = tail[::-1][-n:] if n < L_ else np.concatenate([np.zeros(n - L_), tail[::-1]])
+    rev = rev * np.linspace(0, 1, len(rev)) ** 1.5
+    rev[-int(0.004 * SR):] *= np.linspace(1, 0, int(0.004 * SR))
+    return rev
+
+def thump(c, q):
+    """Soft sub landing for a cut: a round 55 Hz tap, no click. Sits under music without competing with the kick."""
+    n = int(0.45 * SR); t = np.arange(n) / SR
+    s = np.sin(2 * np.pi * np.cumsum(q.get("freq", 55) + 40 * np.exp(-t / 0.03)) / SR) * np.exp(-t / 0.16)
+    return lp(np.tanh(1.5 * s) * np.minimum(1, t / 0.004), 400)
+
 def _clink(c, f, n_s=0.09, a=1.0):
     """One coin hit: inharmonic metal partials with a very short decay (a clink, not a bell)."""
     n = int(n_s * SR); t = np.arange(n) / SR
@@ -490,11 +650,14 @@ def render(spec, out):
         elif typ == "counter": sig = counter(c, q, fps)
         elif typ == "pour": sig = pour(c, q, fps)
         elif typ == "swish": sig = swish(c, q, fps)
+        elif typ == "lofi_tape": sig = lofi_tape(c, q, fps)
+        elif typ == "swoosh": sig = swoosh(c, q, fps)
+        elif typ == "reverse_swell": sig = reverse_swell(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
                    "coin": coin, "register": register, "glitch": glitch, "click": click, "pop": pop,
                    "cash": cash, "blip": blip, "vine_boom": vine_boom, "scratch": scratch, "bass_drop": bass_drop,
                    "stamp": stamp, "buzz": buzz, "sting": sting, "clink": clink, "slap": slap, "coin_drop": coin_drop, "coins": coins, "cash_riffle": cash_riffle,
-                   "graph_tick": graph_tick}[typ](c, q)
+                   "graph_tick": graph_tick, "thump": thump}[typ](c, q)
         place(L, R, sig, at, g, pan)
     st = np.stack([L, R], 1)
     if loop:  # periodic by construction: whatever rings past the end continues from the start
