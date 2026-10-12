@@ -1,0 +1,510 @@
+{
+ "fps": 30,
+ "duration": 20,
+ "seed": 9,
+ "fade_out": 0.8,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 0,
+   "gain": 1.1,
+   "rate": 0.92,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 2,
+   "gain": 1.1,
+   "rate": 1.048,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 4,
+   "gain": 1.1,
+   "rate": 1.0,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 6,
+   "gain": 1.1,
+   "rate": 0.9520000000000001,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 8,
+   "gain": 1.1,
+   "rate": 1.08,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 10,
+   "gain": 1.1,
+   "rate": 1.032,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 12,
+   "gain": 1.1,
+   "rate": 0.984,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 14,
+   "gain": 1.1,
+   "rate": 0.936,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 16,
+   "gain": 1.1,
+   "rate": 1.064,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 18,
+   "gain": 1.1,
+   "rate": 1.016,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 20,
+   "gain": 1.1,
+   "rate": 0.9680000000000001,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 22,
+   "gain": 1.1,
+   "rate": 0.92,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 24,
+   "gain": 1.1,
+   "rate": 1.048,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 26,
+   "gain": 1.1,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 28,
+   "gain": 1.1,
+   "rate": 0.9520000000000001,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/send.ogg",
+   "frame": 44,
+   "gain": 1.0,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 72,
+   "gain": 1.0,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "riser",
+   "start": 96,
+   "end": 120,
+   "gain": 0.06
+  },
+  {
+   "type": "reverse_swell",
+   "start": 102,
+   "end": 120,
+   "gain": 0.14,
+   "notes": [
+    "A3",
+    "C4",
+    "E4",
+    "G4"
+   ]
+  },
+  {
+   "type": "impact",
+   "frame": 120,
+   "gain": 0.18
+  },
+  {
+   "type": "thump",
+   "frame": 120,
+   "gain": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 120,
+   "gain": 0.9,
+   "rate": 0.95,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 165,
+   "gain": 0.9,
+   "rate": 0.98,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 210,
+   "gain": 0.9,
+   "rate": 1.01,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 255,
+   "gain": 0.9,
+   "rate": 1.04,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 300,
+   "gain": 0.9,
+   "rate": 1.0699999999999998,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 345,
+   "gain": 0.9,
+   "rate": 1.0999999999999999,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 390,
+   "gain": 0.9,
+   "rate": 1.13,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 135,
+   "gain": 0.7,
+   "rate": 0.9,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 139,
+   "gain": 0.7,
+   "rate": 0.98,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 143,
+   "gain": 0.7,
+   "rate": 1.06,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 145,
+   "gain": 0.7,
+   "rate": 1.1400000000000001,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 147,
+   "gain": 0.7,
+   "rate": 1.22,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/snap.ogg",
+   "frame": 149,
+   "gain": 0.7,
+   "rate": 1.3,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 169,
+   "gain": 0.55,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 173,
+   "gain": 0.55,
+   "rate": 1.06,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 177,
+   "gain": 0.55,
+   "rate": 1.12,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 181,
+   "gain": 0.55,
+   "rate": 1.18,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/add-to-cart.ogg",
+   "frame": 193,
+   "gain": 1.1,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/open.ogg",
+   "frame": 212,
+   "gain": 0.7,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 237,
+   "gain": 0.9,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/purchase.ogg",
+   "frame": 240,
+   "gain": 1.1,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/notification.ogg",
+   "frame": 269,
+   "gain": 1.1,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/toggle-on.ogg",
+   "frame": 286,
+   "gain": 0.9,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/progress-step.ogg",
+   "frame": 308,
+   "gain": 0.7,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/progress-step.ogg",
+   "frame": 314,
+   "gain": 0.7,
+   "rate": 1.1,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/progress-step.ogg",
+   "frame": 320,
+   "gain": 0.7,
+   "rate": 1.2,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/progress-step.ogg",
+   "frame": 326,
+   "gain": 0.7,
+   "rate": 1.3,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/reward.ogg",
+   "frame": 349,
+   "gain": 0.8,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/level-up.ogg",
+   "frame": 394,
+   "gain": 1.0,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/success.ogg",
+   "frame": 402,
+   "gain": 0.8,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "impact",
+   "frame": 441,
+   "gain": 0.2
+  },
+  {
+   "type": "thump",
+   "frame": 441,
+   "gain": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/achievement.ogg",
+   "frame": 449,
+   "gain": 0.8,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 495,
+   "gain": 0.9,
+   "rate": 1.05,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 501,
+   "gain": 1.0,
+   "rate": 0.95,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 503,
+   "gain": 1.0,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 505,
+   "gain": 1.0,
+   "rate": 1.05,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 507,
+   "gain": 1.0,
+   "rate": 0.95,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 509,
+   "gain": 1.0,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 511,
+   "gain": 1.0,
+   "rate": 1.05,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 513,
+   "gain": 1.0,
+   "rate": 0.95,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/typing.ogg",
+   "frame": 515,
+   "gain": 1.0,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/success.ogg",
+   "frame": 527,
+   "gain": 0.9,
+   "rate": 1.0,
+   "pan": 0.0
+  }
+ ]
+}

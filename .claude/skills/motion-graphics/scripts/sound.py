@@ -13,6 +13,7 @@ Cue types: tick riser impact chime whoosh pad glint drone kick snare hat beat
            and a music bed for voice-overs: lofi (start/end, bpm, lp, drums/keys/bass).
            tape lo-fi bed: lofi_tape (FM Rhodes, swung boom-bap, wow/flutter, side-chain, lp_auto, tape stop),
            cinematic cuts: swoosh (doppler pass-by), reverse_swell (into a cut), thump (soft sub landing).
+           house (tech-house bed with sections: intro/gap/drop/break/outro), sample (a real audio file, e.g. CC0 uisfx).
 Every cue takes "frame" (or "start"/"end" in frames), optional "gain" (default 0.5) and "pan" (-1..1).
 Requires numpy and scipy (pip install numpy scipy).
 """
@@ -543,6 +544,101 @@ def thump(c, q):
     s = np.sin(2 * np.pi * np.cumsum(q.get("freq", 55) + 40 * np.exp(-t / 0.03)) / SR) * np.exp(-t / 0.16)
     return lp(np.tanh(1.5 * s) * np.minimum(1, t / 0.004), 400)
 
+# ── house bed + real samples ────────────────────────────────────────────────────────────────────────
+def _saw(f, n, harm=28, phase=0.0):
+    """Band-limited saw by additive synthesis (no aliasing)."""
+    t = np.arange(n) / SR; out = np.zeros(n); K = int(min(harm, (SR / 2 - 500) / max(f, 1)))
+    for k in range(1, K + 1): out += np.sin(2 * np.pi * k * f * t + phase * k) / k
+    return out * 0.6
+
+HOUSE_PROG = [("A2", ["A3", "C4", "E4", "G4"]), ("F2", ["A3", "C4", "F4", "E4"]), ("C2", ["G3", "C4", "E4", "G4"]), ("G2", ["G3", "B3", "D4", "E4"])]
+HOUSE_MIX = {   # layer gains per section
+    "intro": {"pad": 1.0, "hat": 0.45, "kick": 0, "clap": 0, "bass": 0, "stab": 0, "ohat": 0},
+    "gap":   {"pad": 0.25, "hat": 0, "kick": 0, "clap": 0, "bass": 0, "stab": 0, "ohat": 0},
+    "drop":  {"pad": 0.3, "hat": 1.0, "kick": 1.0, "clap": 1.0, "bass": 1.0, "stab": 1.0, "ohat": 1.0},
+    "break": {"pad": 1.0, "hat": 0.3, "kick": 0, "clap": 0, "bass": 0.55, "stab": 0.45, "ohat": 0},
+    "outro": {"pad": 0.6, "hat": 0.7, "kick": 0.85, "clap": 0.6, "bass": 0.8, "stab": 0.6, "ohat": 0.5},
+}
+def house(c, q, fps):
+    """Tech-house bed built from what that genre is actually made of: 909-style kick, clap, closed/open hats,
+    offbeat saw bass, sidechained supersaw stabs and a pad. "sections": [[frame, name], ...] (absolute frames; names in
+    HOUSE_MIX: intro, gap, drop, break, outro) switch layers in and out; "lp_auto" [[frame, Hz], ...]; "bpm" (120)."""
+    bpm = q.get("bpm", 120); beat = 60 / bpm; s16 = beat / 4; bar = 4 * beat
+    n = max(1, int((q["end"] - q["start"]) / fps * SR)); N = n + SR
+    L = {k: np.zeros(N) for k in ["pad", "hat", "kick", "clap", "bass", "stab", "ohat"]}
+    def put(k, sig, t, g):
+        i = int(t * SR)
+        if 0 <= i < N: m = min(len(sig), N - i); L[k][i:i + m] += sig[:m] * g
+    mk = int(0.42 * SR); tk = np.arange(mk) / SR
+    kick = np.tanh(2.5 * np.sin(2 * np.pi * np.cumsum(50 + 110 * np.exp(-tk / 0.028)) / SR) * np.exp(-tk / 0.2))
+    kick += bp(c.noise(mk), 1500, 6000) * np.exp(-tk / 0.004) * 0.35
+    mc = int(0.4 * SR); tc = np.arange(mc) / SR; clap = np.zeros(mc)
+    for d in (0, 0.011, 0.022): i = int(d * SR); clap[i:] += bp(c.noise(mc - i), 900, 3200) * np.exp(-np.arange(mc - i) / SR / (0.012 if d < 0.02 else 0.12))
+    clap = c.reverb(clap * 0.8, 0.9, 0.25)
+    mh = int(0.05 * SR); hat = hp(c.noise(mh), 8000) * np.exp(-np.arange(mh) / SR / 0.011)
+    mo = int(0.26 * SR); ohat = hp(c.noise(mo), 7000) * np.exp(-np.arange(mo) / SR / 0.08)
+    def stab(chord, dur=0.2):
+        m = int((dur + 0.15) * SR); t = np.arange(m) / SR
+        sig = sum(_saw(_hz(nt) * d, m, 24, ph) for nt in chord for d, ph in ((1, 0), (1.006, 1.3), (0.994, 2.1)))
+        sig = _auto_filter(sig, list(700 + 4200 * np.exp(-np.arange(0, m, 256) / SR / 0.07)))
+        return sig * np.minimum(1, t / 0.003) * np.exp(-t / 0.16)
+    def bassn(f, dur=0.22):
+        m = int(dur * SR); t = np.arange(m) / SR
+        sig = _auto_filter(_saw(f, m, 20) + 0.6 * np.sin(2 * np.pi * f * t), list(300 + 1400 * np.exp(-np.arange(0, m, 256) / SR / 0.05)))
+        return np.tanh(1.6 * sig) * np.minimum(1, t / 0.004) * np.clip((dur - t) / 0.03, 0, 1)
+    def padc(chord, dur):
+        m = int(dur * SR); t = np.arange(m) / SR
+        sig = sum(_saw(_hz(nt) * d, m, 12, ph) for nt in chord for d, ph in ((1, 0), (1.004, 0.7), (0.996, 1.9)))
+        return lp(sig, 1500) * np.minimum(1, t / 0.25) * np.clip((dur - t) / 0.2, 0, 1)
+    k, t = 0, 0.0
+    stabs = [stab(ch) for _, ch in HOUSE_PROG]; basses = [bassn(_hz(r)) for r, _ in HOUSE_PROG]
+    while t < n / SR + bar:
+        r, ch = HOUSE_PROG[k % 4]
+        put("pad", padc(ch, bar + 0.25), t, 0.07)
+        for st in range(16):
+            ts = t + st * s16 + (0.012 if st % 2 else 0)
+            if st % 4 == 0: put("kick", kick, ts, 0.45)
+            if st in (4, 12): put("clap", clap, ts, 0.75)
+            put("hat", hat, ts, (0.34 if st % 2 == 0 else 0.2) * (0.85 + 0.3 * c.rng.random()))
+            if st % 4 == 2: put("ohat", ohat, ts, 0.25); put("bass", basses[k % 4], ts, 0.34)
+            if st in (2, 6, 11, 14): put("stab", stabs[k % 4], ts, 0.2)
+        t += bar; k += 1
+    # section envelopes per layer (25 ms crossfades), then sidechain the tonal layers to the kick
+    secs = sorted(q.get("sections", [[q["start"], "drop"]]))
+    tt = q["start"] + np.arange(N) / SR * fps
+    idx = np.searchsorted([s_[0] for s_ in secs], tt, side="right") - 1
+    names = [secs[max(0, i)][1] for i in idx]
+    duck = np.ones(N); kd = L["kick"]
+    env = np.abs(kd); env = lp(env, 30); env /= env.max() + 1e-9
+    duck = 1 - 0.55 * np.clip(env * 1.6, 0, 1)
+    out = np.zeros(N); sm = int(0.025 * SR)
+    for name in L:
+        g = np.array([HOUSE_MIX[nm][name] for nm in names], float)
+        g = np.convolve(g, np.ones(sm) / sm, mode="same")
+        sig = L[name] * g
+        if name in ("pad", "bass", "stab"): sig = sig * duck
+        out += sig
+    out = hp(out, 30)[:n]
+    if "lp_auto" in q: out = _auto_filter(out, _curve(q["lp_auto"], n, q["start"], fps))
+    fo = int(0.4 * SR); out[-fo:] *= np.linspace(1, 0, fo)
+    return np.tanh(out * 1.2) / 1.2
+
+_SAMPLES = {}
+def sample(c, q):
+    """A real audio file (wav/mp3/ogg via ffmpeg), mono. "file" path, optional "rate" (pitch/speed, 1 = original),
+    "trim" seconds to keep, "lp" Hz."""
+    import subprocess
+    key = q["file"]
+    if key not in _SAMPLES:
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", key, "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"], capture_output=True, check=True).stdout
+        _SAMPLES[key] = np.frombuffer(raw, np.float32).astype(float)
+    x = _SAMPLES[key]
+    r = q.get("rate", 1.0)
+    if r != 1.0: x = np.interp(np.arange(0, len(x) - 1, r), np.arange(len(x)), x)
+    if "trim" in q: x = x[: int(q["trim"] * SR)]
+    if "lp" in q: x = lp(x, q["lp"])
+    return x
+
 def _clink(c, f, n_s=0.09, a=1.0):
     """One coin hit: inharmonic metal partials with a very short decay (a clink, not a bell)."""
     n = int(n_s * SR); t = np.arange(n) / SR
@@ -651,6 +747,8 @@ def render(spec, out):
         elif typ == "pour": sig = pour(c, q, fps)
         elif typ == "swish": sig = swish(c, q, fps)
         elif typ == "lofi_tape": sig = lofi_tape(c, q, fps)
+        elif typ == "house": sig = house(c, q, fps)
+        elif typ == "sample": sig = sample(c, q)
         elif typ == "swoosh": sig = swoosh(c, q, fps)
         elif typ == "reverse_swell": sig = reverse_swell(c, q, fps)
         else: sig = {"tick": tick, "impact": impact, "chime": chime, "glint": glint, "kick": kick, "snare": snare, "hat": hat,
