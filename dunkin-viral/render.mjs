@@ -29,7 +29,7 @@ for (const id of ids) {
   }
   await renderMedia({
     composition, serveUrl, codec: "h264", crf: 16, pixelFormat: "yuv420p",
-    audioCodec: "aac", audioBitrate: "320k", outputLocation: `out/${id}.mp4`, browserExecutable, chromiumOptions, concurrency: Number(process.env.CONC || 4),
+    audioCodec: "aac", audioBitrate: "320k", outputLocation: `out/${id}.mp4`, browserExecutable, chromiumOptions, concurrency: Number(process.env.CONC || 4), scale: Number(process.env.SCALE || 1),
     onProgress: ({ progress }) => process.stdout.write(`\r${id} ${(progress * 100).toFixed(0)}%   `),
   });
   console.log(`\n${id}: out/${id}.mp4`);
