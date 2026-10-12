@@ -13,7 +13,7 @@ const M = { fontFamily: "Mono", letterSpacing: "0.16em", textTransform: "upperca
 const lerp = (a, b, t) => a + (b - a) * t;
 const sp = (f, at, damping = 10, stiffness = 240) => spring({ frame: f - at, fps: 30, config: { damping, stiffness } });
 // brand palette only: ink / uv / paper / sky, with iris + sky as the accents (no off-brand lime or coral)
-const BG = [C.ink, C.uv, C.paper, C.ink3, C.sky, C.paper, C.ink, "#050505", C.ink];
+export const BG = [C.ink, C.uv, C.paper, C.ink3, C.sky, C.paper, C.ink, "#050505", C.ink];
 const LIGHT = [2, 4, 5];   // styles drawn on a light background
 
 // ── 1 · kinetic type ──────────────────────────────────────────────────────────────────────────────
@@ -240,7 +240,7 @@ function Mascot({ t, W, H, u }) {
 function Spark({ size, color = C.iris, style }) {
   return <svg width={size} height={size} viewBox="0 0 100 100" style={style}><path d={sparkPath(50, 50, 48, 0.22)} fill={color} /></svg>;
 }
-const SCENES = [Kinetic, Liquid, UI, Data, Type3D, Mascot, Particles, Glitch, Logo];
+export const SCENES = [Kinetic, Liquid, UI, Data, Type3D, Mascot, Particles, Glitch, Logo];
 
 // ── hook + HUD + end card ─────────────────────────────────────────────────────────────────────────
 // The brand intro (1 bar): the spark slams in, flies up and lands as the i-dot of the wordmark while the letters rise,
