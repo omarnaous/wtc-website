@@ -1,6 +1,6 @@
-// "POV: websites in 2026 / Claude could never do this." Silent (the user adds trending audio in-app). The user's screen recording of the Valmora site.
+// "POV: this website looks like it cost $10,000 / ChatGPT could never do this." Silent (the user adds trending audio in-app). The user's screen recording of the Valmora site.
 // The car sits under its cover through the hook, the cover comes off on the drop, every section gets one bar with a punch-in.
-// Then the window pulls back ("websites that look like they cost $10,000"), Dev screeches in driving a classic spider,
+// Then the window pulls back ("this is an Appify animated website"), Dev screeches in driving a classic spider,
 // and the punchline lands: "costs from $500", DM "ANIMATED WEBSITE".
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Easing } from "remotion";
 import { SRC_FRAMES, DROP, STATEMENT, END, MAP, SECTIONS, CHIPS, CUTS } from "./timing.js";
@@ -62,14 +62,15 @@ function Pov({ f, W, H }) {
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.05), rgba(0,0,0,.55))" }} />
       <Stage W={W} H={H}>
-        <div style={{ position: "absolute", left: 40, right: 40, top: 300, ...caption }}>
-          <div style={{ fontSize: 84, letterSpacing: "-0.02em", ...pop(sp(f, -6, 11, 300), 1.3) }}>POV: websites in 2026</div>
+        <div style={{ position: "absolute", left: 40, right: 40, top: 230, ...caption }}>
+          <div style={{ fontSize: 58, letterSpacing: "-0.02em", whiteSpace: "nowrap", ...pop(sp(f, -6, 11, 300), 1.3) }}>POV: this website looks like it cost</div>
+          <div style={{ ...D, fontSize: 150, color: C.gold, marginTop: 4, textShadow: "0 6px 40px rgba(0,0,0,.6)", ...pop(sp(f, -3, 8, 300), 1.8) }}>$10,000</div>
         </div>
         <div style={{ position: "absolute", left: 14, top: 590, transform: `translate(${sx}px, ${sy}px)` }}>
           <Browser i={i} w={1052} z={z} fy={fy} />
         </div>
         <div style={{ position: "absolute", left: 40, right: 40, top: 1350, ...caption }}>
-          {f >= 26 && <div style={{ ...D, fontSize: 92, lineHeight: 1.05, color: C.gold, textShadow: "0 4px 24px rgba(0,0,0,.6)", ...pop(sp(f, 26, 9, 300), 1.8) }}>Claude could never<br />do this.</div>}
+          {f >= 26 && <div style={{ ...D, fontSize: 92, lineHeight: 1.05, color: C.gold, textShadow: "0 4px 24px rgba(0,0,0,.6)", ...pop(sp(f, 26, 9, 300), 1.8) }}>ChatGPT could never<br />do this.</div>}
         </div>
         {chip && (
           <div key={chip[0]} style={{ position: "absolute", left: 0, right: 0, top: 1580, display: "flex", justifyContent: "center", opacity: interpolate(f - chip[0], [0, 4, 30, 34], [0, 1, 1, 0], clamp) }}>
@@ -92,7 +93,7 @@ const Hall = ({ t }) => (
   </>
 );
 
-// ── 2 · "looks like it cost $10,000": the window pulls back, Dev screeches in, "costs from $500" ────────
+// ── 2 · "this is an Appify animated website": the window pulls back, Dev screeches in, "costs from $500" ────────
 const ARRIVE = 34, STOP = 56;                  // relative to STATEMENT
 const CAR_W = 960, CAR_X = 60, CAR_Y = 1330;
 function Finale({ f, W, H }) {
@@ -115,8 +116,8 @@ function Finale({ f, W, H }) {
       <Stage W={W} H={H}>
         {/* line 1: the claim */}
         <div style={{ position: "absolute", left: 0, right: 0, top: 260, textAlign: "center", opacity: 1 - out, transform: `translateY(${-out * 60}px)` }}>
-          <div style={{ ...D, fontSize: 84, color: "#fff", ...pop(A) }}>Websites that look like</div>
-          <div style={{ ...D, fontSize: 104, color: C.gold, marginTop: 14, textShadow: "0 10px 50px rgba(232,211,163,.3)", ...pop(A2, 1.6) }}>they cost $10,000.</div>
+          <div style={{ ...D, fontSize: 96, color: "#fff", ...pop(A) }}>This is an <span style={{ color: C.gold }}>Appify</span></div>
+          <div style={{ ...D, fontSize: 112, color: "#fff", marginTop: 14, whiteSpace: "nowrap", ...pop(A2, 1.6) }}>animated website.</div>
         </div>
         {/* line 2: the price */}
         {e >= 0 && (

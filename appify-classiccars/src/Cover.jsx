@@ -39,15 +39,16 @@ export const Cover = () => {
           </div>
         </div>
         {/* hook */}
-        <div style={{ position: "absolute", left: 0, right: 0, top: 150, textAlign: "center" }}>
-          <div style={{ ...D, fontSize: 92, color: "#fff", whiteSpace: "nowrap" }}>POV: websites in 2026</div>
-          <div style={{ ...D, fontSize: 106, color: C.sky, marginTop: 14, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(116,198,255,.25)" }}>Claude could never.</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 130, textAlign: "center" }}>
+          <div style={{ ...D, fontSize: 72, color: "#fff", whiteSpace: "nowrap" }}>This website looks like it cost</div>
+          <div style={{ ...D, fontSize: 150, color: C.sky, marginTop: 6, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(116,198,255,.3)" }}>$10,000</div>
+          <div style={{ ...D, fontSize: 50, color: "rgba(255,255,255,.75)", marginTop: 10, whiteSpace: "nowrap" }}>ChatGPT could never.</div>
         </div>
         {/* the site, with motion trails behind it */}
         {[3, 2, 1].map((g) => (
-          <div key={g} style={{ position: "absolute", left: 120 - g * 38, top: 470 + g * 6, transform: "rotate(-4deg)", opacity: 0.16 / g, filter: `blur(${g * 2}px)` }}><Window ghost /></div>
+          <div key={g} style={{ position: "absolute", left: 120 - g * 38, top: 490 + g * 6, transform: "rotate(-4deg)", opacity: 0.16 / g, filter: `blur(${g * 2}px)` }}><Window ghost /></div>
         ))}
-        <div style={{ position: "absolute", left: 120, top: 470, transform: "rotate(-4deg)" }}><Window /></div>
+        <div style={{ position: "absolute", left: 120, top: 490, transform: "rotate(-4deg)" }}><Window /></div>
         {/* speed lines + scroll cursor */}
         {[0, 1, 2].map((i) => <i key={i} style={{ position: "absolute", left: 40 - i * 10, top: 640 + i * 70, width: 120 - i * 30, height: 8, borderRadius: 9, background: C.iris, opacity: 0.85 - i * 0.2, transform: "rotate(-4deg)" }} />)}
         {/* appify × VALMORA, stacked on the left */}

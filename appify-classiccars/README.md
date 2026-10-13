@@ -1,4 +1,4 @@
-# Valmora reel: "POV: websites in 2026 / Claude could never do this."
+# Valmora reel: "POV: this website looks like it cost $10,000 / ChatGPT could never do this."
 
 Edit of the Valmora site screen recording (`source/classiccars.mp4`) into a silent 21 s Reel + Feed cut with a Dev end card
 The cover comes off the car on the drop; on the pull-back ("websites that look like they cost $10,000") Dev screeches in
