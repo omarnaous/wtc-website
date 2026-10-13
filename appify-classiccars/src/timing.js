@@ -5,8 +5,8 @@ export const DURATION = 630;
 export const BEAT = 15;
 export const SRC_FRAMES = 726;
 export const DROP = 120;         // the cover comes off the car
-export const STATEMENT = 420;    // the window pulls back and the cover falls over it
-export const END = 510;          // the cover whips off the price: DM "ANIMATED WEBSITE"
+export const STATEMENT = 420;    // the window pulls back: "websites that look like they cost $10,000", Dev drives in
+export const END = 510;          // the punchline: "costs from $500", DM "ANIMATED WEBSITE"
 // [reel frame, source frame] keyframes: real time through the hook, then one bar per section (jump cuts between)
 export const MAP = [[0, 0], [DROP, 117], [179, 215], [180, 272], [239, 346], [240, 360], [299, 440], [300, 512], [359, 590], [360, 600], [STATEMENT, 712]];
 export const SECTIONS = [DROP, 180, 240, 300, 360];          // a punch-in + flash on each
@@ -17,4 +17,4 @@ export const CHIPS = [   // [frame, text]: what's on screen in that bar
   [306, "a gauge that reads out the specs"],
   [366, "even the invite form is on brand"],
 ];
-export const CUTS = [STATEMENT, END];
+export const CUTS = [STATEMENT];

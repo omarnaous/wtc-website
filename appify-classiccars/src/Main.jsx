@@ -1,11 +1,12 @@
 // "POV: websites in 2026 / Claude could never do this." Silent (the user adds trending audio in-app). The user's screen recording of the Valmora site.
-// One idea: the unveil. The car sits under its cover through the hook, the cover comes off on the drop, every section gets
-// one bar with a punch-in. Then the window pulls back, a cover falls over it, and on the end card the cover whips off the price.
+// The car sits under its cover through the hook, the cover comes off on the drop, every section gets one bar with a punch-in.
+// Then the window pulls back ("websites that look like they cost $10,000"), Dev screeches in driving a classic spider,
+// and the punchline lands: "costs from $500", DM "ANIMATED WEBSITE".
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Easing } from "remotion";
 import { SRC_FRAMES, DROP, STATEMENT, END, MAP, SECTIONS, CHIPS, CUTS } from "./timing.js";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Grain, Vignette } from "./fx.jsx";
 import { WORDMARK, sparkPath } from "./brand.js";
-import { Dev } from "./Dev.jsx";
+import { DevCar } from "./Car.jsx";
 
 const C = { ink: "#0A0913", bg: "#100E0C", gold: "#E8D3A3", cream: "#EDE6D8", wine: "#7A1426", uv: "#5B2BFF", iris: "#8F72FF" };
 const D = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1 };
@@ -82,29 +83,6 @@ function Pov({ f, W, H }) {
   );
 }
 
-// the car cover: a cream drape with folds and a rippling hem. lift 0..1 = whipped off up and to the right
-function Cloth({ w, h, t = 0, lift = 0, id = "c" }) {
-  const n = 7, amp = h * 0.035 * (1 + lift * 3);
-  let hem = "";
-  for (let k = n; k > 0; k--) {
-    const x0 = (k / n) * w * 0.9 + w * 0.05, x1 = ((k - 0.5) / n) * w * 0.9 + w * 0.05, x2 = ((k - 1) / n) * w * 0.9 + w * 0.05;
-    hem += ` Q ${x1} ${h + amp * Math.sin(t / 4 + k * 1.7)} ${x2} ${h - amp * 0.4 * Math.cos(t / 5 + k)}`;
-  }
-  const top = -h * 0.08 - lift * h * 0.3;
-  const d = `M ${w * 0.05} ${h} Q ${-w * 0.03} ${h * 0.5} ${w * 0.1} ${h * 0.14} Q ${w * 0.5} ${top} ${w * 0.9} ${h * 0.14} Q ${w * 1.03} ${h * 0.5} ${w * 0.95} ${h}` + hem + " Z";
-  // irregular soft folds, slightly diagonal, so it reads as fabric and not a radiator
-  const folds = [[0, "#D8CCB4"], [0.08, "#F3ECDD"], [0.19, "#D2C4A8"], [0.24, "#EEE6D5"], [0.38, "#F5EFE2"], [0.47, "#CFC0A3"], [0.55, "#ECE3D1"], [0.69, "#F4EDDF"], [0.78, "#D4C6AA"], [0.86, "#EFE7D7"], [1, "#CBBB9D"]];
-  return (
-    <svg width={w} height={h * 1.1} viewBox={`0 ${-h * 0.1} ${w} ${h * 1.2}`} style={{ overflow: "visible", filter: `drop-shadow(0 30px 40px rgba(0,0,0,.55)) blur(${lift * 5}px)` }}>
-      <defs>
-        <linearGradient id={id + "f"} x1="0" x2="1" gradientTransform={`rotate(${8 + lift * 20} .5 .5)`}>{folds.map(([o, c], k) => <stop key={k} offset={o} stopColor={c} />)}</linearGradient>
-        <linearGradient id={id + "s"} x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#fff" stopOpacity=".35" /><stop offset=".5" stopColor="#fff" stopOpacity="0" /><stop offset="1" stopColor="#5A4A35" stopOpacity=".45" /></linearGradient>
-      </defs>
-      <path d={d} fill={`url(#${id}f)`} />
-      <path d={d} fill={`url(#${id}s)`} />
-    </svg>
-  );
-}
 // a showroom: dark hall, one cool skylight cone, warm floor glow
 const Hall = ({ t }) => (
   <>
@@ -114,73 +92,85 @@ const Hall = ({ t }) => (
   </>
 );
 
-// ── 2 · pull back: this is an Appify animated website. A cover falls over it ──────────────────────────
-function Statement({ f, W, H }) {
-  const t = f - STATEMENT, back = interpolate(t, [0, 18], [0, 1], { ...clamp, easing: Easing.bezier(0.65, 0, 0.35, 1) });
+// ── 2 · "looks like it cost $10,000": the window pulls back, Dev screeches in, "costs from $500" ────────
+const ARRIVE = 34, STOP = 56;                  // relative to STATEMENT
+const CAR_W = 960, CAR_X = 60, CAR_Y = 1330;
+function Finale({ f, W, H }) {
+  const t = f - STATEMENT, e = f - END;
+  const back = interpolate(t, [0, 18], [0, 1], { ...clamp, easing: Easing.bezier(0.65, 0, 0.35, 1) });
+  const out = interpolate(e, [0, 7], [0, 1], { ...clamp, easing: easeIn });
   const i = interpolate(t, [0, 90], [600, 712], clamp);
-  const drop = interpolate(t, [50, 64], [0, 1], { ...clamp, easing: easeIn });
-  const settle = t >= 64 ? Math.exp(-(t - 64) / 5) * Math.sin((t - 64) / 2) : 0;
-  const bw = interpolate(back, [0, 1], [1052, 800]);
+  // the drive-in: fast, then a hard brake with the nose dipping and rocking back
+  const drive = interpolate(t, [ARRIVE, STOP], [0, 1], { ...clamp, easing: Easing.bezier(0.2, 0.7, 0.3, 1) });
+  const x = interpolate(drive, [0, 1], [-1150, CAR_X]);
+  const st = t - STOP, rock = st >= 0 ? 2.6 * Math.exp(-st / 6) * Math.cos(st / 2.2) : 0;
+  const rot = (x + 1150) / 0.78 * 0.9;           // wheel turns with the distance travelled
+  const idle = st > 12 ? Math.sin(t * 2.4) * 1.2 : 0;
+  const moving = t >= ARRIVE && t < STOP;
+  const beep = [130, 146].find((b) => e >= b && e < b + 12);
+  const A = sp(t, 12, 10, 300), A2 = sp(t, 20, 9, 300);
   return (
     <AbsoluteFill style={{ background: C.bg }}>
       <Hall t={t} />
       <Stage W={W} H={H}>
-        <div style={{ position: "absolute", left: 0, right: 0, top: 300, textAlign: "center" }}>
-          <div style={{ ...D, fontSize: 96, color: "#fff", ...pop(sp(t, 12, 10, 300)) }}>This is an <span style={{ color: C.gold }}>Appify</span></div>
-          <div style={{ ...D, fontSize: 132, color: "#fff", marginTop: 14, ...pop(sp(t, 20, 9, 300), 1.6) }}>animated website.</div>
+        {/* line 1: the claim */}
+        <div style={{ position: "absolute", left: 0, right: 0, top: 260, textAlign: "center", opacity: 1 - out, transform: `translateY(${-out * 60}px)` }}>
+          <div style={{ ...D, fontSize: 84, color: "#fff", ...pop(A) }}>Websites that look like</div>
+          <div style={{ ...D, fontSize: 104, color: C.gold, marginTop: 14, textShadow: "0 10px 50px rgba(232,211,163,.3)", ...pop(A2, 1.6) }}>they cost $10,000.</div>
         </div>
-        <div style={{ position: "absolute", left: interpolate(back, [0, 1], [14, 140]), top: interpolate(back, [0, 1], [590, 760]) }}>
-          <Browser i={i} w={bw} style={{ transform: `rotate(${back * -2}deg)` }} />
-        </div>
-        {t >= 48 && (
-          <div style={{ position: "absolute", left: 100, top: interpolate(drop, [0, 1], [-700, 700]) + settle * 14, transform: `rotate(-2deg) scaleY(${1 - settle * 0.03})`, transformOrigin: "50% 100%" }}>
-            <Cloth w={880} h={560} t={t} id="st" />
+        {/* line 2: the price */}
+        {e >= 0 && (
+          <div style={{ position: "absolute", left: 0, right: 0, top: 200, textAlign: "center" }}>
+            <div style={{ ...D, fontSize: 76, color: "#fff", ...pop(sp(e, 4, 10, 300)) }}>Looks like <span style={{ color: "rgba(255,255,255,.55)" }}>$10,000.</span></div>
+            <div style={{ ...D, fontSize: 170, color: C.gold, marginTop: 4, textShadow: "0 10px 60px rgba(232,211,163,.4)", ...pop(sp(e, 11, 8, 300), 1.8) }}><span style={{ fontSize: 64, color: "#fff", verticalAlign: "0.9em", marginRight: 16 }}>costs from</span>$500</div>
           </div>
         )}
-        {t >= 64 && t < 72 && <AbsoluteFill style={{ background: "radial-gradient(ellipse 40% 6% at 50% 68%, rgba(255,255,255,.18), transparent)" }} />}
-      </Stage>
-    </AbsoluteFill>
-  );
-}
-
-// ── 3 · end card: the cover whips off the price ───────────────────────────────────────────────────────
-function EndCard({ f, W, H }) {
-  const t = f - END, devP = sp(t, 2, 13, 200), cta = sp(t, 32, 9, 260), pulse = 1 + 0.025 * Math.sin(Math.max(0, t - 42) / 4);
-  const dw = 400, dx = 60, dy = 1920 - 330 - dw * 830 / 420 + 40;
-  const lift = interpolate(t, [14, 28], [0, 1], { ...clamp, easing: easeIn });
-  const price = sp(t, 16, 9, 280);
-  return (
-    <AbsoluteFill style={{ background: C.bg }}>
-      <Hall t={t} />
-      <Stage W={W} H={H}>
-        <div style={{ position: "absolute", left: 0, right: 0, top: 200, textAlign: "center" }}>
-          <div style={{ ...D, fontSize: 68, color: "#fff", ...pop(sp(t, 4, 10, 300)) }}>Animated websites</div>
-          <div style={{ ...D, fontSize: 170, color: C.gold, marginTop: 6, textShadow: `0 10px ${40 + 30 * price}px rgba(232,211,163,.35)`, transform: `scale(${interpolate(price, [0, 1], [0.92, 1])})` }}><span style={{ fontSize: 64, color: "#fff", verticalAlign: "0.9em", marginRight: 16 }}>from</span>$500</div>
-        </div>
-        {lift < 1 && (
-          <div style={{ position: "absolute", left: 170, top: 230 - lift * 900, transform: `translateX(${lift * 620}px) rotate(${lift * 38}deg) skewX(${lift * -14}deg)`, transformOrigin: "0% 100%", opacity: 1 - lift * 0.3 }}>
-            <Cloth w={740} h={300} t={t} lift={lift} id="ec" />
+        {/* the site, pulled back */}
+        {out < 1 && (
+          <div style={{ position: "absolute", left: interpolate(back, [0, 1], [14, 160]), top: interpolate(back, [0, 1], [590, 600]) - out * 400, opacity: 1 - out, transform: `scale(${1 - out * 0.4})` }}>
+            <Browser i={i} w={interpolate(back, [0, 1], [1052, 760])} style={{ transform: `rotate(${back * -2}deg)` }} />
           </div>
         )}
-        <div style={{ position: "absolute", left: 0, right: 0, top: 560, display: "grid", justifyItems: "center", transform: `scale(${interpolate(cta, [0, 1], [1.5, 1]) * pulse})`, opacity: Math.min(1, cta * 2) }}>
-          <div style={{ padding: "22px 50px", borderRadius: 30, background: C.cream, textAlign: "center", boxShadow: "0 20px 60px rgba(232,211,163,.25)" }}>
-            <div style={{ ...M, fontSize: 26, color: C.wine, letterSpacing: "0.2em" }}>DM</div>
-            <div style={{ ...D, fontSize: 74, color: C.ink, marginTop: 6 }}>“ANIMATED WEBSITE”</div>
-            <div style={{ ...UI, fontSize: 30, color: C.wine, marginTop: 10 }}>for a website like this</div>
-          </div>
-        </div>
-        <div style={{ position: "absolute", right: 70, top: 1120, display: "grid", justifyItems: "end", gap: 14, ...rise(sp(t, 42, 12, 220)) }}>
-          <svg viewBox={WORDMARK.viewBox} width={330} height={330 * 1167 / 3224}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.gold} /></svg>
-          <div style={{ ...M, fontSize: 24, color: "rgba(255,255,255,.75)" }}>@appifylb</div>
-          <div style={{ ...UI, fontWeight: 400, fontSize: 26, color: "rgba(255,255,255,.6)", marginTop: 10, textAlign: "right", lineHeight: 1.35 }}>Valmora · designed & built by Appify<br />a concept marque, imagery illustrative</div>
-        </div>
-        <div style={{ position: "absolute", left: dx, top: dy, transform: `translateY(${(1 - Math.min(1, devP)) * 700}px)` }}>
-          <Dev width={dw} point={1} brow={16} lid={0.06} smile={1} look={4} happy={t > 24 ? 1 : 0} tilt={Math.sin(t / 8) * 2} />
-        </div>
-        {t >= 16 && t < 40 && [0, 1, 2, 3, 4].map((k) => {
-          const g = interpolate(t, [16 + k * 2, 26 + k * 2, 36 + k], [0, 1, 0], clamp);
-          return <Spark key={k} size={30 + (k % 3) * 18} style={{ position: "absolute", left: [230, 820, 330, 900, 560][k], top: [300, 280, 470, 430, 250][k], opacity: g, transform: `scale(${g}) rotate(${t * 4}deg)` }} />;
+        {e >= 0 && (() => {
+          const cta = sp(e, 28, 9, 260), pulse = 1 + 0.025 * Math.sin(Math.max(0, e - 40) / 4);
+          return (
+            <>
+              <div style={{ position: "absolute", left: 0, right: 0, top: 560, display: "grid", justifyItems: "center", transform: `scale(${interpolate(cta, [0, 1], [1.5, 1]) * pulse})`, opacity: Math.min(1, cta * 2) }}>
+                <div style={{ padding: "22px 50px", borderRadius: 30, background: C.cream, textAlign: "center", boxShadow: "0 20px 60px rgba(232,211,163,.25)" }}>
+                  <div style={{ ...M, fontSize: 26, color: C.wine, letterSpacing: "0.2em" }}>DM</div>
+                  <div style={{ ...D, fontSize: 74, color: C.ink, marginTop: 6 }}>“ANIMATED WEBSITE”</div>
+                  <div style={{ ...UI, fontSize: 30, color: C.wine, marginTop: 10 }}>for a website like this</div>
+                </div>
+              </div>
+              <div style={{ position: "absolute", left: 0, right: 0, top: 850, display: "grid", justifyItems: "center", gap: 12, ...rise(sp(e, 40, 12, 220)) }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
+                  <svg viewBox={WORDMARK.viewBox} width={250} height={250 * 1167 / 3224}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.gold} /></svg>
+                  <div style={{ ...M, fontSize: 26, color: "rgba(255,255,255,.75)" }}>@appifylb</div>
+                </div>
+                <div style={{ ...UI, fontWeight: 400, fontSize: 24, color: "rgba(255,255,255,.55)" }}>Valmora · a concept marque, designed & built by Appify</div>
+              </div>
+            </>
+          );
+        })()}
+        {/* speed lines + tyre smoke */}
+        {moving && [0, 1, 2, 3].map((k) => <i key={k} style={{ position: "absolute", left: x - 200 + k * 30, top: CAR_Y + 60 + k * 62, width: 220 - k * 30, height: 9, borderRadius: 9, background: C.gold, opacity: 0.7 * (1 - drive) + 0.2 }} />)}
+        {t >= STOP - 8 && t < STOP + 30 && [0, 1, 2, 3, 4, 5].map((k) => {
+          const a = t - (STOP - 8) - k * 2, g = interpolate(a, [0, 26], [0, 1], clamp);
+          if (a < 0) return null;
+          return <i key={k} style={{ position: "absolute", left: CAR_X + 120 - g * (90 + k * 30), top: CAR_Y + 250 - g * (40 + k * 12), width: 80 + g * 120, height: 80 + g * 120, borderRadius: 999, background: "rgba(230,224,214,.9)", opacity: 0.55 * (1 - g), filter: "blur(10px)" }} />;
         })}
+        {/* exhaust puffs while it idles */}
+        {st > 10 && [0, 1, 2].map((k) => {
+          const a = ((t + k * 9) % 27) / 27;
+          return <i key={k} style={{ position: "absolute", left: CAR_X + 30 - a * 120, top: CAR_Y + 270 - a * 50, width: 30 + a * 60, height: 30 + a * 60, borderRadius: 99, background: "rgba(220,214,204,.8)", opacity: 0.4 * (1 - a), filter: "blur(6px)" }} />;
+        })}
+        <div style={{ position: "absolute", left: x, top: CAR_Y }}>
+          <DevCar width={CAR_W} rot={rot} pitch={rock} bounce={idle} wave={1} waveAng={Math.sin(t / 3) * 22} thumbs={1} tilt={Math.sin(t / 7) * 3}
+            face={{ brow: 16, lid: 0.04, smile: 1, look: moving ? 8 : 0, happy: st > 14 ? 1 : 0, shock: moving ? 0.5 : 0 }} />
+        </div>
+        {beep && (
+          <div style={{ position: "absolute", left: CAR_X + 700, top: CAR_Y - 150, transform: `rotate(-10deg) scale(${interpolate(e - beep, [0, 3, 12], [0.6, 1.1, 1], clamp)})`, ...D, fontSize: 64, color: "#fff", textShadow: `0 0 0 ${C.wine}, 4px 4px 0 ${C.wine}` }}>BEEP BEEP!</div>
+        )}
       </Stage>
     </AbsoluteFill>
   );
@@ -190,7 +180,7 @@ export const Main = () => {
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }], ["UI", "Geist-400.ttf", { weight: "400" }]]);
   const f = useCurrentFrame();
   const { width: W, height: H } = useVideoConfig();
-  const scenes = [Pov, Statement, EndCard];
+  const scenes = [Pov, Finale];
   const i = CUTS.filter((c) => f >= c).length;
   const at = i ? CUTS[i - 1] : 0, inCut = i > 0 && f < at + 9;
   const p = interpolate(f, [at, at + 9], [0, 1], { ...clamp, easing: easeIn });
