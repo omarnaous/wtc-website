@@ -1,4 +1,4 @@
-// "POV: this website looks like it cost $10,000 / ChatGPT could never do this." Silent (the user adds trending audio in-app). The user's screen recording of the Valmora site.
+// "Guess how much this website cost. $10,000? / ChatGPT could never do this." -> payoff "Not $10,000. From $500." Silent (the user adds trending audio in-app). The user's screen recording of the Valmora site.
 // The car sits under its cover through the hook, the cover comes off on the drop, every section gets one bar with a punch-in.
 // Then the window pulls back ("this is an Appify animated website"), Dev screeches in driving a classic spider,
 // and the punchline lands: "costs from $500", DM "ANIMATED WEBSITE".
@@ -63,8 +63,8 @@ function Pov({ f, W, H }) {
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.05), rgba(0,0,0,.55))" }} />
       <Stage W={W} H={H}>
         <div style={{ position: "absolute", left: 40, right: 40, top: 230, ...caption }}>
-          <div style={{ fontSize: 58, letterSpacing: "-0.02em", whiteSpace: "nowrap", ...pop(sp(f, -6, 11, 300), 1.3) }}>POV: this website looks like it cost</div>
-          <div style={{ ...D, fontSize: 150, color: C.gold, marginTop: 4, textShadow: "0 6px 40px rgba(0,0,0,.6)", ...pop(sp(f, -3, 8, 300), 1.8) }}>$10,000</div>
+          <div style={{ fontSize: 58, letterSpacing: "-0.02em", whiteSpace: "nowrap", ...pop(sp(f, -6, 11, 300), 1.3) }}>Guess how much this website cost</div>
+          <div style={{ ...D, fontSize: 150, color: C.gold, marginTop: 4, textShadow: "0 6px 40px rgba(0,0,0,.6)", ...pop(sp(f, -3, 8, 300), 1.8) }}>$10,000?</div>
         </div>
         <div style={{ position: "absolute", left: 14, top: 590, transform: `translate(${sx}px, ${sy}px)` }}>
           <Browser i={i} w={1052} z={z} fy={fy} />
@@ -122,8 +122,8 @@ function Finale({ f, W, H }) {
         {/* line 2: the price */}
         {e >= 0 && (
           <div style={{ position: "absolute", left: 0, right: 0, top: 200, textAlign: "center" }}>
-            <div style={{ ...D, fontSize: 76, color: "#fff", ...pop(sp(e, 4, 10, 300)) }}>Looks like <span style={{ color: "rgba(255,255,255,.55)" }}>$10,000.</span></div>
-            <div style={{ ...D, fontSize: 170, color: C.gold, marginTop: 4, textShadow: "0 10px 60px rgba(232,211,163,.4)", ...pop(sp(e, 11, 8, 300), 1.8) }}><span style={{ fontSize: 64, color: "#fff", verticalAlign: "0.9em", marginRight: 16 }}>costs from</span>$500</div>
+            <div style={{ ...D, fontSize: 76, color: "#fff", ...pop(sp(e, 4, 10, 300)) }}>Not <span style={{ position: "relative", color: "rgba(255,255,255,.55)" }}>$10,000.<i style={{ position: "absolute", left: -6, top: "52%", height: 9, borderRadius: 9, background: "#F0384F", width: `${interpolate(e, [10, 16], [0, 108], clamp)}%`, transform: "rotate(-6deg)" }} /></span></div>
+            <div style={{ ...D, fontSize: 170, color: C.gold, marginTop: 4, textShadow: "0 10px 60px rgba(232,211,163,.4)", ...pop(sp(e, 11, 8, 300), 1.8) }}><span style={{ fontSize: 64, color: "#fff", verticalAlign: "0.9em", marginRight: 16 }}>from</span>$500</div>
           </div>
         )}
         {/* the site, pulled back */}

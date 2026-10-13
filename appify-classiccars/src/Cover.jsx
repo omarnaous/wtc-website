@@ -40,8 +40,8 @@ export const Cover = () => {
         </div>
         {/* hook */}
         <div style={{ position: "absolute", left: 0, right: 0, top: 130, textAlign: "center" }}>
-          <div style={{ ...D, fontSize: 72, color: "#fff", whiteSpace: "nowrap" }}>This website looks like it cost</div>
-          <div style={{ ...D, fontSize: 150, color: C.sky, marginTop: 6, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(116,198,255,.3)" }}>$10,000</div>
+          <div style={{ ...D, fontSize: 60, color: "#fff", whiteSpace: "nowrap" }}>Guess how much this website cost</div>
+          <div style={{ ...D, fontSize: 150, color: C.sky, marginTop: 6, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(116,198,255,.3)" }}>$10,000?</div>
           <div style={{ ...D, fontSize: 50, color: "rgba(255,255,255,.75)", marginTop: 10, whiteSpace: "nowrap" }}>ChatGPT could never.</div>
         </div>
         {/* the site, with motion trails behind it */}
