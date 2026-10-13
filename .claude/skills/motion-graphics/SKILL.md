@@ -59,6 +59,8 @@ python3 <skill-dir>/scripts/sound.py sound/cues.json public/sound.wav
 
 Cue types: `tick`, `riser`, `impact`, `chime`, `whoosh`, `pad`, `kick`, `snare`, `hat`, `glint`, `drone`, `beat` (a whole drum pattern at a BPM), and foley for the subject on screen: `printer`, `coin`, `register`, `rip`, `glitch`, `click`, `pop`, `typing`. Give each scene sounds that belong to what is on screen. Each cue takes a `frame` (or `start`/`end`), `gain` and `pan`. Read `references/sound.md` for mixing levels and the beat-grid helper (kinetic type "on the beat" means word changes land on the grid frames printed by `sound.py --grid`).
 
+Music beds: `house` (120 BPM tech-house with intro/gap/drop/break/outro sections, the best default for promos), `lofi_tape` (80 BPM tape lo-fi, tape stop), `lofi`. Transitions: `swoosh`, `reverse_swell`, `thump`. Real audio: `sample` (wav/mp3/ogg), with CC0 UI sounds bundled in `assets/sfx/` (typing, send, receive, add-to-cart, purchase, notification, success…). Tonal effects must be in tune with the bed: move them only by whole semitones into the bar's chord (see `references/sound.md`, "Tuning"). Set `"peak_db": -3` for a comfortable level, and always render an effects-only ("NoMusic") mix too so the user can add trending audio in-app.
+
 Mount it with `<Audio src={staticFile("sound.wav")} />` in every composition. If the user supplies music, use theirs and cut the beat sheet to its beats instead.
 
 ### 6. Review stills before rendering video

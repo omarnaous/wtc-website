@@ -79,3 +79,35 @@ Impact around 0.9-1.0, riser 0.5-0.6, beat 0.4-0.6, chime 0.2, whoosh 0.1, pad 0
 For seamless loops set `"loop": true` at the top level. `sound.py` then snaps pad and drone frequencies to whole cycles per loop, filters noise circularly, and wraps anything that rings past the end back onto the start, so the audio is periodic by construction. Use `drone`/`pad` spanning the whole duration plus hits placed on the beat grid.
 
 For social reels with a voice-over: business explainer reels typically sit on lo-fi hip-hop or a funky groove (85-110 BPM, no lead melody) so the voice stays clear; use `lofi` for that, and a handful of hits only where something happens on screen (vine_boom, scratch, bass_drop, stamp, whoosh). Leave the music to the platform's trending-audio library at low volume; it is licensed there and boosts reach.
+
+## Music beds: pick a genre synthesis can do honestly
+
+Synthesis sounds fake when it imitates acoustic instruments, so choose a bed whose real instruments are synths anyway:
+- `house`: 120 BPM tech-house (909-style kick, clap, closed/open hats, offbeat saw bass, sidechained supersaw stabs, pad).
+  `"sections": [[frame, "intro"|"gap"|"drop"|"break"|"outro"], ...]` switches layers in and out (absolute frames);
+  `"lp_auto": [[frame, Hz], ...]` automates a low-pass (muffled intro that opens on the drop). One chord per bar:
+  Am, F, C, G (A minor). Best default for promos and "watch it build" ads.
+- `lofi_tape`: 80 BPM tape lo-fi (FM Rhodes ii-V-I-VI, swung boom-bap, wow/flutter, vinyl, sidechain), `lp_auto`,
+  `"stop": [a, b]` for a tape stop. Calmer; at 80 BPM a 45-frame cut is exactly 2 beats.
+- `lofi`: the older, simpler lo-fi bed.
+Whatever the bed, also deliver a "NoMusic" mix (effects only) so the user can add trending audio in-app.
+
+## Transitions and real samples
+
+- `swoosh` (start/end, "peak" 0..1, "f" pass frequency): a doppler pass-by. Vary "f" per cut so ten cuts don't repeat.
+- `reverse_swell` (start/end, "notes"): reversed cymbal + chord tail swelling INTO a cut; use chord tones of the next bar.
+- `thump` (frame, "freq"): soft sub landing under a cut or hit.
+- `sample` (frame, "file", "gain", "rate", "trim", "lp"): any real audio file (wav/mp3/ogg via ffmpeg). The skill ships
+  CC0 UI sounds in `assets/sfx/` (see its README for which notes each one plays).
+
+## Tuning (the "broken piano" problem)
+
+A tonal effect that is off the music's pitch grid sounds broken even when it is quiet. Before using any tonal sample
+under music, measure its pitch (FFT peaks in cents vs A440); reject packs that are consistently off (uisfx "glass" is
+~+45 cents), and shift kept ones only by whole semitones (`rate = 2 ** (n/12)`) into the chord of the bar they land on.
+Never randomise the rate of a tonal sound (fine for noise-like clicks and typing).
+
+## Master level
+
+The spec takes `"peak_db"` (default -1). -3 gives about -15/-16 LUFS for a busy promo, close to what Instagram plays at;
+users often find -1 dBFS mixes too loud. Keep UI effects about 3 dB under the bed.
