@@ -1,7 +1,7 @@
-// "POV: this is not a movie. It's a website." The user's screen recording of the Oddball site, cut to the beat:
+// "POV: websites in 2026 / Claude could never do this." Silent (the user adds trending audio in-app). The user's screen recording of the Oddball site, cut to the beat:
 // the shot clock runs down through the hook, the platypus dunks on the drop, every section gets one bar with a
 // punch-in. Then the window pulls back, the ball flies out of the site and lands spinning on Dev's finger.
-import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Easing } from "remotion";
+import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Easing } from "remotion";
 import { SRC_FRAMES, DROP, STATEMENT, END, MAP, SECTIONS, CHIPS, CUTS } from "./timing.js";
 import { useFonts, clamp, easeOut, easeIn, shake, Flash, Grain, Vignette } from "./fx.jsx";
 import { WORDMARK, sparkPath } from "./brand.js";
@@ -74,16 +74,16 @@ function Pov({ f, W, H }) {
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.05), rgba(0,0,0,.55))" }} />
       <Stage W={W} H={H}>
         <div style={{ position: "absolute", left: 40, right: 40, top: 300, ...caption }}>
-          <div style={{ fontSize: 80, letterSpacing: "-0.02em", ...pop(sp(f, -6, 11, 300), 1.3) }}>POV: this is not a movie</div>
+          <div style={{ fontSize: 84, letterSpacing: "-0.02em", ...pop(sp(f, -6, 11, 300), 1.3) }}>POV: websites in 2026</div>
         </div>
         <div style={{ position: "absolute", left: 14, top: 590, transform: `translate(${sx}px, ${sy}px)` }}>
           <Browser i={i} w={1052} z={z} fy={fy} />
         </div>
         <div style={{ position: "absolute", left: 40, right: 40, top: 1350, ...caption }}>
-          {f >= 48 && <div style={{ ...D, fontSize: 96, color: C.lime, textShadow: "0 4px 24px rgba(0,0,0,.6)", ...pop(sp(f, 48, 9, 300), 1.8) }}>it's a website.</div>}
+          {f >= 26 && <div style={{ ...D, fontSize: 92, lineHeight: 1.05, color: C.lime, textShadow: "0 4px 24px rgba(0,0,0,.6)", ...pop(sp(f, 26, 9, 300), 1.8) }}>Claude could never<br />do this.</div>}
         </div>
         {chip && (
-          <div key={chip[0]} style={{ position: "absolute", left: 0, right: 0, top: 1500, display: "flex", justifyContent: "center", opacity: interpolate(f - chip[0], [0, 4, 30, 34], [0, 1, 1, 0], clamp) }}>
+          <div key={chip[0]} style={{ position: "absolute", left: 0, right: 0, top: 1580, display: "flex", justifyContent: "center", opacity: interpolate(f - chip[0], [0, 4, 30, 34], [0, 1, 1, 0], clamp) }}>
             <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 28px 16px 20px", borderRadius: 99, background: "rgba(10,9,19,.6)", border: "2px solid rgba(212,245,60,.45)", ...UI, fontSize: 38, color: "#fff", transform: `translateY(${(1 - Math.min(1, sp(f, chip[0], 12, 260))) * 30}px)` }}>
               <Spark size={34} />{chip[1]}
             </div>
@@ -135,15 +135,15 @@ function EndCard({ f, W, H }) {
       <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(212,245,60,.06) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(212,245,60,.06) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px" }} />
       <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 40%, rgba(212,245,60,${0.2 + 0.05 * Math.sin(t / 6)}), transparent 60%)` }} />
       <Stage W={W} H={H}>
-        <div style={{ position: "absolute", left: 0, right: 0, top: 260, textAlign: "center" }}>
-          <div style={{ ...D, fontSize: 120, color: "#fff", ...pop(sp(t, 6, 10, 300)) }}>Your turn.</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 220, textAlign: "center" }}>
+          <div style={{ ...D, fontSize: 68, color: "#fff", ...pop(sp(t, 4, 10, 300)) }}>Animated websites</div>
+          <div style={{ ...D, fontSize: 170, color: C.lime, marginTop: 6, textShadow: "0 10px 50px rgba(212,245,60,.35)", ...pop(sp(t, 10, 8, 300), 1.8) }}><span style={{ fontSize: 64, color: "#fff", verticalAlign: "0.9em", marginRight: 16 }}>from</span>$500</div>
         </div>
-        <div style={{ position: "absolute", left: 0, right: 0, top: 470, display: "grid", justifyItems: "center", transform: `scale(${interpolate(cta, [0, 1], [1.5, 1]) * pulse})`, opacity: Math.min(1, cta * 2) }}>
-          <div style={{ padding: "28px 54px", borderRadius: 34, background: C.lime, textAlign: "center", boxShadow: "0 20px 60px rgba(212,245,60,.35)" }}>
-            <div style={{ ...M, fontSize: 30, color: C.court, letterSpacing: "0.2em" }}>DM</div>
-            <div style={{ ...D, fontSize: 88, color: C.ink, marginTop: 8 }}>“ANIMATED</div>
-            <div style={{ ...D, fontSize: 88, color: C.ink }}>WEBSITE”</div>
-            <div style={{ ...UI, fontSize: 32, color: C.court, marginTop: 12 }}>for a website like this</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 540, display: "grid", justifyItems: "center", transform: `scale(${interpolate(cta, [0, 1], [1.5, 1]) * pulse})`, opacity: Math.min(1, cta * 2) }}>
+          <div style={{ padding: "22px 50px", borderRadius: 30, background: C.lime, textAlign: "center", boxShadow: "0 20px 60px rgba(212,245,60,.35)" }}>
+            <div style={{ ...M, fontSize: 26, color: C.court, letterSpacing: "0.2em" }}>DM</div>
+            <div style={{ ...D, fontSize: 74, color: C.ink, marginTop: 6 }}>“ANIMATED WEBSITE”</div>
+            <div style={{ ...UI, fontSize: 30, color: C.court, marginTop: 10 }}>for a website like this</div>
           </div>
         </div>
         <div style={{ position: "absolute", right: 70, top: 1120, display: "grid", justifyItems: "end", gap: 14, ...rise(sp(t, 40, 12, 220)) }}>
@@ -174,7 +174,6 @@ export const Main = () => {
   const layer = (k) => { const S = scenes[k]; return <S f={f} W={W} H={H} />; };
   return (
     <AbsoluteFill style={{ background: "#000", overflow: "hidden" }}>
-      <Audio src={staticFile("sound.wav")} />
       {inCut && layer(i - 1)}
       <AbsoluteFill style={inCut ? { clipPath: `path('${sparkPath(W / 2, H * 0.48, R, 0.3)}')` } : undefined}>{layer(i)}</AbsoluteFill>
       {inCut && <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}><path d={sparkPath(W / 2, H * 0.48, R, 0.3)} fill="none" stroke={C.lime} strokeWidth={14 * (1 - p)} /></svg>}
