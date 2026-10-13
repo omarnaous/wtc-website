@@ -1,0 +1,246 @@
+{
+ "fps": 30,
+ "duration": 20.0,
+ "seed": 17,
+ "fade_out": 0.8,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "house",
+   "start": 0,
+   "end": 600,
+   "bpm": 120,
+   "gain": 0.5,
+   "sections": [
+    [
+     0,
+     "intro"
+    ],
+    [
+     76,
+     "gap"
+    ],
+    [
+     90,
+     "drop"
+    ],
+    [
+     390,
+     "break"
+    ],
+    [
+     480,
+     "outro"
+    ]
+   ],
+   "lp_auto": [
+    [
+     0,
+     1400
+    ],
+    [
+     76,
+     1400
+    ],
+    [
+     89,
+     1800
+    ],
+    [
+     91,
+     12000
+    ]
+   ]
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 0,
+   "gain": 0.42,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/receive.ogg",
+   "frame": 30,
+   "gain": 0.315,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 12,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 52,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 96,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 141,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 186,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 231,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 276,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 321,
+   "gain": 0.385,
+   "rate": 1.0,
+   "pan": 0.15
+  },
+  {
+   "type": "riser",
+   "start": 76,
+   "end": 90,
+   "gain": 0.05
+  },
+  {
+   "type": "reverse_swell",
+   "start": 72,
+   "end": 90,
+   "gain": 0.13,
+   "notes": [
+    "F3",
+    "A3",
+    "C4",
+    "E4"
+   ]
+  },
+  {
+   "type": "impact",
+   "frame": 90,
+   "gain": 0.18
+  },
+  {
+   "type": "thump",
+   "frame": 90,
+   "gain": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 100,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 160,
+   "gain": 0.35,
+   "rate": 0.74915,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 205,
+   "gain": 0.35,
+   "rate": 1.12246,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 250,
+   "gain": 0.35,
+   "rate": 0.94387,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/select.ogg",
+   "frame": 340,
+   "gain": 0.35,
+   "rate": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "swoosh",
+   "start": 384,
+   "end": 402,
+   "peak": 0.4,
+   "f": 2600,
+   "gain": 0.18
+  },
+  {
+   "type": "thump",
+   "frame": 404,
+   "gain": 0.22
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/reward.ogg",
+   "frame": 404,
+   "gain": 0.56,
+   "rate": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "swoosh",
+   "start": 473,
+   "end": 489,
+   "peak": 0.45,
+   "f": 3000,
+   "gain": 0.18
+  },
+  {
+   "type": "thump",
+   "frame": 504,
+   "gain": 0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/success.ogg",
+   "frame": 504,
+   "gain": 0.56,
+   "rate": 0.8909,
+   "pan": 0.0
+  }
+ ]
+}
