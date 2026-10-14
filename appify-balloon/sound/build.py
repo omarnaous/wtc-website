@@ -94,9 +94,14 @@ for b in range(LINE1, END + 30, 15):
 bass_notes = [-36, -36, -40, -38]                              # A1 A1 F1 G1, one per bar of 60 frames
 for j, b in enumerate(range(LINE1, END + 30, 60)):
     nn = sec(2.0); put(filt(saw(A(bass_notes[j % 4]), nn, 6), "lowpass", 400) * env(nn, 0.01, 0.8), b, 0.18)
-for f in [LINE1, LINE1 + 10, LINE2, LINE2 + 8]:
+for f in [LINE1, LINE1 + 10]:
     nn = sec(0.12); put(filt(noise(nn), "lowpass", 260) * env(nn, 0.001, 0.025) * 2, f, 0.55)
 nn = sec(1.2); put(tone(np.linspace(A(12), A(7), nn), nn) * env(nn, 0.3, 0.3) * 0.0 + filt(noise(nn), "bandpass", [1500, 6000]) * np.sin(np.pi * np.arange(nn) / nn) ** 2 * 0.3, LAND - 30, 0.25)
+# the spotlight snapping on: a heavy theatre-light clunk (with the flicker) and a faint hum
+for d, gn in [(2, 1.0), (4, 0.4)]:
+    nn = sec(0.5); put(filt(noise(nn), "lowpass", 500) * env(nn, 0.001, 0.05) * 2 + tone(np.linspace(70, 40, nn), nn) * env(nn, 0.002, 0.15), END + d, 0.7 * gn)
+n = sec((DUR - END) / FPS); hum = (tone(A(-33), n) * 0.6 + tone(A(-21), n) * 0.3) * np.minimum(1, np.arange(n) / sec(0.2)) * 0.03
+put(hum, END + 2)
 nn = sec(2.6); chime = (tone(A(12), nn) + 0.6 * tone(A(16), nn) + 0.5 * tone(A(19), nn) + 0.3 * tone(A(24), nn)) * env(nn, 0.002, 0.8)
 put(chime, LAND, 0.25)
 nn = sec(0.3); put(tone(np.linspace(80, 45, nn), nn) * env(nn, 0.003, 0.1), LAND, 0.5)

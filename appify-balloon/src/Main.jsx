@@ -195,7 +195,6 @@ function Scene({ f, W, H }) {
       <Stage W={W} H={H}>
         {shotOut > 0 && <div style={{ position: "absolute", inset: 0, opacity: shotOut, transform: `translate(${sx}px, ${sy}px)` }}><BalloonShot f={f} layer="hud" /></div>}
         {f >= LINE1 && f < LINE2 && <Line1 t={f - LINE1} out={interpolate(f, [LINE2 - 6, LINE2], [0, 1], clamp)} />}
-        {f >= LINE2 && f < END + 6 && <Line2 t={f - LINE2} out={interpolate(f, [END - 4, END + 4], [0, 1], clamp)} />}
         {f >= END && <EndCard f={f} />}
       </Stage>
       {flash > 0 && <AbsoluteFill style={{ background: "#fff", opacity: flash, mixBlendMode: "screen" }} />}
@@ -226,6 +225,7 @@ const DOT = { x: WM_L + (WSPARK.x + 20) * WM_S, y: WM_T + (WSPARK.y + 917) * WM_
 function EndCard({ f }) {
   const t = f - END;
   const letters = sp(f, END + 2, 12, 200);
+  const lamp = interpolate(t, [0, 2, 3, 4, 5, 7], [0, 0, 1, 0.45, 1, 1], clamp);   // the spotlight snaps on with a flicker
   const fall = interpolate(f, [END + 4, LAND], [0, 1], { ...clamp, easing: Easing.bezier(0.3, 0, 0.6, 1) });
   const sx = DOT.x + Math.sin(fall * Math.PI * 3) * 120 * (1 - fall), sy = interpolate(fall, [0, 1], [-60, DOT.y]);
   const size = interpolate(fall, [0, 1], [70, DOT.r * 2]);
@@ -233,10 +233,13 @@ function EndCard({ f }) {
   const sq = land >= 0 ? 1 + 0.4 * Math.exp(-land / 3) * Math.cos(land / 1.5) : 1;
   return (
     <>
+      <AbsoluteFill style={{ opacity: lamp * 0.9, mixBlendMode: "screen", background: "linear-gradient(180deg, rgba(235,230,255,.55), rgba(200,185,255,.12) 45%, rgba(200,185,255,0) 62%)", clipPath: "polygon(43% 0, 57% 0, 100% 100%, 0% 100%)", filter: "blur(24px)" }} />
+      <AbsoluteFill style={{ opacity: lamp, mixBlendMode: "screen", background: "radial-gradient(ellipse 34% 7% at 50% 52%, rgba(220,210,255,.35), transparent 70%)" }} />
+      <AbsoluteFill style={{ opacity: lamp, background: "radial-gradient(ellipse 22% 4% at 50% 0%, rgba(255,255,255,.9), transparent 100%)" }} />
       <AbsoluteFill style={{ background: `radial-gradient(ellipse 60% 30% at 50% 40%, rgba(91,43,255,${0.3 + (land >= 0 ? 0.15 * Math.exp(-land / 20) : 0)}), transparent 70%)` }} />
       <div style={{ position: "absolute", left: 0, right: 0, top: 960, textAlign: "center", ...pop(sp(f, LAND + 6, 11, 260), 1.2) }}>
-        <div style={{ ...D, fontSize: 76, color: "#fff" }}>Imagine it on</div>
-        <div style={{ ...D, fontSize: 76, color: C.sky, marginTop: 8 }}>your brand.</div>
+        <div style={{ ...D, fontSize: 76, color: "#fff" }}>We put your brand</div>
+        <div style={{ ...D, fontSize: 76, color: C.yellow, marginTop: 8, textShadow: "0 0 40px rgba(255,210,63,.45)" }}>in the spotlight.</div>
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1210, display: "grid", justifyItems: "center", ...pop(sp(f, LAND + 16, 9, 260), 1.5) }}>
         <div style={{ padding: "18px 46px", borderRadius: 26, background: C.uv, textAlign: "center", boxShadow: "0 20px 60px rgba(91,43,255,.45)", transform: `scale(${1 + 0.025 * Math.sin(Math.max(0, f - LAND - 30) / 4)})` }}>

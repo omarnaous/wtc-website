@@ -238,7 +238,8 @@ export function World({ f, shake = [0, 0] }) {
       <Shreds f={f} />
       <Confetti f={f} start={POP} seed="c" count={420} origin={[c[0], c[1], c[2], 1.4, 1.5, 0.8]} />
       <Confetti f={f} start={END - 30} seed="r" count={140} origin={[0, 3, 0, 3.4, 0.6, 2]} burst={false} />
-      {f >= END && <directionalLight position={[0, 1, 6]} intensity={1.6} />}
+      {f >= END && <directionalLight position={[0, 1, 6]} intensity={1.2 * interpolate(f - END, [0, 2, 3, 4, 5, 7], [0, 0, 1, 0.45, 1, 1], clamp)} />}
+      {f >= END && <spotLight position={[0, 6, 3]} angle={0.32} penumbra={0.5} intensity={120 * interpolate(f - END, [0, 2, 3, 4, 5, 7], [0, 0, 1, 0.45, 1, 1], clamp)} distance={14} decay={2} color="#F2EEFF" />}
       <Logo f={f} />
     </>
   );
