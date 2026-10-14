@@ -40,7 +40,7 @@ bash <skill-dir>/scripts/scaffold.sh <project-dir>     # copies assets/template,
 
 The template has `src/index.js`, `src/Root.jsx` (one `<Composition>` per format), `src/timing.js`, `src/Main.jsx` (a starter scene with font loading and helpers), `render.mjs` (renders MP4s or still frames) and `sound/cues.example.json`. Copy brand files into `src/` and fonts into `public/` (load fonts with `FontFace` + `delayRender`, as the template does; never rely on system or Google fonts at render time).
 
-Remotion API notes and the gotchas that cost real time are in `references/remotion.md`. Read it before writing compositions.
+Remotion API notes and the gotchas that cost real time are in `references/remotion.md`. Read it before writing compositions. For real 3D (glossy objects, reflections, 3D confetti, extruded logos), read `references/three.md`.
 
 ### 4. Build the compositions
 
