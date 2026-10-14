@@ -234,16 +234,17 @@ const camAt = (p) => ({
   y: interpolate(p, [0, 112, 166, 169, BURST + 24], [2.4, 3.0, 2.2, 1.9, 2.4], clamp),
   t: interpolate(p, [0, 112, 160, 169, BURST + 24], [1.15, 1.05, 0.75, 0.62, 0.75], clamp),   // look-at height
 });
-export function World({ f, p, shake = [0, 0] }) {
+// zoom < 1 brings the camera closer (the landscape window in the Day-series cut); look overrides the look-at height
+export function World({ f, p, shake = [0, 0], zoom = 1, look = null }) {
   const { camera } = useThree();
   const end = f >= SHOULD ? 1 : 0;
   const whip = end ? interpolate(f - SHOULD, [0, 16], [0, 1], { ...clamp, easing: Easing.bezier(0.2, 0.9, 0.3, 1) }) : 0;
   const c = camAt(p);
-  const d = end ? 10.6 - (f - SHOULD) * 0.008 : c.d, cy = end ? 2.6 : c.y;
+  const d = (end ? 10.6 - (f - SHOULD) * 0.008 : c.d) * zoom, cy = (end ? 2.6 : c.y) * zoom;
   const orbit = end ? Math.sin((f - SHOULD) / 60) * 0.12 : 0;
   useLayoutEffect(() => {
     camera.position.set(Math.sin(orbit) * d + shake[0] * 0.003, cy + shake[1] * 0.003, Math.cos(orbit) * d);
-    camera.lookAt(0, end ? 0.95 : c.t, 0); camera.updateProjectionMatrix();
+    camera.lookAt(0, look ?? (end ? 0.95 : c.t), 0); camera.updateProjectionMatrix();
   }, [f]);
   const foilMap = useFoilTexture(), petals = useFoilPetals(), shards = useShards();
   const chocTex = useMemo(() => noiseTex(512, (g, s) => speckle(g, s, "#808080", ["#707070", "#909090"], 3000, 2.2, "ch")), []);

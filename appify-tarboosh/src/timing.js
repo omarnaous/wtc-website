@@ -29,3 +29,10 @@ export function pt(f) {
   const e = x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
   return PT_REW * (1 - e);
 }
+
+// "Day 1 of making ads for Lebanese brands": the same ad inside the browser-window frame of the website reels.
+// The window plays ad frames 0..D1_HOLD (it stops on the re-wrapped Tarboosh, before the Appify flip), then a spark cut
+// to the series end card at D1_END.
+export const D1_DURATION = 450;
+export const D1_HOLD = 317;
+export const D1_END = 330;
