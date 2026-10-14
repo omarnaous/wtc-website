@@ -1,0 +1,298 @@
+{
+ "fps": 30,
+ "duration": 15.0,
+ "seed": 11,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "pop",
+   "frame": 6,
+   "gain": 0.9
+  },
+  {
+   "type": "thump",
+   "frame": 6,
+   "gain": 0.5,
+   "freq": 60
+  },
+  {
+   "type": "swoosh",
+   "start": 6,
+   "end": 28,
+   "gain": 0.22,
+   "f": 6000,
+   "peak": 0.2
+  },
+  {
+   "type": "glint",
+   "frame": 10,
+   "gain": 0.06
+  },
+  {
+   "type": "impact",
+   "frame": 10,
+   "gain": 0.55
+  },
+  {
+   "type": "pop",
+   "frame": 30,
+   "gain": 0.4
+  },
+  {
+   "type": "pop",
+   "frame": 38,
+   "gain": 0.4
+  },
+  {
+   "type": "pop",
+   "frame": 46,
+   "gain": 0.4
+  },
+  {
+   "type": "swoosh",
+   "start": 53,
+   "end": 63,
+   "gain": 0.24,
+   "f": 1800,
+   "peak": 0.7
+  },
+  {
+   "type": "glint",
+   "frame": 66,
+   "gain": 0.07
+  },
+  {
+   "type": "swoosh",
+   "start": 83,
+   "end": 93,
+   "gain": 0.24,
+   "f": 2330,
+   "peak": 0.7
+  },
+  {
+   "type": "glint",
+   "frame": 96,
+   "gain": 0.07
+  },
+  {
+   "type": "swoosh",
+   "start": 113,
+   "end": 123,
+   "gain": 0.24,
+   "f": 2860,
+   "peak": 0.7
+  },
+  {
+   "type": "glint",
+   "frame": 126,
+   "gain": 0.07
+  },
+  {
+   "type": "swoosh",
+   "start": 143,
+   "end": 153,
+   "gain": 0.24,
+   "f": 3390,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 157,
+   "gain": 0.32,
+   "pitch": 1.1400000000000001,
+   "pan": 0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 173,
+   "end": 183,
+   "gain": 0.16,
+   "f": 3920,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 183,
+   "gain": 0.32,
+   "pitch": 0.9,
+   "pan": -0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 188,
+   "end": 198,
+   "gain": 0.16,
+   "f": 4450,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 198,
+   "gain": 0.32,
+   "pitch": 0.98,
+   "pan": 0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 203,
+   "end": 213,
+   "gain": 0.16,
+   "f": 4980,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 213,
+   "gain": 0.32,
+   "pitch": 1.06,
+   "pan": -0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 218,
+   "end": 228,
+   "gain": 0.16,
+   "f": 2310,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 228,
+   "gain": 0.32,
+   "pitch": 1.1400000000000001,
+   "pan": 0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 233,
+   "end": 243,
+   "gain": 0.16,
+   "f": 2840,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 243,
+   "gain": 0.32,
+   "pitch": 0.9,
+   "pan": -0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 248,
+   "end": 258,
+   "gain": 0.16,
+   "f": 3370,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 258,
+   "gain": 0.32,
+   "pitch": 0.98,
+   "pan": 0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 263,
+   "end": 273,
+   "gain": 0.16,
+   "f": 3900,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 273,
+   "gain": 0.32,
+   "pitch": 1.06,
+   "pan": -0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 278,
+   "end": 288,
+   "gain": 0.16,
+   "f": 4430,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 288,
+   "gain": 0.32,
+   "pitch": 1.1400000000000001,
+   "pan": 0.2
+  },
+  {
+   "type": "swoosh",
+   "start": 293,
+   "end": 303,
+   "gain": 0.16,
+   "f": 4960,
+   "peak": 0.7
+  },
+  {
+   "type": "clink",
+   "frame": 303,
+   "gain": 0.32,
+   "pitch": 0.9,
+   "pan": -0.2
+  },
+  {
+   "type": "thump",
+   "frame": 315,
+   "gain": 0.5
+  },
+  {
+   "type": "counter",
+   "start": 318,
+   "end": 336,
+   "gain": 0.3
+  },
+  {
+   "type": "pop",
+   "frame": 336,
+   "gain": 0.5
+  },
+  {
+   "type": "riser",
+   "start": 319,
+   "end": 342,
+   "gain": 0.45
+  },
+  {
+   "type": "impact",
+   "frame": 345,
+   "gain": 0.95
+  },
+  {
+   "type": "clink",
+   "frame": 348,
+   "gain": 0.3,
+   "pitch": 1.0,
+   "pan": -0.3
+  },
+  {
+   "type": "clink",
+   "frame": 351,
+   "gain": 0.26,
+   "pitch": 1.12,
+   "pan": 0.3
+  },
+  {
+   "type": "clink",
+   "frame": 354,
+   "gain": 0.22,
+   "pitch": 0.94
+  },
+  {
+   "type": "whoosh",
+   "frame": 360,
+   "gain": 0.1
+  },
+  {
+   "type": "chime",
+   "frame": 375,
+   "gain": 0.18
+  }
+ ]
+}

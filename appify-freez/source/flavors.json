@@ -1,0 +1,183 @@
+[
+ {
+  "name": "Lemon & Mint",
+  "slug": "lemon-and-mint",
+  "accent": "#69C9CD",
+  "url": "https://freezmix.com/flavor-details/37/lemon-and-mint",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028ccdc4044.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028cce1f2c2.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5bc42ab93.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a368541ee2.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a368594da8.png"
+  ],
+  "desc": "Light blue paint on the glass bottle"
+ },
+ {
+  "name": "Blue Hawaii",
+  "slug": "blue-hawaii",
+  "accent": "#637BBC",
+  "url": "https://freezmix.com/flavor-details/36/blue-hawaii",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028c7a6d8ea.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028c7ac0a52.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5bc03aaf6.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a366768d8e.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a3667ba949.png"
+  ],
+  "desc": "Blue paint on the glass bottle"
+ },
+ {
+  "name": "Lychee",
+  "slug": "lychee",
+  "accent": "#ffffff",
+  "url": "https://freezmix.com/flavor-details/35/lychee",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028c1f339fd.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028c1f83daa.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5bbc7a9be.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a3674b4f7a.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a367510a7a.png"
+  ],
+  "desc": "White Opaque paint on the glass bottle"
+ },
+ {
+  "name": "Berry Mix",
+  "slug": "berry-mix",
+  "accent": "#A26CAE",
+  "url": "https://freezmix.com/flavor-details/34/berry-mix",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028bce929e5.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028bceec050.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5bac369c5.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a363081712.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a3630cab17.png"
+  ],
+  "desc": "Purple paint on the glass bottle"
+ },
+ {
+  "name": "Pomegranate Mix",
+  "slug": "pomegranate-mix",
+  "accent": "#E1495C",
+  "url": "https://freezmix.com/flavor-details/33/pomegranate-mix",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028b84c41dd.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028b8536293.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5ba6f036c.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a3618152af.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a36186cf54.png"
+  ],
+  "desc": "Red paint on the glass bottle"
+ },
+ {
+  "name": "Mango & Peach",
+  "slug": "mango-and-peach",
+  "accent": "#F4794E",
+  "url": "https://freezmix.com/flavor-details/32/mango-and-peach",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028b431e51f.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028b4388f29.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5ba160f83.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a36075a1c5.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a3607b05cb.png"
+  ],
+  "desc": "Orange paint on the glass bottle"
+ },
+ {
+  "name": "Strawberry Mix",
+  "slug": "strawberry-mix",
+  "accent": "#F282B0",
+  "url": "https://freezmix.com/flavor-details/31/strawberry-mix",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660289e419c34.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660289e46bd7d.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5b9c83bb2.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a35f37b33c.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a35f3d09e9.png"
+  ],
+  "desc": "Pink paint on the glass bottle"
+ },
+ {
+  "name": "Kiwi & Lime",
+  "slug": "kiwi-and-lime",
+  "accent": "#96CA4A",
+  "url": "https://freezmix.com/flavor-details/30/kiwi-and-lime",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_6602897164ad3.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028971b9757.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5b667d107.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a35de223bc.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a35de76440.png"
+  ],
+  "desc": "Green paint on the glass bottle"
+ },
+ {
+  "name": "Pineapple & Coconut",
+  "slug": "pineapple-and-coconut",
+  "accent": "#FEE173",
+  "url": "https://freezmix.com/flavor-details/29/pineapple-and-coconut",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028929a4660.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_6602892a06cff.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5b664aae0.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a35c42d0bb.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a35c486f7c.png"
+  ],
+  "desc": "Yellow paint on the glass bottle"
+ },
+ {
+  "name": "Lemon & Ginger",
+  "slug": "lemon-and-ginger",
+  "accent": "#28313D",
+  "url": "https://freezmix.com/flavor-details/28/lemon-and-ginger",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_6602861085857.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_66028610d7000.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5b5cb3025.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a34ee2d147.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a34ee7f7f6.png"
+  ],
+  "desc": "Black paint on the glass bottle"
+ },
+ {
+  "name": "Mojito Strawberry",
+  "slug": "mojito-strawberry",
+  "accent": "#b84d85",
+  "url": "https://freezmix.com/flavor-details/27/mojito-strawberry",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660285bc31f48.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660285bc90108.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5b5d3fdfd.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a34d96ebfc.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a34d9d24ce.png"
+  ],
+  "desc": "Purple paint on the glass bottle"
+ },
+ {
+  "name": "Tamarind",
+  "slug": "tamarind",
+  "accent": "#bf8c57",
+  "url": "https://freezmix.com/flavor-details/26/tamarind",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660284e442f7b.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660284e490d42.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660ffa902e43e.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_6656f286660cb.png"
+  ],
+  "desc": "Brown paint on the glass bottle"
+ },
+ {
+  "name": "Apple & Grape",
+  "slug": "apple-and-grape",
+  "accent": "#E8E6DD",
+  "url": "https://freezmix.com/flavor-details/25/apple-and-grape",
+  "man": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660283fcdcc01.png",
+  "woman": "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660283fd465d6.png",
+  "detail": [
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_660e5b3c8a574.jpg",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a34c281b0f.png",
+   "https://freezmix.s3.eu-central-1.amazonaws.com/pages/lg_662a34c2d5ce3.png"
+  ],
+  "desc": "Light green paint on the glass bottle"
+ }
+]

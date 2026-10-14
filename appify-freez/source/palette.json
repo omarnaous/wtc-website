@@ -1,0 +1,80 @@
+[
+ {
+  "name": "Lemon & Mint",
+  "slug": "lemon-and-mint",
+  "accent": "#69C9CD",
+  "bg": "#1ECECB"
+ },
+ {
+  "name": "Blue Hawaii",
+  "slug": "blue-hawaii",
+  "accent": "#637BBC",
+  "bg": "#2046B3"
+ },
+ {
+  "name": "Lychee",
+  "slug": "lychee",
+  "accent": "#ffffff",
+  "bg": "#E3E3E3"
+ },
+ {
+  "name": "Berry Mix",
+  "slug": "berry-mix",
+  "accent": "#A26CAE",
+  "bg": "#720230"
+ },
+ {
+  "name": "Pomegranate Mix",
+  "slug": "pomegranate-mix",
+  "accent": "#E1495C",
+  "bg": "#891E28"
+ },
+ {
+  "name": "Mango & Peach",
+  "slug": "mango-and-peach",
+  "accent": "#F4794E",
+  "bg": "#F4551B"
+ },
+ {
+  "name": "Strawberry Mix",
+  "slug": "strawberry-mix",
+  "accent": "#F282B0",
+  "bg": "#F05E9F"
+ },
+ {
+  "name": "Kiwi & Lime",
+  "slug": "kiwi-and-lime",
+  "accent": "#96CA4A",
+  "bg": "#76D63E"
+ },
+ {
+  "name": "Pineapple & Coconut",
+  "slug": "pineapple-and-coconut",
+  "accent": "#FEE173",
+  "bg": "#FBDD65"
+ },
+ {
+  "name": "Lemon & Ginger",
+  "slug": "lemon-and-ginger",
+  "accent": "#28313D",
+  "bg": "#161F26"
+ },
+ {
+  "name": "Mojito Strawberry",
+  "slug": "mojito-strawberry",
+  "accent": "#b84d85",
+  "bg": "#713C6A"
+ },
+ {
+  "name": "Tamarind",
+  "slug": "tamarind",
+  "accent": "#bf8c57",
+  "bg": "#3F212B"
+ },
+ {
+  "name": "Apple & Grape",
+  "slug": "apple-and-grape",
+  "accent": "#E8E6DD",
+  "bg": "#CAC085"
+ }
+]
