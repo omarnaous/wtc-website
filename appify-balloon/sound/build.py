@@ -13,7 +13,7 @@ SR = 48000
 src = open("src/timing.js").read()
 g = lambda k: int(re.search(rf"export const {k} = (\d+)", src).group(1))
 FPS, DUR = g("FPS"), g("DURATION")
-POP, LINE1, LINE2, END, LAND = (g(k) for k in ["POP", "LINE1", "LINE2", "END", "LAND"])
+POP, LINE1, LINE2, EXPLAIN, END, LAND = (g(k) for k in ["POP", "LINE1", "LINE2", "EXPLAIN", "END", "LAND"])
 PUMPS = [int(x) for x in re.search(r"PUMPS = \[([^\]]+)\]", src).group(1).split(",")]
 
 N = int(DUR / FPS * SR) + SR
@@ -97,6 +97,23 @@ for j, b in enumerate(range(LINE1, END + 30, 60)):
 for f in [LINE1, LINE1 + 10]:
     nn = sec(0.12); put(filt(noise(nn), "lowpass", 260) * env(nn, 0.001, 0.025) * 2, f, 0.55)
 nn = sec(1.2); put(tone(np.linspace(A(12), A(7), nn), nn) * env(nn, 0.3, 0.3) * 0.0 + filt(noise(nn), "bandpass", [1500, 6000]) * np.sin(np.pi * np.arange(nn) / nn) ** 2 * 0.3, LAND - 30, 0.25)
+# the explainer: a fast feed flick with scroll ticks, the brake onto the motion post, then pops for each chip
+n = sec(0.55); ts = np.arange(n) / SR
+put(filt(noise(n), "bandpass", [600, 5000]) * np.sin(np.pi * ts / ts[-1]) ** 2, EXPLAIN + 2, 0.35)
+f = EXPLAIN + 4
+while f < EXPLAIN + 108:
+    nn = sec(0.02); put(filt(noise(nn), "highpass", 3000) * env(nn, 0.0005, 0.004), f, 0.14, 0.2)
+    f += 3 if f < EXPLAIN + 60 else int(3 + (f - EXPLAIN - 60) / 6)
+nn = sec(0.4); put(tone(np.linspace(110, 50, nn), nn) * env(nn, 0.002, 0.1), EXPLAIN + 112, 0.55)       # brake thud
+for j, st in enumerate([12, 16, 19, 24]):                                                               # sparkle on the stop
+    m = sec(0.4); put(tone(A(st), m) * env(m, 0.002, 0.12), EXPLAIN + 112 + j * 2, 0.08, (j - 1.5) / 3)
+for k, st in enumerate([0, 4, 7]):                                                                       # attention -> clicks -> customers
+    m = sec(0.35); put((tone(A(st), m) + 0.4 * tone(A(st + 12), m)) * env(m, 0.003, 0.1), EXPLAIN + 150 + 14 + k * 14, 0.14)
+for k, st in enumerate([0, 2, 4, 7, 9, 12]):                                                            # what we make
+    m = sec(0.3); put(tone(A(st + 12), m) * env(m, 0.002, 0.08), EXPLAIN + 225 + 6 + k * 6, 0.09, (k - 2.5) / 4)
+# Dev steps into the light: a springy boing
+nn = sec(0.45); ts = np.arange(nn) / SR
+put(tone(220 + 340 * (1 - np.exp(-ts / 0.06)) + 30 * np.sin(2 * np.pi * 12 * ts), nn) * env(nn, 0.004, 0.14), LAND + 10, 0.12)
 # the spotlight snapping on: a heavy theatre-light clunk (with the flicker) and a faint hum
 for d, gn in [(2, 1.0), (4, 0.4)]:
     nn = sec(0.5); put(filt(noise(nn), "lowpass", 500) * env(nn, 0.001, 0.05) * 2 + tone(np.linspace(70, 40, nn), nn) * env(nn, 0.002, 0.15), END + d, 0.7 * gn)

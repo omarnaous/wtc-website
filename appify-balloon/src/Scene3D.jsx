@@ -183,7 +183,7 @@ function Shreds({ f }) {
 }
 
 // ── the extruded logo with the gold spark landing as the i-dot ────────────────────────────────────────
-const WM_PX = 760, WM_SCALE = WM_PX / 3224 / PXU, WM_CY = 760;
+const WM_PX = 720, WM_SCALE = WM_PX / 3224 / PXU, WM_CY = 560;
 function useLogoGeometry() {
   return useMemo(() => {
     const d = new SVGLoader().parse(`<svg xmlns="http://www.w3.org/2000/svg"><path d="${WORDMARK.letters}"/></svg>`);

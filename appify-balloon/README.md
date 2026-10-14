@@ -1,8 +1,8 @@
 # The Balloon: "You just watched a balloon for 7 seconds."
 
-14 s attention reel. A glossy UV balloon with the appify logo is pumped up, pump by pump, toward a needle while a camera
+24 s attention reel. A glossy UV balloon with the appify logo is pumped up, pump by pump, toward a needle while a camera
 HUD counts the frames to impact. It pops at exactly 7.0 s (frame 210) into a confetti blast in brand colours, then
-"You just watched a balloon for 7 seconds." A spotlight snaps on over the 3D logo, a gold spark lands as the
+"You just watched a balloon for 7 seconds." A 10 s explainer (photos get scrolled past, motion stops the scroll, attention turns into customers, what we make), then a spotlight snaps on over the 3D logo, a gold spark lands as the
 i-dot: "We put your brand in the spotlight." / DM "MOTION".
 
 - Timing (pumps, pop, beats): `src/timing.js`.

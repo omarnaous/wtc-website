@@ -2,10 +2,12 @@
 // counts the frames to impact. At exactly 7.0 s it pops into a confetti blast in brand colours.
 // "You just watched a balloon for 7 seconds." / "That's what motion does to attention." -> a confetti spark lands as the i-dot.
 import { AbsoluteFill, Audio, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig, Easing } from "remotion";
-import { FPS, HOOK_OUT, PUMPS, POP, LINE1, LINE2, END, LAND, KNOT, CX, S0, S1, NEEDLE0 } from "./timing.js";
+import { FPS, HOOK_OUT, PUMPS, POP, LINE1, LINE2, EXPLAIN, END, LAND, KNOT, CX, S0, S1, NEEDLE0 } from "./timing.js";
 import { useFonts, clamp, easeOut, shake, Grain, Vignette } from "./fx.jsx";
 import { ThreeCanvas } from "@remotion/three";
 import { World } from "./Scene3D.jsx";
+import { Explain } from "./Explain.jsx";
+import { Dev } from "./Dev.jsx";
 import { WORDMARK, WSPARK, sparkPath } from "./brand.js";
 
 export const C = { ink: "#0A0913", uv: "#5B2BFF", iris: "#8F72FF", sky: "#74C6FF", paper: "#F3F1FA", alert: "#F0384F", yellow: "#FFD23F" };
@@ -195,6 +197,7 @@ function Scene({ f, W, H }) {
       <Stage W={W} H={H}>
         {shotOut > 0 && <div style={{ position: "absolute", inset: 0, opacity: shotOut, transform: `translate(${sx}px, ${sy}px)` }}><BalloonShot f={f} layer="hud" /></div>}
         {f >= LINE1 && f < LINE2 && <Line1 t={f - LINE1} out={interpolate(f, [LINE2 - 6, LINE2], [0, 1], clamp)} />}
+        {f >= EXPLAIN && f < END + 6 && <Explain f={f} />}
         {f >= END && <EndCard f={f} />}
       </Stage>
       {flash > 0 && <AbsoluteFill style={{ background: "#fff", opacity: flash, mixBlendMode: "screen" }} />}
@@ -220,7 +223,7 @@ function Line2({ t, out }) {
 }
 
 // ── end card: one confetti spark drifts down and lands as the i-dot ───────────────────────────────────
-const WM_W = 760, WM_S = WM_W / 3224, WM_L = CX - WM_W / 2, WM_T = 620;
+const WM_W = 720, WM_S = WM_W / 3224, WM_L = CX - WM_W / 2, WM_T = 560 - WM_W * 1167 / 3224 / 2;
 const DOT = { x: WM_L + (WSPARK.x + 20) * WM_S, y: WM_T + (WSPARK.y + 917) * WM_S, r: WSPARK.r * WM_S };
 function EndCard({ f }) {
   const t = f - END;
@@ -234,21 +237,38 @@ function EndCard({ f }) {
   return (
     <>
       <AbsoluteFill style={{ opacity: lamp * 0.9, mixBlendMode: "screen", background: "linear-gradient(180deg, rgba(235,230,255,.55), rgba(200,185,255,.12) 45%, rgba(200,185,255,0) 62%)", clipPath: "polygon(43% 0, 57% 0, 100% 100%, 0% 100%)", filter: "blur(24px)" }} />
-      <AbsoluteFill style={{ opacity: lamp, mixBlendMode: "screen", background: "radial-gradient(ellipse 34% 7% at 50% 52%, rgba(220,210,255,.35), transparent 70%)" }} />
+      <AbsoluteFill style={{ opacity: lamp, mixBlendMode: "screen", background: "radial-gradient(ellipse 36% 4% at 50% 96%, rgba(220,210,255,.45), transparent 70%)" }} />
       <AbsoluteFill style={{ opacity: lamp, background: "radial-gradient(ellipse 22% 4% at 50% 0%, rgba(255,255,255,.9), transparent 100%)" }} />
       <AbsoluteFill style={{ background: `radial-gradient(ellipse 60% 30% at 50% 40%, rgba(91,43,255,${0.3 + (land >= 0 ? 0.15 * Math.exp(-land / 20) : 0)}), transparent 70%)` }} />
-      <div style={{ position: "absolute", left: 0, right: 0, top: 960, textAlign: "center", ...pop(sp(f, LAND + 6, 11, 260), 1.2) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 730, textAlign: "center", ...pop(sp(f, LAND + 6, 11, 260), 1.2) }}>
         <div style={{ ...D, fontSize: 76, color: "#fff" }}>We put your brand</div>
         <div style={{ ...D, fontSize: 76, color: C.yellow, marginTop: 8, textShadow: "0 0 40px rgba(255,210,63,.45)" }}>in the spotlight.</div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1210, display: "grid", justifyItems: "center", ...pop(sp(f, LAND + 16, 9, 260), 1.5) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 900, display: "grid", justifyItems: "center", ...pop(sp(f, LAND + 16, 9, 260), 1.5) }}>
+        <div style={{ ...M, fontSize: 26, color: "rgba(255,255,255,.75)", marginBottom: 18 }}>@appifylb · motion graphics &amp; animated websites</div>
         <div style={{ padding: "18px 46px", borderRadius: 26, background: C.uv, textAlign: "center", boxShadow: "0 20px 60px rgba(91,43,255,.45)", transform: `scale(${1 + 0.025 * Math.sin(Math.max(0, f - LAND - 30) / 4)})` }}>
           <div style={{ ...M, fontSize: 24, color: "rgba(255,255,255,.75)" }}>DM</div>
           <div style={{ ...D, fontSize: 70, color: "#fff", marginTop: 6 }}>“MOTION”</div>
         </div>
-        <div style={{ ...M, fontSize: 26, color: "rgba(255,255,255,.7)", marginTop: 26 }}>@appifylb · motion graphics & animated websites</div>
       </div>
+      <EndDev f={f} />
     </>
+  );
+}
+
+// Dev steps up into the spotlight: pops up, waves, then points at the DM box
+function EndDev({ f }) {
+  const t = f - (LAND + 10);
+  if (t < 0) return null;
+  const up = spring({ frame: t, fps: FPS, config: { damping: 11, stiffness: 160 } });
+  const toPoint = interpolate(t, [44, 54], [0, 1], clamp);
+  const blink = (t % 70) > 66 ? 1 : 0;
+  const w = 380, h = w * 830 / 420;
+  return (
+    <div style={{ position: "absolute", left: CX - w / 2, top: 1870 - h + (1 - up) * 700, width: w, filter: "drop-shadow(0 30px 40px rgba(0,0,0,.55))" }}>
+      <Dev width={w} wave={1 - toPoint} waveAng={Math.sin(t / 2.4) * 22} point={toPoint} brow={14} lid={Math.max(0.05, blink)} smile={1}
+        happy={t > 20 && t < 44 ? 1 : 0} open={t < 30 ? 0.3 + 0.3 * Math.abs(Math.sin(t / 2)) : 0} tilt={Math.sin(t / 9) * 3} look={toPoint * 6} bob={Math.sin(t / 6) * 3} />
+    </div>
   );
 }
 
