@@ -5,6 +5,7 @@ import { useFonts } from "./fx.jsx";
 import { ThreeCanvas } from "@remotion/three";
 import { BalloonShot, C } from "./Main.jsx";
 import { World } from "./Scene3D.jsx";
+import { Dev } from "./Dev.jsx";
 
 const D = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1 };
 export const Cover = () => {
@@ -21,6 +22,10 @@ export const Cover = () => {
           </ThreeCanvas>
         </div>
         <BalloonShot f={182} layer="hud" />
+        {/* Dev, shocked, pointing up at the needle */}
+        <div style={{ position: "absolute", left: -60, top: 1110, filter: "drop-shadow(0 30px 40px rgba(0,0,0,.55))" }}>
+          <Dev width={360} point={1} shock={1} look={7} brow={10} tilt={-5} />
+        </div>
       </div>
       <AbsoluteFill style={{ background: `linear-gradient(180deg, rgba(10,9,19,.85) ${feed ? 4 : 14}%, rgba(10,9,19,0) ${feed ? 24 : 30}%)` }} />
       <div style={{ position: "absolute", left: 0, right: 0, top: feed ? 40 : 330, textAlign: "center", textShadow: "0 6px 30px rgba(0,0,0,.7)" }}>
