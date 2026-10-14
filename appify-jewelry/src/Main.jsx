@@ -1,5 +1,5 @@
 // Animated website 04: NAÏADE (a concept jewelry brand, design study). Silent (the user adds trending audio in-app).
-// "Your jewelry costs thousands. / Does your website look it?" The user's screen recording of the site plays in a browser window while a
+// "Your jewelry costs thousands. / Does your website show it?" The user's screen recording of the site plays in a browser window while a
 // HUD chip walks through the pieces (0/3 ... 3/3, then the whole set, $38,200) so people stay to the end. Then a spark
 // cut to the end card: websites that look this expensive, from $500, DM "ANIMATED WEBSITE", Dev with a ring box.
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
@@ -72,7 +72,7 @@ function Pov({ f, W, H }) {
           <Browser i={i} w={1052} z={z} />
         </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 1330, ...caption }}>
-          {f >= 34 && <div style={{ ...D, fontSize: 72, color: C.teal, textShadow: "0 4px 24px rgba(0,0,0,.55)", ...pop(sp(f, 34, 9, 300), 1.8) }}>Does your website look it?</div>}
+          {f >= 34 && <div style={{ ...D, fontSize: 72, color: C.teal, textShadow: "0 4px 24px rgba(0,0,0,.55)", ...pop(sp(f, 34, 9, 300), 1.8) }}>Does your website show it?</div>}
           {f >= 56 && <div style={{ ...UI, fontSize: 46, marginTop: 18, ...rise(sp(f, 56, 12, 260)) }}>This one does.</div>}
         </div>
         {f >= 6 && (

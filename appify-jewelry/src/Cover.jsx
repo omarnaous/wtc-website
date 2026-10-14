@@ -42,7 +42,7 @@ export const Cover = () => {
         <div style={{ position: "absolute", left: 0, right: 0, top: 130, textAlign: "center" }}>
           <div style={{ ...D, fontSize: 104, color: "#fff", whiteSpace: "nowrap" }}>Your jewelry</div>
           <div style={{ ...D, fontSize: 104, color: "#fff", whiteSpace: "nowrap", marginTop: 4 }}>costs thousands.</div>
-          <div style={{ ...D, fontSize: 72, color: C.sky, marginTop: 12, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(53,230,216,.3)" }}>Does your website look it?</div>
+          <div style={{ ...D, fontSize: 72, color: C.sky, marginTop: 12, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(53,230,216,.3)" }}>Does your website show it?</div>
         </div>
         {/* the site, with motion trails behind it */}
         {[3, 2, 1].map((g) => (
