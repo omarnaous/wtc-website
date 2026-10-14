@@ -40,9 +40,9 @@ export const Cover = () => {
         </div>
         {/* hook */}
         <div style={{ position: "absolute", left: 0, right: 0, top: 130, textAlign: "center" }}>
-          <div style={{ ...D, fontSize: 96, color: "#fff", whiteSpace: "nowrap" }}>Selling $16,200 rings</div>
-          <div style={{ ...D, fontSize: 96, color: "#fff", whiteSpace: "nowrap", marginTop: 4 }}>on a $50 website?</div>
-          <div style={{ ...D, fontSize: 84, color: C.sky, marginTop: 12, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(53,230,216,.3)" }}>Make it feel like this.</div>
+          <div style={{ ...D, fontSize: 104, color: "#fff", whiteSpace: "nowrap" }}>This jewelry</div>
+          <div style={{ ...D, fontSize: 104, color: "#fff", whiteSpace: "nowrap", marginTop: 4 }}>doesn’t exist.</div>
+          <div style={{ ...D, fontSize: 88, color: C.sky, marginTop: 12, whiteSpace: "nowrap", textShadow: "0 10px 50px rgba(53,230,216,.3)" }}>The website does.</div>
         </div>
         {/* the site, with motion trails behind it */}
         {[3, 2, 1].map((g) => (
