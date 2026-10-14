@@ -1,5 +1,5 @@
 // Animated website 04: NAÏADE (a concept jewelry brand, design study). Silent (the user adds trending audio in-app).
-// "This jewelry doesn't exist. / The website does." The user's screen recording of the site plays in a browser window while a
+// "Cheap website, / cheap jewelry." The user's screen recording of the site plays in a browser window while a
 // HUD chip walks through the pieces (0/3 ... 3/3, then the whole set, $38,200) so people stay to the end. Then a spark
 // cut to the end card: websites that look this expensive, from $500, DM "ANIMATED WEBSITE", Dev with a ring box.
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
@@ -66,13 +66,13 @@ function Pov({ f, W, H }) {
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.05), rgba(0,0,0,.55))" }} />
       <Stage W={W} H={H}><Safe>
         <div style={{ position: "absolute", left: 0, right: 0, top: 250, ...caption }}>
-          <div style={{ ...D, fontSize: 112, lineHeight: 1.04, ...pop(sp(f, -6, 11, 300), 1.3) }}>This jewelry<br />doesn’t exist.</div>
+          <div style={{ ...D, fontSize: 112, lineHeight: 1.04, ...pop(sp(f, -6, 11, 300), 1.3) }}>Cheap website,<br />cheap jewelry.</div>
         </div>
         <div style={{ position: "absolute", left: 14, top: 600, transform: `translate(${sx}px, ${sy}px)` }}>
           <Browser i={i} w={1052} z={z} />
         </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 1330, ...caption }}>
-          {f >= 34 && <div style={{ ...D, fontSize: 94, color: C.teal, textShadow: "0 4px 24px rgba(0,0,0,.55)", ...pop(sp(f, 34, 9, 300), 1.8) }}>The website does.</div>}
+          {f >= 34 && <div style={{ ...D, fontSize: 80, color: C.teal, textShadow: "0 4px 24px rgba(0,0,0,.55)", ...pop(sp(f, 34, 9, 300), 1.8) }}>Make it feel like luxury.</div>}
           {f >= 56 && <div style={{ ...UI, fontSize: 46, marginTop: 18, ...rise(sp(f, 56, 12, 260)) }}>ChatGPT could never.</div>}
         </div>
         {f >= 6 && (
