@@ -1,9 +1,11 @@
-// "The Balloon". A glossy UV balloon with the appify logo is pumped up, pump by pump, toward a needle while a camera HUD
+// "The Balloon" (3D). A latex UV balloon with the appify logo is pumped up, pump by pump, toward a needle while a camera HUD
 // counts the frames to impact. At exactly 7.0 s it pops into a confetti blast in brand colours.
 // "You just watched a balloon for 7 seconds." / "That's what motion does to attention." -> a confetti spark lands as the i-dot.
 import { AbsoluteFill, Audio, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig, Easing } from "remotion";
 import { FPS, HOOK_OUT, PUMPS, POP, LINE1, LINE2, END, LAND, KNOT, CX, S0, S1, NEEDLE0 } from "./timing.js";
 import { useFonts, clamp, easeOut, shake, Grain, Vignette } from "./fx.jsx";
+import { ThreeCanvas } from "@remotion/three";
+import { World } from "./Scene3D.jsx";
 import { WORDMARK, WSPARK, sparkPath } from "./brand.js";
 
 export const C = { ink: "#0A0913", uv: "#5B2BFF", iris: "#8F72FF", sky: "#74C6FF", paper: "#F3F1FA", alert: "#F0384F", yellow: "#FFD23F" };
@@ -135,7 +137,7 @@ function Shreds({ f }) {
 }
 
 // the HUD + balloon + needle shot at frame f (also the thumbnail)
-export function BalloonShot({ f, hud = true }) {
+export function BalloonShot({ f, hud = true, layer = "all" }) {
   const s = scaleAt(Math.min(f, POP)), thin = interpolate(s, [S0, S1], [0, 1], clamp);
   const tip = f < POP ? needleAt(f) : needleAt(POP) - interpolate(f - POP, [0, 8], [0, 40], { ...clamp, easing: easeOut });
   const tremble = f > POP - 26 && f < POP ? (f - (POP - 26)) / 26 : 0;
@@ -145,17 +147,12 @@ export function BalloonShot({ f, hud = true }) {
   const tc = (n) => String(n).padStart(2, "0");
   return (
     <>
+      {layer !== "hud" && <>
       <AbsoluteFill style={{ background: C.ink }} />
       <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(143,114,255,.06) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(143,114,255,.06) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px", backgroundPosition: "540px 0" }} />
       <AbsoluteFill style={{ background: `radial-gradient(ellipse 60% 34% at 50% 52%, rgba(91,43,255,${0.3 + 0.2 * thin}), transparent 70%)` }} />
-      {f < POP && (
-        <div style={{ position: "absolute", left: tx, top: ty, width: 1080, height: 1920 }}>
-          <String_ f={f} s={s} />
-          <Balloon s={s} thin={thin} wob={wobbleAt(f)} />
-        </div>
-      )}
-      <Needle tip={tip} />
-      {hud && (
+      </>}
+      {hud && layer !== "bg" && (
         <>
           {[[60, 200, 0], [960, 200, 90], [60, 1640, -90], [960, 1640, 180]].map(([x, yy, rot], n) => (
             <svg key={n} width="60" height="60" style={{ position: "absolute", left: x, top: yy, transform: `rotate(${rot}deg)` }}><path d="M4 56 V4 H56" fill="none" stroke="rgba(255,255,255,.7)" strokeWidth="4" /></svg>
@@ -183,23 +180,23 @@ function Scene({ f, W, H }) {
   const flash = f >= POP && f < POP + 8 ? interpolate(f - POP, [0, 1, 7], [0.9, 0.6, 0], clamp) : 0;
   return (
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
+      {shotOut > 0 && <AbsoluteFill style={{ opacity: shotOut }}><BalloonShot f={f} layer="bg" /></AbsoluteFill>}
+      {f >= POP && <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 45%, rgba(91,43,255,${0.55 * Math.exp(-(f - POP) / 20) + 0.18}), transparent 65%)` }} />}
       <Stage W={W} H={H}>
         <div style={{ position: "absolute", inset: 0, transform: `translate(${sx}px, ${sy}px) scale(${punch})` }}>
-          {shotOut > 0 && <div style={{ position: "absolute", inset: 0, opacity: shotOut }}><BalloonShot f={f} /></div>}
-          {f >= POP && <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 45%, rgba(91,43,255,${0.55 * Math.exp(-(f - POP) / 20) + 0.18}), transparent 65%)` }} />}
           {f >= POP && f < POP + 30 && [0, 1].map((k) => { const p = interpolate(f - POP - k * 4, [0, 24], [0, 1], { ...clamp, easing: easeOut }); return p > 0 && <div key={k} style={{ position: "absolute", left: CX - 900 * p, top: origin.y - 900 * p, width: 1800 * p, height: 1800 * p, borderRadius: 999, border: `${10 * (1 - p) + 1}px solid rgba(201,184,255,${1 - p})` }} />; })}
-          <Shreds f={f} />
-          <Confetti f={f} start={POP} seed="c" count={340} origin={origin} />
-          <Confetti f={f} start={END - 30} seed="r" count={90} origin={{ x: 540, y: -120, w: 1100, h: 200 }} burst={false} />
         </div>
-        {hook > 0 && <div style={{ position: "absolute", left: 0, right: 0, top: 1690, textAlign: "center", opacity: hook, ...UI, fontSize: 52, color: "#fff", textShadow: "0 4px 20px rgba(0,0,0,.6)" }}>Try not to look away.</div>}
+      </Stage>
+      <AbsoluteFill style={{ transform: `scale(${punch})` }}>
+        <ThreeCanvas width={W} height={H} camera={{ fov: 30, position: [0, 0.15, 9], near: 0.1, far: 50 }} gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}>
+          <World f={f} shake={[sx, sy]} />
+        </ThreeCanvas>
+      </AbsoluteFill>
+      <Stage W={W} H={H}>
+        {shotOut > 0 && <div style={{ position: "absolute", inset: 0, opacity: shotOut, transform: `translate(${sx}px, ${sy}px)` }}><BalloonShot f={f} layer="hud" /></div>}
         {f >= LINE1 && f < LINE2 && <Line1 t={f - LINE1} out={interpolate(f, [LINE2 - 6, LINE2], [0, 1], clamp)} />}
         {f >= LINE2 && f < END + 6 && <Line2 t={f - LINE2} out={interpolate(f, [END - 4, END + 4], [0, 1], clamp)} />}
         {f >= END && <EndCard f={f} />}
-        <div style={{ position: "absolute", inset: 0, transform: `translate(${sx}px, ${sy}px) scale(${punch})` }}>
-          <Confetti f={f} start={POP} seed="c" count={340} origin={origin} front />
-          <Confetti f={f} start={END - 30} seed="r" count={90} origin={{ x: 540, y: -120, w: 1100, h: 200 }} burst={false} front />
-        </div>
       </Stage>
       {flash > 0 && <AbsoluteFill style={{ background: "#fff", opacity: flash, mixBlendMode: "screen" }} />}
     </AbsoluteFill>
@@ -237,9 +234,6 @@ function EndCard({ f }) {
   return (
     <>
       <AbsoluteFill style={{ background: `radial-gradient(ellipse 60% 30% at 50% 40%, rgba(91,43,255,${0.3 + (land >= 0 ? 0.15 * Math.exp(-land / 20) : 0)}), transparent 70%)` }} />
-      <svg viewBox={WORDMARK.viewBox} width={WM_W} height={WM_W * 1167 / 3224} style={{ position: "absolute", left: WM_L, top: WM_T, opacity: Math.min(1, letters * 1.5), transform: `translateY(${(1 - Math.min(1, letters)) * 60}px)` }}><path d={WORDMARK.letters} fill="#fff" /></svg>
-      <svg width={size} height={size} viewBox="0 0 100 100" style={{ position: "absolute", left: sx - size / 2, top: sy - size / 2, transform: `rotate(${(1 - fall) * 540}deg) scale(${sq}, ${2 - sq})`, filter: "drop-shadow(0 0 18px rgba(255,210,63,.7))" }}><path d={sparkPath(50, 50, 48, 0.22)} fill={C.yellow} /></svg>
-      {land >= 0 && land < 24 && (() => { const p = interpolate(land, [0, 22], [0, 1], { ...clamp, easing: easeOut }); return <div style={{ position: "absolute", left: DOT.x - 170 * p, top: DOT.y - 170 * p, width: 340 * p, height: 340 * p, borderRadius: 999, border: `${6 * (1 - p) + 1}px solid rgba(255,210,63,${1 - p})` }} />; })()}
       <div style={{ position: "absolute", left: 0, right: 0, top: 960, textAlign: "center", ...pop(sp(f, LAND + 6, 11, 260), 1.2) }}>
         <div style={{ ...D, fontSize: 76, color: "#fff" }}>Imagine it on</div>
         <div style={{ ...D, fontSize: 76, color: C.sky, marginTop: 8 }}>your brand.</div>

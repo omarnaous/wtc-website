@@ -2,7 +2,9 @@
 // Stage coordinates are shared with the reel; the Feed cover shows the centre 1080x1350 of the same stage.
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { useFonts } from "./fx.jsx";
+import { ThreeCanvas } from "@remotion/three";
 import { BalloonShot, C } from "./Main.jsx";
+import { World } from "./Scene3D.jsx";
 
 const D = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1 };
 export const Cover = () => {
@@ -12,7 +14,13 @@ export const Cover = () => {
   return (
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
       <div style={{ position: "absolute", left: 0, top: off, width: 1080, height: 1920 }}>
-        <BalloonShot f={182} />
+        <BalloonShot f={182} layer="bg" />
+        <div style={{ position: "absolute", inset: 0 }}>
+          <ThreeCanvas width={1080} height={1920} camera={{ fov: 30, position: [0, 0.15, 9], near: 0.1, far: 50 }} gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}>
+            <World f={182} />
+          </ThreeCanvas>
+        </div>
+        <BalloonShot f={182} layer="hud" />
       </div>
       <AbsoluteFill style={{ background: `linear-gradient(180deg, rgba(10,9,19,.85) ${feed ? 4 : 14}%, rgba(10,9,19,0) ${feed ? 24 : 30}%)` }} />
       <div style={{ position: "absolute", left: 0, right: 0, top: feed ? 40 : 330, textAlign: "center", textShadow: "0 6px 30px rgba(0,0,0,.7)" }}>
