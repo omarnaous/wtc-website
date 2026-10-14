@@ -1,0 +1,13 @@
+{
+  "name": "appify-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "python3 scripts/seed.py",
+    "db:local": "wrangler d1 migrations apply appify-db --local",
+    "db:remote": "wrangler d1 migrations apply appify-db --remote",
+    "dev": "wrangler pages dev public --port 8788",
+    "deploy": "wrangler pages deploy public --project-name appify --branch main"
+  },
+  "devDependencies": { "wrangler": "^4.40.0" }
+}

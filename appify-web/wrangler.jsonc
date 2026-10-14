@@ -1,0 +1,15 @@
+// Cloudflare Pages project "appify": static files in public/, server-rendered pages in functions/.
+{
+  "name": "appify",
+  "pages_build_output_dir": "./public",
+  "compatibility_date": "2026-10-01",
+  "vars": {
+    // Canonical origin for SEO. Switch to "https://www.appify-lb.com" once the domain is connected,
+    // and set NOINDEX_HOST to "pages.dev" so the preview address isn't indexed next to it.
+    "SITE_URL": "https://appify-32m.pages.dev",
+    "NOINDEX_HOST": ""
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "appify-db", "database_id": "77f2ec5b-ba8e-480b-b531-985b7f939853", "migrations_dir": "migrations" }
+  ]
+}
