@@ -1,4 +1,4 @@
-# NAÏADE reel (animated website 04): "Cheap website, cheap jewelry." / "Make it feel like luxury."
+# NAÏADE reel (animated website 04): "Your jewelry costs thousands. / Does your website look it?"
 
 Edit of the NAÏADE site screen recording (`source/jewelry.mp4`) into a silent 20 s 9:16 Reel (the user adds trending
 audio in-app), same template as Valmora / Earshot. A HUD chip walks through the pieces (Piece 0/3 → 3/3 → the whole set,
