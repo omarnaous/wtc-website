@@ -29,6 +29,9 @@ function Stage({ W, H, children }) {
   const k = Math.min(W / 1080, H / 1920);
   return <div style={{ position: "absolute", left: (W - 1080 * k) / 2, top: (H - 1920 * k) / 2, width: 1080, height: 1920, transform: `scale(${k})`, transformOrigin: "0 0" }}>{children}</div>;
 }
+// Instagram fills tall phones, cropping ~100 px off each side of a 1080-wide reel, and its buttons cover the right edge
+// and the caption the bottom. Everything that matters is scaled into that safe area, centred a little left.
+const Safe = ({ s = 0.76, ox = 500, oy = 860, children }) => <div style={{ position: "absolute", inset: 0, transform: `scale(${s})`, transformOrigin: `${ox}px ${oy}px` }}>{children}</div>;
 function Browser({ i, w, z = 1, style }) {
   const h = (w * 764) / 1280;
   return (
@@ -61,7 +64,7 @@ function Pov({ f, W, H }) {
         <Img src={src(i)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.05), rgba(0,0,0,.55))" }} />
-      <Stage W={W} H={H}>
+      <Stage W={W} H={H}><Safe>
         <div style={{ position: "absolute", left: 0, right: 0, top: 250, ...caption }}>
           <div style={{ ...D, fontSize: 104, lineHeight: 1.04, ...pop(sp(f, -6, 11, 300), 1.3) }}>Selling $16,200 rings<br />on a $50 website?</div>
         </div>
@@ -69,20 +72,20 @@ function Pov({ f, W, H }) {
           <Browser i={i} w={1052} z={z} />
         </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 1330, ...caption }}>
-          {f >= 34 && <div style={{ ...D, fontSize: 100, color: C.teal, textShadow: "0 4px 24px rgba(0,0,0,.55)", ...pop(sp(f, 34, 9, 300), 1.8) }}>Make it feel like this.</div>}
+          {f >= 34 && <div style={{ ...D, fontSize: 92, color: C.teal, textShadow: "0 4px 24px rgba(0,0,0,.55)", ...pop(sp(f, 34, 9, 300), 1.8) }}>Make it feel like this.</div>}
           {f >= 56 && <div style={{ ...UI, fontSize: 46, marginTop: 18, ...rise(sp(f, 56, 12, 260)) }}>ChatGPT could never.</div>}
         </div>
         {f >= 6 && (
           <div style={{ position: "absolute", left: 0, right: 0, top: 1590, display: "flex", justifyContent: "center" }}>
             <div key={k} style={{ display: "flex", alignItems: "center", gap: 18, padding: "16px 28px", borderRadius: 18, background: "rgba(5,8,10,.66)", border: `3px solid ${set ? C.teal : "rgba(53,230,216,.5)"}`, boxShadow: set ? "0 0 40px rgba(53,230,216,.35)" : "none", transform: `scale(${interpolate(hud, [0, 1], [1.3, 1])})`, opacity: Math.min(1, hud * 3) }}>
-              <span style={{ ...M, fontSize: 28, color: C.teal }}>{set ? "The set" : `Piece ${count}/3`}</span>
+              <span style={{ ...M, fontSize: 28, color: C.teal }}>{set ? "Set" : `Piece ${count}/3`}</span>
               <div style={{ display: "flex", gap: 8 }}>{[1, 2, 3].map((n) => <i key={n} style={{ width: 22, height: 22, borderRadius: 99, transform: "rotate(45deg) scale(.8)", background: n <= count ? C.teal : "rgba(255,255,255,.18)" }} />)}</div>
-              <span style={{ ...UI, fontSize: 34, color: "#fff" }}>{set ? "Earrings, pendant & ring" : name}</span>
+              <span style={{ ...UI, fontSize: 34, color: "#fff" }}>{set ? "Earrings · pendant · ring" : name}</span>
               {price && <span style={{ ...UI, fontSize: 34, color: C.teal }}>{price}</span>}
             </div>
           </div>
         )}
-      </Stage>
+      </Safe></Stage>
     </AbsoluteFill>
   );
 }
@@ -97,14 +100,15 @@ function Caustics({ t }) {
 function EndCard({ f, W, H }) {
   const t = f - END, cta = sp(t, 30, 9, 260), pulse = 1 + 0.025 * Math.sin(Math.max(0, t - 40) / 4);
   const devP = sp(t, 6, 13, 200), offer = sp(t, 26, 8, 300);
-  const dw = 380, dx = 40, dy = 1920 - 200 - dw * 830 / 420;
+  const dw = 380, dx = 330, dy = 1920 - 110 - dw * 830 / 420;
   return (
     <AbsoluteFill style={{ background: `linear-gradient(180deg, #02090B, ${C.night} 55%, #062B30)` }}>
       <AbsoluteFill style={{ background: `radial-gradient(ellipse 60% 22% at ${40 + 8 * Math.sin(t / 30)}% 20%, rgba(53,230,216,.28), transparent 70%)`, filter: "blur(10px)" }} />
       <Stage W={W} H={H}>
         <Caustics t={t} />
+        <Safe s={0.8} oy={900}>
         <div style={{ position: "absolute", left: 0, right: 0, top: 170, textAlign: "center" }}>
-          <div style={{ ...M, fontSize: 32, color: C.teal, letterSpacing: "0.3em", ...pop(sp(t, 2, 10, 300)) }}>The deep end</div>
+          <div style={{ display: "grid", justifyItems: "center", gap: 10, ...pop(sp(t, 2, 10, 300)) }}><svg viewBox={WORDMARK.viewBox} width={280} height={280 * 1167 / 3224}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.teal} /></svg><span style={{ ...M, fontSize: 24, color: C.teal }}>@appifylb</span></div>
           <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 18 }}>{[0, 1, 2].map((k) => <Spark key={k} size={60} style={{ ...pop(sp(t, 6 + k * 5, 8, 320), 2) }} />)}</div>
           <div style={{ ...D, fontSize: 76, color: "#fff", marginTop: 40, ...pop(sp(t, 12, 10, 300)) }}>Websites that look</div>
           <div style={{ ...D, fontSize: 76, color: "#fff", marginTop: 6, ...pop(sp(t, 16, 10, 300)) }}>this expensive</div>
@@ -117,14 +121,11 @@ function EndCard({ f, W, H }) {
             <div style={{ ...UI, fontSize: 30, color: C.night, marginTop: 10 }}>for a website like this</div>
           </div>
         </div>
-        <div style={{ position: "absolute", right: 70, top: 1250, display: "grid", justifyItems: "end", gap: 14, ...rise(sp(t, 42, 12, 220)) }}>
-          <svg viewBox={WORDMARK.viewBox} width={330} height={330 * 1167 / 3224}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.teal} /></svg>
-          <div style={{ ...M, fontSize: 24, color: "rgba(255,255,255,.75)" }}>@appifylb</div>
-          <div style={{ ...UI, fontWeight: 400, fontSize: 24, color: "rgba(255,255,255,.6)", marginTop: 10, textAlign: "right" }}>NAÏADE · concept brand<br />designed & built by Appify</div>
-        </div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 1030, textAlign: "center", ...UI, fontWeight: 400, fontSize: 24, color: "rgba(255,255,255,.6)", ...rise(sp(t, 42, 12, 220)) }}>NAÏADE · concept brand · designed &amp; built by Appify</div>
         <div style={{ position: "absolute", left: dx, top: dy, transform: `translateY(${(1 - Math.min(1, devP)) * 700}px)` }}>
           <DevRing width={dw} t={t} tilt={Math.sin(t / 9) * 3} bob={Math.sin(t / 6) * 3} face={{ brow: 18, lid: (t % 70) > 66 ? 1 : 0.04, smile: 1, look: 6, happy: t > 24 ? 1 : 0, open: t > 16 && t < 30 ? 0.5 : 0 }} />
         </div>
+        </Safe>
       </Stage>
     </AbsoluteFill>
   );

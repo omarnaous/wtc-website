@@ -9,3 +9,4 @@ NAÏADE is a concept brand (the site's own footer: pieces, prices and imagery ar
 Extract the frames first (not committed): `mkdir -p public/rec && ffmpeg -t 17.2 -i source/jewelry.mp4 -q:v 2 public/rec/%04d.jpg`
 Then `node render.mjs Reel` and strip the empty audio track: `ffmpeg -i out/Reel.mp4 -c:v copy -an out/Appify-NAIADE-Website-Reel.mp4`.
 Thumbnail: `node render.mjs CoverReel 0` -> `covers/`. Piece timing: `src/timing.js`.
+All overlays sit in Instagram's safe area (`Safe` in `src/Main.jsx`): tall phones crop ~100 px off each side, the buttons cover the right edge and the caption the bottom.
