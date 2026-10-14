@@ -1,121 +1,121 @@
-// Generated from freezmix.com (scraped): the 13 flavours, their label background colours, and the slot each one gets.
-export const SLOTS = [
+// From freezmix.com (scraped): the 13 flavours in the film's order, each with its label background colour.
+// `dark`: the colour is light, so type on it is ink. `top`: Freez's bottle-with-fruit hero shot, where the site has one.
+export const FLAVORS = [
  {
+  "n": 1,
   "name": "Lemon & Mint",
   "slug": "lemon-and-mint",
+  "word": "MINT",
   "bg": "#1ECECB",
-  "top": "top-lemon",
-  "at": 60,
-  "len": 30,
-  "dark": true
+  "dark": true,
+  "top": "top-lemon"
  },
  {
+  "n": 2,
   "name": "Pineapple & Coconut",
   "slug": "pineapple-and-coconut",
+  "word": "PINEAPPLE",
   "bg": "#FBDD65",
-  "top": "top-pineapple",
-  "at": 90,
-  "len": 30,
-  "dark": true
+  "dark": true,
+  "top": "top-pineapple"
  },
  {
+  "n": 3,
   "name": "Pomegranate Mix",
   "slug": "pomegranate-mix",
+  "word": "POMEGRANATE",
   "bg": "#891E28",
-  "top": "top-pomegranate",
-  "at": 120,
-  "len": 30,
-  "dark": false
+  "dark": false,
+  "top": "top-pomegranate"
  },
  {
+  "n": 4,
   "name": "Blue Hawaii",
   "slug": "blue-hawaii",
+  "word": "HAWAII",
   "bg": "#2046B3",
-  "top": null,
-  "at": 150,
-  "len": 30,
-  "dark": false
+  "dark": false,
+  "top": null
  },
  {
+  "n": 5,
   "name": "Mango & Peach",
   "slug": "mango-and-peach",
+  "word": "MANGO",
   "bg": "#F4551B",
-  "top": null,
-  "at": 180,
-  "len": 15,
-  "dark": false
+  "dark": false,
+  "top": null
  },
  {
+  "n": 6,
   "name": "Berry Mix",
   "slug": "berry-mix",
+  "word": "BERRY",
   "bg": "#720230",
-  "top": null,
-  "at": 195,
-  "len": 15,
-  "dark": false
+  "dark": false,
+  "top": null
  },
  {
+  "n": 7,
   "name": "Strawberry Mix",
   "slug": "strawberry-mix",
+  "word": "STRAWBERRY",
   "bg": "#F05E9F",
-  "top": null,
-  "at": 210,
-  "len": 15,
-  "dark": false
+  "dark": true,
+  "top": null
  },
  {
+  "n": 8,
   "name": "Kiwi & Lime",
   "slug": "kiwi-and-lime",
+  "word": "KIWI",
   "bg": "#76D63E",
-  "top": null,
-  "at": 225,
-  "len": 15,
-  "dark": true
+  "dark": true,
+  "top": null
  },
  {
+  "n": 9,
   "name": "Lychee",
   "slug": "lychee",
+  "word": "LYCHEE",
   "bg": "#E3E3E3",
-  "top": null,
-  "at": 240,
-  "len": 15,
-  "dark": true
+  "dark": true,
+  "top": null
  },
  {
+  "n": 10,
   "name": "Lemon & Ginger",
   "slug": "lemon-and-ginger",
+  "word": "GINGER",
   "bg": "#161F26",
-  "top": null,
-  "at": 255,
-  "len": 15,
-  "dark": false
+  "dark": false,
+  "top": null
  },
  {
+  "n": 11,
   "name": "Mojito Strawberry",
   "slug": "mojito-strawberry",
+  "word": "MOJITO",
   "bg": "#713C6A",
-  "top": null,
-  "at": 270,
-  "len": 15,
-  "dark": false
+  "dark": false,
+  "top": null
  },
  {
+  "n": 12,
   "name": "Tamarind",
   "slug": "tamarind",
+  "word": "TAMARIND",
   "bg": "#3F212B",
-  "top": null,
-  "at": 285,
-  "len": 15,
-  "dark": false
+  "dark": false,
+  "top": null
  },
  {
+  "n": 13,
   "name": "Apple & Grape",
   "slug": "apple-and-grape",
+  "word": "APPLE",
   "bg": "#CAC085",
-  "top": null,
-  "at": 300,
-  "len": 15,
-  "dark": true
+  "dark": true,
+  "top": null
  }
 ];
-export const LINEUP = ["lemon-and-mint", "blue-hawaii", "lychee", "berry-mix", "pomegranate-mix", "mango-and-peach", "strawberry-mix", "kiwi-and-lime", "pineapple-and-coconut", "lemon-and-ginger", "mojito-strawberry", "tamarind", "apple-and-grape"];   // the site's own order
