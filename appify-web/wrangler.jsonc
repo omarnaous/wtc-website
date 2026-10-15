@@ -1,15 +1,25 @@
-// Cloudflare Pages project "appify": static files in public/, server-rendered pages in functions/.
+// Cloudflare Worker "appify": static files in public/ (Workers static assets), server-rendered pages and the booking
+// API in src/ (entry src/index.js), content in D1. Deploy with `npm run deploy`.
 {
   "name": "appify",
-  "pages_build_output_dir": "./public",
+  "main": "src/index.js",
   "compatibility_date": "2026-10-01",
+  // Files that exist in public/ are served without running the worker; everything else goes to src/index.js.
+  "assets": { "directory": "./public", "binding": "ASSETS" },
   "vars": {
-    // Canonical origin for SEO. Switch to "https://www.appify-lb.com" once the domain is connected,
-    // and set NOINDEX_HOST to "pages.dev" so the preview address isn't indexed next to it.
-    "SITE_URL": "https://appify-32m.pages.dev",
-    "NOINDEX_HOST": ""
+    // Canonical origin for SEO. The bare domain redirects here (src/index.js).
+    "SITE_URL": "https://www.appify-lb.com",
+    // The *.workers.dev preview address gets x-robots-tag: noindex so it isn't indexed next to the real domain.
+    "NOINDEX_HOST": "workers.dev"
   },
+  // Both hostnames attach to the worker on deploy (Cloudflare creates the DNS records). Needs appify-lb.com to be an
+  // active zone in this Cloudflare account, i.e. the nameservers moved from Namecheap to Cloudflare.
+  "routes": [
+    { "pattern": "www.appify-lb.com", "custom_domain": true },
+    { "pattern": "appify-lb.com", "custom_domain": true }
+  ],
   "d1_databases": [
     { "binding": "DB", "database_name": "appify-db", "database_id": "77f2ec5b-ba8e-480b-b531-985b7f939853", "migrations_dir": "migrations" }
-  ]
+  ],
+  "observability": { "enabled": true }
 }

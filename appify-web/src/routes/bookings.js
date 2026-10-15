@@ -1,11 +1,11 @@
 // POST /api/bookings: saves the appointment request in D1, then hands back the WhatsApp or email link
 // the visitor sends it with. Works with fetch (JSON) and with a plain form post (no JavaScript).
-import { loadSite } from "../_lib/data.js";
+import { loadSite } from "../lib/data.js";
 
 const clip = (v, n) => String(v ?? "").trim().slice(0, n);
 const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
 
-export async function onRequestPost({ request, env }) {
+export async function createBooking(request, env) {
   const isJSON = (request.headers.get("content-type") || "").includes("application/json");
   let b;
   if (isJSON) b = await request.json().catch(() => ({}));

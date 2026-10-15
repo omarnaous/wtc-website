@@ -1,7 +1,7 @@
 # appify-web: www.appify-lb.com
 
-The Appify studio site. Server-rendered on **Cloudflare Pages Functions** (full HTML for SEO, no framework),
-content in **Cloudflare D1**, static files and videos on Pages. A small vanilla JS layer adds the motion:
+The Appify studio site. Server-rendered on a **Cloudflare Worker** (full HTML for SEO, no framework),
+content in **Cloudflare D1**, static files and videos on **Workers static assets** (`public/`). A small vanilla JS layer adds the motion:
 live Dev mascot (blinks, follows the cursor, talks, does tricks on tap), word-by-word headlines, scroll reveals,
 tilt cards, hover-play videos, a video player, filters, and the booking flow.
 
@@ -25,21 +25,30 @@ npx wrangler d1 execute appify-db --remote --command "UPDATE settings SET value=
 npx wrangler d1 execute appify-db --remote --command "UPDATE projects SET live_url='https://…' WHERE slug='oddball'"
 npx wrangler d1 execute appify-db --remote --command "SELECT * FROM bookings ORDER BY id DESC LIMIT 20"
 ```
-Pages cache HTML for up to 10 minutes at the edge, so edits show within that window.
+Pages are cached at the edge for up to 10 minutes on the custom domain (the Cache API does nothing on `*.workers.dev`), so edits show within that window.
+
+## Code
+- `src/index.js`: the Worker entry. Static files in `public/` are served before it runs (with `public/_headers`);
+  it handles the rest: `POST /api/bookings` (`src/routes/bookings.js`) and every page (`src/routes/page.js`, which
+  renders with `src/lib/`). It also redirects the bare domain to `SITE_URL` and adds security headers.
+- `wrangler.jsonc`: Worker `appify`, assets, D1 binding, `SITE_URL`, and the two custom domains.
 
 ## Run and deploy
 ```
 npm install
+npx wrangler login                   # once
 npm run db:local && npm run dev      # http://localhost:8788
 npm run db:remote                    # apply new migrations to the live database
-npm run deploy                       # wrangler pages deploy public --project-name appify
+npm run deploy                       # wrangler deploy
 ```
 New video: `bash scripts/encode.sh <source.mp4> <slug> [poster-second] [width]`, then add a row to `motion` or `projects`.
+Workers static assets take files up to 25 MiB each.
 
 ## Domain
-Pages project `appify` (https://appify-32m.pages.dev). To serve it on www.appify-lb.com: Pages > appify > Custom domains >
-add `www.appify-lb.com`, then at Namecheap add a CNAME `www` -> `appify-32m.pages.dev`. Then set `SITE_URL` in
-`wrangler.jsonc` to `https://www.appify-lb.com` and `NOINDEX_HOST` to `pages.dev`, and redeploy.
+`appify-lb.com` must be an active zone in the same Cloudflare account (add the site in Cloudflare, then switch the
+nameservers at Namecheap to the two Cloudflare gives you). `npm run deploy` then attaches `www.appify-lb.com` and
+`appify-lb.com` to the Worker and creates their DNS records (`routes` in `wrangler.jsonc`). The bare domain 301s to
+www. The `*.workers.dev` address stays up as a preview and is served with `x-robots-tag: noindex`.
 
 ## Stage 2: admin panel (planned)
 `/admin` behind Cloudflare Access (Zero Trust, free up to 50 users): CRUD for projects, motion, FAQs and services,

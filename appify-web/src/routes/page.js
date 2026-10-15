@@ -1,13 +1,12 @@
-// Server-rendered pages for every route that isn't a static file (see public/_routes.json).
+// Server-rendered pages for every route that isn't a static file in public/ (src/index.js routes them here).
 // HTML is cached at the edge for a few minutes; content comes from D1.
-import { loadSite } from "./_lib/data.js";
-import { homePage, workPage, servicePage, notFoundPage } from "./_lib/pages.js";
+import { loadSite } from "../lib/data.js";
+import { homePage, workPage, servicePage, notFoundPage } from "../lib/pages.js";
 
 const HTML = { "content-type": "text/html; charset=utf-8" };
 const page = (html, status = 200, extra = {}) => new Response(html, { status, headers: { ...HTML, "cache-control": status === 200 ? "public, max-age=60, s-maxage=600, stale-while-revalidate=86400" : "no-store", ...extra } });
 
-export async function onRequestGet(ctx) {
-  const { request, env } = ctx;
+export async function renderPage(request, env, ctx) {
   const url = new URL(request.url);
   // one canonical form: no trailing slash (except "/")
   if (url.pathname.length > 1 && url.pathname.endsWith("/")) return Response.redirect(url.origin + url.pathname.replace(/\/+$/, "") + url.search, 301);
