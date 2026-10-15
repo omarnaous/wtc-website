@@ -1,0 +1,53 @@
+{
+ "ask": {
+  "at": 24,
+  "len": 53,
+  "text": "You used to ask AI questions."
+ },
+ "hand": {
+  "at": 91,
+  "len": 51,
+  "text": "Now, you hand it the whole job."
+ },
+ "name": {
+  "at": 182,
+  "len": 49,
+  "text": "Gemini 3.5."
+ },
+ "plans": {
+  "at": 261,
+  "len": 22,
+  "text": "It plans."
+ },
+ "codes": {
+  "at": 309,
+  "len": 22,
+  "text": "It codes."
+ },
+ "sees": {
+  "at": 357,
+  "len": 21,
+  "text": "It sees."
+ },
+ "builds": {
+  "at": 405,
+  "len": 22,
+  "text": "It builds."
+ },
+ "sleep": {
+  "at": 453,
+  "len": 59,
+  "text": "And while you sleep... it keeps going."
+ },
+ "end": {
+  "at": 552,
+  "len": 49,
+  "text": "Gemini 3.5."
+ },
+ "over": {
+  "at": 611,
+  "len": 35,
+  "text": "Just hand it over."
+ },
+ "total": 721
+}
