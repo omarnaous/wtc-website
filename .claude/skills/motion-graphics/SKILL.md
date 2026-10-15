@@ -1,6 +1,6 @@
 ---
 name: motion-graphics
-description: "Design and render finished motion graphics videos (MP4 with sound) in code with Remotion. Use this whenever the user asks for any animated video or motion piece, even casually: logo reveals or intros/outros, showreels, kinetic typography or animated quotes/lyrics, seamless loops or animated backgrounds, 3D abstract loops, animated data stories, charts or infographics, product/app promos, Instagram Reels/Stories/TikTok/Shorts clips, YouTube intros, explainer animations, title cards, lower thirds, animated posters, or 'make it move'. Also use it for Apple-style work (Apple keynote / Mac or iPhone launch films, the notch animation, macOS-UI films, 'make it look like Apple'), which switches on Apple mode. Also use it to edit, re-time, re-brand or re-render an existing Remotion project. Do not use for static images, or for adding interactive animations to a website or app UI."
+description: "Design and render finished motion graphics videos (MP4 with sound) in code with Remotion. Use this whenever the user asks for any animated video or motion piece, even casually: logo reveals or intros/outros, showreels, kinetic typography or animated quotes/lyrics, seamless loops or animated backgrounds, 3D abstract loops, animated data stories, charts or infographics, product/app promos, Instagram Reels/Stories/TikTok/Shorts clips, YouTube intros, explainer animations, title cards, lower thirds, animated posters, or 'make it move'. Also use it to edit, re-time, re-brand or re-render an existing Remotion project. Do not use for static images, or for adding interactive animations to a website or app UI."
 ---
 
 # Motion Graphics
@@ -23,8 +23,6 @@ Don't stop to ask about things with a sensible default. State the assumption in 
 
 Ask only when the answer changes the whole piece (e.g. two contradicting brands, or facts/figures you'd have to make up).
 
-**Apple mode.** If the brief mentions Apple, an Apple keynote/launch, a Mac or iPhone launch film, the notch, macOS/iOS UI, WWDC, or "make it look like Apple", read `references/apple.md` before anything else and follow it: it asks for the facts list first, uses the Apple kit (`assets/apple/apple.jsx`: Apple springs, `chain`, `MenuBar`, `Notch`, `Wallpaper`, `Caption`, `Glass`, `Hello`, with Inter in `assets/apple/fonts/`), and overrides the house style (critically damped springs, motion worked out from the start of the film, one caption per scene, quiet camera, causal/harmonious/sparse sound).
-
 ### 2. Write the treatment and beat sheet (in your head or a comment, not a long chat message)
 
 - **The one idea.** One sentence: what carries the piece from first frame to last? (e.g. "the spark ignites, draws the logo, leaves before the hit, and returns as the i-dot"). Every effect should serve it.
@@ -41,8 +39,6 @@ bash <skill-dir>/scripts/scaffold.sh <project-dir>     # copies assets/template,
 ```
 
 The template has `src/index.js`, `src/Root.jsx` (one `<Composition>` per format), `src/timing.js`, `src/Main.jsx` (a starter scene with font loading and helpers), `render.mjs` (renders MP4s or still frames) and `sound/cues.example.json`. Copy brand files into `src/` and fonts into `public/` (load fonts with `FontFace` + `delayRender`, as the template does; never rely on system or Google fonts at render time).
-
-In Apple mode also copy `assets/apple/apple.jsx` into `src/` and `assets/apple/fonts/*.woff2` into `public/`.
 
 Remotion API notes and the gotchas that cost real time are in `references/remotion.md`. Read it before writing compositions. For real 3D (glossy objects, reflections, 3D confetti, extruded logos), read `references/three.md`.
 
