@@ -12,8 +12,9 @@ from scipy.io import wavfile
 SR, FPS = 48000, 30
 T = open("src/timing.js").read()
 g = lambda k: int(re.search(rf"export const {k} = (\d+)", T).group(1))
-DURF = g("DURATION"); SC = [int(x) for x in re.search(r"SC = \[([^\]]+)\]", T).group(1).split(",")]
-SPARK, EXIT, FLY, LAND, LINE, URL = g("SPARK"), g("EXIT"), g("FLY"), g("LAND"), g("LINE"), g("URL")
+DURF = g("DURATION"); S = [int(x) for x in re.search(r"S = \[([^\]]+)\]", T).group(1).split(",")]
+LINE, PILL, SPARK, WORD, LAND, TAG, URL = g("LINE"), g("PILL"), g("SPARK"), g("WORD"), g("LAND"), g("TAG"), g("URL")
+SC = S
 DUR = DURF / FPS; N = int(DUR * SR)
 BPM = 120; BEAT = 60 / BPM; STEP = BEAT / 4; BAR = BEAT * 4
 rng = np.random.default_rng(14)
@@ -112,41 +113,42 @@ def land_chord():
 
 fx = Bus()
 DM = [74, 76, 78, 79, 81, 83, 85, 86]  # D major, D5 up
-# 0 · the phone rises, "hello" is written
-fx.put(rise_whoosh(0.9), 0, 0.55)
-fx.put(haptic(0.8), f(16), 0.35)
-fx.put(pen(f(32)), f(8), 0.9, pan=-0.1)
-fx.put(reverb(bell(86, 0.4, 0.8), 1.4, 0.4), f(40), 0.07, pan=0.2)
-# 1 · websites: the island opens on the downbeat, the page fills
-fx.put(haptic(1.2), f(SC[0]), 0.6)
-fx.put(reverb(bell(74, 0.5, 1.0), 1.6, 0.35), f(SC[0] + 2), 0.12)
-for k, fr in enumerate((SC[0] + 16, SC[0] + 32, SC[0] + 48)): fx.put(tick(1760 + 220 * k), f(fr), 0.18, pan=0.25)
-fx.put(tick(2640), f(SC[0] + 62), 0.25, pan=0.3)
-# 2 · animated sites: the island taps, the digits roll ($360 -> $500)
-fx.put(haptic(1.0), f(SC[1]), 0.5)
-for k, d in enumerate((0, 3, 5, 7, 9, 12, 15)): fx.put(tick(2400 - 60 * k), f(SC[1] + 2 + d), 0.16 * (1 - k * 0.08), pan=0.1 * (k % 3 - 1))
-fx.put(reverb(bell(81, 0.5, 0.9), 1.4, 0.35), f(SC[1] + 16), 0.09)
-# 3 · apps: the line swaps, two icons pop
-fx.put(swish(0.4), f(SC[2] - 6), 0.35)
-fx.put(haptic(1.0), f(SC[2]), 0.45)
-fx.put(pop(81), f(SC[2] + 8), 0.3, pan=-0.2); fx.put(pop(86), f(SC[2] + 14), 0.3, pan=0.2)
-# 4 · under 7 days: the ring closes while 7 dots climb the scale, then the check
-fx.put(swish(0.4), f(SC[3] - 6), 0.3)
-fx.put(haptic(1.0), f(SC[3]), 0.45)
-fx.put(glide(f(38), 62, 74), f(SC[3] + 8), 0.35)
-for i in range(7): fx.put(reverb(bell(DM[i], 0.35, 0.35), 0.8, 0.25), f(SC[3] + 10 + i * 5), 0.12, pan=-0.3 + i * 0.1)
-fx.put(haptic(1.3), f(SC[3] + 46), 0.5); fx.put(reverb(bell(86, 0.6, 1.2), 1.6, 0.35), f(SC[3] + 46), 0.16)
-# 5 · the island closes to its spark, the phone drops, the spark flies and lands
-fx.put(haptic(0.9), f(SPARK), 0.4)
-fx.put(glitter(f(LAND - FLY)), f(FLY), 0.5, pan=0.15)
-fx.put(glide(f(LAND - FLY), 74, 86), f(FLY), 0.25)
-fx.put(swish(0.7, 300, 3000), f(EXIT), 0.4, pan=-0.1)
+def morph(fr, m0, m1, gn=0.3):
+    """a shape changing: a soft air move plus a short tonal slide between two chord tones"""
+    fx.put(swish(0.5, 300, 4000), f(fr - 4), gn); fx.put(glide(0.32, m0, m1), f(fr), gn * 0.5); fx.put(haptic(1.0), f(fr + 6), gn * 1.3)
+# 0 · a line draws itself and inflates into a pill; "Ideas," rises
+fx.put(glide(f(PILL - LINE), 62, 74), f(LINE), 0.35)
+fx.put(swish(0.35, 2000, 9000), f(LINE), 0.12)
+fx.put(pop(74), f(PILL + 2), 0.35); fx.put(haptic(0.9), f(PILL + 4), 0.4)
+fx.put(swish(0.4, 600, 5000), f(PILL), 0.18)
+# 1 · website: lines draw (a tick each), dots pop
+morph(S[0], 74, 78)
+for k, d in enumerate((10, 16, 20, 24, 27, 30, 32)): fx.put(tick(1760 + 110 * k), f(S[0] + d), 0.14, pan=-0.3 + 0.1 * k)
+for k in range(3): fx.put(pop(86 + k * 2), f(S[0] + 12 + 2 * k), 0.12, pan=-0.25)
+# 2 · video: play draws, the progress line starts
+morph(S[1], 78, 81)
+fx.put(tick(2200), f(S[1] + 12), 0.16); fx.put(tick(1650), f(S[1] + 20), 0.14)
+# 3 · phone: island, cards, list, tab dots
+morph(S[2], 81, 74)
+for k, d in enumerate((8, 12, 16, 19, 22, 24)): fx.put(tick(1480 + 140 * k), f(S[2] + d), 0.13, pan=0.25 - 0.1 * k)
+for k in range(4): fx.put(pop(81 + [0, 2, 4, 5][k]), f(S[2] + 30 + 2 * k), 0.12, pan=-0.3 + 0.2 * k)
+# 4 · ring: the disc opens it, 7 day-ticks climb the scale, the 7 lands
+morph(S[3], 74, 69)
+fx.put(haptic(1.4), f(S[3] + 10), 0.5)
+for k in range(7): fx.put(reverb(bell(DM[k], 0.35, 0.35), 0.8, 0.25), f(S[3] + 14 + k * 4), 0.12, pan=-0.3 + k * 0.1)
+fx.put(haptic(1.3), f(S[3] + 20), 0.45); fx.put(reverb(bell(86, 0.6, 1.2), 1.6, 0.35), f(S[3] + 44), 0.12)
+# 5 · the ring becomes the spark and lands on the i
+fx.put(swish(0.6, 300, 5000), f(SPARK - 4), 0.35)
+fx.put(glitter(f(LAND - SPARK)), f(SPARK), 0.45, pan=0.15)
+fx.put(glide(f(LAND - SPARK), 74, 86), f(SPARK), 0.22)
+fx.put(swish(0.45, 500, 4000), f(WORD), 0.2)
 fx.put(land_chord(), f(LAND), 0.42)
-fx.put(tick(1320), f(LINE + 2), 0.12); fx.put(tick(1760), f(URL + 2), 0.08)
+fx.put(swish(0.35, 800, 6000), f(TAG), 0.12); fx.put(tick(1320), f(TAG + 4), 0.1)
+fx.put(glide(0.6, 81, 86), f(URL + 4), 0.12); fx.put(tick(1760), f(URL + 2), 0.08)
 
 # ───────────────────────── music: pad from the start, the groove on the first offer, the pad again when the island closes
 CHORDS = [([50, 54, 57, 61, 64], 38), ([47, 50, 54, 57, 61], 35), ([43, 47, 50, 54, 57], 31), ([45, 49, 52, 57, 59], 33)]
-G0, G1 = f(SC[0]), f(SPARK)
+G0, G1 = f(S[0]), f(SPARK)
 padb, keysb, bassb, drums = Bus(), Bus(), Bus(), Bus()
 t, bar = G0 - BAR, -1  # one bar of pad before the downbeat
 while t < DUR:
