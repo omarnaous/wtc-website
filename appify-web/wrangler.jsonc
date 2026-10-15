@@ -14,6 +14,9 @@
   },
   // Both hostnames attach to the worker on deploy (Cloudflare creates the DNS records). Needs appify-lb.com to be an
   // active zone in this Cloudflare account, i.e. the nameservers moved from Namecheap to Cloudflare.
+  // Served only on the custom domains below; no *.workers.dev address (the account has no workers.dev subdomain).
+  "workers_dev": false,
+  "preview_urls": false,
   "routes": [
     { "pattern": "www.appify-lb.com", "custom_domain": true },
     { "pattern": "appify-lb.com", "custom_domain": true }

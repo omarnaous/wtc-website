@@ -48,7 +48,7 @@ Workers static assets take files up to 25 MiB each.
 `appify-lb.com` must be an active zone in the same Cloudflare account (add the site in Cloudflare, then switch the
 nameservers at Namecheap to the two Cloudflare gives you). `npm run deploy` then attaches `www.appify-lb.com` and
 `appify-lb.com` to the Worker and creates their DNS records (`routes` in `wrangler.jsonc`). The bare domain 301s to
-www. The `*.workers.dev` address stays up as a preview and is served with `x-robots-tag: noindex`.
+www. There is no `*.workers.dev` address (`workers_dev: false`); the site is only served on the custom domains.
 
 ## Stage 2: admin panel (planned)
 `/admin` behind Cloudflare Access (Zero Trust, free up to 50 users): CRUD for projects, motion, FAQs and services,
