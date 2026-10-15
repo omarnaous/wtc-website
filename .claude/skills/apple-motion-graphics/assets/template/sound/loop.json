@@ -1,0 +1,10 @@
+{
+  "fps": 30, "duration": 8.0, "seed": 5, "loop": true, "peak_db": -3, "lowpass": 6000,
+  "cues": [
+    { "type": "drone",  "start": 0, "end": 240, "gain": 0.04 },
+    { "type": "whoosh", "frame": 2,   "gain": 0.05 },
+    { "type": "click",  "frame": 78,  "gain": 0.12, "freq": 600 },
+    { "type": "click",  "frame": 188, "gain": 0.1,  "freq": 520 },
+    { "type": "whoosh", "frame": 200, "gain": 0.04 }
+  ]
+}

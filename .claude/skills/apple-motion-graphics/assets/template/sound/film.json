@@ -1,0 +1,16 @@
+{
+  "fps": 30, "duration": 11.5, "seed": 3, "peak_db": -3, "lowpass": 6000,
+  "_note": "Causal, harmonious, sparse: every cue sits on a frame from src/timing.js (scene i starts at i*75).",
+  "cues": [
+    { "type": "pad",    "start": 6,   "gain": 0.06, "chord": [110, 164.8, 220, 277.2, 329.6] },
+    { "type": "glint",  "frame": 12,  "gain": 0.03 },
+    { "type": "whoosh", "frame": 73,  "gain": 0.06 },
+    { "type": "click",  "frame": 76,  "gain": 0.12, "freq": 600 },
+    { "type": "chime",  "frame": 89,  "gain": 0.12, "freq": 880, "pan": 0.15 },
+    { "type": "whoosh", "frame": 148, "gain": 0.06 },
+    { "type": "click",  "frame": 151, "gain": 0.12, "freq": 600 },
+    { "type": "chime",  "frame": 164, "gain": 0.12, "freq": 659.3, "pan": -0.15 },
+    { "type": "whoosh", "frame": 223, "gain": 0.05 },
+    { "type": "chime",  "frame": 237, "gain": 0.16, "freq": 440 }
+  ]
+}
