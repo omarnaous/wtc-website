@@ -8,9 +8,9 @@ const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${
 // Cards show their poster; nothing plays until tapped, then the player opens the full video with sound.
 const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
 const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen to watch.", "We made every frame of it.", "Tap me, I do tricks."];
-// The hero intro: the screen next to Dev shows the poster; tap to play it with sound. Made with scripts/intro.sh, which fits any
+// The hero intro (source: appify-intro/): the screen next to Dev shows the poster; tap to play it with sound. Made with scripts/intro.sh, which fits any
 // video to the 16:9 screen at full sharpness (now: the showreel as a placeholder; run it on the real intro to replace).
-const INTRO = { video: "/media/intro.mp4", poster: "/media/intro.webp" };
+const INTRO = { video: "/media/intro.mp4?v=2", poster: "/media/intro.webp?v=2" };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
 function orgLD(site) {
