@@ -7,7 +7,7 @@ export const PLANS = [
     question: ["How much is an", "e-commerce website?"],
     name: "E-commerce website · Standard",
     price: 360, from: false, totalLabel: "Total · pay once", stamp: "PAID ONCE",
-    lines: ["Basic template", "Admin panel", "Hosting included", "Pay once, no monthly fees"],
+    lines: ["Premium template", "Admin panel", "Hosting included", "Pay once, no monthly fees"],
     end: "Pay once · no monthly fees · hosting included",
     next: "Custom e-commerce from $500",
   },
