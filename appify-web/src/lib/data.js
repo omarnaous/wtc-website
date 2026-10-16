@@ -1,7 +1,6 @@
 // Reads all site content from D1 in one round trip and keeps it in memory for a short while per isolate.
 // The stage-2 admin panel writes to the same tables and bumps settings.content_version.
 import { json } from "./html.js";
-import { storeListing } from "./store.js";
 
 let memo = null;
 const TTL = 30_000;
@@ -18,7 +17,7 @@ export async function loadSite(env, origin) {
   const s = Object.fromEntries(settings.results.map((r) => [r.key, r.value]));
   const data = {
     settings: s,
-    projects: await Promise.all(projects.results.map(async (p) => ({ ...p, features: json(p.features), stack: json(p.stack), store: p.kind === "app" && p.store_url ? await storeListing(env, p.store_url) : null }))),
+    projects: projects.results.map((p) => ({ ...p, features: json(p.features), stack: json(p.stack) })),
     motion: motion.results,
     faqs: faqs.results,
     services: services.results.map((x) => ({ ...x, points: json(x.points) })),

@@ -75,31 +75,24 @@ function motionCard(m, i) {
 </article>`;
 }
 
-// An app with an App Store link shows its live listing: icon, name, developer, rating, category, price, screenshots.
-const compact = (n) => (n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M" : n >= 1e3 ? (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K" : String(n));
-function storeCard(p, st) {
-  const facts = [
-    st.ratings > 0 ? `<div><b>${st.rating.toFixed(1)} <span class="star">★</span></b><small>${compact(st.ratings)} ratings</small></div>` : "",
-    st.genre ? `<div><b>${esc(st.genre)}</b><small>Category</small></div>` : "",
-    st.price ? `<div><b>${esc(st.price)}</b><small>Price</small></div>` : "",
-    st.age ? `<div><b>${esc(st.age)}</b><small>Age</small></div>` : "",
-  ].filter(Boolean).slice(0, 3).join("");
-  return `<article class="app-store" data-reveal>
-  <a class="store-card" href="${esc(st.url)}" target="_blank" rel="noopener" aria-label="${esc(st.name)} on the App Store">
-    <div class="store-head">
-      <img class="store-icon" src="${esc(st.icon)}" width="76" height="76" alt="" loading="lazy" decoding="async">
-      <div class="store-id"><h3>${esc(st.name)}</h3><p>${esc(st.seller)}</p></div>
-      <span class="store-get">View</span>
-    </div>
-    ${facts ? `<div class="store-facts">${facts}</div>` : ""}
-    <div class="store-shots">${st.shots.map((u, i) => `<img src="${esc(u)}" width="300" height="650" alt="${esc(st.name)} screenshot ${i + 1}" loading="lazy" decoding="async">`).join("")}</div>
-    <p class="store-foot">View on the App Store${icon.ext}</p>
+// An app with a store link shows a web preview of its real App Store page: a browser window with the full link in
+// the address bar and a screenshot of the live page (WordPress mShots renders and caches it), which scrolls slowly.
+const shot = (url) => `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=960&h=1800&vpw=1280&vph=2400`;
+function webPreviewCard(p) {
+  const shown = p.store_url.replace(/^https?:\/\//, "");
+  return `<article class="app-web" data-reveal>
+  <a class="web-card" href="${esc(p.store_url)}" target="_blank" rel="noopener" aria-label="${esc(p.title)} on the App Store">
+    <div class="web-bar"><span class="web-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="web-url"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${esc(shown)}</span></div>
+    <div class="web-view"><img src="${esc(shot(p.store_url))}" width="960" height="1800" alt="The ${esc(p.title)} App Store page" loading="lazy" decoding="async"></div>
   </a>
+  <p class="meta">${esc(p.category)} · iOS</p>
+  <h3><a href="${esc(p.store_url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h3>
+  <p class="summary">${esc(p.summary)}</p>
 </article>`;
 }
 
 function appCard(p) {
-  if (p.store) return storeCard(p, p.store);
+  if (p.store_url) return webPreviewCard(p);
   return `<article class="app-card" data-reveal>
   <div class="phone"><div class="phone-screen">
     <div class="app-splash">${sparkSVG("app-spark")}<strong>${esc(p.title)}</strong><span>${STATUS[p.status]}</span></div>
@@ -216,10 +209,6 @@ export function homePage(site) {
   </div>
   <div class="hrow apps-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">
       ${apps.map(appCard).join("")}
-      <a class="app-card next" href="#book" data-reveal>
-        <div class="phone ghost"><div class="phone-screen"><div class="app-splash"><span class="plus">+</span><strong>Your app</strong><span>Next in line</span></div></div><i class="phone-notch"></i></div>
-        <div class="app-body"><p class="meta">Have an app idea?</p><h3>Yours could be next.</h3><p class="summary">Tell us what it should do. We'll map the screens, the features and a timeline on a free call.</p><span class="link">Book a call${icon.arrow}</span></div>
-      </a>
   </div>
   ${rowProg("apps-row")}
 </section>
