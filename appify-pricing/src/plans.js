@@ -14,9 +14,9 @@ export const PLANS = [
     id: "WebApp500", n: 2, accent: "#74C6FF",
     question: ["Need a system", "for your business?"],
     name: "Web app · Custom",
-    price: 500, from: true, totalLabel: "Starting at", stamp: "CUSTOM",
-    lines: ["CRM for your clients", "Business systems", "Automations & workflows", "Custom dashboards", "Fully custom design", "Admin panel"],
-    end: "CRMs · systems · automations · dashboards",
+    price: 500, from: true, totalLabel: "Starting at · pay once", stamp: "CUSTOM",
+    lines: ["CRM for your clients", "Business systems", "Automations & workflows", "Custom dashboards", "Admin panel", "Hosting included", "Pay once, no monthly fees"],
+    end: "Pay once · no monthly fees · hosting included",
   },
   {
     id: "App999", n: 3, accent: "#39E29B",
