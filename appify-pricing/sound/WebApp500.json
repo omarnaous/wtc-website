@@ -1,266 +1,240 @@
 {
  "fps": 30,
  "duration": 13.0,
- "seed": 41,
+ "seed": 52,
  "fade_out": 0.8,
  "lowpass": 10000,
  "peak_db": -3,
  "cues": [
   {
-   "type": "house",
+   "type": "drone",
    "start": 0,
    "end": 390,
-   "bpm": 120,
-   "gain": 0.42,
-   "sections": [
-    [
-     0,
-     "intro"
-    ],
-    [
-     40,
-     "gap"
-    ],
-    [
-     60,
-     "drop"
-    ],
-    [
-     300,
-     "outro"
-    ]
+   "freq": 55,
+   "gain": 0.2
+  },
+  {
+   "type": "pad",
+   "start": 60,
+   "end": 390,
+   "chord": [
+    110,
+    130.81,
+    164.81,
+    220
    ],
-   "lp_auto": [
-    [
-     0,
-     900
-    ],
-    [
-     40,
-     700
-    ],
-    [
-     59,
-     700
-    ],
-    [
-     62,
-     9000
-    ]
-   ]
+   "gain": 0.13,
+   "fade_in": 0.4
   },
   {
-   "type": "swoosh",
+   "type": "beat",
+   "start": 60,
+   "end": 390,
+   "bpm": 120,
+   "pattern": "half-time",
+   "gain": 0.34,
+   "hats": 0.3
+  },
+  {
+   "type": "typing",
    "start": 0,
-   "end": 12,
-   "peak": 0.4,
-   "f": 2400,
-   "gain": 0.12
+   "end": 30,
+   "gain": 0.14
   },
   {
-   "type": "pop",
-   "frame": 3,
-   "gain": 0.12,
-   "pan": -0.2
+   "type": "glitch",
+   "frame": 40,
+   "gain": 0.09
   },
   {
-   "type": "pop",
-   "frame": 11,
-   "gain": 0.14,
-   "pan": 0.2
-  },
-  {
-   "type": "counter",
-   "start": 51,
+   "type": "graph_rise",
+   "start": 47,
    "end": 60,
-   "gain": 0.16
+   "f0": 300,
+   "f1": 1200,
+   "gain": 0.1
   },
   {
-   "type": "reverse_swell",
-   "start": 44,
-   "end": 60,
-   "gain": 0.12,
-   "notes": [
-    "A3",
-    "C4",
-    "E4"
-   ]
+   "type": "glitch",
+   "frame": 60,
+   "gain": 0.14
   },
   {
    "type": "impact",
    "frame": 60,
-   "gain": 0.26
+   "gain": 0.22
   },
   {
    "type": "thump",
    "frame": 60,
-   "gain": 0.3
+   "gain": 0.3,
+   "freq": 55
   },
   {
-   "type": "glint",
-   "frame": 70,
-   "gain": 0.05
+   "type": "sweep",
+   "start": 82,
+   "end": 96,
+   "f0": 400,
+   "f1": 1600,
+   "gain": 0.07
   },
   {
-   "type": "swoosh",
-   "start": 80,
-   "end": 94,
-   "peak": 0.5,
-   "f": 1800,
-   "gain": 0.1
-  },
-  {
-   "type": "click",
+   "type": "blip",
    "frame": 90,
+   "freq": 440,
    "gain": 0.12
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 105,
-   "end": 119,
-   "gain": 0.22
+   "end": 117,
+   "gain": 0.12
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 111,
-   "end": 120,
-   "gain": 0.2,
-   "pan": 0.1
+   "end": 118,
+   "gain": 0.1,
+   "pan": 0.15
   },
   {
-   "type": "pop",
+   "type": "blip",
    "frame": 117,
-   "gain": 0.11,
-   "pan": -0.3
+   "freq": 880.0,
+   "gain": 0.13,
+   "pan": -0.2
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 129,
-   "end": 138,
-   "gain": 0.2,
-   "pan": -0.1
+   "end": 136,
+   "gain": 0.1,
+   "pan": -0.15
   },
   {
-   "type": "pop",
+   "type": "blip",
    "frame": 135,
-   "gain": 0.11,
-   "pan": -0.3
+   "freq": 1046.5022612023945,
+   "gain": 0.13,
+   "pan": -0.2
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 147,
-   "end": 156,
-   "gain": 0.2,
-   "pan": 0.1
+   "end": 154,
+   "gain": 0.1,
+   "pan": 0.15
   },
   {
-   "type": "pop",
+   "type": "blip",
    "frame": 153,
-   "gain": 0.11,
-   "pan": -0.3
+   "freq": 1174.6590716696303,
+   "gain": 0.13,
+   "pan": -0.2
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 165,
-   "end": 174,
-   "gain": 0.2,
-   "pan": -0.1
+   "end": 172,
+   "gain": 0.1,
+   "pan": -0.15
   },
   {
-   "type": "pop",
+   "type": "blip",
    "frame": 171,
-   "gain": 0.11,
-   "pan": -0.3
+   "freq": 1318.5102276514797,
+   "gain": 0.13,
+   "pan": -0.2
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 183,
-   "end": 192,
-   "gain": 0.2,
-   "pan": 0.1
+   "end": 190,
+   "gain": 0.1,
+   "pan": 0.15
   },
   {
-   "type": "pop",
+   "type": "blip",
    "frame": 189,
-   "gain": 0.11,
-   "pan": -0.3
+   "freq": 1567.981743926997,
+   "gain": 0.13,
+   "pan": -0.2
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 201,
-   "end": 210,
-   "gain": 0.2,
-   "pan": -0.1
+   "end": 208,
+   "gain": 0.1,
+   "pan": -0.15
   },
   {
-   "type": "pop",
+   "type": "blip",
    "frame": 207,
-   "gain": 0.11,
-   "pan": -0.3
+   "freq": 1760.0,
+   "gain": 0.13,
+   "pan": -0.2
   },
   {
-   "type": "printer",
+   "type": "typing",
    "start": 219,
-   "end": 228,
-   "gain": 0.2,
-   "pan": 0.1
+   "end": 226,
+   "gain": 0.1,
+   "pan": 0.15
   },
   {
-   "type": "pop",
+   "type": "blip",
    "frame": 225,
-   "gain": 0.11,
-   "pan": -0.3
+   "freq": 2093.004522404789,
+   "gain": 0.13,
+   "pan": -0.2
   },
   {
-   "type": "printer",
-   "start": 255,
-   "end": 267,
-   "gain": 0.22
+   "type": "graph_rise",
+   "start": 251,
+   "end": 265,
+   "f0": 440,
+   "f1": 1760,
+   "gain": 0.08
   },
   {
-   "type": "register",
+   "type": "chime",
    "frame": 265,
-   "gain": 0.16
+   "freq": 1760,
+   "gain": 0.06
   },
   {
-   "type": "stamp",
+   "type": "slap",
    "frame": 270,
    "gain": 0.3
   },
   {
    "type": "thump",
    "frame": 270,
+   "gain": 0.14,
+   "freq": 55
+  },
+  {
+   "type": "whoosh",
+   "start": 290,
+   "end": 308,
    "gain": 0.16
   },
   {
-   "type": "reverse_swell",
-   "start": 286,
-   "end": 300,
-   "gain": 0.1,
-   "notes": [
-    "G3",
-    "B3",
-    "D4"
-   ]
+   "type": "glitch",
+   "frame": 300,
+   "gain": 0.08
   },
   {
-   "type": "swoosh",
-   "start": 293,
-   "end": 309,
-   "peak": 0.45,
-   "f": 2800,
-   "gain": 0.2
-  },
-  {
-   "type": "pop",
+   "type": "blip",
    "frame": 312,
+   "freq": 1318.5,
    "gain": 0.12
   },
   {
-   "type": "glint",
-   "frame": 330,
-   "gain": 0.05,
-   "freq": 2794
+   "type": "blip",
+   "frame": 316,
+   "freq": 1760,
+   "gain": 0.1
   }
  ]
 }

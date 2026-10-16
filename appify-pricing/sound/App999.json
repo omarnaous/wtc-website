@@ -1,218 +1,176 @@
 {
  "fps": 30,
  "duration": 13.0,
- "seed": 41,
+ "seed": 63,
  "fade_out": 0.8,
  "lowpass": 10000,
  "peak_db": -3,
  "cues": [
   {
-   "type": "house",
+   "type": "lofi_tape",
    "start": 0,
    "end": 390,
-   "bpm": 120,
-   "gain": 0.42,
-   "sections": [
-    [
-     0,
-     "intro"
-    ],
-    [
-     40,
-     "gap"
-    ],
-    [
-     60,
-     "drop"
-    ],
-    [
-     300,
-     "outro"
-    ]
-   ],
+   "bpm": 80,
+   "gain": 0.5,
    "lp_auto": [
     [
      0,
-     900
+     800
     ],
     [
      40,
-     700
+     600
     ],
     [
      59,
-     700
+     600
     ],
     [
      62,
-     9000
+     7000
     ]
    ]
   },
   {
-   "type": "swoosh",
-   "start": 0,
-   "end": 12,
-   "peak": 0.4,
-   "f": 2400,
-   "gain": 0.12
-  },
-  {
-   "type": "pop",
+   "type": "sample",
+   "file": "sound/sfx/notification.ogg",
    "frame": 3,
-   "gain": 0.12,
-   "pan": -0.2
+   "gain": 0.32
   },
   {
    "type": "pop",
    "frame": 11,
-   "gain": 0.14,
-   "pan": 0.2
+   "gain": 0.1
   },
   {
    "type": "counter",
    "start": 51,
    "end": 60,
-   "gain": 0.16
+   "gain": 0.1
   },
   {
-   "type": "reverse_swell",
-   "start": 44,
-   "end": 60,
-   "gain": 0.12,
-   "notes": [
-    "A3",
-    "C4",
-    "E4"
-   ]
+   "type": "sample",
+   "file": "sound/sfx/purchase.ogg",
+   "frame": 60,
+   "gain": 0.4
+  },
+  {
+   "type": "thump",
+   "frame": 60,
+   "gain": 0.28
   },
   {
    "type": "impact",
    "frame": 60,
-   "gain": 0.26
-  },
-  {
-   "type": "thump",
-   "frame": 60,
-   "gain": 0.3
-  },
-  {
-   "type": "glint",
-   "frame": 70,
-   "gain": 0.05
-  },
-  {
-   "type": "swoosh",
-   "start": 80,
-   "end": 94,
-   "peak": 0.5,
-   "f": 1800,
    "gain": 0.1
   },
   {
-   "type": "click",
-   "frame": 90,
-   "gain": 0.12
-  },
-  {
-   "type": "printer",
-   "start": 105,
-   "end": 119,
-   "gain": 0.22
-  },
-  {
-   "type": "printer",
-   "start": 111,
-   "end": 120,
-   "gain": 0.2,
-   "pan": 0.1
-  },
-  {
-   "type": "pop",
-   "frame": 117,
-   "gain": 0.11,
-   "pan": -0.3
-  },
-  {
-   "type": "printer",
-   "start": 132,
-   "end": 141,
-   "gain": 0.2,
-   "pan": -0.1
-  },
-  {
-   "type": "pop",
-   "frame": 138,
-   "gain": 0.11,
-   "pan": -0.3
-  },
-  {
-   "type": "printer",
-   "start": 153,
-   "end": 162,
-   "gain": 0.2,
-   "pan": 0.1
-  },
-  {
-   "type": "pop",
-   "frame": 159,
-   "gain": 0.11,
-   "pan": -0.3
-  },
-  {
-   "type": "printer",
-   "start": 174,
-   "end": 183,
-   "gain": 0.2,
-   "pan": -0.1
-  },
-  {
-   "type": "pop",
-   "frame": 180,
-   "gain": 0.11,
-   "pan": -0.3
-  },
-  {
-   "type": "printer",
-   "start": 195,
-   "end": 204,
-   "gain": 0.2,
-   "pan": 0.1
-  },
-  {
-   "type": "pop",
-   "frame": 201,
-   "gain": 0.11,
-   "pan": -0.3
-  },
-  {
-   "type": "printer",
-   "start": 216,
-   "end": 225,
-   "gain": 0.2,
-   "pan": -0.1
-  },
-  {
-   "type": "pop",
-   "frame": 222,
-   "gain": 0.11,
-   "pan": -0.3
-  },
-  {
-   "type": "printer",
-   "start": 255,
-   "end": 267,
-   "gain": 0.22
-  },
-  {
-   "type": "register",
-   "frame": 265,
-   "gain": 0.16
-  },
-  {
-   "type": "stamp",
-   "frame": 270,
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 84,
    "gain": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 105,
+   "gain": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 111,
+   "gain": 0.18,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/toggle-on.ogg",
+   "frame": 117,
+   "gain": 0.24,
+   "pan": -0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 132,
+   "gain": 0.18,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/toggle-on.ogg",
+   "frame": 138,
+   "gain": 0.24,
+   "pan": -0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 153,
+   "gain": 0.18,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/toggle-on.ogg",
+   "frame": 159,
+   "gain": 0.24,
+   "pan": -0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 174,
+   "gain": 0.18,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/toggle-on.ogg",
+   "frame": 180,
+   "gain": 0.24,
+   "pan": -0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 195,
+   "gain": 0.18,
+   "pan": 0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/toggle-on.ogg",
+   "frame": 201,
+   "gain": 0.24,
+   "pan": -0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/press.ogg",
+   "frame": 216,
+   "gain": 0.18,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/toggle-on.ogg",
+   "frame": 222,
+   "gain": 0.24,
+   "pan": -0.2
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/success.ogg",
+   "frame": 265,
+   "gain": 0.32
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/reward.ogg",
+   "frame": 270,
+   "gain": 0.32
   },
   {
    "type": "thump",
@@ -220,34 +178,24 @@
    "gain": 0.16
   },
   {
-   "type": "reverse_swell",
-   "start": 286,
-   "end": 300,
-   "gain": 0.1,
-   "notes": [
-    "G3",
-    "B3",
-    "D4"
-   ]
+   "type": "sample",
+   "file": "sound/sfx/swipe.ogg",
+   "frame": 294,
+   "gain": 0.32
   },
   {
    "type": "swoosh",
    "start": 293,
    "end": 309,
    "peak": 0.45,
-   "f": 2800,
-   "gain": 0.2
+   "f": 3200,
+   "gain": 0.1
   },
   {
-   "type": "pop",
+   "type": "sample",
+   "file": "sound/sfx/open.ogg",
    "frame": 312,
-   "gain": 0.12
-  },
-  {
-   "type": "glint",
-   "frame": 330,
-   "gain": 0.05,
-   "freq": 2794
+   "gain": 0.3
   }
  ]
 }
