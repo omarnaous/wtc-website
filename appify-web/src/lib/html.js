@@ -4,7 +4,7 @@ import { WORDMARK, sparkPath } from "../../public/assets/js/brand.js";
 
 export const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 export const json = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
-export const ASSET_V = "20261016x";
+export const ASSET_V = "20261016y";
 
 export const icon = {
   arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -34,7 +34,9 @@ export function layout({ site, title, description, path = "/", image = "/og.png"
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(url)}">
 <meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
-<meta name="theme-color" content="#0A0913">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0A0913" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F4FC" media="(prefers-color-scheme: light)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Appify">
 <meta property="og:title" content="${esc(title)}">
