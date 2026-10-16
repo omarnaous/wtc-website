@@ -35,25 +35,29 @@ const crumbs = (site, list) => ({ "@type": "BreadcrumbList", itemListElement: li
 // ── pieces ───────────────────────────────────────────────────────────────────────────────────────
 const head = (num, eyebrow, h2, text) => `<header class="sec-head" data-reveal><p class="eyebrow"><span>${num}</span>${esc(eyebrow)}</p><h2>${h2}</h2>${text ? `<p class="sec-text">${text}</p>` : ""}</header>`;
 
+// A website card: the video sits under a play button and plays in place, with sound, when tapped.
 function workCard(p, i = 0) {
-  const cats = [p.status === "live" ? "live" : "", p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ");
-  return `<article class="work-card" data-cats="${cats}" data-reveal style="--d:${(i % 3) * 80}ms" data-tilt>
-  <a class="work-media${p.aspect === "4/5" ? "" : " fit"}" href="/work/${p.slug}" style="${poster(p.poster)}" aria-label="${esc(p.title)} case study">
-    <video muted loop playsinline preload="none" poster="${esc(p.poster)}" data-src="${esc(preview(p.video))}" aria-hidden="true"></video>
-    <span class="badge ${p.status}">${STATUS[p.status]}</span>
-  </a>
+  const cats = [p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ");
+  return `<article class="work-card" data-cats="${cats}" data-reveal style="--d:${(i % 5) * 90}ms" data-tilt>
+  <div class="work-media${p.aspect === "4/5" ? "" : " fit"}" style="${poster(p.poster)}" data-vcard>
+    <video playsinline preload="none" poster="${esc(p.poster)}" data-full="${esc(p.video)}" aria-label="${esc(p.title)} video"></video>
+    <button class="vplay" type="button" aria-label="Play the ${esc(p.title)} video"><span class="vplay-in">${icon.play}</span></button>
+    <i class="vbar" aria-hidden="true"></i>
+  </div>
   <div class="work-body">
     <p class="meta">${esc(p.category)} · ${esc(p.client)}</p>
     <h3><a href="/work/${p.slug}">${esc(p.title)}</a></h3>
     <p class="summary">${esc(p.summary)}</p>
     <div class="work-actions">
-      <button class="btn sm" type="button" data-play="${esc(p.video)}" data-title="${esc(p.title)}">${icon.play}Watch</button>
       ${p.live_url ? `<a class="btn sm ghost" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit live site${icon.ext}</a>` : ""}
       <a class="link" href="/work/${p.slug}">Case study${icon.arrow}</a>
     </div>
   </div>
 </article>`;
 }
+// Horizontal rows (websites, videos): arrows, drag, a progress line. id ties the controls to the row.
+const rowBar = (id, filters) => `<div class="motion-bar">${filters}<div class="scroll-btns"><button type="button" data-scroll="-1" data-for="${id}" aria-label="Previous">${icon.arrow}</button><button type="button" data-scroll="1" data-for="${id}" aria-label="Next">${icon.arrow}</button></div></div>`;
+const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="${id}" aria-hidden="true"><i></i></div></div>`;
 
 function motionCard(m, i) {
   return `<article class="reel" data-kind="${m.kind}" data-reveal>
@@ -171,11 +175,10 @@ export function homePage(site) {
 <section class="section work" id="work" aria-labelledby="work-h">
   <div class="wrap">
     ${head("01", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "Real client stores and our Animated Website series. Watch each one move, open the case study or visit it live.")}
-    <div class="filters" role="group" aria-label="Filter websites" data-filter=".work-card">
-      <button class="on" data-f="*">All</button><button data-f="live">Live</button><button data-f="animated">Animated</button><button data-f="ecommerce">E-commerce</button>
-    </div>
-    <div class="work-grid">${websites.map(workCard).join("")}</div>
+    ${rowBar("work-row", `<div class="filters" role="group" aria-label="Filter websites" data-filter="#work-row .work-card"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="animated">Animated</button><button type="button" data-f="ecommerce">E-commerce</button></div>`)}
   </div>
+  <div class="hrow work-row" id="work-row" data-row tabindex="0" aria-label="Websites we built">${websites.slice(0, 5).map(workCard).join("")}</div>
+  ${rowProg("work-row")}
 </section>
 
 <section class="section apps" id="apps" aria-labelledby="apps-h">
@@ -194,19 +197,15 @@ export function homePage(site) {
 <section class="section motion" id="motion" aria-labelledby="motion-h">
   <div class="wrap">
     ${head("03", "Motion graphics & content ads", `<span id="motion-h">Content that holds attention</span>`, "Reels, ads, 3D and brand films, every frame and every sound made by us. Tap any video to watch it with sound.")}
-    <div class="motion-bar">
-      <div class="filters" role="group" aria-label="Filter videos" data-filter=".reel">
-        <button class="on" data-f="*">All</button><button data-f="ad">Ads</button><button data-f="brand">Brand</button><button data-f="reel">Reels</button><button data-f="client">Client work</button>
-      </div>
-      <div class="scroll-btns"><button type="button" data-scroll="-1" aria-label="Previous videos">${icon.arrow}</button><button type="button" data-scroll="1" aria-label="Next videos">${icon.arrow}</button></div>
-    </div>
+    ${rowBar("reel-row", `<div class="filters" role="group" aria-label="Filter videos" data-filter="#reel-row .reel"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="ad">Ads</button><button type="button" data-f="brand">Brand</button><button type="button" data-f="reel">Reels</button><button type="button" data-f="client">Client work</button></div>`)}
   </div>
-  <div class="reel-row" data-reel-row tabindex="0" aria-label="Motion graphics videos">${motion.map(motionCard).join("")}</div>
+  <div class="hrow reel-row" id="reel-row" data-row tabindex="0" aria-label="Motion graphics videos">${motion.map(motionCard).join("")}</div>
+  ${rowProg("reel-row")}
 </section>
 
 <section class="section spot" aria-label="Why Appify">
   <div class="wrap spot-in" data-reveal>
-    <p class="spot-k">You just scrolled past ${motion.length} videos and ${websites.length} websites.</p>
+    <p class="spot-k">You just scrolled past ${motion.length} videos and ${Math.min(5, websites.length)} websites.</p>
     <p class="spot-big">That's what we do to your brand: <span class="grad">put it in the spotlight.</span></p>
     <a class="btn primary big magnetic" href="#book">Start your project${icon.arrow}</a>
   </div>
@@ -238,7 +237,7 @@ export function workPage(site, p) {
     <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/#work">Work</a><span>/</span><span aria-current="page">${esc(p.title)}</span></nav>
-      <p class="kicker"><span class="badge ${p.status}">${STATUS[p.status]}</span><span>${esc(p.category)}</span><span class="dot"></span><span>${esc(p.client)}</span></p>
+      <p class="kicker">${sparkSVG("k-spark")}<span>${esc(p.category)}</span><span class="dot"></span><span>${esc(p.client)}</span></p>
       <h1 class="case-title" data-split>${esc(p.title)}</h1>
       <p class="lede">${esc(p.summary)}</p>
       <div class="cta-row">${p.live_url ? `<a class="btn primary big magnetic" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit the live site${icon.ext}</a>` : ""}<a class="btn ghost big" href="/#book">Get a website like this</a></div>
@@ -265,7 +264,7 @@ ${booking(site)}`;
 // ── service landing page ─────────────────────────────────────────────────────────────────────────
 export function servicePage(site, s) {
   const faqs = site.faqs.filter((f) => f.topic === s.faq_topic || f.topic === "general");
-  const related = s.related === "motion" ? `<div class="reel-row static">${site.motion.slice(0, 6).map(motionCard).join("")}</div>`
+  const related = s.related === "motion" ? `<div class="hrow reel-row static" data-row>${site.motion.slice(0, 6).map(motionCard).join("")}</div>`
     : s.related === "apps" ? `<div class="wrap"><div class="apps-grid">${site.projects.filter((p) => p.kind === "app").map(appCard).join("")}</div></div>`
     : `<div class="wrap"><div class="work-grid">${site.projects.filter((p) => p.kind === "website").slice(0, 6).map(workCard).join("")}</div></div>`;
   const body = `

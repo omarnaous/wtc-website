@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261016";
+import { devSVG } from "./dev.js?v=20261016b";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -102,6 +102,7 @@ $$("[data-play]").forEach((b) => b.addEventListener("click", (e) => {
   e.preventDefault();
   if (!player?.showModal) { location.href = b.dataset.play; return; }
   onScreen.forEach((v) => v.pause());
+  $$("[data-vcard].playing video").forEach((v) => { v.pause(); v.closest("[data-vcard]").classList.remove("playing"); });
   pv.src = b.dataset.play; player.querySelector(".player-title").textContent = b.dataset.title || "";
   player.showModal(); pv.muted = false; pv.play().catch(() => {});
 }));
@@ -113,7 +114,6 @@ player?.addEventListener("close", () => {
   if (!reduced) onScreen.forEach((v) => v.play().catch(() => {}));
 });
 
-const row = $("[data-reel-row]");
 // ── filters (websites, videos) ─────────────────────────────────────────────────────────────────────
 $$("[data-filter]").forEach((group) => {
   const items = $$(group.dataset.filter);
@@ -126,18 +126,51 @@ $$("[data-filter]").forEach((group) => {
       it.classList.toggle("out", f !== "*" && !keys.includes(f));
       if (!it.classList.contains("out")) it.classList.add("in");
     });
-    if (row && group.dataset.filter === ".reel") row.scrollTo({ left: 0, behavior: "auto" });
+    const r = items[0]?.closest("[data-row]");
+    if (r) { r.scrollTo({ left: 0, behavior: "auto" }); r.dispatchEvent(new Event("scroll")); }
   });
 });
 
-// ── the reel row: arrow buttons and drag to scroll ─────────────────────────────────────────────────
-if (row) {
-  $$("[data-scroll]").forEach((b) => b.addEventListener("click", () => row.scrollBy({ left: Number(b.dataset.scroll) * row.clientWidth * 0.8, behavior: reduced ? "auto" : "smooth" })));
+// ── horizontal rows: arrow buttons, drag to scroll, a progress line, arrows dim at the ends ───────────────
+$$("[data-row]").forEach((row) => {
+  const btns = row.id ? $$(`[data-for="${row.id}"]`) : [], prog = row.id ? $(`[data-prog-for="${row.id}"]`) : null;
+  btns.forEach((b) => b.addEventListener("click", () => row.scrollBy({ left: Number(b.dataset.scroll) * row.clientWidth * 0.8, behavior: reduced ? "auto" : "smooth" })));
+  const update = () => {
+    const max = row.scrollWidth - row.clientWidth, x = row.scrollLeft;
+    btns.forEach((b) => { b.disabled = Number(b.dataset.scroll) < 0 ? x <= 2 : x >= max - 2; });
+    prog?.style.setProperty("--w", (row.clientWidth / row.scrollWidth).toFixed(3));
+    prog?.style.setProperty("--p", max > 0 ? (x / max).toFixed(3) : "0");
+  };
+  row.addEventListener("scroll", perFrame(update), { passive: true });
+  new ResizeObserver(perFrame(update)).observe(row); update();
   let down = null, moved = false;
-  row.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") return; down = { x: e.clientX, l: row.scrollLeft }; moved = false; });
+  row.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse" || e.target.closest("button, a")) return; down = { x: e.clientX, l: row.scrollLeft }; moved = false; });
   addEventListener("pointermove", (e) => { if (!down) return; const dx = e.clientX - down.x; if (Math.abs(dx) > 6) { moved = true; row.classList.add("drag"); } row.scrollLeft = down.l - dx; }, { passive: true });
-  addEventListener("pointerup", () => { down = null; row.classList.remove("drag"); });
+  addEventListener("pointerup", () => { if (!down) return; down = null; row.classList.remove("drag"); });
   row.addEventListener("click", (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+});
+
+// ── website cards: tap the play button to play the full video in place, with sound ───────────────────────
+const cards = $$("[data-vcard]");
+const stopCard = (m) => { const v = $("video", m); if (!v.paused) v.pause(); m.classList.remove("playing"); };
+cards.forEach((m) => {
+  const v = $("video", m), bar = $(".vbar", m);
+  $(".vplay", m).addEventListener("click", () => {
+    cards.forEach((o) => o !== m && stopCard(o));
+    onScreen.forEach((o) => o.pause());
+    if (!v.getAttribute("src")) { v.src = v.dataset.full; }
+    v.muted = false; m.classList.add("playing", "loading");
+    v.play().catch(() => m.classList.remove("playing", "loading"));
+  });
+  v.addEventListener("playing", () => m.classList.remove("loading"));
+  v.addEventListener("click", () => (v.paused ? $(".vplay", m).click() : stopCard(m)));
+  v.addEventListener("ended", () => { stopCard(m); v.currentTime = 0; });
+  v.addEventListener("timeupdate", () => bar.style.setProperty("--t", v.duration ? (v.currentTime / v.duration).toFixed(3) : 0));
+});
+if (cards.length) {
+  const cio = new IntersectionObserver((es) => es.forEach((e) => { if (!e.isIntersecting) stopCard(e.target); }), { threshold: 0.2 });
+  cards.forEach((m) => cio.observe(m));
+  document.addEventListener("visibilitychange", () => document.hidden && cards.forEach(stopCard));
 }
 
 // ── Dev, live: breathes, blinks, looks at the cursor, talks, and does tricks when tapped ────────────────
