@@ -106,40 +106,52 @@ p { margin: 0; }
 .hero-title .grad { display: inline; }
 .lede { margin-top: 24px; font-size: clamp(17px, 1.5vw, 20px); color: var(--mute); max-width: 56ch; }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
-/* Dev in the hero */
-.hero-dev { position: relative; justify-self: center; width: min(400px, 82vw); aspect-ratio: 420 / 900; display: grid; place-items: end center; }
-.dev-body { position: relative; z-index: 2; width: 100%; will-change: transform; --tab: 0; }
-.dev-btn { display: block; width: 100%; padding: 0; border: 0; position: relative; z-index: 1; transition: scale .4s var(--spring); -webkit-tap-highlight-color: transparent; }
-/* the intro plays on Dev's tablet: the video sits over his body, and a second SVG with only the tablet frame and
-   his arms sits over the video, so his hands hold the screen (SVG units: tablet face at 200,626 200x104 in a 420x830 box) */
-.dev-fg { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-.dev-screen, .dev-tab { position: absolute; left: 26.19%; top: 69.4%; width: 47.62%; height: 12.53%; transform: rotate(-4deg); border-radius: 5% / 9.6%; }
-.dev-screen { z-index: 2; overflow: hidden; background: #110F1E; opacity: var(--tab); }
-.dev-screen video { display: block; width: 100%; height: 100%; object-fit: cover; }
-.dev-screen::after { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255, 255, 255, .22), transparent 40%); }
-.dev-tab { z-index: 3; display: grid; place-items: center; cursor: pointer; opacity: var(--tab); -webkit-tap-highlight-color: transparent; }
-.dev-body.busy .dev-tab { pointer-events: none; }
-.tab-play { position: relative; width: 22%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .94); color: #0A0913; box-shadow: 0 6px 18px rgba(0, 0, 0, .5); transition: transform .4s var(--spring); }
-.tab-play svg { width: 46%; height: 46%; margin-left: 8%; }
-.tab-play::after { content: ""; position: absolute; inset: -18%; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .7); animation: ping 2s var(--ease) infinite; }
-@keyframes ping { 0% { transform: scale(.8); opacity: .9; } 80%, 100% { transform: scale(1.6); opacity: 0; } }
-@media (hover: hover) { .dev-tab:hover .tab-play { transform: scale(1.15); } }
+/* hero stage: the intro screen, with Dev standing at its lower corner */
+.hero-stage { position: relative; justify-self: center; width: min(520px, 100%); display: grid; }
+.tv { position: relative; z-index: 1; aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; isolation: isolate; background: #110F1E; box-shadow: 0 0 0 1.5px rgba(143, 114, 255, .5), 0 40px 90px -30px rgba(91, 43, 255, .85); }
+.tv video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tv::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit; background: linear-gradient(155deg, rgba(255, 255, 255, .14), transparent 32%), linear-gradient(0deg, rgba(10, 9, 19, .55), transparent 38%); }
+.tv-hit { position: absolute; inset: 0; z-index: 2; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.tv-tag, .tv-chip { position: absolute; z-index: 3; pointer-events: none; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; background: rgba(10, 9, 19, .72); color: #fff; }
+.tv-tag { left: 12px; top: 12px; padding: 7px 11px; font: 500 11px/1 "Mono", monospace; letter-spacing: .14em; text-transform: uppercase; }
+.tv-tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--alert); animation: rec 1.6s ease-in-out infinite; }
+@keyframes rec { 50% { opacity: .25; } }
+.tv-chip { right: 12px; bottom: 14px; padding: 10px 14px; font: 600 14px/1 "UI"; box-shadow: 0 8px 24px rgba(0, 0, 0, .4); transition: transform .4s var(--spring); }
+.tv-chip > span { display: none; align-items: center; gap: 8px; }
+.tv-chip svg { width: 18px; height: 18px; }
+.tv:not(.sound) .tv-off, .tv.sound:not(.paused) .tv-on, .tv.sound.paused .tv-paused { display: inline-flex; }
+.tv:not(.sound) .tv-chip { background: #fff; color: var(--ink); animation: bump 2.4s var(--ease) infinite; }
+@keyframes bump { 0%, 60%, 100% { transform: scale(1); } 70% { transform: scale(1.1); } 80% { transform: scale(.97); } }
+.tv.sound:not(.paused) .tv-chip { opacity: 0; transition: opacity .4s 1.6s; }
+@media (hover: hover) { .tv.sound:hover .tv-chip { opacity: 1; transition-delay: 0s; } }
+.eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 13px; }
+.eq b { width: 3px; height: 100%; border-radius: 2px; background: var(--sky); transform-origin: 50% 100%; animation: eq 1s ease-in-out infinite; }
+.eq b:nth-child(2) { animation-delay: -.35s; } .eq b:nth-child(3) { animation-delay: -.7s; } .eq b:nth-child(4) { animation-delay: -.2s; }
+@keyframes eq { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+.tv-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; height: 4px; background: rgba(255, 255, 255, .15); opacity: 0; transition: opacity .3s; pointer-events: none; }
+.tv-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--uv), var(--sky)); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); transition: transform .3s linear; }
+.tv.sound .tv-bar { opacity: 1; }
+.tv-end { position: absolute; inset: 0; z-index: 4; display: grid; place-content: center; justify-items: center; gap: 6px; padding: 16px; text-align: center; background: radial-gradient(ellipse at 50% 40%, rgba(91, 43, 255, .45), rgba(10, 9, 19, .9) 70%); opacity: 0; visibility: hidden; transition: opacity .4s, visibility 0s .4s; }
+.tv.ended .tv-end { opacity: 1; visibility: visible; transition: opacity .4s; }
+.tv.ended .tv-chip, .tv.ended .tv-tag { opacity: 0; }
+.tv-end-k { font: 500 12px/1 "Mono", monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--sky); }
+.tv-end-h { font: 600 clamp(24px, 3vw, 34px)/1.1 "Display"; letter-spacing: -.02em; color: #fff; }
+.tv-end-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+.tv-end .btn { padding: 12px 18px; font-size: 15px; }
+/* Dev */
+.hero-dev { position: relative; z-index: 2; width: 54%; margin: -26px 0 0 3%; aspect-ratio: 420 / 870; display: grid; place-items: end center; container-type: inline-size; }
+.dev-body { position: relative; z-index: 2; width: 100%; will-change: transform; }
+.dev-btn { display: block; width: 100%; padding: 0; border: 0; position: relative; transition: scale .4s var(--spring); -webkit-tap-highlight-color: transparent; }
 .dev-btn:active { scale: .97; }
 .dev-floor { position: absolute; bottom: -10px; left: 6%; right: 6%; height: 56px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0, 0, 0, .55), rgba(91, 43, 255, .35) 45%, transparent 72%); }
-/* Dev's speech bubble, and under it the booking button he points to after the intro */
-.dev-talk { position: absolute; z-index: 4; top: 4%; right: 82%; display: grid; justify-items: end; gap: 10px; }
-.dev-cta { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 999px; background: var(--uv); color: #fff; font: 600 14.5px/1 "UI"; white-space: nowrap; box-shadow: 0 14px 34px -8px rgba(91, 43, 255, .8), inset 0 1px 0 rgba(255, 255, 255, .25); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(.6); transform-origin: 100% 0; transition: opacity .3s, transform .5s var(--spring), visibility 0s .5s; }
-.dev-cta svg { width: 16px; height: 16px; }
-.dev-talk.cta .dev-cta { opacity: 1; visibility: visible; transform: none; transition: opacity .3s, transform .5s var(--spring), visibility 0s; animation: nudge 2.6s var(--ease) 1.2s infinite; }
-@keyframes nudge { 0%, 70%, 100% { translate: 0 0; } 80% { translate: -5px 0; } 90% { translate: 2px 0; } }
-.dev-bubble { position: relative; width: max-content; max-width: 230px; padding: 13px 16px; border-radius: 18px 18px 4px 18px; background: #fff; color: var(--ink); font: 600 15px/1.35 "UI"; box-shadow: 0 18px 40px rgba(0, 0, 0, .4); transform-origin: 100% 100%; transition: opacity .3s, transform .4s var(--spring); }
+.dev-bubble { position: absolute; z-index: 4; left: 84%; top: 12%; width: max-content; max-width: min(230px, 80cqi); padding: 13px 16px; border-radius: 18px 18px 18px 4px; background: #fff; color: var(--ink); font: 600 15px/1.35 "UI"; box-shadow: 0 18px 40px rgba(0, 0, 0, .4); transform-origin: 0 100%; transition: opacity .3s, transform .4s var(--spring); }
 .dev-bubble { display: grid; }
 .dev-bubble > span { grid-area: 1 / 1; }
 .dev-bubble .full { visibility: hidden; }
 .dev-bubble .typed::after { content: "▍"; margin-left: 2px; color: var(--uv); opacity: 0; }
 .dev-bubble.typing .typed::after { opacity: 1; animation: blink .7s steps(2) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
-.orbit { --R: min(235px, 40vw); position: absolute; left: 50%; top: 44%; width: 0; height: 0; z-index: 1; animation: orb 46s linear infinite; will-change: transform; }
+.orbit { --R: 60cqi; position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 1; animation: orb 46s linear infinite; will-change: transform; }
 .orbit::before { content: ""; position: absolute; left: calc(-1 * var(--R)); top: calc(-1 * var(--R)); width: calc(2 * var(--R)); height: calc(2 * var(--R)); border-radius: 50%; border: 1.5px dashed rgba(143, 114, 255, .26); }
 .orbit span { position: absolute; left: 0; top: 0; --a: calc(var(--i) * 60deg); transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(-1 * var(--R))) rotate(calc(-1 * var(--a))); }
 .orbit span i { display: block; font-style: normal; padding: 7px 12px; border-radius: 999px; background: rgba(17, 15, 30, .9); border: 1px solid var(--line); font: 600 13px/1 "UI"; white-space: nowrap; animation: orb 46s linear infinite reverse; }
@@ -153,11 +165,10 @@ p { margin: 0; }
 @media (max-width: 920px) {
   .hero { padding-top: 100px; }
   .hero-grid { grid-template-columns: 1fr; text-align: left; }
-  .hero-dev { width: min(300px, 70vw); margin-top: 10px; }
-  .dev-talk { right: -4%; left: auto; top: -2%; }
-  .dev-bubble { border-radius: 18px 18px 4px 18px; transform-origin: 100% 100%; max-width: min(180px, 46vw); font-size: 14px; }
-  .dev-cta { font-size: 13.5px; padding: 11px 14px; }
-  .orbit { --R: min(180px, 38vw); }
+  .hero-stage { margin-top: 34px; }
+  .hero-dev { width: 58%; }
+  .orbit { --R: 52cqi; }
+  .dev-bubble { max-width: 70cqi; font-size: 14px; padding: 11px 14px; }
 }
 
 /* ── sections ───────────────────────────────────────────────────────────────────────────────────── */

@@ -8,8 +8,8 @@ const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${
 // Cards autoplay a short, light preview (media/p/); the player opens the full video with sound.
 const preview = (v) => (v || "").replace("/media/", "/media/p/");
 const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
-const DEV_LINES = ["Hi, I'm Dev. Tap my tablet!", "That's our intro playing.", "Your first prototype is free.", "Delivered in under 7 days.", "Tap me, I do tricks."];
-// The hero intro video, playing on Dev's tablet (a wide 16:9 video fits it best). Placeholder until the real intro is ready.
+const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen for sound.", "We made every frame of it.", "Tap me, I do tricks."];
+// The hero intro: plays muted on the screen next to Dev, tap for sound. A 16:9 video fits it. Placeholder until the real intro is ready.
 const INTRO = { video: "/media/showreel.mp4", poster: "/media/showreel.webp" };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
@@ -155,16 +155,21 @@ export function homePage(site) {
       <p class="lede">Appify is a creative tech studio in Lebanon. We design animated websites and online stores, build mobile apps and make content ads that put your brand in the spotlight.</p>
       <div class="cta-row"><a class="btn primary big magnetic" href="/book" data-hero-cta>Get a free prototype${icon.arrow}</a></div>
     </div>
-    <div class="hero-dev" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
-      <div class="orbit" aria-hidden="true">${["Websites", "Apps", "Motion", "Meta ads", "3D", "UI/UX"].map((x) => `<span><i>${x}</i></span>`).join("")}</div>
-      <div class="dev-talk"><div class="dev-bubble" aria-hidden="true">${esc(DEV_LINES[0])}</div><a class="dev-cta" href="/book" tabindex="-1">Book your free prototype${icon.arrow}</a></div>
-      <div class="dev-body">
-        <button class="dev-btn" type="button" aria-label="Dev, the Appify mascot. Tap him.">${devSVG({ wave: 1, waveAng: 10, brow: 12, lid: 0.08, smile: 1 })}</button>
-        <div class="dev-screen" aria-hidden="true"><video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(preview(INTRO.video))}"></video></div>
-        <div class="dev-fg" aria-hidden="true">${devSVG({ wave: 1, waveAng: 10, screen: "fg" }, "")}</div>
-        <button class="dev-tab" type="button" data-intro data-play="${esc(INTRO.video)}" data-title="Meet Appify" aria-label="Play the Appify intro with sound"><span class="tab-play">${icon.play}</span></button>
+    <div class="hero-stage" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
+      <div class="tv" data-tv data-full="${esc(INTRO.video)}">
+        <video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(preview(INTRO.video))}"></video>
+        <button class="tv-hit" type="button" aria-label="Play the Appify intro with sound"></button>
+        <span class="tv-tag" aria-hidden="true"><i></i>Intro</span>
+        <span class="tv-chip" aria-hidden="true"><span class="tv-off">${icon.muted}Tap for sound</span><span class="tv-on"><i class="eq"><b></b><b></b><b></b><b></b></i>Tap to pause</span><span class="tv-paused">${icon.play}Tap to play</span></span>
+        <span class="tv-bar" aria-hidden="true"><i></i></span>
+        <div class="tv-end"><p class="tv-end-k">That's Appify.</p><p class="tv-end-h">Your idea next?</p><div class="tv-end-btns"><a class="btn primary magnetic" href="/book">Book a call${icon.arrow}</a><button class="btn ghost tv-again" type="button">Watch again</button></div></div>
       </div>
-      <div class="dev-floor" aria-hidden="true"></div>
+      <div class="hero-dev">
+        <div class="orbit" aria-hidden="true">${["Websites", "Apps", "Motion", "Meta ads", "3D", "UI/UX"].map((x) => `<span><i>${x}</i></span>`).join("")}</div>
+        <div class="dev-bubble" aria-hidden="true">${esc(DEV_LINES[0])}</div>
+        <div class="dev-body"><button class="dev-btn" type="button" aria-label="Dev, the Appify mascot. Tap him.">${devSVG({ wave: 1, waveAng: 10, brow: 12, lid: 0.08, smile: 1 })}</button></div>
+        <div class="dev-floor" aria-hidden="true"></div>
+      </div>
     </div>
   </div>
   <div class="marquee" aria-hidden="true"><div class="marquee-in">${[...marquee, ...marquee].map((m) => `<span>${m}</span>${sparkSVG("m-spark")}`).join("")}</div></div>
