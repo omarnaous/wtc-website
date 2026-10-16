@@ -92,40 +92,66 @@
   },
   {
    "type": "printer",
-   "start": 135,
-   "end": 144,
+   "start": 132,
+   "end": 141,
    "gain": 0.2,
    "pan": -0.1
   },
   {
    "type": "pop",
-   "frame": 141,
+   "frame": 138,
    "gain": 0.11,
    "pan": -0.3
   },
   {
    "type": "printer",
-   "start": 159,
-   "end": 168,
+   "start": 153,
+   "end": 162,
    "gain": 0.2,
    "pan": 0.1
   },
   {
    "type": "pop",
-   "frame": 165,
+   "frame": 159,
    "gain": 0.11,
    "pan": -0.3
   },
   {
    "type": "printer",
-   "start": 183,
-   "end": 192,
+   "start": 174,
+   "end": 183,
    "gain": 0.2,
    "pan": -0.1
   },
   {
    "type": "pop",
-   "frame": 189,
+   "frame": 180,
+   "gain": 0.11,
+   "pan": -0.3
+  },
+  {
+   "type": "printer",
+   "start": 195,
+   "end": 204,
+   "gain": 0.2,
+   "pan": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 201,
+   "gain": 0.11,
+   "pan": -0.3
+  },
+  {
+   "type": "printer",
+   "start": 216,
+   "end": 225,
+   "gain": 0.2,
+   "pan": -0.1
+  },
+  {
+   "type": "pop",
+   "frame": 222,
    "gain": 0.11,
    "pan": -0.3
   },

@@ -19,8 +19,12 @@ const Wordmark = ({ width, fill = "#fff", spark = C.iris }) => (
 const Spark = ({ size, color }) => <svg width={size} height={size} viewBox="0 0 100 100"><path d={sparkPath(50, 50, 48, 0.22)} fill={color} /></svg>;
 
 // receipt geometry: the printer slot sits low; paper rises out of it, so it reads top to bottom as it prints
-const SLOT_Y = 1590, PAPER_X = 110, PAPER_W = 860;
-const HEAD_H = 150, LINE_H = 104, TOTAL_H = 230, TEAR = 28;
+const PAPER_X = 110, PAPER_W = 860, TEAR = 28;
+// longer receipts print a little tighter so every plan fits between the price and the slot
+const sizes = (plan) => {
+  const n = plan.lines.length;
+  return { n, SLOT_Y: n >= 7 ? 1625 : 1600, HEAD_H: n >= 6 ? 128 : 150, LINE_H: n >= 7 ? 82 : n === 6 ? 90 : 104, FONT: n >= 6 ? 40 : 44, TOTAL_H: plan.was ? 262 : 230 };
+};
 
 function Background({ f, accent }) {
   return (
@@ -47,7 +51,8 @@ function Question({ f, plan }) {
   const out = interpolate(f, [HUSH, PRICE - 4], [0, 1], { ...clamp, easing: easeIn });
   const line = (txt, at, color) => {
     const p = sp(f, at, 10, 280);
-    return <div style={{ ...D, fontSize: 124, color, opacity: Math.min(1, p * 2.5), transform: `scale(${interpolate(Math.min(p, 1.2), [0, 1], [1.5, 1])})` }}>{txt}</div>;
+    const size = Math.min(124, Math.floor(960 / (0.56 * Math.max(...plan.question.map((q) => q.length)))));
+    return <div style={{ ...D, fontSize: size, color, opacity: Math.min(1, p * 2.5), transform: `scale(${interpolate(Math.min(p, 1.2), [0, 1], [1.5, 1])})` }}>{txt}</div>;
   };
   return (
     <div style={{ position: "absolute", left: 60, right: 60, top: 700, textAlign: "center", opacity: 1 - out, transform: `translateY(${-90 * out}px) scale(${1 - 0.12 * out})`, filter: `blur(${out * 10}px)` }}>
@@ -79,12 +84,12 @@ function Price({ f, plan }) {
 
 function Receipt({ f, plan }) {
   if (f < RISE) return null;
-  const n = plan.lines.length;
+  const { n, SLOT_Y, HEAD_H, LINE_H, FONT, TOTAL_H } = sizes(plan);
   const full = HEAD_H + n * LINE_H + TOTAL_H + TEAR;
   // how much paper is out of the slot: the header, then one line at a time, then the total
   const grow = (at, amount, dur = 9) => interpolate(f, [at, at + dur], [0, amount], { ...clamp, easing: easeOut });
   let out = grow(PRINT, HEAD_H + TEAR, 14);
-  plan.lines.forEach((_, i) => { out += grow(lineAt(i), LINE_H); });
+  plan.lines.forEach((_, i) => { out += grow(lineAt(i, n), LINE_H); });
   out += grow(TOTAL, TOTAL_H, 12);
   const slot = sp(f, RISE + 4, 14, 200);
   const stampP = sp(f, STAMP, 8, 380);
@@ -98,12 +103,12 @@ function Receipt({ f, plan }) {
             <Wordmark width={200} fill={C.ink} spark={C.uv} />
             <div style={{ width: PAPER_W - 80, borderTop: `3px dashed ${C.rule}` }} />
           </div>
-          {plan.lines.map(([txt, yes], i) => {
-            const tick = sp(f, lineAt(i) + 5, 9, 320);
+          {plan.lines.map((txt, i) => {
+            const tick = sp(f, lineAt(i, n) + 5, 9, 320);
             return (
-              <div key={i} style={{ height: LINE_H, display: "flex", alignItems: "center", gap: 26, padding: "0 50px", fontFamily: "Mono", fontSize: 44, color: yes ? C.ink : C.mute }}>
-                <div style={{ width: 58, height: 58, flex: "none", borderRadius: 29, display: "grid", placeItems: "center", background: yes ? C.uv : "transparent", border: yes ? "none" : `3px solid ${C.rule}`, color: "#fff", fontFamily: "UI", fontWeight: 600, fontSize: 34, transform: `scale(${Math.min(1.15, tick)})` }}>{yes ? "✓" : <span style={{ color: C.mute }}>–</span>}</div>
-                <span style={{ textDecoration: yes ? "none" : "line-through", textDecorationThickness: 3 }}>{txt}</span>
+              <div key={i} style={{ height: LINE_H, display: "flex", alignItems: "center", gap: 24, padding: "0 50px", fontFamily: "Mono", fontSize: FONT, color: C.ink, whiteSpace: "nowrap" }}>
+                <div style={{ width: 56, height: 56, flex: "none", borderRadius: 28, display: "grid", placeItems: "center", background: C.uv, color: "#fff", fontFamily: "UI", fontWeight: 600, fontSize: 32, transform: `scale(${Math.min(1.15, tick)})` }}>✓</div>
+                <span>{txt}</span>
               </div>
             );
           })}
@@ -111,13 +116,14 @@ function Receipt({ f, plan }) {
             <div style={{ borderTop: `3px dashed ${C.rule}`, marginBottom: 26 }} />
             <div style={{ display: "grid", justifyItems: "end", gap: 10 }}>
               <div style={{ ...M, fontSize: 26, color: C.mute }}>{plan.totalLabel}</div>
+              {plan.was && <div style={{ fontFamily: "Mono", fontSize: 36, color: C.mute }}>3 × $100 = <span style={{ textDecoration: "line-through", textDecorationThickness: 4, textDecorationColor: "#F0384F" }}>{money(plan.was)}</span></div>}
               <div style={{ ...D, fontSize: 124, color: C.ink }}>{money(plan.price)}</div>
             </div>
           </div>
         </div>
         {/* the stamp, on the paper */}
         {f >= STAMP && (
-          <div style={{ position: "absolute", left: 44, top: HEAD_H + n * LINE_H + TEAR + 74, transform: `rotate(-9deg) scale(${interpolate(stampP, [0, 1], [2.4, 1])})`, transformOrigin: "30% 50%", opacity: Math.min(1, stampP * 3), padding: "12px 22px", border: `7px solid ${C.uv}`, borderRadius: 16, ...D, fontSize: plan.stamp.length > 9 ? 40 : 52, letterSpacing: "0.02em", color: C.uv, mixBlendMode: "multiply" }}>{plan.stamp}</div>
+          <div style={{ position: "absolute", left: 44, top: HEAD_H + n * LINE_H + TEAR + (plan.was ? 104 : 74), transform: `rotate(-9deg) scale(${interpolate(stampP, [0, 1], [2.4, 1])})`, transformOrigin: "30% 50%", opacity: Math.min(1, stampP * 3), padding: "12px 22px", border: `7px solid ${C.uv}`, borderRadius: 16, ...D, fontSize: plan.stamp.length > 9 ? 40 : 52, letterSpacing: "0.02em", color: C.uv, mixBlendMode: "multiply" }}>{plan.stamp}</div>
         )}
       </div>
       {/* the printer slot, over the paper's bottom edge */}
@@ -139,7 +145,7 @@ function Story({ f, plan }) {
       </AbsoluteFill>
       <Shockwave f={f} cx={W / 2} cy={790} start={PRICE} max={900} width={10} rgb="143,114,255" />
       <Burst f={f} cx={W / 2} cy={790} start={PRICE} count={80} speed={44} seed={plan.id} colors={["#fff", plan.accent, C.iris]} />
-      <Burst f={f} cx={300} cy={SLOT_Y - 150} start={STAMP} count={30} speed={20} seed={plan.id + "s"} colors={[C.uv, plan.accent]} />
+      <Burst f={f} cx={300} cy={sizes(plan).SLOT_Y - 150} start={STAMP} count={30} speed={20} seed={plan.id + "s"} colors={[C.uv, plan.accent]} />
       <Flash f={f} start={PRICE} peak={0.35} />
     </AbsoluteFill>
   );
@@ -156,24 +162,27 @@ function EndCard({ f, plan }) {
       <div style={{ position: "absolute", left: 0, right: 0, top: 420, display: "grid", justifyItems: "center", textAlign: "center" }}>
         <div style={{ ...M, fontSize: 32, color: plan.accent, opacity: Math.min(1, pr * 2) }}>{plan.name}</div>
         <div style={{ ...D, fontSize: 250, color: "#fff", marginTop: 22, transform: `scale(${interpolate(Math.min(pr, 1.1), [0, 1], [1.4, 1])})`, opacity: Math.min(1, pr * 2.5) }}>
-          {plan.from && <span style={{ fontSize: 80, color: plan.accent, letterSpacing: "-0.02em", marginRight: 18 }}>from</span>}{money(plan.price)}
+          {plan.from && <span style={{ fontSize: 80, color: plan.accent, letterSpacing: "-0.02em", marginRight: 18 }}>from</span>}
+          {plan.was && <span style={{ fontSize: 96, color: C.mute, letterSpacing: "-0.03em", marginRight: 24, textDecoration: "line-through", textDecorationThickness: 8, textDecorationColor: "#F0384F" }}>{money(plan.was)}</span>}
+          {money(plan.price)}
         </div>
+        <div style={{ fontFamily: "UI", fontWeight: 600, fontSize: 40, color: plan.accent, marginTop: 22, opacity: Math.min(1, sp(t, 8, 12, 220) * 2) }}>{plan.end}</div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 820, display: "grid", justifyItems: "center", opacity: Math.min(1, cta * 2), transform: `scale(${interpolate(Math.min(cta, 1.1), [0, 1], [1.5, 1]) * pulse})` }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 880, display: "grid", justifyItems: "center", opacity: Math.min(1, cta * 2), transform: `scale(${interpolate(Math.min(cta, 1.1), [0, 1], [1.5, 1]) * pulse})` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 26, padding: "34px 40px 34px 60px", borderRadius: 999, background: "linear-gradient(110deg, #4A1FF0, #5B2BFF 40%, #7B57FF)", boxShadow: "0 24px 70px rgba(91,43,255,.7), inset 0 2px 0 rgba(255,255,255,.3)" }}>
           <span style={{ ...D, fontSize: 84, color: "#fff", letterSpacing: "-0.03em" }}>Book a call</span>
           <span style={{ width: 92, height: 92, borderRadius: 46, background: "#fff", display: "grid", placeItems: "center", color: C.uv, fontFamily: "UI", fontWeight: 600, fontSize: 54 }}>→</span>
         </div>
         <div style={{ ...M, fontSize: 32, color: "rgba(255,255,255,.75)", marginTop: 34 }}>appify-lb.com</div>
       </div>
-      <div style={{ position: "absolute", left: 60, top: 1090, transform: `translateY(${(1 - Math.min(1, dev)) * 600}px)` }}>
+      <div style={{ position: "absolute", left: 60, top: 1130, transform: `translateY(${(1 - Math.min(1, dev)) * 600}px)` }}>
         <Dev width={250} thumbs={1} brow={16} lid={0.08} smile={1} look={6} happy={1} tilt={Math.sin(t / 8) * 2} />
       </div>
-      <div style={{ position: "absolute", right: 80, top: 1290, width: 560, display: "grid", justifyItems: "end", gap: 18, opacity: Math.min(1, nx * 2), transform: `translateX(${(1 - Math.min(1, nx)) * 60}px)` }}>
+      <div style={{ position: "absolute", right: 70, top: 1290, width: 680, display: "grid", justifyItems: "end", gap: 18, opacity: Math.min(1, nx * 2), transform: `translateX(${(1 - Math.min(1, nx)) * 60}px)` }}>
         {plan.next ? (
           <>
             <div style={{ ...M, fontSize: 24, color: C.mute }}>next on the price list</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 26px", borderRadius: 22, background: C.ink2, border: "3px solid rgba(143,114,255,.4)", fontFamily: "UI", fontWeight: 600, fontSize: 36, color: "#fff", textAlign: "right" }}>{plan.next} <Spark size={30} color={C.iris} /></div>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 26px", borderRadius: 22, background: C.ink2, border: "3px solid rgba(143,114,255,.4)", fontFamily: "UI", fontWeight: 600, fontSize: 36, color: "#fff", whiteSpace: "nowrap" }}>{plan.next} <Spark size={30} color={C.iris} /></div>
           </>
         ) : (
           <>

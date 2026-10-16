@@ -118,6 +118,32 @@
   },
   {
    "type": "printer",
+   "start": 183,
+   "end": 192,
+   "gain": 0.2,
+   "pan": -0.1
+  },
+  {
+   "type": "pop",
+   "frame": 189,
+   "gain": 0.11,
+   "pan": -0.3
+  },
+  {
+   "type": "printer",
+   "start": 207,
+   "end": 216,
+   "gain": 0.2,
+   "pan": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 213,
+   "gain": 0.11,
+   "pan": -0.3
+  },
+  {
+   "type": "printer",
    "start": 255,
    "end": 267,
    "gain": 0.22

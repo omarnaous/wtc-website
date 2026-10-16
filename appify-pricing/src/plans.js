@@ -1,36 +1,41 @@
 // The four Appify plans, exactly as priced by Appify. Each one renders as its own Story.
-// line: [text, included?] — included=false prints as a "—" note (what the plan does not include).
+// Lines come from Appify's offer and its service pages. `was` shows the crossed-out "bought one by one" price.
+// Keep each receipt line within ~26 characters so it fits the paper.
 export const PLANS = [
   {
     id: "Store360", n: 1, accent: "#8F72FF",
-    question: ["How much is", "an online store?"],
-    name: "Online store · Standard",
-    price: 360, from: false, totalLabel: "Total · paid once", stamp: "PAID ONCE",
-    lines: [["Basic template", true], ["Admin panel", true], ["One-time payment", true], ["No customizations", false]],
-    next: "Custom stores from $500",
+    question: ["How much is an", "e-commerce website?"],
+    name: "E-commerce website · Standard",
+    price: 360, from: false, totalLabel: "Total · pay once", stamp: "PAID ONCE",
+    lines: ["Basic template", "Admin panel", "Hosting included", "Pay once, no monthly fees"],
+    end: "Pay once · no monthly fees · hosting included",
+    next: "Custom e-commerce from $500",
   },
   {
     id: "Store500", n: 2, accent: "#74C6FF",
     question: ["Want it built", "around your brand?"],
-    name: "Online store · Custom",
-    price: 500, from: true, totalLabel: "Starting at", stamp: "CUSTOM",
-    lines: [["Full customization", true], ["Scroll animations", true], ["Automations & systems", true], ["Custom dashboards", true], ["Admin panel", true]],
+    name: "E-commerce website · Custom",
+    price: 500, from: true, totalLabel: "Starting at · pay once", stamp: "CUSTOM",
+    lines: ["Full customization", "Scroll animations", "Automations & systems", "Custom dashboards", "Admin panel", "Hosting included", "Pay once, no monthly fees"],
+    end: "Pay once · no monthly fees · hosting included",
     next: "Mobile apps from $999",
   },
   {
     id: "App999", n: 3, accent: "#39E29B",
     question: ["Got an", "app idea?"],
-    name: "Mobile app",
+    name: "Mobile app · iOS + Android",
     price: 999, from: true, totalLabel: "Starting at", stamp: "iOS + ANDROID",
-    lines: [["Hosting on iOS & Android", true], ["Free landing page website", true], ["Connected to your app", true], ["Admin panel", true]],
+    lines: ["UI/UX design, every screen", "One app, iOS + Android", "Store publishing handled", "Hosting on iOS & Android", "Free landing page website", "Admin panel for your team"],
+    end: "Free landing page website included",
     next: "3 motion videos for $199",
   },
   {
     id: "Motion199", n: 4, accent: "#FFD23F",
     question: ["Need content that", "stops the scroll?"],
-    name: "Motion graphics",
-    price: 199, from: false, totalLabel: "3-video pack", stamp: "3 VIDEOS",
-    lines: [["3 videos", true], ["15 s to 1 min each", true], ["Every frame & sound by us", true]],
+    name: "Motion graphics · 3 videos",
+    price: 199, was: 300, from: false, totalLabel: "3-video pack", stamp: "SAVE $101",
+    lines: ["3 videos, 15 s to 1 min", "Reels, ads, 3D or logos", "Hook in the first second", "Every format you post", "Sound design + silent cut"],
+    end: "1 video alone is $100 · 3 for $199",
     next: null,
   },
 ];

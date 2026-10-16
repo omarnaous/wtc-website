@@ -7,12 +7,12 @@ src = open("src/timing.js").read()
 v = lambda name: float(re.search(rf"export const {name} = (?:b\()?([\d.]+)", src).group(1))
 B = v("BEAT"); b = lambda n: round(n * B)
 Q1, Q2, HUSH, ROLL, PRICE, RISE, PRINT = 2, 10, b(2.7), b(3.4), b(4), b(5.6), b(7)
-LINE, TOTAL, STAMP, END, DUR = int(v("LINE")), b(17), b(18), b(20), int(v("DURATION"))
-line_at = lambda i: PRINT + 6 + i * LINE
-plans = re.findall(r'id: "(\w+)".*?lines: \[(.*?)\]\],', open("src/plans.js").read(), re.S)
+TOTAL, STAMP, END, DUR = b(17), b(18), b(20), int(v("DURATION"))
+line_at = lambda i, n: PRINT + 6 + i * min(24, (TOTAL - PRINT - 20) // n)   # same as lineAt in timing.js
+plans = re.findall(r'id: "(\w+)".*?lines: \[(.*?)\],\n', open("src/plans.js").read(), re.S)
 
 for pid, lines in plans:
-    n = lines.count("[")
+    n = lines.count('"') // 2
     for music in (True, False):
         cues = [{"type": "house", "start": 0, "end": DUR, "bpm": 120, "gain": 0.42,
                  "sections": [[0, "intro"], [HUSH, "gap"], [PRICE, "drop"], [END, "outro"]],
@@ -31,7 +31,7 @@ for pid, lines in plans:
             {"type": "printer", "start": PRINT, "end": PRINT + 14, "gain": 0.22},            # receipt header
         ]
         for i in range(n):
-            a = line_at(i)
+            a = line_at(i, n)
             cues.append({"type": "printer", "start": a, "end": a + 9, "gain": 0.2, "pan": 0.1 * (-1) ** i})
             cues.append({"type": "pop", "frame": a + 6, "gain": 0.11, "pan": -0.3})       # the line's tick
         cues += [
