@@ -86,7 +86,35 @@ const SERVICE_ICON = {
   "motion-graphics-lebanon": '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="10" width="40" height="28" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 18v12l10-6z" fill="currentColor"/></svg>',
   "meta-ads-lebanon": '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 34V14l18-6v32l-18-6Zm18-20c8 0 12 4 12 10s-4 10-12 10M8 34l4 9h6l-3-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>',
 };
-const serviceCard = (s, i) => `<a class="svc" href="/services/${s.slug}" data-reveal style="--d:${i * 70}ms"><span class="svc-ic">${SERVICE_ICON[s.slug] || ""}</span><h3>${esc(s.name)}</h3><p>${esc(s.intro.split(". ")[0])}.</p><span class="link">Learn more${icon.arrow}</span></a>`;
+// Appify's prices, per service (Meta ads is priced on a call). Shown on each service page and as a line on the home cards.
+const PRICING = {
+  "web-design-lebanon": [
+    { tier: "Standard", name: "E-commerce website", price: 360, note: "One-time payment",
+      lines: ["Premium template", "Admin panel", "Hosting included", "Pay once, no monthly fees"] },
+    { tier: "Custom", name: "Web app", price: 500, from: true, featured: true, note: "Starting price, one-time payment",
+      lines: ["CRM for your clients", "Business systems", "Automations & workflows", "Custom dashboards", "Fully custom design", "Admin panel", "Hosting included", "Pay once, no monthly fees"] },
+  ],
+  "mobile-app-development-lebanon": [
+    { tier: "iOS + Android", name: "Mobile app", price: 999, from: true, featured: true, note: "Starting price",
+      lines: ["UI/UX design, every screen", "One app for iOS and Android", "App Store and Google Play publishing", "Hosting on iOS and Android", "Free landing page website, connected to the app", "Admin panel for your team"] },
+  ],
+  "motion-graphics-lebanon": [
+    { tier: "3-video pack", name: "Motion graphics", price: 199, was: 300, featured: true, note: "1 video alone is $100, so the pack saves you $101",
+      lines: ["3 videos, 15 s to 1 min each", "Reels, ads, 3D or logo reveals", "A hook in the first second", "Delivered in every format you post", "Sound design, plus a silent cut for trending audio"] },
+  ],
+};
+const fromPrice = (slug) => { const p = PRICING[slug]; return p ? Math.min(...p.map((x) => x.price)) : null; };
+const priceCard = (p, i) => `<article class="price-card${p.featured ? " featured" : ""}" data-reveal style="--d:${i * 80}ms">
+  <p class="price-tier">${esc(p.tier)}</p>
+  <h3>${esc(p.name)}</h3>
+  <p class="price-amt">${p.from ? `<span class="price-from">from</span>` : ""}${p.was ? `<s>$${p.was}</s>` : ""}<b>$${p.price}</b></p>
+  <p class="price-note">${esc(p.note)}</p>
+  <ul class="price-list">${p.lines.map((l) => `<li>${icon.check}${esc(l)}</li>`).join("")}</ul>
+  <a class="btn ${p.featured ? "primary" : "ghost"} big magnetic" href="/book">Book a call${icon.arrow}</a>
+</article>`;
+const pricing = (s) => PRICING[s.slug] ? `<section class="section pricing" id="pricing" aria-labelledby="pricing-h"><div class="wrap">${head("", "Pricing", `<span id="pricing-h">${esc(s.name)}: what it costs</span>`, "Clear prices up front. Book a call and we'll confirm yours.")}<div class="price-grid n${PRICING[s.slug].length}">${PRICING[s.slug].map(priceCard).join("")}</div></div></section>` : "";
+
+const serviceCard = (s, i) => `<a class="svc" href="/services/${s.slug}" data-reveal style="--d:${i * 70}ms"><span class="svc-ic">${SERVICE_ICON[s.slug] || ""}</span><h3>${esc(s.name)}</h3><p>${esc(s.intro.split(". ")[0].replace(/\.$/, ""))}.</p>${fromPrice(s.slug) ? `<span class="svc-price">${PRICING[s.slug][0].was ? "3 videos" : "from"} <b>$${fromPrice(s.slug)}</b></span>` : ""}<span class="link">Learn more${icon.arrow}</span></a>`;
 
 function faqList(faqs) {
   return `<div class="faq-list">${faqs.map((f, i) => `<details class="faq" data-reveal style="--d:${(i % 4) * 50}ms"${i === 0 ? " open" : ""}><summary><h3>${esc(f.question)}</h3><span class="faq-ic" aria-hidden="true"></span></summary><div class="faq-a"><p>${esc(f.answer)}</p></div></details>`).join("")}</div>`;
@@ -282,11 +310,12 @@ export function servicePage(site, s) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(s.name)}</span><span class="dot"></span><span>Lebanon</span></p>
       <h1 class="case-title" data-split>${esc(s.h1)}</h1>
       <p class="lede">${esc(s.intro)}</p>
-      <div class="cta-row"><a class="btn primary big magnetic" href="#book">Book a free call${icon.arrow}</a><a class="btn ghost big" href="/#work">See our work</a></div>
+      <div class="cta-row"><a class="btn primary big magnetic" href="#book">Book a free call${icon.arrow}</a>${PRICING[s.slug] ? `<a class="btn ghost big" href="#pricing">See pricing</a>` : `<a class="btn ghost big" href="/#work">See our work</a>`}</div>
     </div>
     <div class="svc-dev" aria-hidden="true">${devSVG({ thumbs: 1, brow: 14, lid: 0.05, smile: 1, look: -4, tilt: 3 }, "")}</div>
   </div>
 </section>
+${pricing(s)}
 <section class="section"><div class="wrap"><div class="points">${s.points.map((x, i) => `<div class="point" data-reveal style="--d:${(i % 3) * 70}ms">${sparkSVG("pt-spark")}<h2>${esc(x.title)}</h2><p>${esc(x.text)}</p></div>`).join("")}</div></div></section>
 <section class="section"><div class="wrap">${head("", "Our work", s.related === "motion" ? "Recent motion work" : s.related === "apps" ? "Apps we're building" : "Websites we built", "")}</div>${related}</section>
 <section class="section faqs"><div class="wrap faq-grid"><div>${head("", "FAQ", `${esc(s.name)}: common questions`, "")}</div>${faqList(faqs)}</div></section>

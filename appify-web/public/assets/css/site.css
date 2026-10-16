@@ -218,7 +218,26 @@ p { margin: 0; }
 .svc-ic svg { width: 28px; height: 28px; }
 .svc h3 { font-size: 24px; margin-top: 8px; }
 .svc p { color: var(--mute); font-size: 15.5px; }
+.svc-price { margin-top: auto; padding-top: 10px; font: 500 12.5px/1 "Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+.svc-price b { font: 600 22px/1 "Display"; letter-spacing: -.02em; text-transform: none; color: var(--strong); margin-left: 4px; }
 .svc .link { margin-top: auto; padding-top: 6px; }
+.svc .svc-price + .link { margin-top: 0; }
+/* pricing on service pages */
+.price-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); align-items: start; }
+.price-grid.n1 { max-width: 560px; }
+.price-card { position: relative; display: grid; gap: 10px; padding: 30px 28px 28px; border-radius: 26px; background: var(--surface); border: 1px solid var(--line); }
+.price-card.featured { border-color: rgba(91, 43, 255, .55); background: radial-gradient(ellipse at 80% 0%, rgba(91, 43, 255, .2), transparent 60%), var(--surface); box-shadow: 0 30px 80px -40px rgba(91, 43, 255, .7); }
+.price-tier { justify-self: start; padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(116, 198, 255, .4); font: 500 12px/1 "Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--sky); }
+.price-card h3 { font-size: 28px; margin-top: 6px; }
+.price-amt { display: flex; align-items: baseline; gap: 10px; margin-top: 4px; }
+.price-amt b { font: 600 clamp(52px, 6vw, 68px)/1 "Display"; letter-spacing: -.045em; color: var(--strong); }
+.price-from { font: 600 20px/1 "Display"; color: var(--iris); }
+.price-amt s { font: 600 30px/1 "Display"; color: var(--dim); text-decoration-color: var(--alert); text-decoration-thickness: 3px; }
+.price-note { color: var(--mute); font-size: 15px; }
+.price-list { list-style: none; padding: 16px 0 6px; margin: 4px 0 0; border-top: 1px dashed var(--line); display: grid; gap: 11px; }
+.price-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; }
+.price-list svg { flex: none; width: 22px; height: 22px; padding: 3px; border-radius: 50%; background: var(--uv); color: #fff; margin-top: 1px; }
+.price-card .btn { justify-self: start; margin-top: 10px; }
 @media (max-width: 1000px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .svc-grid { grid-template-columns: 1fr; } }
 
