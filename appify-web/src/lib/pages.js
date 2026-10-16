@@ -2,7 +2,6 @@
 import { esc, icon, sparkSVG, wordmarkSVG, layout } from "./html.js";
 import { devSVG } from "../../public/assets/js/dev.js";
 
-const STATUS = { live: "Live", concept: "Concept build", "in-development": "In development" };
 const KIND = { ad: "Content ad", brand: "Brand film", reel: "Reel", client: "Client work" };
 const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${s % 60}S`;
@@ -75,32 +74,9 @@ function motionCard(m, i) {
 </article>`;
 }
 
-// An app with a store link shows a web preview of its real App Store page: a browser window with the full link in
-// the address bar and a screenshot of the live page (WordPress mShots renders and caches it), which scrolls slowly.
-const shot = (url) => `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=960&h=1800&vpw=1280&vph=2400`;
-function webPreviewCard(p) {
-  const shown = p.store_url.replace(/^https?:\/\//, "");
-  return `<article class="app-web" data-reveal>
-  <a class="web-card" href="${esc(p.store_url)}" target="_blank" rel="noopener" aria-label="${esc(p.title)} on the App Store">
-    <div class="web-bar"><span class="web-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="web-url"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${esc(shown)}</span></div>
-    <div class="web-view"><img src="${esc(shot(p.store_url))}" width="960" height="1800" alt="The ${esc(p.title)} App Store page" loading="lazy" decoding="async"></div>
-  </a>
-  <p class="meta">${esc(p.category)} · iOS</p>
-  <h3><a href="${esc(p.store_url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h3>
-  <p class="summary">${esc(p.summary)}</p>
-</article>`;
-}
-
-function appCard(p) {
-  if (p.store_url) return webPreviewCard(p);
-  return `<article class="app-card" data-reveal>
-  <div class="phone"><div class="phone-screen">
-    <div class="app-splash">${sparkSVG("app-spark")}<strong>${esc(p.title)}</strong><span>${STATUS[p.status]}</span></div>
-  </div><i class="phone-notch"></i></div>
-  <div class="app-body"><p class="meta">${esc(p.category)}</p><h3>${esc(p.title)}</h3><p class="summary">${esc(p.description || p.summary)}</p>
-  <span class="badge ${p.status}">${STATUS[p.status]}</span></div>
-</article>`;
-}
+// Apps use the same video card as section 3. Until an app has its own video, it shows a placeholder one.
+const APP_PLACEHOLDER = { video: "/media/ecommerce-chat.mp4", poster: "/media/ecommerce-chat.webp", aspect: "9/16", duration: 24 };
+const appReel = (p, i) => motionCard({ ...APP_PLACEHOLDER, ...(p.video ? { video: p.video, poster: p.poster, aspect: p.aspect, duration: 0 } : {}), title: p.title, summary: p.summary, kind: p.category, client: "Appify" }, i);
 
 const SERVICE_ICON = {
   "web-design-lebanon": '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="9" width="38" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M5 16h38M17 43h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
@@ -207,9 +183,7 @@ export function homePage(site) {
     ${head("02", "Mobile apps", `<span id="apps-h">Apps for iOS &amp; Android</span>`, "From the first screens to the App Store and Google Play, with the admin side your team needs.")}
     ${rowBar("apps-row", "<span></span>")}
   </div>
-  <div class="hrow apps-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">
-      ${apps.map(appCard).join("")}
-  </div>
+  <div class="hrow reel-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">${apps.map(appReel).join("")}</div>
   ${rowProg("apps-row")}
 </section>
 
@@ -284,7 +258,7 @@ ${booking(site)}`;
 export function servicePage(site, s) {
   const faqs = site.faqs.filter((f) => f.topic === s.faq_topic || f.topic === "general");
   const related = s.related === "motion" ? `<div class="hrow reel-row static" data-row>${site.motion.slice(0, 6).map(motionCard).join("")}</div>`
-    : s.related === "apps" ? `<div class="hrow apps-row" data-row>${site.projects.filter((p) => p.kind === "app").map(appCard).join("")}</div>`
+    : s.related === "apps" ? `<div class="hrow reel-row static" data-row>${site.projects.filter((p) => p.kind === "app").map(appReel).join("")}</div>`
     : `<div class="wrap"><div class="work-grid">${site.projects.filter((p) => p.kind === "website").slice(0, 6).map(workCard).join("")}</div></div>`;
   const body = `
 <section class="case-hero svc-hero">

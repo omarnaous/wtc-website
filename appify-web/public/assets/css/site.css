@@ -223,50 +223,6 @@ p { margin: 0; }
 .work .summary, .work-grid .summary { font-size: 14.5px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .work-actions .link { margin-left: auto; font-size: 14.5px; }
 
-/* apps */
-.apps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-.app-card { display: grid; grid-template-columns: 200px 1fr; gap: 28px; align-items: center; padding: 28px; border-radius: var(--r); background: radial-gradient(ellipse at 20% 0%, rgba(91, 43, 255, .25), transparent 60%), var(--ink2); border: 1px solid var(--line); transition: transform .5s var(--ease), border-color .3s; }
-.app-card:hover { border-color: rgba(143, 114, 255, .5); }
-.app-body { display: grid; gap: 10px; justify-items: start; }
-.app-body h3 { font-size: 30px; }
-.phone { position: relative; aspect-ratio: 9 / 19.5; border-radius: 36px; padding: 9px; background: linear-gradient(145deg, #2A2740, #0C0B16); box-shadow: 0 30px 60px rgba(0, 0, 0, .5), inset 0 0 0 1.5px rgba(255, 255, 255, .12); }
-.phone-screen { height: 100%; border-radius: 28px; overflow: hidden; background: linear-gradient(160deg, var(--uv), #2A0FA0 60%, #120840); display: grid; place-items: center; }
-.phone.ghost .phone-screen { background: repeating-linear-gradient(135deg, rgba(143, 114, 255, .08) 0 12px, transparent 12px 24px), var(--ink); border: 1.5px dashed rgba(143, 114, 255, .4); }
-.phone-notch { position: absolute; top: 16px; left: 50%; translate: -50% 0; width: 64px; height: 18px; border-radius: 12px; background: #050409; }
-.app-splash { display: grid; justify-items: center; gap: 10px; text-align: center; padding: 12px; }
-.app-splash strong { font: 600 20px/1.1 "Display"; letter-spacing: -.02em; }
-.app-splash span { font: 500 11px/1 "Mono"; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 255, 255, .7); }
-.app-spark { width: 54px; height: 54px; color: #fff; animation: pulse 2.4s var(--ease) infinite; }
-.app-splash .plus { font: 600 48px/1 "Display"; color: var(--iris); }
-@keyframes pulse { 50% { transform: scale(1.15) rotate(45deg); } }
-@media (max-width: 1000px) { .apps-grid { grid-template-columns: 1fr; } }
-/* apps row: App Store listings and app cards side by side, all the same width */
-.apps-row { align-items: stretch; }
-.apps-row > * { flex: none; width: clamp(300px, 84vw, 430px); scroll-snap-align: start; }
-.apps-row .app-card { grid-template-columns: 130px 1fr; gap: 20px; padding: 22px; }
-.apps-row .app-body h3 { font-size: 24px; }
-/* web preview: a browser window showing the live App Store page, scrolling slowly */
-.apps-row > .app-web { width: clamp(300px, 88vw, 640px); display: flex; flex-direction: column; gap: 8px; }
-.web-card { display: block; border-radius: var(--r); overflow: hidden; background: var(--ink2); border: 1px solid var(--line); box-shadow: 0 40px 90px -40px rgba(91, 43, 255, .55); transition: transform .5s var(--spring), border-color .3s; }
-@media (hover: hover) { .web-card:hover { transform: translateY(-6px); border-color: rgba(143, 114, 255, .55); } }
-.web-bar { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 14px; background: #17152A; border-bottom: 1px solid rgba(243, 241, 250, .08); }
-.web-dots { display: flex; gap: 6px; flex: none; }
-.web-dots i { width: 10px; height: 10px; border-radius: 50%; background: #FF5F57; }
-.web-dots i:nth-child(2) { background: #FEBC2E; } .web-dots i:nth-child(3) { background: #28C840; }
-.web-url { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; height: 26px; padding: 0 12px; border-radius: 8px; background: rgba(10, 9, 19, .7); color: var(--mute); font: 500 12.5px/1 "Mono", monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.web-url svg { width: 12px; height: 12px; flex: none; color: var(--green); }
-.web-view { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #fff linear-gradient(180deg, #f5f5f7, #fff); }
-.web-view img { width: 100%; height: auto; animation: page-scroll 26s ease-in-out infinite alternate; }
-@keyframes page-scroll { 0%, 8% { transform: translate3d(0, 0, 0); } 92%, 100% { transform: translate3d(0, calc(-100% + 100cqh), 0); } }
-.web-view { container-type: size; }
-.app-web h3 { font-size: 20px; margin-top: 8px; }
-.app-web h3 a:hover { color: var(--sky); }
-.app-web .summary { font-size: 14.5px; }
-@supports (animation-timeline: view()) {
-  .apps-row > * { animation: card-in linear both, card-out linear both; animation-timeline: view(inline), view(inline); animation-range: entry, exit; }
-}
-@media (max-width: 520px) { .app-card { grid-template-columns: 130px 1fr; gap: 18px; padding: 20px; } .app-body h3 { font-size: 24px; } }
-
 /* motion */
 .motion-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .motion-bar .filters { margin: 0; }
@@ -445,7 +401,7 @@ textarea.field { resize: vertical; }
 .js [data-reveal].in { opacity: 1; transform: none; }
 .js .hrow > [data-reveal] { transform: translate3d(0, 28px, 0); transition: opacity .6s var(--ease) var(--d, 0ms), transform .7s cubic-bezier(.16, 1, .3, 1) var(--d, 0ms); }
 .js .hrow > [data-reveal].in { transform: none; }
-.work-card.tilting, .app-card.tilting, .js .work-card[data-reveal].in.tilting, .js .app-card[data-reveal].in.tilting { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .18s linear, border-color .3s, box-shadow .3s; }
+.work-card.tilting, .js .work-card[data-reveal].in.tilting { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .18s linear, border-color .3s, box-shadow .3s; }
 .js [data-split] .w { display: inline-block; opacity: 0; transform: translateY(.5em) rotate(4deg); filter: blur(6px); transition: opacity .8s var(--ease), transform .8s var(--spring), filter .8s var(--ease); transition-delay: calc(var(--i) * 55ms + 120ms); }
 .js [data-split].in .w { opacity: 1; transform: none; filter: none; }
 
