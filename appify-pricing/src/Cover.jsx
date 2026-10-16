@@ -1,8 +1,9 @@
-// Instagram highlight cover for the price list: the Stories' receipt as an icon. Instagram crops the middle into a
-// circle, so everything sits inside a centred 640 px circle; the rest is background.
+// Instagram highlight cover for the price list: Dev pointing up at the Stories' receipt. Instagram crops the middle
+// into a circle, so Dev's head, his pointing hand and the receipt all sit inside the centred circle.
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { useFonts } from "./fx.jsx";
 import { sparkPath } from "./brand.js";
+import { Dev } from "./Dev.jsx";
 
 const UV = "#5B2BFF", IRIS = "#8F72FF", INK = "#0A0913", PAPER = "#F3F1FA";
 
@@ -19,8 +20,12 @@ export const Cover = ({ dark = false }) => {
       <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
         <circle cx={W / 2} cy={H / 2} r={420} fill="none" stroke="rgba(255,255,255,.14)" strokeWidth={3} strokeDasharray="4 14" />
       </svg>
-      <AbsoluteFill style={{ transform: "scale(1.35)", transformOrigin: "50% 50%" }}>
-      <div style={{ position: "absolute", left: (W - w) / 2, top: (H - h) / 2 + 10, width: w, height: h, transform: "rotate(-7deg)", filter: "drop-shadow(0 30px 40px rgba(10,9,19,.45))" }}>
+      {/* Dev: head and shoulders fill the circle, pointing up at the receipt */}
+      <div style={{ position: "absolute", left: 70, top: 560 }}>
+        <Dev width={760} point={1} brow={18} lid={0.05} smile={1} happy={0.6} look={7} tilt={-4} />
+      </div>
+      {/* the receipt from the Stories, small, top right */}
+      <div style={{ position: "absolute", left: 700, top: 640, width: w, height: h, transform: "rotate(9deg) scale(0.72)", transformOrigin: "50% 50%", filter: "drop-shadow(0 24px 30px rgba(10,9,19,.5))" }}>
         <div style={{ position: "absolute", inset: 0, background: PAPER, borderRadius: "0 0 22px 22px", clipPath: `polygon(${zig}, 100% 100%, 0 100%)` }}>
           <div style={{ position: "absolute", left: 0, right: 0, top: 54, textAlign: "center", fontFamily: "Display", fontWeight: 600, fontSize: 150, lineHeight: 1, letterSpacing: "-0.04em", color: UV }}>$</div>
           {[0, 1, 2].map((i) => (
@@ -33,9 +38,8 @@ export const Cover = ({ dark = false }) => {
           ))}
         </div>
       </div>
-      <svg width={120} height={120} viewBox="0 0 100 100" style={{ position: "absolute", left: W / 2 + 120, top: H / 2 - 250 }}><path d={sparkPath(50, 50, 48, 0.22)} fill={dark ? IRIS : "#fff"} /></svg>
-      <svg width={54} height={54} viewBox="0 0 100 100" style={{ position: "absolute", left: W / 2 - 230, top: H / 2 + 150 }}><path d={sparkPath(50, 50, 48, 0.22)} fill={dark ? "#74C6FF" : "rgba(255,255,255,.75)"} /></svg>
-      </AbsoluteFill>
+      <svg width={76} height={76} viewBox="0 0 100 100" style={{ position: "absolute", left: 610, top: 545 }}><path d={sparkPath(50, 50, 48, 0.22)} fill={dark ? IRIS : "#fff"} /></svg>
+      <svg width={48} height={48} viewBox="0 0 100 100" style={{ position: "absolute", left: 140, top: 640 }}><path d={sparkPath(50, 50, 48, 0.22)} fill={dark ? "#74C6FF" : "rgba(255,255,255,.75)"} /></svg>
     </AbsoluteFill>
   );
 };
