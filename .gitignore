@@ -24,3 +24,6 @@ next-env.d.ts
 
 # Local database backups.
 backups/
+
+# Rendered price-list Stories (source in appify-pricing/; re-render with node render.mjs)
+exports/price-list/
