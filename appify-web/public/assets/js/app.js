@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261016g";
+import { devSVG } from "./dev.js?v=20261016h";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -162,6 +162,8 @@ $$("[data-row]").forEach((row) => {
     btns.forEach((b) => { b.disabled = Number(b.dataset.scroll) < 0 ? x <= 2 : x >= max - 2; });
     prog?.style.setProperty("--w", (row.clientWidth / row.scrollWidth).toFixed(3));
     prog?.style.setProperty("--p", max > 0 ? (x / max).toFixed(3) : "0");
+    const fits = max <= 2; // everything visible: no arrows, no progress line
+    btns[0]?.parentElement.classList.toggle("is-hidden", fits); prog?.classList.toggle("is-hidden", fits);
   };
   row.addEventListener("scroll", perFrame(update), { passive: true });
   new ResizeObserver(perFrame(update)).observe(row); update();

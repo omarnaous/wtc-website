@@ -75,8 +75,32 @@ function motionCard(m, i) {
 </article>`;
 }
 
+// An app with an App Store link shows its live listing: icon, name, developer, rating, category, price, screenshots.
+const compact = (n) => (n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M" : n >= 1e3 ? (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K" : String(n));
+function storeCard(p, st) {
+  const facts = [
+    st.ratings > 0 ? `<div><b>${st.rating.toFixed(1)} <span class="star">★</span></b><small>${compact(st.ratings)} ratings</small></div>` : "",
+    st.genre ? `<div><b>${esc(st.genre)}</b><small>Category</small></div>` : "",
+    st.price ? `<div><b>${esc(st.price)}</b><small>Price</small></div>` : "",
+    st.age ? `<div><b>${esc(st.age)}</b><small>Age</small></div>` : "",
+  ].filter(Boolean).slice(0, 3).join("");
+  return `<article class="app-store" data-reveal>
+  <a class="store-card" href="${esc(st.url)}" target="_blank" rel="noopener" aria-label="${esc(st.name)} on the App Store">
+    <div class="store-head">
+      <img class="store-icon" src="${esc(st.icon)}" width="76" height="76" alt="" loading="lazy" decoding="async">
+      <div class="store-id"><h3>${esc(st.name)}</h3><p>${esc(st.seller)}</p></div>
+      <span class="store-get">View</span>
+    </div>
+    ${facts ? `<div class="store-facts">${facts}</div>` : ""}
+    <div class="store-shots">${st.shots.map((u, i) => `<img src="${esc(u)}" width="300" height="650" alt="${esc(st.name)} screenshot ${i + 1}" loading="lazy" decoding="async">`).join("")}</div>
+    <p class="store-foot">View on the App Store${icon.ext}</p>
+  </a>
+</article>`;
+}
+
 function appCard(p) {
-  return `<article class="app-card" data-reveal data-tilt>
+  if (p.store) return storeCard(p, p.store);
+  return `<article class="app-card" data-reveal>
   <div class="phone"><div class="phone-screen">
     <div class="app-splash">${sparkSVG("app-spark")}<strong>${esc(p.title)}</strong><span>${STATUS[p.status]}</span></div>
   </div><i class="phone-notch"></i></div>
@@ -188,14 +212,16 @@ export function homePage(site) {
 <section class="section apps" id="apps" aria-labelledby="apps-h">
   <div class="wrap">
     ${head("02", "Mobile apps", `<span id="apps-h">Apps for iOS &amp; Android</span>`, "From the first screens to the App Store and Google Play, with the admin side your team needs.")}
-    <div class="apps-grid">
+    ${rowBar("apps-row", "<span></span>")}
+  </div>
+  <div class="hrow apps-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">
       ${apps.map(appCard).join("")}
-      <a class="app-card next" href="#book" data-reveal data-tilt>
+      <a class="app-card next" href="#book" data-reveal>
         <div class="phone ghost"><div class="phone-screen"><div class="app-splash"><span class="plus">+</span><strong>Your app</strong><span>Next in line</span></div></div><i class="phone-notch"></i></div>
         <div class="app-body"><p class="meta">Have an app idea?</p><h3>Yours could be next.</h3><p class="summary">Tell us what it should do. We'll map the screens, the features and a timeline on a free call.</p><span class="link">Book a call${icon.arrow}</span></div>
       </a>
-    </div>
   </div>
+  ${rowProg("apps-row")}
 </section>
 
 <section class="section motion" id="motion" aria-labelledby="motion-h">
@@ -269,7 +295,7 @@ ${booking(site)}`;
 export function servicePage(site, s) {
   const faqs = site.faqs.filter((f) => f.topic === s.faq_topic || f.topic === "general");
   const related = s.related === "motion" ? `<div class="hrow reel-row static" data-row>${site.motion.slice(0, 6).map(motionCard).join("")}</div>`
-    : s.related === "apps" ? `<div class="wrap"><div class="apps-grid">${site.projects.filter((p) => p.kind === "app").map(appCard).join("")}</div></div>`
+    : s.related === "apps" ? `<div class="hrow apps-row" data-row>${site.projects.filter((p) => p.kind === "app").map(appCard).join("")}</div>`
     : `<div class="wrap"><div class="work-grid">${site.projects.filter((p) => p.kind === "website").slice(0, 6).map(workCard).join("")}</div></div>`;
   const body = `
 <section class="case-hero svc-hero">

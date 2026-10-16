@@ -240,6 +240,34 @@ p { margin: 0; }
 .app-splash .plus { font: 600 48px/1 "Display"; color: var(--iris); }
 @keyframes pulse { 50% { transform: scale(1.15) rotate(45deg); } }
 @media (max-width: 1000px) { .apps-grid { grid-template-columns: 1fr; } }
+/* apps row: App Store listings and app cards side by side, all the same width */
+.apps-row { align-items: stretch; }
+.apps-row > * { flex: none; width: clamp(300px, 84vw, 430px); scroll-snap-align: start; }
+.apps-row .app-card { grid-template-columns: 130px 1fr; gap: 20px; padding: 22px; }
+.apps-row .app-body h3 { font-size: 24px; }
+/* a card in the style of an App Store page */
+.store-card { display: flex; flex-direction: column; gap: 16px; height: 100%; padding: 20px; border-radius: var(--r); background: linear-gradient(180deg, rgba(26, 23, 48, .95), var(--ink2)); border: 1px solid var(--line); transition: border-color .3s, transform .5s var(--spring), box-shadow .3s; }
+@media (hover: hover) { .store-card:hover { border-color: rgba(143, 114, 255, .5); transform: translateY(-6px); box-shadow: 0 30px 60px -24px rgba(91, 43, 255, .55); } }
+.store-head { display: flex; align-items: center; gap: 14px; }
+.store-icon { width: 76px; height: 76px; flex: none; border-radius: 22.5%; background: var(--ink3); box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 10px 24px -8px rgba(0, 0, 0, .6); }
+.store-id { flex: 1; min-width: 0; }
+.store-id h3 { font: 600 20px/1.15 "Display"; letter-spacing: -.02em; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.store-id p { margin-top: 4px; color: var(--dim); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.store-get { flex: none; padding: 8px 18px; border-radius: 999px; background: var(--sky); color: var(--ink); font: 700 13.5px/1 "UI"; letter-spacing: .02em; text-transform: uppercase; }
+.store-facts { display: flex; border-block: 1px solid rgba(243, 241, 250, .1); padding: 12px 0; }
+.store-facts > div { flex: 1; display: grid; justify-items: center; gap: 4px; text-align: center; }
+.store-facts > div + div { border-left: 1px solid rgba(243, 241, 250, .1); }
+.store-facts b { font: 600 15px/1.1 "UI"; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; padding: 0 6px; }
+.store-facts small { font: 500 11px/1 "Mono"; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+.star { color: var(--yellow); }
+.store-shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.store-shots img { width: 100%; height: auto; aspect-ratio: 300 / 650; object-fit: cover; border-radius: 14px; background: var(--ink3); border: 1px solid rgba(255, 255, 255, .06); }
+.store-foot { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--sky); font-weight: 600; font-size: 14.5px; }
+.store-foot svg { width: 15px; }
+@supports (animation-timeline: view()) {
+  .apps-row > * { animation: card-in linear both, card-out linear both; animation-timeline: view(inline), view(inline); animation-range: entry, exit; }
+  .apps-row .store-shots img { animation: text-in linear both; animation-timeline: view(inline); animation-range: entry 20% entry 100%; }
+}
 @media (max-width: 520px) { .app-card { grid-template-columns: 130px 1fr; gap: 18px; padding: 20px; } .app-body h3 { font-size: 24px; } }
 
 /* motion */
@@ -259,6 +287,7 @@ p { margin: 0; }
 .reel-row .reel { min-height: calc(var(--h) + 187px); }
 .row-prog { position: relative; height: 3px; border-radius: 3px; background: rgba(243, 241, 250, .1); overflow: hidden; }
 .row-prog i { position: absolute; inset: 0; width: calc(var(--w, .3) * 100%); border-radius: 3px; background: linear-gradient(90deg, var(--uv), var(--sky)); transform: translateX(calc(var(--p, 0) * (1 / var(--w, .3) - 1) * 100%)); transition: transform .12s linear; }
+.scroll-btns.is-hidden, .row-prog.is-hidden { visibility: hidden; }
 .scroll-btns button:disabled { opacity: .3; cursor: default; transform: none; }
 .scroll-btns button:disabled:hover { background: none; }
 .work .motion-bar { margin-bottom: 4px; }
