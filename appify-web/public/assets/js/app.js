@@ -1,28 +1,35 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js";
+import { devSVG } from "./dev.js?v=20261016";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fine = matchMedia("(pointer: fine)").matches;
+// Run a handler at most once per animation frame (pointer and scroll events fire far faster than the screen).
+const perFrame = (fn) => { let q = false, last; return (e) => { last = e; if (q) return; q = true; requestAnimationFrame(() => { q = false; fn(last); }); }; };
 
 // ── nav: solid on scroll, hides when scrolling down, mobile menu, scroll progress ───────────────────
 const nav = $("[data-nav]"), bar = $(".progress");
-let lastY = 0;
+let lastY = 0, docH = 0;
+const measure = () => { docH = document.documentElement.scrollHeight - innerHeight; };
 const onScroll = () => {
-  const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+  const y = scrollY;
   nav?.classList.toggle("scrolled", y > 20);
-  nav?.classList.toggle("hide", y > 400 && y > lastY && !nav.classList.contains("open"));
-  bar?.style.setProperty("--p", h > 0 ? (y / h).toFixed(4) : 0);
+  nav?.classList.toggle("hide", y > 400 && y > lastY + 2 && !nav.classList.contains("open"));
+  if (y < lastY - 2) nav?.classList.remove("hide");
+  bar?.style.setProperty("--p", docH > 0 ? Math.min(1, y / docH).toFixed(4) : 0);
   lastY = y;
 };
-addEventListener("scroll", onScroll, { passive: true }); onScroll();
+measure(); onScroll();
+addEventListener("scroll", perFrame(onScroll), { passive: true });
+addEventListener("resize", perFrame(() => { measure(); onScroll(); }));
+new ResizeObserver(perFrame(measure)).observe(document.body);
 $("[data-burger]")?.addEventListener("click", (e) => {
   const open = nav.classList.toggle("open");
   e.currentTarget.setAttribute("aria-expanded", open);
 });
-$$("[data-mobile-menu] a").forEach((a) => a.addEventListener("click", () => nav.classList.remove("open")));
+$$("[data-mobile-menu] a").forEach((a) => a.addEventListener("click", () => { nav.classList.remove("open"); $("[data-burger]")?.setAttribute("aria-expanded", "false"); }));
 $$(".nav-more").forEach((d) => document.addEventListener("click", (e) => { if (!d.contains(e.target)) d.open = false; }));
 
 // ── split headlines into words, reveal on scroll ────────────────────────────────────────────────────
@@ -46,54 +53,67 @@ const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersec
 $$("[data-reveal]").forEach((el) => io.observe(el));
 
 // ── pointer glow in the hero, glow on service cards, tilt on cards, magnetic buttons ──────────────────
-const hero = $("[data-hero]");
-if (hero && fine && !reduced) hero.addEventListener("pointermove", (e) => {
+// The hero glow is a separate layer moved with transform (no full-screen repaint per mouse move).
+const hero = $("[data-hero]"), spot = $(".hero-bg .spot");
+if (hero && spot && fine && !reduced) hero.addEventListener("pointermove", perFrame((e) => {
   const r = hero.getBoundingClientRect();
-  hero.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
-  hero.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
-});
-$$(".svc").forEach((c) => c.addEventListener("pointermove", (e) => {
-  const r = c.getBoundingClientRect();
-  c.style.setProperty("--x", `${e.clientX - r.left}px`); c.style.setProperty("--y", `${e.clientY - r.top}px`);
-}));
+  spot.style.transform = `translate3d(${e.clientX - r.left}px, ${e.clientY - r.top}px, 0)`;
+}), { passive: true });
 if (fine && !reduced) {
+  $$(".svc").forEach((c) => c.addEventListener("pointermove", perFrame((e) => {
+    const r = c.getBoundingClientRect();
+    c.style.setProperty("--x", `${e.clientX - r.left}px`); c.style.setProperty("--y", `${e.clientY - r.top}px`);
+  }), { passive: true }));
   $$("[data-tilt]").forEach((c) => {
-    c.addEventListener("pointermove", (e) => {
+    let on = false;
+    c.addEventListener("pointermove", perFrame((e) => {
+      if (!on) return;
       const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-      c.style.setProperty("--ry", `${x * 6}deg`); c.style.setProperty("--rx", `${-y * 6}deg`);
-    });
-    c.addEventListener("pointerleave", () => { c.style.setProperty("--ry", "0deg"); c.style.setProperty("--rx", "0deg"); });
+      c.style.setProperty("--ry", `${(x * 5).toFixed(2)}deg`); c.style.setProperty("--rx", `${(-y * 5).toFixed(2)}deg`);
+    }), { passive: true });
+    c.addEventListener("pointerenter", () => { on = true; c.classList.add("tilting"); });
+    c.addEventListener("pointerleave", () => { on = false; c.classList.remove("tilting"); c.style.setProperty("--ry", "0deg"); c.style.setProperty("--rx", "0deg"); });
   });
   $$(".magnetic").forEach((b) => {
-    b.addEventListener("pointermove", (e) => {
+    let on = false;
+    b.addEventListener("pointermove", perFrame((e) => {
+      if (!on) return;
       const r = b.getBoundingClientRect();
-      b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.18}px, ${(e.clientY - r.top - r.height / 2) * 0.28}px)`;
-    });
-    b.addEventListener("pointerleave", () => { b.style.transform = ""; });
+      b.style.translate = `${((e.clientX - r.left - r.width / 2) * 0.18).toFixed(1)}px ${((e.clientY - r.top - r.height / 2) * 0.28).toFixed(1)}px`;
+    }), { passive: true });
+    b.addEventListener("pointerenter", () => { on = true; });
+    b.addEventListener("pointerleave", () => { on = false; b.style.translate = ""; });
   });
 }
 
 // ── videos: load when near, play muted while visible, hover-play on desktop; modal with sound ─────────
-const vids = $$("video[data-src]");
-const load = (v) => { if (!v.src) { v.src = v.dataset.src; v.load(); } };
+const vids = $$("video[data-src]"), onScreen = new Set();
+const load = (v) => { if (!v.getAttribute("src")) { v.src = v.dataset.src; v.load(); } };
 const vio = new IntersectionObserver((es) => es.forEach((e) => {
   const v = e.target;
-  if (e.isIntersecting) { load(v); if (!reduced) v.play().catch(() => {}); } else if (!v.paused) v.pause();
-}), { rootMargin: "200px 0px", threshold: 0.35 });
+  if (e.isIntersecting) { onScreen.add(v); load(v); if (!reduced && !document.hidden) v.play().catch(() => {}); }
+  else { onScreen.delete(v); if (!v.paused) v.pause(); }
+}), { threshold: 0.35 });
 vids.forEach((v) => vio.observe(v));
+document.addEventListener("visibilitychange", () => onScreen.forEach((v) => (document.hidden ? v.pause() : !reduced && v.play().catch(() => {}))));
 
 const player = $("[data-player]"), pv = player?.querySelector("video");
 $$("[data-play]").forEach((b) => b.addEventListener("click", (e) => {
   e.preventDefault();
   if (!player?.showModal) { location.href = b.dataset.play; return; }
+  onScreen.forEach((v) => v.pause());
   pv.src = b.dataset.play; player.querySelector(".player-title").textContent = b.dataset.title || "";
-  player.showModal(); pv.currentTime = 0; pv.muted = false; pv.play().catch(() => {});
+  player.showModal(); pv.muted = false; pv.play().catch(() => {});
 }));
-const closePlayer = () => { pv?.pause(); player?.close(); };
+const closePlayer = () => player?.close();
 player?.querySelector("[data-close]")?.addEventListener("click", closePlayer);
 player?.addEventListener("click", (e) => { if (e.target === player) closePlayer(); });
-player?.addEventListener("close", () => pv?.pause());
+player?.addEventListener("close", () => {
+  pv.pause(); pv.removeAttribute("src"); pv.load(); // stop downloading the full video
+  if (!reduced) onScreen.forEach((v) => v.play().catch(() => {}));
+});
 
+const row = $("[data-reel-row]");
 // ── filters (websites, videos) ─────────────────────────────────────────────────────────────────────
 $$("[data-filter]").forEach((group) => {
   const items = $$(group.dataset.filter);
@@ -104,72 +124,90 @@ $$("[data-filter]").forEach((group) => {
     items.forEach((it) => {
       const keys = (it.dataset.cats || it.dataset.kind || "").split(" ");
       it.classList.toggle("out", f !== "*" && !keys.includes(f));
+      if (!it.classList.contains("out")) it.classList.add("in");
     });
+    if (row && group.dataset.filter === ".reel") row.scrollTo({ left: 0, behavior: "auto" });
   });
 });
 
 // ── the reel row: arrow buttons and drag to scroll ─────────────────────────────────────────────────
-const row = $("[data-reel-row]");
 if (row) {
   $$("[data-scroll]").forEach((b) => b.addEventListener("click", () => row.scrollBy({ left: Number(b.dataset.scroll) * row.clientWidth * 0.8, behavior: reduced ? "auto" : "smooth" })));
   let down = null, moved = false;
   row.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") return; down = { x: e.clientX, l: row.scrollLeft }; moved = false; });
-  addEventListener("pointermove", (e) => { if (!down) return; const dx = e.clientX - down.x; if (Math.abs(dx) > 6) { moved = true; row.classList.add("drag"); } row.scrollLeft = down.l - dx; });
+  addEventListener("pointermove", (e) => { if (!down) return; const dx = e.clientX - down.x; if (Math.abs(dx) > 6) { moved = true; row.classList.add("drag"); } row.scrollLeft = down.l - dx; }, { passive: true });
   addEventListener("pointerup", () => { down = null; row.classList.remove("drag"); });
   row.addEventListener("click", (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
 }
 
 // ── Dev, live: breathes, blinks, looks at the cursor, talks, and does tricks when tapped ────────────────
+// Cheap by design: the body bob and the jump are a CSS transform on the button; the SVG is only rebuilt when
+// the pose actually changes (rounded), at most 30 times a second, and nothing runs while Dev is off screen.
 const stage = $("[data-dev]");
 if (stage) {
   const btn = $(".dev-btn", stage), bubble = $(".dev-bubble", stage);
   const lines = JSON.parse(stage.dataset.lines || "[]");
-  const s = { t0: performance.now(), look: 0, lookT: 0, tilt: 0, tiltT: 0, line: 0, said: lines[0] || "", sayAt: 0.3, nextBlink: 2, blinkAt: -1, act: null, actAt: -9, visible: true };
+  const s = { t0: performance.now(), look: 0, lookT: 0, tilt: 0, tiltT: 0, line: 0, said: lines[0] || "", sayAt: 0.3, nextBlink: 2, blinkAt: -1, act: null, actAt: -9, visible: true, px: null, py: null };
   const now = () => (performance.now() - s.t0) / 1000;
   const ACT = { wave: 1.8, jump: 0.6, thumbs: 1.6, point: 1.6, happy: 1.4, shock: 1.0, wink: 0.8 };
   const smooth = (x) => x * x * (3 - 2 * x);
   const env = (t, a, len, r = 0.18) => (t < a || t > a + len ? 0 : smooth(Math.min(1, (t - a) / r, (a + len - t) / r)));
+  const q = (x, step) => Math.round(x / step) * step;
   const say = (txt) => { s.said = txt; s.sayAt = now(); };
   const play = (a) => { s.act = a; s.actAt = now(); };
-  addEventListener("pointermove", (e) => {
-    const r = btn.getBoundingClientRect();
-    s.lookT = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (innerWidth / 2)));
-    s.tiltT = s.lookT * 3 + Math.max(-1, Math.min(1, (e.clientY - r.top) / innerHeight)) * 1.5;
-  }, { passive: true });
-  new IntersectionObserver(([e]) => { s.visible = e.isIntersecting; }).observe(stage);
+  if (fine) addEventListener("pointermove", (e) => { s.px = e.clientX; s.py = e.clientY; }, { passive: true });
+  // while the page is scrolling, Dev holds his pose so every frame goes to the scroll
+  let scrollingUntil = 0;
+  addEventListener("scroll", () => { scrollingUntil = performance.now() + 180; }, { passive: true });
   const tricks = ["jump", "thumbs", "wink", "shock", "happy", "wave"];
-  let trick = 0;
+  let trick = 0, raf = 0, lastDraw = 0, lastKey = "", lastText = null, lastTyping = null, lastFull = null;
+  // two layers in one grid cell: the full line (hidden) sizes the bubble, so typing never resizes it
+  bubble.innerHTML = '<span class="full" aria-hidden="true"></span><span class="typed"></span>';
+  const full = bubble.firstChild, typedEl = bubble.lastChild;
+  full.textContent = lastFull = s.said; // keep the server-rendered size from the first frame
   btn.addEventListener("click", (e) => {
     const a = tricks[trick++ % tricks.length]; play(a); if (a === "jump" || a === "happy") confetti(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2);
     s.line = (s.line + 1) % lines.length; say(lines[s.line]);
   });
-  const svgBox = btn;
-  const frame = () => {
+  const frame = (ms) => {
+    raf = 0;
+    if (!s.visible || document.hidden) return;
+    raf = requestAnimationFrame(frame);
+    if (ms - lastDraw < 32 || ms < scrollingUntil) return; // ~30 fps is plenty for a cartoon; none while scrolling
+    lastDraw = ms;
     const t = now();
-    if (s.visible) {
-      if (lines.length > 1 && t - s.sayAt > 4.6) { s.line = (s.line + 1) % lines.length; say(lines[s.line]); play(["point", "thumbs", "happy", "wave"][s.line % 4]); }
-      if (t > s.nextBlink) { s.blinkAt = t; s.nextBlink = t + 2.2 + Math.random() * 2.6; }
-      s.look += (s.lookT - s.look) * 0.12; s.tilt += (s.tiltT - s.tilt) * 0.08;
-      const a = (k) => (s.act === k ? env(t, s.actAt, ACT[k]) : 0) + (k === "wave" && t < 2.4 ? env(t, 0.2, 2.2) : 0);
-      const typed = s.said.slice(0, Math.max(0, Math.floor((t - s.sayAt) * 30)));
-      const talking = typed.length < s.said.length;
-      bubble.textContent = typed || " "; bubble.classList.toggle("typing", talking);
-      const open = talking ? 0.25 + 0.5 * Math.abs(Math.sin(t * 17)) : 0;
-      const bt = t - s.blinkAt, blink = bt >= 0 && bt < 0.14 ? Math.sin((bt / 0.14) * Math.PI) : 0;
-      const jumpE = s.act === "jump" && t - s.actAt < ACT.jump ? Math.sin(((t - s.actAt) / ACT.jump) * Math.PI) : 0;
-      const happy = Math.max(a("happy"), 0), wave = Math.min(1, a("wave"));
-      svgBox.style.transform = `translateY(${-jumpE * 60}px)`;
-      svgBox.innerHTML = devSVG({
-        wave, waveAng: Math.sin(t * 9) * 18, point: Math.min(1, a("point")), thumbs: Math.min(1, a("thumbs")),
-        tilt: s.tilt * 1.4, bob: Math.sin(t * 1.5) * 3 - open * 2,
-        brow: 10 + 10 * a("thumbs") + 8 * a("point"), lid: Math.max(0.1 * (1 - happy), blink), smile: Math.max(0.8, happy),
-        look: s.look * 9, shock: a("shock"), happy, wink: a("wink"), open,
-      }, "Dev, the Appify mascot");
+    if (lines.length > 1 && t - s.sayAt > 4.6) { s.line = (s.line + 1) % lines.length; say(lines[s.line]); play(["point", "thumbs", "happy", "wave"][s.line % 4]); }
+    if (t > s.nextBlink) { s.blinkAt = t; s.nextBlink = t + 2.2 + Math.random() * 2.6; }
+    if (s.px !== null) {
+      const r = btn.getBoundingClientRect();
+      s.lookT = Math.max(-1, Math.min(1, (s.px - (r.left + r.width / 2)) / (innerWidth / 2)));
+      s.tiltT = s.lookT * 3 + Math.max(-1, Math.min(1, (s.py - r.top) / innerHeight)) * 1.5;
     }
-    requestAnimationFrame(frame);
+    s.look += (s.lookT - s.look) * 0.2; s.tilt += (s.tiltT - s.tilt) * 0.14;
+    const a = (k) => (s.act === k ? env(t, s.actAt, ACT[k]) : 0) + (k === "wave" && t < 2.4 ? env(t, 0.2, 2.2) : 0);
+    const typed = s.said.slice(0, Math.max(0, Math.floor((t - s.sayAt) * 30)));
+    const talking = typed.length < s.said.length;
+    if (s.said !== lastFull) { full.textContent = lastFull = s.said; }
+    if (typed !== lastText) { typedEl.textContent = typed; lastText = typed; }
+    if (talking !== lastTyping) { bubble.classList.toggle("typing", talking); lastTyping = talking; }
+    const open = talking ? 0.25 + 0.5 * Math.abs(Math.sin(t * 17)) : 0;
+    const bt = t - s.blinkAt, blink = bt >= 0 && bt < 0.14 ? Math.sin((bt / 0.14) * Math.PI) : 0;
+    const jumpE = s.act === "jump" && t - s.actAt < ACT.jump ? Math.sin(((t - s.actAt) / ACT.jump) * Math.PI) : 0;
+    btn.style.transform = `translate3d(0, ${(Math.sin(t * 1.5) * 3 - open * 2 - jumpE * 60).toFixed(1)}px, 0)`;
+    const happy = Math.max(a("happy"), 0), wave = Math.min(1, a("wave"));
+    const pose = {
+      wave: q(wave, 0.05), waveAng: wave > 0.01 ? q(Math.sin(t * 9) * 18, 1) : 0, point: q(Math.min(1, a("point")), 0.05), thumbs: q(Math.min(1, a("thumbs")), 0.05),
+      tilt: q(s.tilt * 1.4, 0.25), brow: q(10 + 10 * a("thumbs") + 8 * a("point"), 0.5), lid: q(Math.max(0.1 * (1 - happy), blink), 0.05), smile: q(Math.max(0.8, happy), 0.05),
+      look: q(s.look * 9, 0.5), shock: q(a("shock"), 0.05), happy: q(happy, 0.05), wink: q(a("wink"), 0.05), open: q(open, 0.08),
+    };
+    const key = Object.values(pose).join(",");
+    if (key !== lastKey) { lastKey = key; btn.innerHTML = devSVG(pose, "Dev, the Appify mascot"); }
   };
-  if (!reduced) requestAnimationFrame(frame);
-  else bubble.textContent = lines[0] || "";
+  const start = () => { if (!raf && !reduced && s.visible && !document.hidden) raf = requestAnimationFrame(frame); };
+  new IntersectionObserver(([e]) => { s.visible = e.isIntersecting; start(); }).observe(stage);
+  document.addEventListener("visibilitychange", start);
+  if (reduced) { full.textContent = typedEl.textContent = lines[0] || ""; }
+  start();
 }
 function confetti(x, y) {
   if (reduced) return;
@@ -186,7 +224,7 @@ function confetti(x, y) {
 // ── booking form: day chips, validation, save, then hand off to WhatsApp or email ───────────────────────
 const form = $("[data-book]");
 if (form) {
-  const row = $("[data-days-row]", form), dayInput = $('input[name="day"]', form);
+  const days = $("[data-days-row]", form), dayInput = $('input[name="day"]', form);
   const closed = JSON.parse(form.dataset.closed || "[0]"), n = Number(form.dataset.days || 14);
   const fmt = new Intl.DateTimeFormat("en", { weekday: "short" }), fmtM = new Intl.DateTimeFormat("en", { month: "short" });
   const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -195,8 +233,8 @@ if (form) {
     if (closed.includes(d.getDay())) continue;
     const b = document.createElement("button"); b.type = "button"; b.className = "day"; b.dataset.day = iso(d);
     b.innerHTML = `<small>${fmt.format(d)}</small><b>${d.getDate()}</b><small>${fmtM.format(d)}</small>`;
-    b.addEventListener("click", () => { $$(".day", row).forEach((x) => x.classList.toggle("on", x === b)); dayInput.value = b.dataset.day; });
-    row.append(b); added++;
+    b.addEventListener("click", () => { $$(".day", days).forEach((x) => x.classList.toggle("on", x === b)); dayInput.value = b.dataset.day; });
+    days.append(b); added++;
   }
   const msg = $(".form-msg", form);
   form.addEventListener("submit", async (e) => {
@@ -204,8 +242,8 @@ if (form) {
     const fd = new FormData(form), channel = e.submitter?.value || "email";
     const body = { ...Object.fromEntries(fd), services: fd.getAll("services"), channel };
     msg.className = "form-msg";
-    if (!body.name?.trim()) { msg.textContent = "Please add your name."; msg.classList.add("err"); form.name.focus(); return; }
-    if (!body.phone?.trim() && !body.email?.trim()) { msg.textContent = "Add a phone number or an email so we can reply."; msg.classList.add("err"); form.phone.focus(); return; }
+    if (!body.name?.trim()) { msg.textContent = "Please add your name."; msg.classList.add("err"); form.elements.name.focus(); return; }
+    if (!body.phone?.trim() && !body.email?.trim()) { msg.textContent = "Add a phone number or an email so we can reply."; msg.classList.add("err"); form.elements.phone.focus(); return; }
     msg.textContent = "Sending…";
     $$(".send .btn", form).forEach((b) => (b.disabled = true));
     try {
@@ -223,9 +261,9 @@ if (form) {
 }
 
 // nav highlight for the section in view
+// (every top-level section is watched, so the highlight clears over the hero and sections without a link)
 const links = $$('.nav-links > a[href^="/#"]');
-const secs = links.map((a) => document.getElementById(a.getAttribute("href").slice(2))).filter(Boolean);
-if (secs.length) {
+if (links.length && document.body.classList.contains("home")) {
   const sio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) links.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "/#" + e.target.id)); }), { rootMargin: "-45% 0px -50% 0px" });
-  secs.forEach((s) => sio.observe(s));
+  $$("main > section").forEach((s) => sio.observe(s));
 }

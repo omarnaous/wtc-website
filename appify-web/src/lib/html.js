@@ -4,7 +4,7 @@ import { WORDMARK, sparkPath } from "../../public/assets/js/brand.js";
 
 export const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 export const json = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
-export const ASSET_V = "20261014";
+export const ASSET_V = "20261016";
 
 export const icon = {
   arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -52,6 +52,8 @@ export function layout({ site, title, description, path = "/", image = "/og.png"
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/sora-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist-mono-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css?v=${ASSET_V}">
 <script type="module" src="/assets/js/app.js?v=${ASSET_V}"></script>
 ${ld}

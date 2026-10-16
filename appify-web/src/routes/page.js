@@ -2,6 +2,7 @@
 // HTML is cached at the edge for a few minutes; content comes from D1.
 import { loadSite } from "../lib/data.js";
 import { homePage, workPage, servicePage, notFoundPage } from "../lib/pages.js";
+import { ASSET_V } from "../lib/html.js";
 
 const HTML = { "content-type": "text/html; charset=utf-8" };
 const page = (html, status = 200, extra = {}) => new Response(html, { status, headers: { ...HTML, "cache-control": status === 200 ? "public, max-age=60, s-maxage=600, stale-while-revalidate=86400" : "no-store", ...extra } });
@@ -11,8 +12,10 @@ export async function renderPage(request, env, ctx) {
   // one canonical form: no trailing slash (except "/")
   if (url.pathname.length > 1 && url.pathname.endsWith("/")) return Response.redirect(url.origin + url.pathname.replace(/\/+$/, "") + url.search, 301);
 
+  // The cache key carries the asset version, so a deploy never serves old cached HTML with new CSS/JS.
   const cache = caches.default;
-  const hit = await cache.match(request);
+  const key = new Request(`${url.origin}${url.pathname}${url.search}${url.search ? "&" : "?"}__v=${ASSET_V}`, { method: "GET" });
+  const hit = await cache.match(key);
   if (hit) return hit;
 
   const site = await loadSite(env, url.origin);
@@ -30,7 +33,7 @@ export async function renderPage(request, env, ctx) {
     res = s ? page(servicePage(site, s), 200, noindex) : page(notFoundPage(site), 404);
   } else res = page(notFoundPage(site), 404);
 
-  if (res.status === 200) ctx.waitUntil(cache.put(request, res.clone()));
+  if (res.status === 200) ctx.waitUntil(cache.put(key, res.clone()));
   return res;
 }
 

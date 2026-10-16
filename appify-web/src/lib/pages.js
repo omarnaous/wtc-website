@@ -6,6 +6,9 @@ const STATUS = { live: "Live", concept: "Concept build", "in-development": "In d
 const KIND = { ad: "Content ad", brand: "Brand film", reel: "Reel", client: "Client work" };
 const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${s % 60}S`;
+// Cards autoplay a short, light preview (media/p/); the player opens the full video with sound.
+const preview = (v) => (v || "").replace("/media/", "/media/p/");
+const poster = (p) => `--poster:url('${esc(p)}')`;
 const DEV_LINES = ["Hi, I'm Dev. Need a website?", "Websites from $360. Yours for life.", "$0 a month. Hosting included.", "Delivered in under 7 days.", "Tap me, I do tricks."];
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
@@ -35,8 +38,8 @@ const head = (num, eyebrow, h2, text) => `<header class="sec-head" data-reveal><
 function workCard(p, i = 0) {
   const cats = [p.status === "live" ? "live" : "", p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ");
   return `<article class="work-card" data-cats="${cats}" data-reveal style="--d:${(i % 3) * 80}ms" data-tilt>
-  <a class="work-media" href="/work/${p.slug}" style="aspect-ratio:${p.aspect}" aria-label="${esc(p.title)} case study">
-    <video muted loop playsinline preload="none" poster="${esc(p.poster)}" data-src="${esc(p.video)}" aria-hidden="true"></video>
+  <a class="work-media${p.aspect === "4/5" ? "" : " fit"}" href="/work/${p.slug}" style="${poster(p.poster)}" aria-label="${esc(p.title)} case study">
+    <video muted loop playsinline preload="none" poster="${esc(p.poster)}" data-src="${esc(preview(p.video))}" aria-hidden="true"></video>
     <span class="badge ${p.status}">${STATUS[p.status]}</span>
   </a>
   <div class="work-body">
@@ -53,9 +56,9 @@ function workCard(p, i = 0) {
 }
 
 function motionCard(m, i) {
-  return `<article class="reel" data-kind="${m.kind}" style="--ar:${m.aspect}" data-reveal>
-  <button class="reel-media" type="button" data-play="${esc(m.video)}" data-title="${esc(m.title)}" aria-label="Play ${esc(m.title)} with sound">
-    <video muted loop playsinline preload="none" poster="${esc(m.poster)}" data-src="${esc(m.video)}" aria-hidden="true"></video>
+  return `<article class="reel" data-kind="${m.kind}" data-reveal>
+  <button class="reel-media${m.aspect === "9/16" ? "" : " fit"}" type="button" style="${poster(m.poster)}" data-play="${esc(m.video)}" data-title="${esc(m.title)}" aria-label="Play ${esc(m.title)} with sound">
+    <video muted loop playsinline preload="none" poster="${esc(m.poster)}" data-src="${esc(preview(m.video))}" aria-hidden="true"></video>
     <span class="reel-play">${icon.play}</span><span class="reel-time">${mmss(m.duration || 0)}</span>
   </button>
   <p class="meta">${KIND[m.kind]}${m.client !== "Appify" ? ` · ${esc(m.client)}` : ""}</p>
@@ -139,7 +142,7 @@ export function homePage(site) {
   const marquee = ["Websites", "Online stores", "Animated websites", "Mobile apps", "Motion graphics", "3D", "Content ads", "Meta ads", "UI/UX"];
   const body = `
 <section class="hero" data-hero>
-  <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="beam"></div>${[1, 2, 3, 4, 5, 6].map((i) => `<span class="float f${i}">${sparkSVG("fs")}</span>`).join("")}</div>
+  <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div><div class="beam"></div>${[1, 2, 3, 4, 5, 6].map((i) => `<span class="float f${i}">${sparkSVG("fs")}</span>`).join("")}</div>
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(site.settings.tagline)}</span><span class="dot"></span><span>Made in Lebanon</span></p>
@@ -149,8 +152,8 @@ export function homePage(site) {
       <ul class="facts"><li><b>$360</b><span>lifetime website</span></li><li><b>$0</b><span>per month</span></li><li><b>&lt;7</b><span>days to launch</span></li></ul>
     </div>
     <div class="hero-dev" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
-      <div class="orbit" aria-hidden="true"><span>Websites</span><span>Apps</span><span>Motion</span><span>Meta ads</span><span>3D</span><span>UI/UX</span></div>
-      <div class="dev-bubble" aria-live="polite">${esc(DEV_LINES[0])}</div>
+      <div class="orbit" aria-hidden="true">${["Websites", "Apps", "Motion", "Meta ads", "3D", "UI/UX"].map((x) => `<span><i>${x}</i></span>`).join("")}</div>
+      <div class="dev-bubble" aria-hidden="true">${esc(DEV_LINES[0])}</div>
       <button class="dev-btn" type="button" aria-label="Dev, the Appify mascot. Tap him.">${devSVG({ wave: 1, waveAng: 10, brow: 12, lid: 0.08, smile: 1 })}</button>
       <div class="dev-floor" aria-hidden="true"></div>
     </div>
@@ -232,7 +235,7 @@ export function workPage(site, p) {
   const body = `
 <article class="case">
   <section class="case-hero">
-    <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div></div>
+    <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/#work">Work</a><span>/</span><span aria-current="page">${esc(p.title)}</span></nav>
       <p class="kicker"><span class="badge ${p.status}">${STATUS[p.status]}</span><span>${esc(p.category)}</span><span class="dot"></span><span>${esc(p.client)}</span></p>
@@ -267,7 +270,7 @@ export function servicePage(site, s) {
     : `<div class="wrap"><div class="work-grid">${site.projects.filter((p) => p.kind === "website").slice(0, 6).map(workCard).join("")}</div></div>`;
   const body = `
 <section class="case-hero svc-hero">
-  <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="beam"></div></div>
+  <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div><div class="beam"></div></div>
   <div class="wrap svc-hero-grid">
     <div>
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span>Services</span><span>/</span><span aria-current="page">${esc(s.name)}</span></nav>
@@ -291,7 +294,7 @@ ${booking(site)}`;
 }
 
 export function notFoundPage(site) {
-  const body = `<section class="case-hero nf"><div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div></div>
+  const body = `<section class="case-hero nf"><div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div></div>
   <div class="wrap nf-in"><div class="nf-dev" aria-hidden="true">${devSVG({ shock: 1, brow: 18, look: 3 }, "")}</div>
   <div><p class="eyebrow">404</p><h1 class="case-title">This page popped.</h1><p class="lede">It moved or never existed. Here's the way back.</p>
   <div class="cta-row"><a class="btn primary big" href="/">Go home${icon.arrow}</a><a class="btn ghost big" href="/#work">See our work</a></div></div></div></section>`;

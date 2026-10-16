@@ -8,4 +8,5 @@ ffmpeg -v error -y -i "$src" -vf "scale=${w}:-2:flags=lanczos,fps=30" -c:v libx2
   -c:a aac -b:a 96k -ac 2 -movflags +faststart "$out/$slug.mp4"
 ffmpeg -v error -y -ss "$t" -i "$src" -frames:v 1 -vf "scale=${w}:-2:flags=lanczos" -q:v 4 "$out/$slug.jpg"
 ffmpeg -v error -y -ss "$t" -i "$src" -frames:v 1 -vf "scale=${w}:-2:flags=lanczos" -c:v libwebp -quality 72 "$out/$slug.webp"
+bash "$(dirname "$0")/previews.sh" "$out/$slug.mp4"
 printf "%-22s %6s KB  %s\n" "$slug" "$(du -k "$out/$slug.mp4" | cut -f1)" "$(ffprobe -v error -select_streams v -show_entries stream=width,height -of csv=p=0 "$out/$slug.mp4")"

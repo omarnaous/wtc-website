@@ -7,9 +7,13 @@ const json = (o, status = 200) => new Response(JSON.stringify(o), { status, head
 
 export async function createBooking(request, env) {
   const isJSON = (request.headers.get("content-type") || "").includes("application/json");
-  let b;
+  let b = {};
   if (isJSON) b = await request.json().catch(() => ({}));
-  else { const f = await request.formData(); b = Object.fromEntries(f); b.services = f.getAll("services"); }
+  else {
+    const f = await request.formData().catch(() => null); // text/plain or a broken body: treat as empty
+    if (f) { b = Object.fromEntries(f); b.services = f.getAll("services"); }
+  }
+  if (!b || typeof b !== "object" || Array.isArray(b)) b = {};
   if (b.website) return json({ ok: true });                                   // honeypot: quietly accept bots
   const d = {
     name: clip(b.name, 80), phone: clip(b.phone, 30), email: clip(b.email, 120), message: clip(b.message, 1200),
