@@ -9,16 +9,14 @@ export const PLANS = [
     price: 360, from: false, totalLabel: "Total · pay once", stamp: "PAID ONCE",
     lines: ["Premium template", "Admin panel", "Hosting included", "Pay once, no monthly fees"],
     end: "Pay once · no monthly fees · hosting included",
-    next: "Custom e-commerce from $500",
   },
   {
-    id: "Store500", n: 2, accent: "#74C6FF",
-    question: ["Want it built", "around your brand?"],
-    name: "E-commerce website · Custom",
-    price: 500, from: true, totalLabel: "Starting at · pay once", stamp: "CUSTOM",
-    lines: ["Full customization", "Scroll animations", "Automations & systems", "Custom dashboards", "Admin panel", "Hosting included", "Pay once, no monthly fees"],
-    end: "Pay once · no monthly fees · hosting included",
-    next: "Mobile apps from $999",
+    id: "WebApp500", n: 2, accent: "#74C6FF",
+    question: ["Need a system", "for your business?"],
+    name: "Web app · Custom",
+    price: 500, from: true, totalLabel: "Starting at", stamp: "CUSTOM",
+    lines: ["CRM for your clients", "Business systems", "Automations & workflows", "Custom dashboards", "Fully custom design", "Admin panel"],
+    end: "CRMs · systems · automations · dashboards",
   },
   {
     id: "App999", n: 3, accent: "#39E29B",
@@ -27,7 +25,6 @@ export const PLANS = [
     price: 999, from: true, totalLabel: "Starting at", stamp: "iOS + ANDROID",
     lines: ["UI/UX design, every screen", "One app, iOS + Android", "Store publishing handled", "Hosting on iOS & Android", "Free landing page website", "Admin panel for your team"],
     end: "Free landing page website included",
-    next: "3 motion videos for $199",
   },
   {
     id: "Motion199", n: 4, accent: "#FFD23F",
@@ -36,6 +33,5 @@ export const PLANS = [
     price: 199, was: 300, from: false, totalLabel: "3-video pack", stamp: "SAVE $101",
     lines: ["3 videos, 15 s to 1 min", "Reels, ads, 3D or logos", "Hook in the first second", "Every format you post", "Sound design + silent cut"],
     end: "1 video alone is $100 · 3 for $199",
-    next: null,
   },
 ];
