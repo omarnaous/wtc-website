@@ -104,7 +104,7 @@ function booking(site, page = false) {
     <div class="book-copy" data-reveal>
       ${page ? `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span aria-current="page">Book a call</span></nav><p class="eyebrow"><span>Free</span>Prototype call</p>` : `<p class="eyebrow"><span>04</span>Book a call</p>`}
       <${h} id="book-h">Tell us your idea. <span class="grad">We'll appify it.</span></${h}>
-      <p class="sec-text">Pick a day and a time, choose what you need, and send it by ${s.whatsapp ? "WhatsApp or email" : "email"}. We reply to confirm your call.</p>
+      <p class="sec-text">Pick a day and a time, tell us what you need, and book it. We reply to confirm your call.</p>
       <ul class="contact-list">
         <li><a href="mailto:${esc(s.email)}">${icon.mail}<span>${esc(s.email)}</span></a></li>
         ${s.whatsapp ? `<li><a href="https://wa.me/${esc(s.whatsapp)}" rel="noopener">${icon.wa}<span>WhatsApp us</span></a></li>` : ""}
@@ -132,8 +132,8 @@ function booking(site, page = false) {
       </fieldset>
       <p class="form-msg" role="status" aria-live="polite"></p>
       <div class="send">
-        ${s.whatsapp ? `<button class="btn primary big magnetic" type="submit" name="channel" value="whatsapp">${icon.wa}Send on WhatsApp</button>` : ""}
-        <button class="btn ${s.whatsapp ? "ghost" : "primary"} big magnetic" type="submit" name="channel" value="email">${icon.mail}Send by email</button>
+        ${s.whatsapp ? `<button class="btn primary big magnetic" type="submit" name="channel" value="whatsapp">${icon.wa}Book on WhatsApp</button>` : ""}
+        <button class="btn ${s.whatsapp ? "ghost" : "primary"} big magnetic" type="submit" name="channel" value="email">Book my call${icon.arrow}</button>
       </div>
     </form>
   </div>
