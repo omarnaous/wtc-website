@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261016o";
+import { devSVG } from "./dev.js?v=20261016p";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -226,13 +226,15 @@ if (stage) {
     const a = tricks[trick++ % tricks.length]; play(a); if (a === "jump" || a === "happy") confetti(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2);
     s.line = (s.line + 1) % lines.length; say(lines[s.line]);
   });
-  // the hero intro: Dev points at it, and cheers when you close it
-  const intro = $("[data-intro]"); let introOn = false;
-  if (intro) {
-    if (fine) intro.addEventListener("pointerenter", () => { say("That's our intro. Hit play!"); play("point"); });
-    intro.addEventListener("click", () => { introOn = true; });
-    player?.addEventListener("close", () => { if (introOn) { introOn = false; say("Told you. Want a free prototype?"); play("happy"); } });
-  }
+  // Dev's tablet plays the intro. Tap it to watch with sound; when it closes, Dev points you to the booking page.
+  const body = $(".dev-body", stage), fg = $(".dev-fg", stage), talk = $(".dev-talk", stage), cta = $(".dev-cta", stage), tab = $("[data-intro]", stage);
+  let introOn = false, ctaOn = false, lastTab = null;
+  const showCta = () => { if (ctaOn || !cta) return; ctaOn = true; talk.classList.add("cta"); cta.tabIndex = 0; };
+  tab?.addEventListener("click", () => { introOn = true; play("happy"); });
+  if (fine) tab?.addEventListener("pointerenter", () => { if (!ctaOn && !introOn) { say("That's our intro. Tap to watch!"); play("happy"); } });
+  player?.addEventListener("close", () => { if (!introOn) return; introOn = false; say("Your turn. Let's build yours!"); play("point"); showCta(); });
+  if (fine) $("[data-hero-cta]")?.addEventListener("pointerenter", () => { say("Good call. It's free!"); play("thumbs"); });
+  setTimeout(() => { if (!ctaOn && !introOn) { say("Psst. Your first prototype is free."); play("wink"); showCta(); } }, 14000);
   const frame = (ms) => {
     raf = 0;
     if (!s.visible || document.hidden) return;
@@ -240,7 +242,7 @@ if (stage) {
     if (ms - lastDraw < 32 || ms < scrollingUntil) return; // ~30 fps is plenty for a cartoon; none while scrolling
     lastDraw = ms;
     const t = now();
-    if (lines.length > 1 && t - s.sayAt > 4.6) { s.line = (s.line + 1) % lines.length; say(lines[s.line]); play(["point", "thumbs", "happy", "wave"][s.line % 4]); }
+    if (lines.length > 1 && t - s.sayAt > 4.6) { s.line = (s.line + 1) % lines.length; say(lines[s.line]); play(["happy", "wink"][s.line % 2]); } // face-only, so the tablet stays in his hands
     if (t > s.nextBlink) { s.blinkAt = t; s.nextBlink = t + 2.2 + Math.random() * 2.6; }
     if (s.px !== null) {
       const r = btn.getBoundingClientRect();
@@ -257,7 +259,7 @@ if (stage) {
     const open = talking ? 0.25 + 0.5 * Math.abs(Math.sin(t * 17)) : 0;
     const bt = t - s.blinkAt, blink = bt >= 0 && bt < 0.14 ? Math.sin((bt / 0.14) * Math.PI) : 0;
     const jumpE = s.act === "jump" && t - s.actAt < ACT.jump ? Math.sin(((t - s.actAt) / ACT.jump) * Math.PI) : 0;
-    btn.style.transform = `translate3d(0, ${(Math.sin(t * 1.5) * 3 - open * 2 - jumpE * 60).toFixed(1)}px, 0)`;
+    body.style.transform = `translate3d(0, ${(Math.sin(t * 1.5) * 3 - open * 2 - jumpE * 60).toFixed(1)}px, 0)`;
     const happy = Math.max(a("happy"), 0), wave = Math.min(1, a("wave"));
     const pose = {
       wave: q(wave, 0.05), waveAng: wave > 0.01 ? q(Math.sin(t * 9) * 18, 1) : 0, point: q(Math.min(1, a("point")), 0.05), thumbs: q(Math.min(1, a("thumbs")), 0.05),
@@ -265,12 +267,14 @@ if (stage) {
       look: q(s.look * 9, 0.5), shock: q(a("shock"), 0.05), happy: q(happy, 0.05), wink: q(a("wink"), 0.05), open: q(open, 0.08),
     };
     const key = Object.values(pose).join(",");
-    if (key !== lastKey) { lastKey = key; btn.innerHTML = devSVG(pose, "Dev, the Appify mascot"); }
+    if (key !== lastKey) { lastKey = key; btn.innerHTML = devSVG(pose, "Dev, the Appify mascot"); fg.innerHTML = devSVG({ ...pose, screen: "fg" }, ""); }
+    const held = (1 - Math.max(pose.point, pose.wave, pose.thumbs)).toFixed(2); // the screen fades with the tablet
+    if (held !== lastTab) { body.style.setProperty("--tab", held); body.classList.toggle("busy", held < 0.5); lastTab = held; }
   };
   const start = () => { if (!raf && !reduced && s.visible && !document.hidden) raf = requestAnimationFrame(frame); };
   new IntersectionObserver(([e]) => { s.visible = e.isIntersecting; start(); }).observe(stage);
   document.addEventListener("visibilitychange", start);
-  if (reduced) { full.textContent = typedEl.textContent = lines[0] || ""; }
+  if (reduced) { full.textContent = typedEl.textContent = lines[0] || ""; btn.innerHTML = devSVG({ brow: 12, lid: 0.08, smile: 1 }, "Dev, the Appify mascot"); fg.innerHTML = devSVG({ screen: "fg" }, ""); body.style.setProperty("--tab", 1); }
   start();
 }
 function confetti(x, y) {

@@ -8,9 +8,9 @@ const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${
 // Cards autoplay a short, light preview (media/p/); the player opens the full video with sound.
 const preview = (v) => (v || "").replace("/media/", "/media/p/");
 const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
-const DEV_LINES = ["Hi, I'm Dev. Need a website?", "Watch our intro, it's short.", "Your first prototype is free.", "Delivered in under 7 days.", "Tap me, I do tricks."];
-// The hero intro video. Placeholder until the real intro is ready: change the file and length here.
-const INTRO = { video: "/media/showreel.mp4", poster: "/media/showreel.webp", seconds: 23 };
+const DEV_LINES = ["Hi, I'm Dev. Tap my tablet!", "That's our intro playing.", "Your first prototype is free.", "Delivered in under 7 days.", "Tap me, I do tricks."];
+// The hero intro video, playing on Dev's tablet (a wide 16:9 video fits it best). Placeholder until the real intro is ready.
+const INTRO = { video: "/media/showreel.mp4", poster: "/media/showreel.webp" };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
 function orgLD(site) {
@@ -153,18 +153,17 @@ export function homePage(site) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(site.settings.tagline)}</span><span class="dot"></span><span>Made in Lebanon</span></p>
       <h1 class="hero-title" data-split>Websites, apps &amp; motion graphics that <span class="grad">stop the scroll.</span></h1>
       <p class="lede">Appify is a creative tech studio in Lebanon. We design animated websites and online stores, build mobile apps and make content ads that put your brand in the spotlight.</p>
-      <div class="hero-actions">
-      <div class="cta-row"><a class="btn primary big magnetic" href="/book">Get a free prototype${icon.arrow}</a></div>
-      <button class="hero-intro" type="button" data-intro data-play="${esc(INTRO.video)}" data-title="Meet Appify" aria-label="Play the Appify intro with sound">
-        <span class="intro-screen"><video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(preview(INTRO.video))}" aria-hidden="true"></video><span class="intro-play">${icon.play}</span></span>
-        <span class="intro-txt"><span class="intro-k"><i class="eq" aria-hidden="true"><b></b><b></b><b></b><b></b></i>Intro · ${mmss(INTRO.seconds)}</span><strong>Meet Appify in ${INTRO.seconds} seconds</strong><span class="intro-sub">Tap to watch with sound</span></span>
-      </button>
-      </div>
+      <div class="cta-row"><a class="btn primary big magnetic" href="/book" data-hero-cta>Get a free prototype${icon.arrow}</a></div>
     </div>
     <div class="hero-dev" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
       <div class="orbit" aria-hidden="true">${["Websites", "Apps", "Motion", "Meta ads", "3D", "UI/UX"].map((x) => `<span><i>${x}</i></span>`).join("")}</div>
-      <div class="dev-bubble" aria-hidden="true">${esc(DEV_LINES[0])}</div>
-      <button class="dev-btn" type="button" aria-label="Dev, the Appify mascot. Tap him.">${devSVG({ wave: 1, waveAng: 10, brow: 12, lid: 0.08, smile: 1 })}</button>
+      <div class="dev-talk"><div class="dev-bubble" aria-hidden="true">${esc(DEV_LINES[0])}</div><a class="dev-cta" href="/book" tabindex="-1">Book your free prototype${icon.arrow}</a></div>
+      <div class="dev-body">
+        <button class="dev-btn" type="button" aria-label="Dev, the Appify mascot. Tap him.">${devSVG({ wave: 1, waveAng: 10, brow: 12, lid: 0.08, smile: 1 })}</button>
+        <div class="dev-screen" aria-hidden="true"><video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(preview(INTRO.video))}"></video></div>
+        <div class="dev-fg" aria-hidden="true">${devSVG({ wave: 1, waveAng: 10, screen: "fg" }, "")}</div>
+        <button class="dev-tab" type="button" data-intro data-play="${esc(INTRO.video)}" data-title="Meet Appify" aria-label="Play the Appify intro with sound"><span class="tab-play">${icon.play}</span></button>
+      </div>
       <div class="dev-floor" aria-hidden="true"></div>
     </div>
   </div>

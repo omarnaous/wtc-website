@@ -15,7 +15,7 @@ function octagon(cx, cy, w, h, c) {
 }
 
 // Athletic build: wide shoulders, V-taper, big arms, fitted tee with the appify wordmark.
-function body({ point = 0, wave = 0, waveAng = 0, thumbs = 0 }) {
+function body({ point = 0, wave = 0, waveAng = 0, thumbs = 0, screen = 0 }) {
   const busy = Math.min(1, Math.max(point, wave, thumbs));
   let g = `<ellipse cx="300" cy="858" rx="190" ry="18" fill="rgba(10,9,19,.18)"/>`;
   // longer legs: slim dark trousers with a knee crease, sneakers
@@ -34,8 +34,10 @@ function body({ point = 0, wave = 0, waveAng = 0, thumbs = 0 }) {
   // appify wordmark on the chest
   const ws = 150 / WORDMARK.width, wx = 300 - 75, wy = 590;
   g += `<g transform="translate(${wx} ${wy}) scale(${ws})"><path d="${WORDMARK.letters}" fill="#fff"/><path d="${WORDMARK.spark}" fill="${IRIS}"/></g>`;
-  // tablet, tucked away while gesturing
-  g += `<g opacity="${1 - busy}"><g transform="rotate(-4 300 676)"><rect x="196" y="622" width="208" height="112" rx="14" fill="#25212E" ${S}/><path d="${spark(300, 678, 20)}" fill="${IRIS}"/></g></g>`;
+  // tablet, tucked away while gesturing. The "fg" layer is only the tablet frame and the arms: it sits on top of a
+  // video placed over the tablet (the hero intro), so his hands hold the screen.
+  if (screen === "fg") g = "";
+  g += `<g opacity="${1 - busy}"><g transform="rotate(-4 300 676)"><rect x="196" y="622" width="208" height="112" rx="14" fill="${screen === "fg" ? "none" : "#25212E"}" ${S}/>${screen === "fg" ? "" : `<path d="${spark(300, 678, 20)}" fill="${IRIS}"/>`}</g></g>`;
   const limb = (x1, y1, cx, cy, x2, y2, w) =>
     `<path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" fill="none" stroke="${INK}" stroke-width="${w + 14}" stroke-linecap="round"/><path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" fill="none" stroke="${SKIN}" stroke-width="${w}" stroke-linecap="round"/>`;
   const upper = (sx, sy, ex, ey, out) => {
@@ -120,9 +122,9 @@ function head({ brow = 6, lid = 0.1, smile = 0.8, look = 0, open = 0, shock = 0,
 }
 
 
-// Full SVG. Pose props: point, wave, waveAng, thumbs, tilt, bob; face props: brow, lid, smile, look, open, shock, happy, wink.
-export function devSVG({ point = 0, wave = 0, waveAng = 0, thumbs = 0, tilt = 0, bob = 0, ...face } = {}, label = "Dev, the Appify mascot") {
+// Full SVG (screen: "fg" gives just the tablet frame and arms). Pose props: point, wave, waveAng, thumbs, tilt, bob; face props: brow, lid, smile, look, open, shock, happy, wink.
+export function devSVG({ point = 0, wave = 0, waveAng = 0, thumbs = 0, screen = 0, tilt = 0, bob = 0, ...face } = {}, label = "Dev, the Appify mascot") {
   return `<svg viewBox="90 50 420 830" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}" style="overflow:visible;width:100%;height:auto;display:block">`
-    + `<g transform="translate(0 ${bob})">${body({ point, wave, waveAng, thumbs })}`
-    + `<g transform="rotate(${tilt} 300 446) translate(300 452) scale(0.86) translate(-300 -452)">${head(face)}</g></g></svg>`;
+    + `<g transform="translate(0 ${bob})">${body({ point, wave, waveAng, thumbs, screen })}`
+    + (screen === "fg" ? "" : `<g transform="rotate(${tilt} 300 446) translate(300 452) scale(0.86) translate(-300 -452)">${head(face)}</g>`) + `</g></svg>`;
 }
