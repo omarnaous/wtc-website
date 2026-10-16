@@ -5,13 +5,12 @@ import { devSVG } from "../../public/assets/js/dev.js";
 const KIND = { ad: "Content ad", brand: "Brand film", reel: "Reel", client: "Client work" };
 const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${s % 60}S`;
-// Cards autoplay a short, light preview (media/p/); the player opens the full video with sound.
-const preview = (v) => (v || "").replace("/media/", "/media/p/");
+// Cards show their poster; nothing plays until tapped, then the player opens the full video with sound.
 const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
-const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen for sound.", "We made every frame of it.", "Tap me, I do tricks."];
-// The hero intro: plays muted on the screen next to Dev, tap for sound. Made with scripts/intro.sh, which fits any
+const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen to watch.", "We made every frame of it.", "Tap me, I do tricks."];
+// The hero intro: the screen next to Dev shows the poster; tap to play it with sound. Made with scripts/intro.sh, which fits any
 // video to the 16:9 screen at full sharpness (now: the showreel as a placeholder; run it on the real intro to replace).
-const INTRO = { video: "/media/intro.mp4", loop: "/media/intro-loop.mp4", poster: "/media/intro.webp" };
+const INTRO = { video: "/media/intro.mp4", poster: "/media/intro.webp" };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
 function orgLD(site) {
@@ -68,7 +67,7 @@ const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="
 function motionCard(m, i) {
   return `<article class="reel" data-kind="${m.kind}" data-reveal>
   <button class="reel-media${m.aspect === "9/16" ? "" : " fit"}" type="button" style="${poster(m.poster)}" data-play="${esc(m.video)}" data-title="${esc(m.title)}" aria-label="Play ${esc(m.title)} with sound">
-    <video muted loop playsinline preload="none" poster="${esc(m.poster)}" data-src="${esc(preview(m.video))}" aria-hidden="true"></video>
+    <img src="${esc(m.poster)}" alt="" loading="lazy" decoding="async">
     <span class="reel-play">${icon.play}</span><span class="reel-time">${mmss(m.duration || 0)}</span>
   </button>
   <p class="meta">${esc(KIND[m.kind] || m.kind)}${m.client !== "Appify" ? ` · ${esc(m.client)}` : ""}</p>
@@ -158,10 +157,10 @@ export function homePage(site) {
     </div>
     <div class="hero-stage" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
       <div class="tv" data-tv data-full="${esc(INTRO.video)}">
-        <video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(INTRO.loop)}" width="1920" height="1080"></video>
+        <video playsinline preload="none" poster="${esc(INTRO.poster)}" width="1920" height="1080"></video>
         <button class="tv-hit" type="button" aria-label="Play the Appify intro with sound"></button>
         <span class="tv-tag" aria-hidden="true"><i></i>Intro</span>
-        <span class="tv-chip" aria-hidden="true"><span class="tv-off">${icon.muted}Tap for sound</span><span class="tv-on"><i class="eq"><b></b><b></b><b></b><b></b></i>Tap to pause</span><span class="tv-paused">${icon.play}Tap to play</span></span>
+        <span class="tv-chip" aria-hidden="true"><span class="tv-off">${icon.play}Tap to play</span><span class="tv-on"><i class="eq"><b></b><b></b><b></b><b></b></i>Tap to pause</span><span class="tv-paused">${icon.play}Tap to play</span></span>
         <span class="tv-bar" aria-hidden="true"><i></i></span>
         <div class="tv-end"><p class="tv-end-k">That's Appify.</p><p class="tv-end-h">Your idea next?</p><div class="tv-end-btns"><a class="btn primary magnetic" href="/book">Book a call${icon.arrow}</a><button class="btn ghost tv-again" type="button">Watch again</button></div></div>
       </div>

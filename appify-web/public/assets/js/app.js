@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261016w";
+import { devSVG } from "./dev.js?v=20261016x";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -94,23 +94,15 @@ if (fine && !reduced) {
   });
 }
 
-// ── videos: load when near, play muted while visible, hover-play on desktop; modal with sound ─────────
-const vids = $$("video[data-src]"), onScreen = new Set();
-const load = (v) => { if (!v.getAttribute("src")) { v.src = v.dataset.src; v.load(); } };
-const vio = new IntersectionObserver((es) => es.forEach((e) => {
-  const v = e.target;
-  if (e.isIntersecting) { onScreen.add(v); load(v); if (!reduced && !document.hidden && !v.closest(".moving")) v.play().catch(() => {}); }
-  else { onScreen.delete(v); if (!v.paused) v.pause(); }
-}), { threshold: 0.6 });
-vids.forEach((v) => vio.observe(v));
-document.addEventListener("visibilitychange", () => onScreen.forEach((v) => (document.hidden ? v.pause() : !reduced && v.play().catch(() => {}))));
+// ── videos: nothing loads or plays until it's tapped (cards show their poster); the player plays with sound ─
+const pauseOthers = (keep) => $$("video").forEach((v) => v !== keep && !v.paused && v.pause());
 
 const player = $("[data-player]"), pv = player?.querySelector("video");
 $$("[data-play]").forEach((b) => b.addEventListener("click", (e) => {
   e.preventDefault();
   if (!player?.showModal) { location.href = b.dataset.play; return; }
-  onScreen.forEach((v) => v.pause());
-  $$("[data-vcard].playing video").forEach((v) => { v.pause(); v.closest("[data-vcard]").classList.remove("playing"); });
+  pauseOthers(pv);
+  $$("[data-vcard].playing").forEach((m) => m.classList.remove("playing"));
   pv.src = b.dataset.play; player.querySelector(".player-title").textContent = b.dataset.title || "";
   player.showModal(); pv.muted = false; pv.play().catch(() => {});
 }));
@@ -119,7 +111,6 @@ player?.querySelector("[data-close]")?.addEventListener("click", closePlayer);
 player?.addEventListener("click", (e) => { if (e.target === player) closePlayer(); });
 player?.addEventListener("close", () => {
   pv.pause(); pv.removeAttribute("src"); pv.load(); // stop downloading the full video
-  if (!reduced) onScreen.forEach((v) => v.play().catch(() => {}));
 });
 
 // ── filters (websites, videos) ─────────────────────────────────────────────────────────────────────
@@ -150,13 +141,6 @@ $$("[data-row]").forEach((row) => {
     const at = Math.round((row.scrollLeft) / step), to = Math.max(0, Math.min(cs.length - 1, at + Number(b.dataset.scroll) * perPage));
     row.scrollTo({ left: Math.min(cs[to].offsetLeft - first, row.scrollWidth - row.clientWidth), behavior: reduced ? "auto" : "smooth" });
   }));
-  // while the row moves, its preview videos pause (the decoder stays out of the way of the swipe)
-  let moving = 0;
-  const rest = () => { moving = 0; row.classList.remove("moving"); $$("video[data-src]", row).forEach((v) => onScreen.has(v) && !reduced && !document.hidden && v.play().catch(() => {})); };
-  row.addEventListener("scroll", () => {
-    if (!moving) { row.classList.add("moving"); $$("video[data-src]", row).forEach((v) => !v.paused && v.pause()); }
-    clearTimeout(moving); moving = setTimeout(rest, 180);
-  }, { passive: true });
   const update = () => {
     const max = row.scrollWidth - row.clientWidth, x = row.scrollLeft;
     btns.forEach((b) => { b.disabled = Number(b.dataset.scroll) < 0 ? x <= 2 : x >= max - 2; });
@@ -181,7 +165,7 @@ cards.forEach((m) => {
   const v = $("video", m), bar = $(".vbar", m);
   $(".vtap", m).addEventListener("click", () => {
     cards.forEach((o) => o !== m && stopCard(o));
-    onScreen.forEach((o) => o.pause());
+    pauseOthers(v);
     if (!v.getAttribute("src")) { v.src = v.dataset.full; }
     v.muted = false; m.classList.add("playing", "loading");
     v.play().catch(() => m.classList.remove("playing", "loading"));
@@ -235,7 +219,7 @@ if (stage) {
     $(".tv-hit", tv).addEventListener("click", () => {
       if (!tv.classList.contains("sound")) {
         tv.classList.add("sound"); tvV.loop = false; tvV.src = tv.dataset.full; tvV.muted = false;
-        tvV.play().catch(() => {}); say("Turn it up!"); play("happy");
+        pauseOthers(tvV); tvV.play().catch(() => {}); say("Turn it up!"); play("happy");
       } else if (tvV.paused) tvV.play().catch(() => {});
       else tvV.pause();
     });

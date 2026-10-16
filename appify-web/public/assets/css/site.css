@@ -223,7 +223,7 @@ p { margin: 0; }
   @keyframes card-in { from { scale: .84; opacity: .3; rotate: -3deg; } to { scale: 1; opacity: 1; rotate: 0deg; } }
   @keyframes card-out { to { scale: .84; opacity: .3; rotate: 3deg; } }
   /* the picture drifts inside its frame, against the swipe */
-  .hrow .reel-media video { scale: 1.14; animation: drift-in-frame linear both; animation-timeline: view(inline); animation-range: cover; }
+  .hrow .reel-media img { scale: 1.14; animation: drift-in-frame linear both; animation-timeline: view(inline); animation-range: cover; }
   @keyframes drift-in-frame { from { translate: 6% 0; } to { translate: -6% 0; } }
   /* a soft light passes across the frame */
   .hrow .reel-media::after { content: ""; position: absolute; inset: -10% -60%; z-index: 1; pointer-events: none; background: linear-gradient(100deg, transparent 42%, rgba(255, 255, 255, .13) 50%, transparent 58%); animation: sheen linear both; animation-timeline: view(inline); animation-range: cover; }
@@ -240,8 +240,8 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) { .hrow *, .hrow *::after { animation: none !important; } }
 /* website cards reuse the video-card look (.reel); only the frame shape and the text below differ */
 .reel.site .reel-media { height: auto; aspect-ratio: 4 / 5; }
-.reel.site .reel-media video { object-position: 50% 22%; cursor: pointer; }
-.reel.site .reel-media.fit video { object-fit: cover; object-position: 50% 50%; }
+.reel.site .reel-media img { object-position: 50% 22%; cursor: pointer; }
+.reel.site .reel-media.fit img { object-fit: cover; object-position: 50% 50%; }
 .reel.site .reel-media.fit::before { content: none; }
 .reel.site h3 { margin-top: 8px; }
 .reel.site h3 a:hover { color: var(--sky); }
@@ -293,9 +293,9 @@ p { margin: 0; }
 .reel.out { display: none; }
 .reel-media { position: relative; display: block; flex: none; width: 100%; height: var(--h); border-radius: var(--r); overflow: hidden; background: var(--ink3); border: 1px solid var(--line); transition: transform .5s var(--spring), box-shadow .3s; }
 @media (hover: hover) { .reel-media:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -20px rgba(91, 43, 255, .6); } }
-.reel-media video { width: 100%; height: 100%; object-fit: cover; }
+.reel-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .work-media.fit::before, .reel-media.fit::before { content: ""; position: absolute; inset: 0; background: var(--poster) center / cover; }
-.work-media.fit video, .reel-media.fit video { position: relative; object-fit: contain; object-position: 50% 50%; }
+.work-media.fit video, .reel-media.fit img { position: relative; object-fit: contain; object-position: 50% 50%; }
 .reel-play { position: absolute; inset: auto 14px 14px auto; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .92); color: var(--ink); transition: transform .35s var(--spring); }
 .reel-play svg { width: 22px; margin-left: 3px; }
 @media (hover: hover) { .reel-media:hover .reel-play { transform: scale(1.12); } }
