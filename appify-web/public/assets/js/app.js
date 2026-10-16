@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261016b";
+import { devSVG } from "./dev.js?v=20261016d";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -49,7 +49,8 @@ $$("[data-split]").forEach((el) => {
   walk(el);
   el.setAttribute("data-reveal", "");
 });
-const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+// After its entrance, an element drops the stagger delay so hover and other transitions respond at once.
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { const t = e.target; t.classList.add("in"); io.unobserve(t); setTimeout(() => t.style.setProperty("--d", "0ms"), 1400); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
 $$("[data-reveal]").forEach((el) => io.observe(el));
 
 // ── pointer glow in the hero, glow on service cards, tilt on cards, magnetic buttons ──────────────────
@@ -155,7 +156,7 @@ const cards = $$("[data-vcard]");
 const stopCard = (m) => { const v = $("video", m); if (!v.paused) v.pause(); m.classList.remove("playing"); };
 cards.forEach((m) => {
   const v = $("video", m), bar = $(".vbar", m);
-  $(".vplay", m).addEventListener("click", () => {
+  $(".vtap", m).addEventListener("click", () => {
     cards.forEach((o) => o !== m && stopCard(o));
     onScreen.forEach((o) => o.pause());
     if (!v.getAttribute("src")) { v.src = v.dataset.full; }
@@ -163,7 +164,7 @@ cards.forEach((m) => {
     v.play().catch(() => m.classList.remove("playing", "loading"));
   });
   v.addEventListener("playing", () => m.classList.remove("loading"));
-  v.addEventListener("click", () => (v.paused ? $(".vplay", m).click() : stopCard(m)));
+  v.addEventListener("click", () => (v.paused ? $(".vtap", m).click() : stopCard(m)));
   v.addEventListener("ended", () => { stopCard(m); v.currentTime = 0; });
   v.addEventListener("timeupdate", () => bar.style.setProperty("--t", v.duration ? (v.currentTime / v.duration).toFixed(3) : 0));
 });

@@ -35,23 +35,23 @@ const crumbs = (site, list) => ({ "@type": "BreadcrumbList", itemListElement: li
 // ── pieces ───────────────────────────────────────────────────────────────────────────────────────
 const head = (num, eyebrow, h2, text) => `<header class="sec-head" data-reveal><p class="eyebrow"><span>${num}</span>${esc(eyebrow)}</p><h2>${h2}</h2>${text ? `<p class="sec-text">${text}</p>` : ""}</header>`;
 
-// A website card: the video sits under a play button and plays in place, with sound, when tapped.
+// At most two sentences on a card.
+const twoSentences = (t = "") => (t.match(/[^.!?]+[.!?]+(\s|$)/g) || [t]).slice(0, 2).join("").trim();
+// A website card, in the same style as the video cards: the frame, a play button in the corner, text below.
+// Tapping the frame plays the full video in place, with sound.
 function workCard(p, i = 0) {
   const cats = [p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ");
-  return `<article class="work-card" data-cats="${cats}" data-reveal style="--d:${(i % 5) * 90}ms" data-tilt>
-  <div class="work-media${p.aspect === "4/5" ? "" : " fit"}" style="${poster(p.poster)}" data-vcard>
+  return `<article class="reel site" data-cats="${cats}" data-reveal style="--d:${(i % 5) * 70}ms">
+  <div class="reel-media${p.aspect === "4/5" ? "" : " fit"}" style="${poster(p.poster)}" data-vcard>
     <video playsinline preload="none" poster="${esc(p.poster)}" data-full="${esc(p.video)}" aria-label="${esc(p.title)} video"></video>
-    <button class="vplay" type="button" aria-label="Play the ${esc(p.title)} video"><span class="vplay-in">${icon.play}</span></button>
+    <button class="vtap" type="button" aria-label="Play the ${esc(p.title)} video"><span class="reel-play">${icon.play}</span></button>
     <i class="vbar" aria-hidden="true"></i>
   </div>
-  <div class="work-body">
-    <p class="meta">${esc(p.category)} · ${esc(p.client)}</p>
-    <h3><a href="/work/${p.slug}">${esc(p.title)}</a></h3>
-    <p class="summary">${esc(p.summary)}</p>
-    <div class="work-actions">
-      ${p.live_url ? `<a class="btn sm ghost" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit live site${icon.ext}</a>` : ""}
-      <a class="link" href="/work/${p.slug}">Case study${icon.arrow}</a>
-    </div>
+  <h3><a href="/work/${p.slug}">${esc(p.title)}</a></h3>
+  <p class="summary">${esc(twoSentences(p.summary))}</p>
+  <div class="work-actions">
+    ${p.live_url ? `<a class="btn sm card-btn" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit site${icon.ext}</a>` : ""}
+    <a class="btn sm card-btn" href="/work/${p.slug}">Case study${icon.arrow}</a>
   </div>
 </article>`;
 }
@@ -174,10 +174,10 @@ export function homePage(site) {
 
 <section class="section work" id="work" aria-labelledby="work-h">
   <div class="wrap">
-    ${head("01", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "Real client stores and our Animated Website series. Watch each one move, open the case study or visit it live.")}
-    ${rowBar("work-row", `<div class="filters" role="group" aria-label="Filter websites" data-filter="#work-row .work-card"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="animated">Animated</button><button type="button" data-f="ecommerce">E-commerce</button></div>`)}
+    ${head("01", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "A live client store and four concept builds from our Animated Website series. Tap play to watch one move.")}
+    ${rowBar("work-row", `<div class="filters" role="group" aria-label="Filter websites" data-filter="#work-row .reel"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="animated">Animated</button><button type="button" data-f="ecommerce">E-commerce</button></div>`)}
   </div>
-  <div class="hrow work-row" id="work-row" data-row tabindex="0" aria-label="Websites we built">${websites.slice(0, 5).map(workCard).join("")}</div>
+  <div class="hrow reel-row work-row" id="work-row" data-row tabindex="0" aria-label="Websites we built">${websites.slice(0, 5).map(workCard).join("")}</div>
   ${rowProg("work-row")}
 </section>
 
