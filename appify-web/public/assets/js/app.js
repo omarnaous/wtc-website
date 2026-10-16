@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261016e";
+import { devSVG } from "./dev.js?v=20261016f";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,14 @@ $$("[data-split]").forEach((el) => {
 });
 // After its entrance, an element drops the stagger delay so hover and other transitions respond at once.
 const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { const t = e.target; t.classList.add("in"); io.unobserve(t); setTimeout(() => t.style.setProperty("--d", "0ms"), 1400); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-$$("[data-reveal]").forEach((el) => io.observe(el));
+// Cards in a horizontal row appear with the row (all at once, the first few staggered), so nothing fades in mid-swipe.
+const rowIO = new IntersectionObserver((es) => es.forEach((e) => {
+  if (!e.isIntersecting) return;
+  [...e.target.children].forEach((c, i) => { c.style.setProperty("--d", `${Math.min(i, 5) * 60}ms`); c.classList.add("in"); setTimeout(() => c.style.setProperty("--d", "0ms"), 1400); });
+  rowIO.unobserve(e.target);
+}), { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+$$("[data-row]").forEach((r) => rowIO.observe(r));
+$$("[data-reveal]").forEach((el) => { if (!el.parentElement.matches("[data-row]")) io.observe(el); });
 
 // ── pointer glow in the hero, glow on service cards, tilt on cards, magnetic buttons ──────────────────
 // The hero glow is a separate layer moved with transform (no full-screen repaint per mouse move).
@@ -92,9 +99,9 @@ const vids = $$("video[data-src]"), onScreen = new Set();
 const load = (v) => { if (!v.getAttribute("src")) { v.src = v.dataset.src; v.load(); } };
 const vio = new IntersectionObserver((es) => es.forEach((e) => {
   const v = e.target;
-  if (e.isIntersecting) { onScreen.add(v); load(v); if (!reduced && !document.hidden) v.play().catch(() => {}); }
+  if (e.isIntersecting) { onScreen.add(v); load(v); if (!reduced && !document.hidden && !v.closest(".moving")) v.play().catch(() => {}); }
   else { onScreen.delete(v); if (!v.paused) v.pause(); }
-}), { threshold: 0.35 });
+}), { threshold: 0.6 });
 vids.forEach((v) => vio.observe(v));
 document.addEventListener("visibilitychange", () => onScreen.forEach((v) => (document.hidden ? v.pause() : !reduced && v.play().catch(() => {}))));
 
@@ -135,7 +142,21 @@ $$("[data-filter]").forEach((group) => {
 // ── horizontal rows: arrow buttons, drag to scroll, a progress line, arrows dim at the ends ───────────────
 $$("[data-row]").forEach((row) => {
   const btns = row.id ? $$(`[data-for="${row.id}"]`) : [], prog = row.id ? $(`[data-prog-for="${row.id}"]`) : null;
-  btns.forEach((b) => b.addEventListener("click", () => row.scrollBy({ left: Number(b.dataset.scroll) * row.clientWidth * 0.8, behavior: reduced ? "auto" : "smooth" })));
+  const cardsIn = () => [...row.children].filter((c) => c.offsetParent);
+  btns.forEach((b) => b.addEventListener("click", () => {
+    const cs = cardsIn(); if (cs.length < 2) return;
+    const step = cs[1].offsetLeft - cs[0].offsetLeft, first = cs[0].offsetLeft;
+    const perPage = Math.max(1, Math.floor((row.clientWidth - parseFloat(getComputedStyle(row).paddingLeft) * 2 + 18) / step));
+    const at = Math.round((row.scrollLeft) / step), to = Math.max(0, Math.min(cs.length - 1, at + Number(b.dataset.scroll) * perPage));
+    row.scrollTo({ left: Math.min(cs[to].offsetLeft - first, row.scrollWidth - row.clientWidth), behavior: reduced ? "auto" : "smooth" });
+  }));
+  // while the row moves, its preview videos pause (the decoder stays out of the way of the swipe)
+  let moving = 0;
+  const rest = () => { moving = 0; row.classList.remove("moving"); $$("video[data-src]", row).forEach((v) => onScreen.has(v) && !reduced && !document.hidden && v.play().catch(() => {})); };
+  row.addEventListener("scroll", () => {
+    if (!moving) { row.classList.add("moving"); $$("video[data-src]", row).forEach((v) => !v.paused && v.pause()); }
+    clearTimeout(moving); moving = setTimeout(rest, 180);
+  }, { passive: true });
   const update = () => {
     const max = row.scrollWidth - row.clientWidth, x = row.scrollLeft;
     btns.forEach((b) => { b.disabled = Number(b.dataset.scroll) < 0 ? x <= 2 : x >= max - 2; });

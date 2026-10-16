@@ -8,7 +8,7 @@ const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${s % 60}S`;
 // Cards autoplay a short, light preview (media/p/); the player opens the full video with sound.
 const preview = (v) => (v || "").replace("/media/", "/media/p/");
-const poster = (p) => `--poster:url('${esc(p)}')`;
+const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
 const DEV_LINES = ["Hi, I'm Dev. Need a website?", "Websites from $360. Yours for life.", "$0 a month. Hosting included.", "Delivered in under 7 days.", "Tap me, I do tricks."];
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
@@ -58,7 +58,7 @@ function workCard(p, i = 0) {
 // Website videos' lengths in seconds (ffprobe), for the time tag on the home row.
 const SITE_SECONDS = { "/media/wtc-launch.mp4": 25, "/media/firnlight.mp4": 20, "/media/oddball.mp4": 21, "/media/valmora.mp4": 21, "/media/earshot.mp4": 15 };
 // The home websites row uses the video card exactly as section 3 does (motionCard), fed with a website.
-const siteReel = (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: p.client }, i).replace('<article class="reel" data-kind="', `<article class="reel" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
+const siteReel = (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: "Appify" }, i).replace('<article class="reel" data-kind="', `<article class="reel" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
 // Horizontal rows (websites, videos): arrows, drag, a progress line. id ties the controls to the row.
 const rowBar = (id, filters) => `<div class="motion-bar">${filters}<div class="scroll-btns"><button type="button" data-scroll="-1" data-for="${id}" aria-label="Previous">${icon.arrow}</button><button type="button" data-scroll="1" data-for="${id}" aria-label="Next">${icon.arrow}</button></div></div>`;
 const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="${id}" aria-hidden="true"><i></i></div></div>`;
