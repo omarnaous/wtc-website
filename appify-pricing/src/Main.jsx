@@ -153,7 +153,7 @@ function Story({ f, plan }) {
 
 function EndCard({ f, plan }) {
   const t = f - END;
-  const pr = sp(t, 2, 10, 300), cta = sp(t, 10, 9, 260), dev = sp(t, 6, 13, 160), nx = sp(t, 22, 12, 220);
+  const pr = sp(t, 2, 10, 300), cta = sp(t, 10, 9, 260), dev = sp(t, 6, 13, 160);
   const pulse = 1 + 0.025 * Math.sin((t / 15) * Math.PI);
   return (
     <AbsoluteFill>
@@ -175,21 +175,8 @@ function EndCard({ f, plan }) {
         </div>
         <div style={{ ...M, fontSize: 32, color: "rgba(255,255,255,.75)", marginTop: 34 }}>appify-lb.com</div>
       </div>
-      <div style={{ position: "absolute", left: 60, top: 1130, transform: `translateY(${(1 - Math.min(1, dev)) * 600}px)` }}>
+      <div style={{ position: "absolute", left: (W - 250) / 2, top: 1120, transform: `translateY(${(1 - Math.min(1, dev)) * 600}px)` }}>
         <Dev width={250} thumbs={1} brow={16} lid={0.08} smile={1} look={6} happy={1} tilt={Math.sin(t / 8) * 2} />
-      </div>
-      <div style={{ position: "absolute", right: 70, top: 1290, width: 680, display: "grid", justifyItems: "end", gap: 18, opacity: Math.min(1, nx * 2), transform: `translateX(${(1 - Math.min(1, nx)) * 60}px)` }}>
-        {plan.next ? (
-          <>
-            <div style={{ ...M, fontSize: 24, color: C.mute }}>next on the price list</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 26px", borderRadius: 22, background: C.ink2, border: "3px solid rgba(143,114,255,.4)", fontFamily: "UI", fontWeight: 600, fontSize: 36, color: "#fff", whiteSpace: "nowrap" }}>{plan.next} <Spark size={30} color={C.iris} /></div>
-          </>
-        ) : (
-          <>
-            <div style={{ ...M, fontSize: 24, color: C.mute }}>that's the full price list</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 26px", borderRadius: 22, background: C.ink2, border: "3px solid rgba(143,114,255,.4)", fontFamily: "UI", fontWeight: 600, fontSize: 36, color: "#fff" }}>Ideas, appified. <Spark size={30} color={C.iris} /></div>
-          </>
-        )}
       </div>
     </AbsoluteFill>
   );
