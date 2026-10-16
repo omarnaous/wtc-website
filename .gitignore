@@ -30,3 +30,4 @@ exports/price-list/
 
 # Rendered explainer reel (source in appify-explainer/)
 exports/explainer/
+exports/intro/
