@@ -1,11 +1,11 @@
 // Server-rendered pages for every route that isn't a static file in public/ (src/index.js routes them here).
-// HTML is cached at the edge for a few minutes; content comes from D1.
+// HTML is cached at the edge for a few minutes (browsers always revalidate, so a deploy shows at once); content comes from D1.
 import { loadSite } from "../lib/data.js";
 import { homePage, workPage, servicePage, notFoundPage } from "../lib/pages.js";
 import { ASSET_V } from "../lib/html.js";
 
 const HTML = { "content-type": "text/html; charset=utf-8" };
-const page = (html, status = 200, extra = {}) => new Response(html, { status, headers: { ...HTML, "cache-control": status === 200 ? "public, max-age=60, s-maxage=600, stale-while-revalidate=86400" : "no-store", ...extra } });
+const page = (html, status = 200, extra = {}) => new Response(html, { status, headers: { ...HTML, "cache-control": status === 200 ? "public, max-age=0, must-revalidate, s-maxage=600" : "no-store", ...extra } });
 
 export async function renderPage(request, env, ctx) {
   const url = new URL(request.url);
