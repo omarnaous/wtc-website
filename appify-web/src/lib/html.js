@@ -4,7 +4,7 @@ import { WORDMARK, sparkPath } from "../../public/assets/js/brand.js";
 
 export const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 export const json = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
-export const ASSET_V = "20261016t";
+export const ASSET_V = "20261016u";
 
 export const icon = {
   arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
