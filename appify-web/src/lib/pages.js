@@ -55,6 +55,10 @@ function workCard(p, i = 0) {
   </div>
 </article>`;
 }
+// Website videos' lengths in seconds (ffprobe), for the time tag on the home row.
+const SITE_SECONDS = { "/media/wtc-launch.mp4": 25, "/media/firnlight.mp4": 20, "/media/oddball.mp4": 21, "/media/valmora.mp4": 21, "/media/earshot.mp4": 15 };
+// The home websites row uses the video card exactly as section 3 does (motionCard), fed with a website.
+const siteReel = (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: p.client }, i).replace('<article class="reel" data-kind="', `<article class="reel" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
 // Horizontal rows (websites, videos): arrows, drag, a progress line. id ties the controls to the row.
 const rowBar = (id, filters) => `<div class="motion-bar">${filters}<div class="scroll-btns"><button type="button" data-scroll="-1" data-for="${id}" aria-label="Previous">${icon.arrow}</button><button type="button" data-scroll="1" data-for="${id}" aria-label="Next">${icon.arrow}</button></div></div>`;
 const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="${id}" aria-hidden="true"><i></i></div></div>`;
@@ -65,7 +69,7 @@ function motionCard(m, i) {
     <video muted loop playsinline preload="none" poster="${esc(m.poster)}" data-src="${esc(preview(m.video))}" aria-hidden="true"></video>
     <span class="reel-play">${icon.play}</span><span class="reel-time">${mmss(m.duration || 0)}</span>
   </button>
-  <p class="meta">${KIND[m.kind]}${m.client !== "Appify" ? ` · ${esc(m.client)}` : ""}</p>
+  <p class="meta">${esc(KIND[m.kind] || m.kind)}${m.client !== "Appify" ? ` · ${esc(m.client)}` : ""}</p>
   <h3>${esc(m.title)}</h3>
   <p class="summary">${esc(m.summary)}</p>
 </article>`;
@@ -174,10 +178,10 @@ export function homePage(site) {
 
 <section class="section work" id="work" aria-labelledby="work-h">
   <div class="wrap">
-    ${head("01", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "A live client store and four concept builds from our Animated Website series. Tap play to watch one move.")}
+    ${head("01", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "A live client store and four concept builds from our Animated Website series. Tap any video to watch it with sound.")}
     ${rowBar("work-row", `<div class="filters" role="group" aria-label="Filter websites" data-filter="#work-row .reel"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="animated">Animated</button><button type="button" data-f="ecommerce">E-commerce</button></div>`)}
   </div>
-  <div class="hrow reel-row work-row" id="work-row" data-row tabindex="0" aria-label="Websites we built">${websites.slice(0, 5).map(workCard).join("")}</div>
+  <div class="hrow reel-row" id="work-row" data-row tabindex="0" aria-label="Websites we built">${websites.slice(0, 5).map(siteReel).join("")}</div>
   ${rowProg("work-row")}
 </section>
 

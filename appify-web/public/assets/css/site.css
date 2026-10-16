@@ -234,6 +234,8 @@ p { margin: 0; }
 .hrow.drag { cursor: grabbing; scroll-snap-type: none; }
 .hrow.drag * { pointer-events: none; }
 .reel-row { --h: clamp(380px, 56vh, 540px); scroll-snap-type: x proximity; }
+/* both rows (websites and videos) reserve the same text space under the frame, so their cards are the same height */
+.reel-row .reel { min-height: calc(var(--h) + 187px); }
 .row-prog { position: relative; height: 3px; border-radius: 3px; background: rgba(243, 241, 250, .1); overflow: hidden; }
 .row-prog i { position: absolute; inset: 0; width: calc(var(--w, .3) * 100%); border-radius: 3px; background: linear-gradient(90deg, var(--uv), var(--sky)); transform: translateX(calc(var(--p, 0) * (1 / var(--w, .3) - 1) * 100%)); transition: transform .12s linear; }
 .scroll-btns button:disabled { opacity: .3; cursor: default; transform: none; }
