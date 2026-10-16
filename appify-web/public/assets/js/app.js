@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261016n";
+import { devSVG } from "./dev.js?v=20261016o";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -226,6 +226,13 @@ if (stage) {
     const a = tricks[trick++ % tricks.length]; play(a); if (a === "jump" || a === "happy") confetti(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2);
     s.line = (s.line + 1) % lines.length; say(lines[s.line]);
   });
+  // the hero intro: Dev points at it, and cheers when you close it
+  const intro = $("[data-intro]"); let introOn = false;
+  if (intro) {
+    if (fine) intro.addEventListener("pointerenter", () => { say("That's our intro. Hit play!"); play("point"); });
+    intro.addEventListener("click", () => { introOn = true; });
+    player?.addEventListener("close", () => { if (introOn) { introOn = false; say("Told you. Want a free prototype?"); play("happy"); } });
+  }
   const frame = (ms) => {
     raf = 0;
     if (!s.visible || document.hidden) return;

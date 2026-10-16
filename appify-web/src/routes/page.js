@@ -1,7 +1,7 @@
 // Server-rendered pages for every route that isn't a static file in public/ (src/index.js routes them here).
 // HTML is cached at the edge for a few minutes (browsers always revalidate, so a deploy shows at once); content comes from D1.
 import { loadSite } from "../lib/data.js";
-import { homePage, workPage, servicePage, notFoundPage } from "../lib/pages.js";
+import { homePage, workPage, servicePage, bookPage, notFoundPage } from "../lib/pages.js";
 import { ASSET_V } from "../lib/html.js";
 
 const HTML = { "content-type": "text/html; charset=utf-8" };
@@ -23,6 +23,7 @@ export async function renderPage(request, env, ctx) {
   const p = url.pathname;
   let res;
   if (p === "/") res = page(homePage(site), 200, noindex);
+  else if (p === "/book") res = page(bookPage(site), 200, noindex);
   else if (p === "/robots.txt") res = new Response(`User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${site.url}/sitemap.xml\n`, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } });
   else if (p === "/sitemap.xml") res = new Response(sitemap(site), { headers: { "content-type": "application/xml; charset=utf-8", "cache-control": "public, max-age=3600" } });
   else if (p.startsWith("/work/")) {
@@ -41,6 +42,7 @@ function sitemap(site) {
   const today = new Date().toISOString().slice(0, 10);
   const urls = [
     ["/", "1.0", "weekly"],
+    ["/book", "0.8", "monthly"],
     ...site.services.map((s) => [`/services/${s.slug}`, "0.9", "monthly"]),
     ...site.projects.filter((p) => p.kind === "website").map((p) => [`/work/${p.slug}`, "0.7", "monthly", p]),
   ];

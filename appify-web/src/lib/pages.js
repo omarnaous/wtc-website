@@ -8,7 +8,9 @@ const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${
 // Cards autoplay a short, light preview (media/p/); the player opens the full video with sound.
 const preview = (v) => (v || "").replace("/media/", "/media/p/");
 const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
-const DEV_LINES = ["Hi, I'm Dev. Need a website?", "Websites from $360. Yours for life.", "$0 a month. Hosting included.", "Delivered in under 7 days.", "Tap me, I do tricks."];
+const DEV_LINES = ["Hi, I'm Dev. Need a website?", "Watch our intro, it's short.", "Your first prototype is free.", "Delivered in under 7 days.", "Tap me, I do tricks."];
+// The hero intro video. Placeholder until the real intro is ready: change the file and length here.
+const INTRO = { video: "/media/showreel.mp4", poster: "/media/showreel.webp", seconds: 23 };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
 function orgLD(site) {
@@ -90,15 +92,17 @@ function faqList(faqs) {
   return `<div class="faq-list">${faqs.map((f, i) => `<details class="faq" data-reveal style="--d:${(i % 4) * 50}ms"${i === 0 ? " open" : ""}><summary><h3>${esc(f.question)}</h3><span class="faq-ic" aria-hidden="true"></span></summary><div class="faq-a"><p>${esc(f.answer)}</p></div></details>`).join("")}</div>`;
 }
 
-function booking(site) {
+function booking(site, page = false) {
   const s = site.settings;
   const services = ["Website", "Online store", "Animated website", "Mobile app", "Motion graphics", "Meta ads", "Something else"];
   const slots = JSON.parse(s.booking_slots || "[]");
-  return `<section class="section book" id="book" aria-labelledby="book-h">
+  const h = page ? "h1" : "h2";
+  return `<section class="section book${page ? " book-page" : ""}" id="book" aria-labelledby="book-h">
+  ${page ? `<div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div><div class="beam"></div></div>` : ""}
   <div class="wrap book-grid">
     <div class="book-copy" data-reveal>
-      <p class="eyebrow"><span>04</span>Book a call</p>
-      <h2 id="book-h">Tell us your idea. <span class="grad">We'll appify it.</span></h2>
+      ${page ? `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span aria-current="page">Book a call</span></nav><p class="eyebrow"><span>Free</span>Prototype call</p>` : `<p class="eyebrow"><span>04</span>Book a call</p>`}
+      <${h} id="book-h">Tell us your idea. <span class="grad">We'll appify it.</span></${h}>
       <p class="sec-text">Pick a day and a time, choose what you need, and send it by ${s.whatsapp ? "WhatsApp or email" : "email"}. We reply to confirm your call.</p>
       <ul class="contact-list">
         <li><a href="mailto:${esc(s.email)}">${icon.mail}<span>${esc(s.email)}</span></a></li>
@@ -149,8 +153,13 @@ export function homePage(site) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(site.settings.tagline)}</span><span class="dot"></span><span>Made in Lebanon</span></p>
       <h1 class="hero-title" data-split>Websites, apps &amp; motion graphics that <span class="grad">stop the scroll.</span></h1>
       <p class="lede">Appify is a creative tech studio in Lebanon. We design animated websites and online stores, build mobile apps and make content ads that put your brand in the spotlight.</p>
-      <div class="cta-row"><a class="btn primary big magnetic" href="#book">Book a free call${icon.arrow}</a><a class="btn ghost big" href="#work">See our work</a></div>
-      <ul class="facts"><li><b>$360</b><span>lifetime website</span></li><li><b>$0</b><span>per month</span></li><li><b>&lt;7</b><span>days to launch</span></li></ul>
+      <div class="hero-actions">
+      <div class="cta-row"><a class="btn primary big magnetic" href="/book">Get a free prototype${icon.arrow}</a></div>
+      <button class="hero-intro" type="button" data-intro data-play="${esc(INTRO.video)}" data-title="Meet Appify" aria-label="Play the Appify intro with sound">
+        <span class="intro-screen"><video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(preview(INTRO.video))}" aria-hidden="true"></video><span class="intro-play">${icon.play}</span></span>
+        <span class="intro-txt"><span class="intro-k"><i class="eq" aria-hidden="true"><b></b><b></b><b></b><b></b></i>Intro · ${mmss(INTRO.seconds)}</span><strong>Meet Appify in ${INTRO.seconds} seconds</strong><span class="intro-sub">Tap to watch with sound</span></span>
+      </button>
+      </div>
     </div>
     <div class="hero-dev" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
       <div class="orbit" aria-hidden="true">${["Websites", "Apps", "Motion", "Meta ads", "3D", "UI/UX"].map((x) => `<span><i>${x}</i></span>`).join("")}</div>
@@ -233,7 +242,7 @@ export function workPage(site, p) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(p.category)}</span><span class="dot"></span><span>${esc(p.client)}</span></p>
       <h1 class="case-title" data-split>${esc(p.title)}</h1>
       <p class="lede">${esc(p.summary)}</p>
-      <div class="cta-row">${p.live_url ? `<a class="btn primary big magnetic" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit the live site${icon.ext}</a>` : ""}<a class="btn ghost big" href="/#book">Get a website like this</a></div>
+      <div class="cta-row">${p.live_url ? `<a class="btn primary big magnetic" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit the live site${icon.ext}</a>` : ""}<a class="btn ghost big" href="/book">Get a website like this</a></div>
     </div>
   </section>
   ${p.video ? `<div class="wrap case-video" data-reveal><video controls playsinline preload="metadata" poster="${esc(p.poster)}" style="aspect-ratio:${p.aspect}"><source src="${esc(p.video)}" type="video/mp4"></video></div>` : ""}
@@ -282,6 +291,15 @@ ${booking(site)}`;
   return layout({
     site, path: `/services/${s.slug}`, body, bodyClass: "page-svc", title: s.meta_title, description: s.meta_description,
     jsonld: [graph({ "@type": "Service", name: s.h1, serviceType: s.name, description: s.meta_description, provider: { "@id": `${site.url}/#org` }, areaServed: { "@type": "Country", name: "Lebanon" }, url: `${site.url}/services/${s.slug}` }, faqLD(faqs), crumbs(site, [["Home", "/"], [s.name, `/services/${s.slug}`]]), orgLD(site))],
+  });
+}
+
+// ── book a call: the booking form on its own page ────────────────────────────────────────────────
+export function bookPage(site) {
+  return layout({
+    site, path: "/book", body: booking(site, true), bodyClass: "page-book",
+    title: "Book a free prototype call | Appify", description: "Pick a day and a time for a free call with Appify in Lebanon. Tell us your idea for a website, an app or a video.",
+    jsonld: [graph(crumbs(site, [["Home", "/"], ["Book a call", "/book"]]), orgLD(site))],
   });
 }
 

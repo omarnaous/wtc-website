@@ -4,7 +4,7 @@ import { WORDMARK, sparkPath } from "../../public/assets/js/brand.js";
 
 export const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 export const json = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
-export const ASSET_V = "20261016n";
+export const ASSET_V = "20261016o";
 
 export const icon = {
   arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -68,13 +68,13 @@ ${ld}
       ${NAV.map(([t, h]) => `<a href="${h}">${t}</a>`).join("")}
       <details class="nav-more"><summary>Services</summary><div class="nav-menu">${site.services.map((s) => `<a href="/services/${s.slug}">${esc(s.name)}</a>`).join("")}</div></details>
     </nav>
-    <a class="btn primary sm magnetic nav-cta" href="/#book">Book a call</a>
+    <a class="btn primary sm magnetic nav-cta" href="/book">Book a call</a>
     <button class="nav-burger" aria-label="Open menu" aria-expanded="false" data-burger><span></span><span></span></button>
   </div>
   <div class="nav-mobile" data-mobile-menu>
     ${NAV.map(([t, h]) => `<a href="${h}">${t}</a>`).join("")}
     ${site.services.map((s) => `<a class="sub" href="/services/${s.slug}">${esc(s.name)}</a>`).join("")}
-    <a class="btn primary" href="/#book">Book a call</a>
+    <a class="btn primary" href="/book">Book a call</a>
   </div>
 </header>
 <main id="main">
@@ -100,7 +100,7 @@ function footer(site) {
       <p class="foot-sub">Websites, mobile apps, motion graphics and Meta ads, made in Lebanon.</p>
     </div>
     <nav class="foot-col" aria-label="Services"><h2>Services</h2>${site.services.map((s) => `<a href="/services/${s.slug}">${esc(s.name)}</a>`).join("")}</nav>
-    <nav class="foot-col" aria-label="Site"><h2>Studio</h2><a href="/#work">Websites</a><a href="/#apps">Mobile apps</a><a href="/#motion">Motion graphics</a><a href="/#faq">FAQ</a><a href="/#book">Book a call</a></nav>
+    <nav class="foot-col" aria-label="Site"><h2>Studio</h2><a href="/#work">Websites</a><a href="/#apps">Mobile apps</a><a href="/#motion">Motion graphics</a><a href="/#faq">FAQ</a><a href="/book">Book a call</a></nav>
     <div class="foot-col"><h2>Contact</h2>
       <a href="mailto:${esc(site.settings.email)}">${icon.mail}${esc(site.settings.email)}</a>
       ${site.settings.whatsapp ? `<a href="https://wa.me/${esc(site.settings.whatsapp)}" rel="noopener">${icon.wa}WhatsApp</a>` : ""}
