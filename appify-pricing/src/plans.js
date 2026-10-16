@@ -1,4 +1,4 @@
-// The four Appify plans, exactly as priced by Appify. Each one renders as its own Story.
+// The four Appify plans, exactly as priced by Appify. Each one renders as its own Story; all four share the brand iris accent.
 // Lines come from Appify's offer and its service pages. `was` shows the crossed-out "bought one by one" price.
 // Keep each receipt line within ~26 characters so it fits the paper.
 export const PLANS = [
@@ -11,7 +11,7 @@ export const PLANS = [
     end: "Pay once · no monthly fees · hosting included",
   },
   {
-    id: "WebApp500", n: 2, accent: "#74C6FF",
+    id: "WebApp500", n: 2, accent: "#8F72FF",
     question: ["Need a system", "for your business?"],
     name: "Web app · Custom",
     price: 500, from: true, totalLabel: "Starting at · pay once", stamp: "CUSTOM",
@@ -19,7 +19,7 @@ export const PLANS = [
     end: "Pay once · no monthly fees · hosting included",
   },
   {
-    id: "App999", n: 3, accent: "#39E29B",
+    id: "App999", n: 3, accent: "#8F72FF",
     question: ["Got an", "app idea?"],
     name: "Mobile app · iOS + Android",
     price: 999, from: true, totalLabel: "Starting at", stamp: "iOS + ANDROID",
@@ -27,7 +27,7 @@ export const PLANS = [
     end: "Free landing page website included",
   },
   {
-    id: "Motion199", n: 4, accent: "#FFD23F",
+    id: "Motion199", n: 4, accent: "#8F72FF",
     question: ["Need content that", "stops the scroll?"],
     name: "Motion graphics · 3 videos",
     price: 199, was: 300, from: false, totalLabel: "3-video pack", stamp: "SAVE $101",
