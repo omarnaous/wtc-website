@@ -27,3 +27,6 @@ backups/
 
 # Rendered price-list Stories (source in appify-pricing/; re-render with node render.mjs)
 exports/price-list/
+
+# Rendered explainer reel (source in appify-explainer/)
+exports/explainer/
