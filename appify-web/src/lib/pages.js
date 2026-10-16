@@ -9,8 +9,9 @@ const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${
 const preview = (v) => (v || "").replace("/media/", "/media/p/");
 const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
 const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen for sound.", "We made every frame of it.", "Tap me, I do tricks."];
-// The hero intro: plays muted on the screen next to Dev, tap for sound. A 16:9 video fits it. Placeholder until the real intro is ready.
-const INTRO = { video: "/media/showreel.mp4", poster: "/media/showreel.webp" };
+// The hero intro: plays muted on the screen next to Dev, tap for sound. Made with scripts/intro.sh, which fits any
+// video to the 16:9 screen at full sharpness (now: the showreel as a placeholder; run it on the real intro to replace).
+const INTRO = { video: "/media/intro.mp4", loop: "/media/intro-loop.mp4", poster: "/media/intro.webp" };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
 function orgLD(site) {
@@ -157,7 +158,7 @@ export function homePage(site) {
     </div>
     <div class="hero-stage" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
       <div class="tv" data-tv data-full="${esc(INTRO.video)}">
-        <video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(preview(INTRO.video))}"></video>
+        <video muted loop playsinline preload="none" poster="${esc(INTRO.poster)}" data-src="${esc(INTRO.loop)}" width="1920" height="1080"></video>
         <button class="tv-hit" type="button" aria-label="Play the Appify intro with sound"></button>
         <span class="tv-tag" aria-hidden="true"><i></i>Intro</span>
         <span class="tv-chip" aria-hidden="true"><span class="tv-off">${icon.muted}Tap for sound</span><span class="tv-on"><i class="eq"><b></b><b></b><b></b><b></b></i>Tap to pause</span><span class="tv-paused">${icon.play}Tap to play</span></span>
