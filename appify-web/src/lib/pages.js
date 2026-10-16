@@ -153,7 +153,7 @@ export function homePage(site) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(site.settings.tagline)}</span><span class="dot"></span><span>Made in Lebanon</span></p>
       <h1 class="hero-title" data-split>Websites, apps &amp; motion graphics that <span class="grad">stop the scroll.</span></h1>
       <p class="lede">Appify is a creative tech studio in Lebanon. We design animated websites and online stores, build mobile apps and make content ads that put your brand in the spotlight.</p>
-      <div class="cta-row"><a class="btn primary big magnetic" href="/book" data-hero-cta>Get a free prototype${icon.arrow}</a></div>
+      <div class="cta-row"><a class="cta-hero magnetic" href="/book" data-hero-cta><span class="cta-txt"><b>Get a free prototype</b><small>Pick a day and a time</small></span><span class="cta-go">${icon.arrow}</span></a></div>
     </div>
     <div class="hero-stage" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
       <div class="tv" data-tv data-full="${esc(INTRO.video)}">

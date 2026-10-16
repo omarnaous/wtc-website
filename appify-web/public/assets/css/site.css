@@ -106,6 +106,21 @@ p { margin: 0; }
 .hero-title .grad { display: inline; }
 .lede { margin-top: 24px; font-size: clamp(17px, 1.5vw, 20px); color: var(--mute); max-width: 56ch; }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+/* the hero button: two lines, a light that sweeps across it, a soft glow that breathes, an arrow chip that leans in on hover */
+.cta-hero { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 22px; padding: 10px 10px 10px 28px; border-radius: 999px; color: #fff; overflow: hidden;
+  background: linear-gradient(110deg, #4A1FF0 0%, var(--uv) 40%, #7B57FF 100%); box-shadow: 0 18px 44px -12px rgba(91, 43, 255, .9), inset 0 1px 0 rgba(255, 255, 255, .3), inset 0 0 0 1px rgba(255, 255, 255, .12); transition: transform .35s var(--spring), box-shadow .3s; }
+.cta-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .45) 50%, transparent 65%); transform: translateX(-110%); animation: sweep 4.2s var(--ease) 1.2s infinite; }
+@keyframes sweep { 0% { transform: translateX(-110%); } 35%, 100% { transform: translateX(110%); } }
+.cta-hero::after { content: ""; position: absolute; inset: -40%; z-index: -2; background: radial-gradient(closest-side, rgba(143, 114, 255, .55), transparent); animation: breathe 3s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .35; } }
+.cta-txt { display: grid; gap: 5px; }
+.cta-txt b { font: 600 18px/1 "UI"; letter-spacing: -.01em; }
+.cta-txt small { font: 500 12px/1 "Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255, 255, 255, .72); }
+.cta-go { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: #fff; color: var(--uv); flex: none; transform: rotate(-35deg); transition: transform .45s var(--spring); }
+.cta-go svg { width: 20px; height: 20px; }
+@media (hover: hover) { .cta-hero:hover { box-shadow: 0 24px 54px -12px rgba(91, 43, 255, 1), inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 0 0 1px rgba(255, 255, 255, .2); } .cta-hero:hover .cta-go { transform: rotate(0) translateX(3px) scale(1.06); } }
+.cta-hero:active .cta-go { transform: rotate(0) scale(.94); }
+@media (max-width: 520px) { .cta-row:has(.cta-hero) { display: grid; } .cta-hero { justify-content: space-between; } }
 /* hero stage: the intro screen, with Dev standing at its lower corner */
 .hero-stage { position: relative; justify-self: center; width: min(520px, 100%); display: grid; }
 .tv { position: relative; z-index: 1; aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; isolation: isolate; background: #110F1E; box-shadow: 0 0 0 1.5px rgba(143, 114, 255, .5), 0 40px 90px -30px rgba(91, 43, 255, .85); }
