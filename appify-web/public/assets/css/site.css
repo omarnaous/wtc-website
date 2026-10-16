@@ -144,12 +144,12 @@ p { margin: 0; }
 }
 
 /* ── sections ───────────────────────────────────────────────────────────────────────────────────── */
-.section { padding: clamp(80px, 11vw, 140px) 0; position: relative; }
-.sec-head { max-width: 760px; margin-bottom: clamp(32px, 5vw, 56px); }
+.section { padding: clamp(40px, 5vw, 68px) 0; position: relative; }
+.sec-head { max-width: 760px; margin-bottom: clamp(20px, 3vw, 32px); }
 .sec-head h2 { font-size: clamp(34px, 4.8vw, 64px); margin-top: 18px; }
 .sec-text { margin-top: 18px; color: var(--mute); font-size: clamp(16px, 1.3vw, 19px); }
 .sec-text a { color: var(--sky); text-decoration: underline; text-underline-offset: 3px; }
-.svcs { padding-top: clamp(70px, 9vw, 110px); }
+.svcs { padding-top: clamp(48px, 6vw, 76px); }
 .svc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .svc { position: relative; display: flex; flex-direction: column; gap: 12px; padding: 26px 24px 24px; border-radius: var(--r); background: linear-gradient(180deg, rgba(26, 23, 48, .9), rgba(17, 15, 30, .9)); border: 1px solid var(--line); overflow: hidden; transition: transform .45s var(--spring), border-color .3s; }
 .svc::before { content: ""; position: absolute; inset: 0; background: radial-gradient(260px circle at var(--x, 50%) var(--y, 0%), rgba(91, 43, 255, .28), transparent 70%); opacity: 0; transition: opacity .3s; }
@@ -231,7 +231,7 @@ p { margin: 0; }
 .scroll-btns button:hover { background: rgba(243, 241, 250, .1); transform: scale(1.06); }
 .scroll-btns button svg { width: 20px; }
 .scroll-btns button:first-child svg { transform: scaleX(-1); }
-.hrow { --side: max(var(--pad), calc((100vw - 1240px) / 2 + var(--pad))); display: flex; gap: 18px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 30px var(--side) 22px; scroll-padding-inline: var(--side); scrollbar-width: none; cursor: grab; }
+.hrow { --side: max(var(--pad), calc((100vw - 1240px) / 2 + var(--pad))); display: flex; gap: 18px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 18px var(--side) 16px; scroll-padding-inline: var(--side); scrollbar-width: none; cursor: grab; }
 .hrow::-webkit-scrollbar { display: none; }
 .hrow.drag { cursor: grabbing; scroll-snap-type: none; }
 .hrow.drag * { pointer-events: none; }
