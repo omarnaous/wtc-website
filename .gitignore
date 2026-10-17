@@ -32,6 +32,7 @@ exports/price-list/
 exports/explainer/
 exports/intro/
 exports/darebni/
+exports/faq/
 
 # Local Worker secrets for wrangler dev (never commit)
 .dev.vars
