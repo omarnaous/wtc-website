@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 20.0,
+ "duration": 26.0,
  "seed": 21,
  "fade_out": 1.0,
  "lowpass": 10000,
@@ -9,7 +9,7 @@
   {
    "type": "house",
    "start": 0,
-   "end": 600,
+   "end": 780,
    "bpm": 120,
    "gain": 0.4,
    "sections": [
@@ -18,15 +18,19 @@
      "intro"
     ],
     [
-     105,
+     180,
      "gap"
     ],
     [
-     120,
+     210,
      "drop"
     ],
     [
-     450,
+     585,
+     "break"
+    ],
+    [
+     660,
      "outro"
     ]
    ],
@@ -36,15 +40,23 @@
      1100
     ],
     [
-     105,
+     180,
      700
     ],
     [
-     119,
+     209,
      700
     ],
     [
-     122,
+     212,
+     9500
+    ],
+    [
+     585,
+     3000
+    ],
+    [
+     660,
      9500
     ]
    ]
@@ -59,46 +71,67 @@
   },
   {
    "type": "pop",
-   "frame": 25,
+   "frame": 19,
    "gain": 0.13
   },
   {
    "type": "pop",
-   "frame": 33,
+   "frame": 27,
    "gain": 0.15
   },
   {
-   "type": "pop",
-   "frame": 73,
-   "gain": 0.13
+   "type": "swoosh",
+   "start": 77,
+   "end": 93,
+   "peak": 0.45,
+   "f": 2400,
+   "gain": 0.16
   },
   {
    "type": "pop",
-   "frame": 79,
-   "gain": 0.15
+   "frame": 93,
+   "gain": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 103,
+   "gain": 0.13,
+   "pan": -0.3
+  },
+  {
+   "type": "pop",
+   "frame": 118,
+   "gain": 0.13,
+   "pan": 0.0
+  },
+  {
+   "type": "pop",
+   "frame": 133,
+   "gain": 0.13,
+   "pan": 0.3
   },
   {
    "type": "glint",
-   "frame": 84,
-   "gain": 0.09,
-   "freq": 1396.9
+   "frame": 156,
+   "gain": 0.08,
+   "freq": 1318.5
   },
   {
    "type": "chime",
-   "frame": 86,
+   "frame": 158,
    "gain": 0.05,
    "freq": 1760
   },
   {
    "type": "riser",
-   "start": 99,
-   "end": 120,
+   "start": 174,
+   "end": 210,
    "gain": 0.1
   },
   {
    "type": "reverse_swell",
-   "start": 105,
-   "end": 120,
+   "start": 180,
+   "end": 210,
    "gain": 0.12,
    "notes": [
     "A3",
@@ -107,94 +140,179 @@
    ]
   },
   {
+   "type": "swoosh",
+   "start": 203,
+   "end": 219,
+   "peak": 0.45,
+   "f": 3000,
+   "gain": 0.14
+  },
+  {
    "type": "impact",
-   "frame": 120,
-   "gain": 0.26
+   "frame": 210,
+   "gain": 0.24
   },
   {
    "type": "thump",
-   "frame": 120,
-   "gain": 0.3
-  },
-  {
-   "type": "pop",
-   "frame": 141,
-   "gain": 0.12
+   "frame": 210,
+   "gain": 0.28
   },
   {
    "type": "swish",
-   "start": 164,
-   "end": 176,
-   "gain": 0.1
+   "start": 279,
+   "end": 291,
+   "gain": 0.1,
+   "pan": 0.3
   },
   {
-   "type": "swoosh",
-   "start": 233,
-   "end": 249,
-   "peak": 0.45,
-   "f": 2600,
-   "gain": 0.18
+   "type": "swish",
+   "start": 354,
+   "end": 366,
+   "gain": 0.1,
+   "pan": 0.3
+  },
+  {
+   "type": "swish",
+   "start": 429,
+   "end": 441,
+   "gain": 0.1,
+   "pan": 0.3
+  },
+  {
+   "type": "swish",
+   "start": 504,
+   "end": 516,
+   "gain": 0.1,
+   "pan": 0.3
   },
   {
    "type": "pop",
-   "frame": 261,
-   "gain": 0.12
+   "frame": 215,
+   "gain": 0.11
+  },
+  {
+   "type": "pop",
+   "frame": 290,
+   "gain": 0.11
+  },
+  {
+   "type": "pop",
+   "frame": 365,
+   "gain": 0.11
+  },
+  {
+   "type": "pop",
+   "frame": 440,
+   "gain": 0.11
+  },
+  {
+   "type": "pop",
+   "frame": 515,
+   "gain": 0.11
+  },
+  {
+   "type": "pop",
+   "frame": 233,
+   "gain": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 308,
+   "gain": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 383,
+   "gain": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 458,
+   "gain": 0.1
   },
   {
    "type": "sample",
    "file": "sound/sfx/purchase.ogg",
-   "frame": 270,
-   "gain": 0.3
+   "frame": 380,
+   "gain": 0.28
   },
   {
    "type": "sample",
    "file": "sound/sfx/receive.ogg",
-   "frame": 280,
-   "gain": 0.3
+   "frame": 390,
+   "gain": 0.28
   },
   {
    "type": "pop",
-   "frame": 291,
-   "gain": 0.1
-  },
-  {
-   "type": "swoosh",
-   "start": 323,
-   "end": 339,
-   "peak": 0.45,
-   "f": 3000,
-   "gain": 0.18
+   "frame": 397,
+   "gain": 0.09
   },
   {
    "type": "swish",
-   "start": 330,
-   "end": 340,
-   "gain": 0.09,
+   "start": 435,
+   "end": 445,
+   "gain": 0.08,
    "pan": -0.4
   },
   {
    "type": "swish",
-   "start": 338,
-   "end": 348,
-   "gain": 0.09,
+   "start": 442,
+   "end": 452,
+   "gain": 0.08,
    "pan": 0.0
   },
   {
    "type": "swish",
-   "start": 346,
-   "end": 356,
-   "gain": 0.09,
+   "start": 449,
+   "end": 459,
+   "gain": 0.08,
    "pan": 0.4
   },
   {
+   "type": "swoosh",
+   "start": 578,
+   "end": 594,
+   "peak": 0.45,
+   "f": 2200,
+   "gain": 0.16
+  },
+  {
    "type": "pop",
-   "frame": 353,
-   "gain": 0.12
+   "frame": 590,
+   "gain": 0.14
+  },
+  {
+   "type": "glint",
+   "frame": 600,
+   "gain": 0.09,
+   "freq": 1396.9
+  },
+  {
+   "type": "chime",
+   "frame": 602,
+   "gain": 0.05,
+   "freq": 1760
+  },
+  {
+   "type": "impact",
+   "frame": 618,
+   "gain": 0.2
+  },
+  {
+   "type": "thump",
+   "frame": 618,
+   "gain": 0.2
+  },
+  {
+   "type": "riser",
+   "start": 639,
+   "end": 660,
+   "gain": 0.09
   },
   {
    "type": "reverse_swell",
-   "start": 436,
-   "end": 450,
+   "start": 641,
+   "end": 660,
    "gain": 0.1,
    "notes": [
     "G3",
@@ -204,61 +322,66 @@
   },
   {
    "type": "swoosh",
-   "start": 443,
-   "end": 459,
+   "start": 653,
+   "end": 669,
    "peak": 0.45,
    "f": 2200,
    "gain": 0.2
   },
   {
    "type": "impact",
-   "frame": 472,
+   "frame": 682,
    "gain": 0.22
   },
   {
    "type": "glint",
-   "frame": 474,
+   "frame": 684,
    "gain": 0.07,
    "freq": 2349
   },
   {
    "type": "pop",
-   "frame": 495,
+   "frame": 693,
+   "gain": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 705,
    "gain": 0.08,
    "pan": -0.4
   },
   {
    "type": "pop",
-   "frame": 499,
+   "frame": 709,
    "gain": 0.08,
    "pan": -0.2
   },
   {
    "type": "pop",
-   "frame": 503,
+   "frame": 713,
    "gain": 0.08,
    "pan": 0.0
   },
   {
    "type": "pop",
-   "frame": 507,
+   "frame": 717,
    "gain": 0.08,
    "pan": 0.2
   },
   {
    "type": "pop",
-   "frame": 511,
+   "frame": 721,
    "gain": 0.08,
    "pan": 0.4
   },
   {
    "type": "pop",
-   "frame": 517,
+   "frame": 727,
    "gain": 0.14
   },
   {
    "type": "thump",
-   "frame": 517,
+   "frame": 727,
    "gain": 0.14
   }
  ]
