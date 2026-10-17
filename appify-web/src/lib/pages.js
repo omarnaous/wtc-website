@@ -10,7 +10,7 @@ const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/
 const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen to watch.", "We made every frame of it.", "Tap me, I do tricks."];
 // The hero intro (source: appify-intro/): the screen next to Dev shows the poster; tap to play it with sound. Made with scripts/intro.sh, which fits any
 // video to the 16:9 screen at full sharpness.
-const INTRO = { video: "/media/intro.mp4?v=3", poster: "/media/intro.webp?v=3" };
+const INTRO = { video: "/media/intro.mp4?v=4", poster: "/media/intro.webp?v=4" };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
 function orgLD(site) {
