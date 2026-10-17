@@ -1,5 +1,6 @@
-// POST /api/bookings: saves the appointment request in D1, then hands back the WhatsApp or email link
-// the visitor sends it with. Works with fetch (JSON) and with a plain form post (no JavaScript).
+// POST /api/bookings: saves the appointment request in D1, emails it to Appify (Brevo, when BREVO_API_KEY is set),
+// then hands back the WhatsApp or email link the visitor sends it with. Works with fetch (JSON) and with a plain form
+// post (no JavaScript).
 import { loadSite } from "../lib/data.js";
 
 const clip = (v, n) => String(v ?? "").trim().slice(0, n);
@@ -45,9 +46,33 @@ export async function createBooking(request, env) {
     "", `Request #${r.meta?.last_row_id ?? ""}`,
   ].filter((l) => l !== null);
   const text = lines.join("\n").replace(/\n{3,}/g, "\n\n");
+  await notify(env, s, d, text, r.meta?.last_row_id);
   const whatsappUrl = s.whatsapp ? `https://wa.me/${s.whatsapp}?text=${encodeURIComponent(text)}` : null;
   const mailtoUrl = `mailto:${s.email}?subject=${encodeURIComponent(`Booking request: ${d.name}`)}&body=${encodeURIComponent(text)}`;
   const go = d.channel === "whatsapp" && whatsappUrl ? whatsappUrl : mailtoUrl;
   if (isJSON) return json({ ok: true, id: r.meta?.last_row_id, url: go, whatsappUrl, mailtoUrl });
   return new Response(null, { status: 303, headers: { location: go } });
+}
+
+// Emails each booking to Appify through Brevo's transactional API. Needs the Worker secret BREVO_API_KEY; the sender
+// (MAIL_FROM, else the site email) must be a verified sender in Brevo. A failed email never fails the booking: the
+// request is already saved in D1.
+async function notify(env, s, d, text, id) {
+  if (!env.BREVO_API_KEY || !s.email) return;
+  const from = env.MAIL_FROM || s.email;
+  try {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: { "api-key": env.BREVO_API_KEY, "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify({
+        sender: { name: "Appify website", email: from },
+        to: [{ email: s.email, name: "Appify" }],
+        ...(d.email ? { replyTo: { email: d.email, name: d.name } } : {}),
+        subject: `New booking #${id ?? ""}: ${d.name}${d.day ? ` (${[d.day, d.time].filter(Boolean).join(" at ")})` : ""}`,
+        textContent: text,
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) console.error("brevo", res.status, (await res.text()).slice(0, 300));
+  } catch (e) { console.error("brevo", e.message); }
 }
