@@ -301,8 +301,6 @@ p { margin: 0; }
 .work .motion-bar { margin-bottom: 4px; }
 .reel-row.static { --h: clamp(340px, 50vh, 480px); }
 .reel { flex: none; scroll-snap-align: start; width: calc(var(--h) * 9 / 16); display: flex; flex-direction: column; gap: 8px; }
-/* website cards are wider (4:5), but never wider than the row's snap area, so a swipe still settles on a card */
-.reel.wide { width: min(calc(var(--h) * 4 / 5), 100vw - 2 * var(--side) - 40px); }
 .reel.out { display: none; }
 .reel-media { position: relative; display: block; flex: none; width: 100%; height: var(--h); border-radius: var(--r); overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); transition: transform .5s var(--spring), box-shadow .3s; }
 @media (hover: hover) { .reel-media:hover { border-color: rgba(143, 114, 255, .5); } }

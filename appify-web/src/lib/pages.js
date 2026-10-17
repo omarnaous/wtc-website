@@ -50,12 +50,11 @@ function siteCard(p) {
   <span class="link">Visit site${icon.ext}</span>
 </a>`;
 }
-// Website videos' lengths in seconds (ffprobe), for the time tag on the home row.
-const SITE_SECONDS = { "/media/wtc-launch.mp4": 25, "/media/firnlight.mp4": 20, "/media/oddball.mp4": 21, "/media/valmora.mp4": 21, "/media/earshot.mp4": 15 };
 const igOf = (site, x) => x.ig_url || site.settings.instagram;
 const reelOf = (site) => (m, i) => motionCard({ ...m, href: igOf(site, m) }, i);
-// Concept websites use the video card exactly as the motion row does (motionCard), and open their reel on Instagram.
-const siteReel = (site) => (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: "Appify", href: igOf(site, p) }, i).replace('<article class="reel" data-kind="', `<article class="reel wide" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
+// Concept websites use the video card exactly as the motion row does (motionCard), with their reel's own Instagram
+// cover, and open that reel.
+const siteReel = (site) => (p, i) => motionCard({ ...p, kind: p.category, aspect: "9/16", duration: 0, client: "Appify", href: igOf(site, p) }, i);
 // Horizontal rows (websites, videos): arrows, drag, a progress line. id ties the controls to the row.
 const rowBar = (id, filters) => `<div class="motion-bar">${filters}<div class="scroll-btns"><button type="button" data-scroll="-1" data-for="${id}" aria-label="Previous">${icon.arrow}</button><button type="button" data-scroll="1" data-for="${id}" aria-label="Next">${icon.arrow}</button></div></div>`;
 const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="${id}" aria-hidden="true"><i></i></div></div>`;
