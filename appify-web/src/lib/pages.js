@@ -4,9 +4,6 @@ import { devSVG } from "../../public/assets/js/dev.js";
 
 const KIND = { ad: "Content ad", brand: "Brand film", reel: "Reel", client: "Client work" };
 const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${s % 60}S`;
-// Cards show their poster; nothing plays until tapped, then the player opens the full video with sound.
-const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
 const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen to watch.", "We made every frame of it.", "Tap me, I do tricks."];
 // The hero intro (source: appify-intro/): the screen next to Dev shows the poster; tap to play it with sound. Made with scripts/intro.sh, which fits any
 // video to the 16:9 screen at full sharpness.
@@ -32,46 +29,46 @@ function orgLD(site) {
 }
 const graph = (...items) => ({ "@context": "https://schema.org", "@graph": items.filter(Boolean) });
 const faqLD = (faqs) => faqs.length && { "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })) };
-const videoLD = (site, m) => ({ "@type": "VideoObject", name: m.title, description: m.summary, thumbnailUrl: site.url + m.poster, contentUrl: site.url + m.video, uploadDate: m.upload_date || "2026-10-14", duration: isoDur(m.duration || 0), creator: { "@id": `${site.url}/#org` } });
 const crumbs = (site, list) => ({ "@type": "BreadcrumbList", itemListElement: list.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: site.url + path })) });
 
 // ── pieces ───────────────────────────────────────────────────────────────────────────────────────
 const head = (num, eyebrow, h2, text) => `<header class="sec-head" data-reveal><p class="eyebrow"><span>${num}</span>${esc(eyebrow)}</p><h2>${h2}</h2>${text ? `<p class="sec-text">${text}</p>` : ""}</header>`;
 
-// At most two sentences on a card.
-const twoSentences = (t = "") => (t.match(/[^.!?]+[.!?]+(\s|$)/g) || [t]).slice(0, 2).join("").trim();
-// A website card, in the same style as the video cards: the frame, a play button in the corner, text below.
-// Tapping the frame plays the full video in place, with sound.
-function workCard(p, i = 0) {
-  const cats = [p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ");
-  return `<article class="reel site" data-cats="${cats}" data-reveal style="--d:${(i % 5) * 70}ms">
-  <div class="reel-media${p.aspect === "4/5" ? "" : " fit"}" style="${poster(p.poster)}" data-vcard>
-    <video playsinline preload="none" poster="${esc(p.poster)}" data-full="${esc(p.video)}" aria-label="${esc(p.title)} video"></video>
-    <button class="vtap" type="button" aria-label="Play the ${esc(p.title)} video"><span class="reel-play">${icon.play}</span></button>
-    <i class="vbar" aria-hidden="true"></i>
+// A live client website: a preview of the real site (desktop, with its phone view in front); the card opens the site.
+const host = (u = "") => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/.*$/, "");
+const isLive = (p) => p.status === "live" && p.live_url && p.preview;
+function siteCard(p) {
+  return `<a class="site-card" href="${esc(p.live_url)}" target="_blank" rel="noopener" aria-label="Visit ${esc(p.title)} (opens in a new tab)">
+  <div class="site-shot">
+    <div class="site-bar" aria-hidden="true"><i></i><i></i><i></i><span>${esc(host(p.live_url))}</span></div>
+    <img class="site-d" src="${esc(p.preview)}" alt="The ${esc(p.title)} website" loading="lazy" decoding="async" width="1200" height="750">
+    <img class="site-m" src="${esc(p.preview.replace(".webp", "-m.webp"))}" alt="" loading="lazy" decoding="async" width="360" height="779">
   </div>
-  <h3><a href="/work/${p.slug}">${esc(p.title)}</a></h3>
-  <p class="summary">${esc(twoSentences(p.summary))}</p>
-  <div class="work-actions">
-    ${p.live_url ? `<a class="btn sm card-btn" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit site${icon.ext}</a>` : ""}
-    <a class="btn sm card-btn" href="/work/${p.slug}">Case study${icon.arrow}</a>
-  </div>
-</article>`;
+  <p class="meta">${esc(p.category)}</p>
+  <h3>${esc(p.title)}</h3>
+  <p class="summary">${esc(p.summary)}</p>
+  <span class="link">Visit site${icon.ext}</span>
+</a>`;
 }
 // Website videos' lengths in seconds (ffprobe), for the time tag on the home row.
 const SITE_SECONDS = { "/media/wtc-launch.mp4": 25, "/media/firnlight.mp4": 20, "/media/oddball.mp4": 21, "/media/valmora.mp4": 21, "/media/earshot.mp4": 15 };
-// The home websites row uses the video card exactly as section 3 does (motionCard), fed with a website.
-const siteReel = (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: "Appify" }, i).replace('<article class="reel" data-kind="', `<article class="reel wide" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
+const igOf = (site, x) => x.ig_url || site.settings.instagram;
+const reelOf = (site) => (m, i) => motionCard({ ...m, href: igOf(site, m) }, i);
+// Concept websites use the video card exactly as the motion row does (motionCard), and open their reel on Instagram.
+const siteReel = (site) => (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: "Appify", href: igOf(site, p) }, i).replace('<article class="reel" data-kind="', `<article class="reel wide" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
 // Horizontal rows (websites, videos): arrows, drag, a progress line. id ties the controls to the row.
 const rowBar = (id, filters) => `<div class="motion-bar">${filters}<div class="scroll-btns"><button type="button" data-scroll="-1" data-for="${id}" aria-label="Previous">${icon.arrow}</button><button type="button" data-scroll="1" data-for="${id}" aria-label="Next">${icon.arrow}</button></div></div>`;
 const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="${id}" aria-hidden="true"><i></i></div></div>`;
 
+// A video card: its thumbnail; tapping it opens the video where it lives (m.href: the Instagram reel, or the App Store).
 function motionCard(m, i) {
+  const where = m.where || "Instagram";
   return `<article class="reel" data-kind="${m.kind}" data-reveal>
-  <button class="reel-media${m.aspect === "9/16" ? "" : " fit"}" type="button" style="${poster(m.poster)}" data-play="${esc(m.video)}" data-title="${esc(m.title)}" aria-label="Play ${esc(m.title)} with sound">
+  <a class="reel-media${m.aspect === "9/16" ? "" : " fit"}" href="${esc(m.href)}" target="_blank" rel="noopener" aria-label="Watch ${esc(m.title)} on ${where} (opens in a new tab)">
     <img src="${esc(m.poster)}" alt="" loading="lazy" decoding="async">
-    <span class="reel-play">${icon.play}</span><span class="reel-time">${mmss(m.duration || 0)}</span>
-  </button>
+    <span class="reel-ig">${where === "Instagram" ? icon.ig : ""}${where === "Instagram" ? "Watch on Instagram" : `View on the ${where}`}</span>
+    <span class="reel-play">${icon.play}</span>${m.duration ? `<span class="reel-time">${mmss(m.duration)}</span>` : ""}
+  </a>
   <p class="meta">${esc(KIND[m.kind] || m.kind)}${m.client !== "Appify" ? ` · ${esc(m.client)}` : ""}</p>
   <h3>${esc(m.title)}</h3>
   <p class="summary">${esc(m.summary)}</p>
@@ -80,7 +77,8 @@ function motionCard(m, i) {
 
 // Apps use the same video card as section 3. Until an app has its own video, it shows a placeholder one.
 const APP_PLACEHOLDER = { video: "/media/ecommerce-chat.mp4", poster: "/media/ecommerce-chat.webp", aspect: "9/16", duration: 24 };
-const appReel = (p, i) => motionCard({ ...APP_PLACEHOLDER, ...(p.video ? { video: p.video, poster: p.poster, aspect: p.aspect, duration: 0 } : {}), title: p.title, summary: p.summary, kind: p.category, client: "Appify" }, i);
+const appReel = (site) => (p, i) => motionCard({ ...APP_PLACEHOLDER, ...(p.video ? { video: p.video, poster: p.poster, aspect: p.aspect, duration: 0 } : {}), title: p.title, summary: p.summary, kind: p.category, client: "Appify",
+  ...(p.store_url ? { href: p.store_url, where: "App Store" } : { href: igOf(site, p) }) }, i);
 
 const SERVICE_ICON = {
   "web-design-lebanon": '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="9" width="38" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M5 16h38M17 43h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
@@ -172,6 +170,7 @@ function booking(site, page = false, num = "") {
 // ── home ─────────────────────────────────────────────────────────────────────────────────────────
 export function homePage(site) {
   const websites = site.projects.filter((p) => p.kind === "website");
+  const live = websites.filter(isLive), concepts = websites.filter((p) => !isLive(p));
   const apps = site.projects.filter((p) => p.kind === "app");
   const motion = site.motion;
   const body = `
@@ -212,10 +211,12 @@ export function homePage(site) {
 
 <section class="section work" id="work" aria-labelledby="work-h">
   <div class="wrap">
-    ${head("02", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "A live client store and four concept builds from our Animated Website series. Tap any video to watch it with sound.")}
-    ${rowBar("work-row", `<div class="filters" role="group" aria-label="Filter websites" data-filter="#work-row .reel"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="animated">Animated</button><button type="button" data-f="ecommerce">E-commerce</button></div>`)}
+    ${head("02", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "Live websites we built for our clients. Tap one to visit it.")}
+    <div class="site-grid">${live.map(siteCard).join("")}</div>
+    <div class="sub-head"><h3>Animated website concepts</h3><p>Concept builds from our Animated Website series. Tap one to watch it on Instagram.</p></div>
+    ${rowBar("work-row", "<span></span>")}
   </div>
-  <div class="hrow reel-row" id="work-row" data-row tabindex="0" aria-label="Websites we built">${websites.slice(0, 5).map(siteReel).join("")}</div>
+  <div class="hrow reel-row" id="work-row" data-row tabindex="0" aria-label="Animated website concepts">${concepts.map(siteReel(site)).join("")}</div>
   ${rowProg("work-row")}
 </section>
 
@@ -224,16 +225,16 @@ export function homePage(site) {
     ${head("03", "Mobile apps", `<span id="apps-h">Apps for iOS &amp; Android</span>`, "From the first screens to the App Store and Google Play, with the admin side your team needs.")}
     ${rowBar("apps-row", "<span></span>")}
   </div>
-  <div class="hrow reel-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">${apps.map(appReel).join("")}</div>
+  <div class="hrow reel-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">${apps.map(appReel(site)).join("")}</div>
   ${rowProg("apps-row")}
 </section>
 
 <section class="section motion" id="motion" aria-labelledby="motion-h">
   <div class="wrap">
-    ${head("04", "Motion graphics & content ads", `<span id="motion-h">Content that holds attention</span>`, "Reels, ads, 3D and brand films, every frame and every sound made by us. Tap any video to watch it with sound.")}
+    ${head("04", "Motion graphics & content ads", `<span id="motion-h">Content that holds attention</span>`, "Reels, ads, 3D and brand films, every frame and every sound made by us. Tap any video to watch it on Instagram.")}
     ${rowBar("reel-row", `<div class="filters" role="group" aria-label="Filter videos" data-filter="#reel-row .reel"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="ad">Ads</button><button type="button" data-f="brand">Brand</button><button type="button" data-f="reel">Reels</button><button type="button" data-f="client">Client work</button></div>`)}
   </div>
-  <div class="hrow reel-row" id="reel-row" data-row tabindex="0" aria-label="Motion graphics videos">${motion.map(motionCard).join("")}</div>
+  <div class="hrow reel-row" id="reel-row" data-row tabindex="0" aria-label="Motion graphics videos">${motion.map(reelOf(site)).join("")}</div>
   ${rowProg("reel-row")}
 </section>
 
@@ -257,13 +258,14 @@ ${booking(site, false, "05")}
     site, path: "/", body, bodyClass: "home",
     title: "Appify | Web Design, Mobile Apps & Motion Graphics in Lebanon",
     description: "Appify is a creative tech studio in Lebanon: animated websites and online stores from $360 with $0/month, mobile apps, motion graphics, content ads and Meta ads.",
-    jsonld: [graph(orgLD(site), { "@type": "WebSite", "@id": `${site.url}/#website`, name: "Appify", url: site.url + "/", publisher: { "@id": `${site.url}/#org` }, inLanguage: "en" }, faqLD(site.faqs), ...motion.map((m) => videoLD(site, m)))],
+    jsonld: [graph(orgLD(site), { "@type": "WebSite", "@id": `${site.url}/#website`, name: "Appify", url: site.url + "/", publisher: { "@id": `${site.url}/#org` }, inLanguage: "en" }, faqLD(site.faqs))],
   });
 }
 
 // ── case study ───────────────────────────────────────────────────────────────────────────────────
 export function workPage(site, p) {
   const others = site.projects.filter((x) => x.kind === "website" && x.slug !== p.slug);
+  const moreLive = others.filter(isLive);
   const next = others[0];
   const body = `
 <article class="case">
@@ -274,33 +276,32 @@ export function workPage(site, p) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(p.category)}</span><span class="dot"></span><span>${esc(p.client)}</span></p>
       <h1 class="case-title" data-split>${esc(p.title)}</h1>
       <p class="lede">${esc(p.summary)}</p>
-      <div class="cta-row">${p.live_url ? `<a class="btn primary big" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit the live site${icon.ext}</a>` : ""}<a class="btn ghost big" href="/book">Get a website like this</a></div>
+      <div class="cta-row">${p.live_url ? `<a class="btn primary big" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit the live site${icon.ext}</a>` : ""}${!isLive(p) ? `<a class="btn ${p.live_url ? "ghost" : "primary"} big" href="${esc(igOf(site, p))}" target="_blank" rel="noopener">${icon.ig}Watch on Instagram</a>` : ""}<a class="btn ghost big" href="/book">Get a website like this</a></div>
     </div>
   </section>
-  ${p.video ? `<div class="wrap case-video" data-reveal><video controls playsinline preload="metadata" poster="${esc(p.poster)}" style="aspect-ratio:${p.aspect}"><source src="${esc(p.video)}" type="video/mp4"></video></div>` : ""}
+  ${isLive(p) ? `<div class="wrap case-shot">${siteCard(p).replace(/<p class="meta">[\s\S]*<\/a>$/, "</a>")}</div>` : ""}
   <section class="wrap case-body">
     <div class="case-text" data-reveal><h2>About the project</h2><p>${esc(p.description)}</p></div>
     ${p.features.length ? `<div class="case-feat" data-reveal><h2>What we built</h2><ul>${p.features.map((f) => `<li>${sparkSVG("li-spark")}${esc(f)}</li>`).join("")}</ul></div>` : ""}
     ${p.stack.length ? `<div class="case-stack" data-reveal><h2>Built with</h2><div class="tags">${p.stack.map((t) => `<span>${esc(t)}</span>`).join("")}</div></div>` : ""}
   </section>
   ${next ? `<section class="wrap case-next" data-reveal><p class="eyebrow">Next project</p><a class="next-link" href="/work/${next.slug}"><span>${esc(next.title)}</span>${icon.arrow}</a></section>` : ""}
-  <section class="section"><div class="wrap">${head("", "More work", "More websites by Appify", "")}<div class="work-grid">${others.slice(0, 3).map(workCard).join("")}</div></div></section>
+  <section class="section"><div class="wrap">${head("", "More work", "More websites by Appify", "")}<div class="site-grid">${moreLive.slice(0, 4).map(siteCard).join("")}</div></div></section>
 </article>
 ${booking(site)}`;
-  const vid = p.video ? { "@type": "VideoObject", name: `${p.title}: website by Appify`, description: p.summary, thumbnailUrl: site.url + p.poster, contentUrl: site.url + p.video, uploadDate: (p.created_at || "2026-10-14").slice(0, 10) } : null;
   return layout({
     site, path: `/work/${p.slug}`, body, bodyClass: "page-case", image: p.poster ? p.poster.replace(".webp", ".jpg") : "/og.png",
     title: p.seo_title || `${p.title} | Appify`, description: p.seo_description || p.summary,
-    jsonld: [graph({ "@type": "CreativeWork", name: p.title, about: p.category, description: p.description, url: `${site.url}/work/${p.slug}`, creator: { "@id": `${site.url}/#org` }, ...(p.live_url ? { sameAs: p.live_url } : {}), ...(vid ? { video: vid } : {}) }, crumbs(site, [["Home", "/"], ["Work", "/#work"], [p.title, `/work/${p.slug}`]]), orgLD(site))],
+    jsonld: [graph({ "@type": "CreativeWork", name: p.title, about: p.category, description: p.description, url: `${site.url}/work/${p.slug}`, creator: { "@id": `${site.url}/#org` }, ...(p.live_url ? { sameAs: p.live_url } : {}) }, crumbs(site, [["Home", "/"], ["Work", "/#work"], [p.title, `/work/${p.slug}`]]), orgLD(site))],
   });
 }
 
 // ── service landing page ─────────────────────────────────────────────────────────────────────────
 export function servicePage(site, s) {
   const faqs = site.faqs.filter((f) => f.topic === s.faq_topic || f.topic === "general");
-  const related = s.related === "motion" ? `<div class="hrow reel-row static" data-row>${site.motion.slice(0, 6).map(motionCard).join("")}</div>`
-    : s.related === "apps" ? `<div class="hrow reel-row static" data-row>${site.projects.filter((p) => p.kind === "app").map(appReel).join("")}</div>`
-    : `<div class="wrap"><div class="work-grid">${site.projects.filter((p) => p.kind === "website").slice(0, 6).map(workCard).join("")}</div></div>`;
+  const related = s.related === "motion" ? `<div class="hrow reel-row static" data-row>${site.motion.slice(0, 6).map(reelOf(site)).join("")}</div>`
+    : s.related === "apps" ? `<div class="hrow reel-row static" data-row>${site.projects.filter((p) => p.kind === "app").map(appReel(site)).join("")}</div>`
+    : `<div class="wrap"><div class="site-grid">${site.projects.filter((p) => p.kind === "website" && isLive(p)).map(siteCard).join("")}</div></div>`;
   const body = `
 <section class="case-hero svc-hero">
   <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div><div class="beam"></div></div>
