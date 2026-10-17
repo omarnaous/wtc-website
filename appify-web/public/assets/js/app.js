@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261017b";
+import { devSVG } from "./dev.js?v=20261017c";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -60,39 +60,13 @@ const rowIO = new IntersectionObserver((es) => es.forEach((e) => {
 $$("[data-row]").forEach((r) => rowIO.observe(r));
 $$("[data-reveal]").forEach((el) => { if (!el.parentElement.matches("[data-row]")) io.observe(el); });
 
-// ── pointer glow in the hero, glow on service cards, tilt on cards, magnetic buttons ──────────────────
+// ── pointer glow in the hero ─────────────────────────────────────────────────────────────────────────
 // The hero glow is a separate layer moved with transform (no full-screen repaint per mouse move).
 const hero = $("[data-hero]"), spot = $(".hero-bg .spot");
 if (hero && spot && fine && !reduced) hero.addEventListener("pointermove", perFrame((e) => {
   const r = hero.getBoundingClientRect();
   spot.style.transform = `translate3d(${e.clientX - r.left}px, ${e.clientY - r.top}px, 0)`;
 }), { passive: true });
-if (fine && !reduced) {
-  $$(".svc").forEach((c) => c.addEventListener("pointermove", perFrame((e) => {
-    const r = c.getBoundingClientRect();
-    c.style.setProperty("--x", `${e.clientX - r.left}px`); c.style.setProperty("--y", `${e.clientY - r.top}px`);
-  }), { passive: true }));
-  $$("[data-tilt]").forEach((c) => {
-    let on = false;
-    c.addEventListener("pointermove", perFrame((e) => {
-      if (!on) return;
-      const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-      c.style.setProperty("--ry", `${(x * 5).toFixed(2)}deg`); c.style.setProperty("--rx", `${(-y * 5).toFixed(2)}deg`);
-    }), { passive: true });
-    c.addEventListener("pointerenter", () => { on = true; c.classList.add("tilting"); });
-    c.addEventListener("pointerleave", () => { on = false; c.classList.remove("tilting"); c.style.setProperty("--ry", "0deg"); c.style.setProperty("--rx", "0deg"); });
-  });
-  $$(".magnetic").forEach((b) => {
-    let on = false;
-    b.addEventListener("pointermove", perFrame((e) => {
-      if (!on) return;
-      const r = b.getBoundingClientRect();
-      b.style.translate = `${((e.clientX - r.left - r.width / 2) * 0.18).toFixed(1)}px ${((e.clientY - r.top - r.height / 2) * 0.28).toFixed(1)}px`;
-    }), { passive: true });
-    b.addEventListener("pointerenter", () => { on = true; });
-    b.addEventListener("pointerleave", () => { on = false; b.style.translate = ""; });
-  });
-}
 
 // ── videos: nothing loads or plays until it's tapped (cards show their poster); the player plays with sound ─
 const pauseOthers = (keep) => $$("video").forEach((v) => v !== keep && !v.paused && v.pause());

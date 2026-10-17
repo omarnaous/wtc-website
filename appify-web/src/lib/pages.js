@@ -61,7 +61,7 @@ function workCard(p, i = 0) {
 // Website videos' lengths in seconds (ffprobe), for the time tag on the home row.
 const SITE_SECONDS = { "/media/wtc-launch.mp4": 25, "/media/firnlight.mp4": 20, "/media/oddball.mp4": 21, "/media/valmora.mp4": 21, "/media/earshot.mp4": 15 };
 // The home websites row uses the video card exactly as section 3 does (motionCard), fed with a website.
-const siteReel = (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: "Appify" }, i).replace('<article class="reel" data-kind="', `<article class="reel" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
+const siteReel = (p, i) => motionCard({ ...p, kind: p.category, duration: SITE_SECONDS[p.video] || 0, client: "Appify" }, i).replace('<article class="reel" data-kind="', `<article class="reel wide" data-cats="${[p.category === "Animated website" ? "animated" : "", p.category === "E-commerce" ? "ecommerce" : ""].join(" ")}" data-kind="`);
 // Horizontal rows (websites, videos): arrows, drag, a progress line. id ties the controls to the row.
 const rowBar = (id, filters) => `<div class="motion-bar">${filters}<div class="scroll-btns"><button type="button" data-scroll="-1" data-for="${id}" aria-label="Previous">${icon.arrow}</button><button type="button" data-scroll="1" data-for="${id}" aria-label="Next">${icon.arrow}</button></div></div>`;
 const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="${id}" aria-hidden="true"><i></i></div></div>`;
@@ -112,7 +112,7 @@ const priceCard = (p, i) => `<article class="price-card${p.featured ? " featured
   <p class="price-amt">${p.from ? `<span class="price-from">from</span>` : ""}${p.was ? `<s>$${p.was}</s>` : ""}<b>$${p.price}</b></p>
   <p class="price-note">${esc(p.note)}</p>
   <ul class="price-list">${p.lines.map((l) => `<li>${icon.check}${esc(l)}</li>`).join("")}</ul>
-  <a class="btn ${p.featured ? "primary" : "ghost"} big magnetic" href="/book">Book a call${icon.arrow}</a>
+  <a class="btn ${p.featured ? "primary" : "ghost"} big" href="/book">Book a call${icon.arrow}</a>
 </article>`;
 const pricing = (s) => PRICING[s.slug] ? `<section class="section pricing" id="pricing" aria-labelledby="pricing-h"><div class="wrap">${head("", "Pricing", `<span id="pricing-h">${esc(s.name)}: what it costs</span>`, "Clear prices up front. Book a call and we'll confirm yours.")}<div class="price-grid n${PRICING[s.slug].length}">${PRICING[s.slug].map(priceCard).join("")}</div></div></section>` : "";
 
@@ -161,8 +161,8 @@ function booking(site, page = false, num = "") {
       </fieldset>
       <p class="form-msg" role="status" aria-live="polite"></p>
       <div class="send">
-        ${s.whatsapp ? `<button class="btn primary big magnetic" type="submit" name="channel" value="whatsapp">${icon.wa}Book on WhatsApp</button>` : ""}
-        <button class="btn ${s.whatsapp ? "ghost" : "primary"} big magnetic" type="submit" name="channel" value="email">Book my call${icon.arrow}</button>
+        ${s.whatsapp ? `<button class="btn primary big" type="submit" name="channel" value="whatsapp">${icon.wa}Book on WhatsApp</button>` : ""}
+        <button class="btn ${s.whatsapp ? "ghost" : "primary"} big" type="submit" name="channel" value="email">Book my call${icon.arrow}</button>
       </div>
     </form>
   </div>
@@ -174,7 +174,6 @@ export function homePage(site) {
   const websites = site.projects.filter((p) => p.kind === "website");
   const apps = site.projects.filter((p) => p.kind === "app");
   const motion = site.motion;
-  const marquee = ["Websites", "Online stores", "Animated websites", "Mobile apps", "Motion graphics", "3D", "Content ads", "Meta ads", "UI/UX"];
   const body = `
 <section class="hero" data-hero>
   <div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div><div class="beam"></div>${[1, 2, 3, 4, 5, 6].map((i) => `<span class="float f${i}">${sparkSVG("fs")}</span>`).join("")}</div>
@@ -183,7 +182,7 @@ export function homePage(site) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(site.settings.tagline)}</span><span class="dot"></span><span>Made in Lebanon</span></p>
       <h1 class="hero-title" data-split>Websites, apps &amp; motion graphics that <span class="grad">stop the scroll.</span></h1>
       <p class="lede">Appify is a creative tech studio in Lebanon. We design animated websites and online stores, build mobile apps and make content ads that put your brand in the spotlight.</p>
-      <div class="cta-row"><a class="cta-hero magnetic" href="/book" data-hero-cta><span class="cta-txt"><b>Get a free prototype</b><small>Pick a day and a time</small></span><span class="cta-go">${icon.arrow}</span></a></div>
+      <div class="cta-row"><a class="cta-hero" href="/book" data-hero-cta><span class="cta-txt"><b>Get a free prototype</b><small>Pick a day and a time</small></span><span class="cta-go">${icon.arrow}</span></a></div>
     </div>
     <div class="hero-stage" data-dev data-lines='${esc(JSON.stringify(DEV_LINES))}'>
       <div class="tv" data-tv data-full="${esc(INTRO.video)}">
@@ -192,7 +191,7 @@ export function homePage(site) {
         <span class="tv-tag" aria-hidden="true"><i></i>Intro</span>
         <span class="tv-chip" aria-hidden="true"><span class="tv-off">${icon.play}Tap to play</span><span class="tv-on"><i class="eq"><b></b><b></b><b></b><b></b></i>Tap to pause</span><span class="tv-paused">${icon.play}Tap to play</span></span>
         <span class="tv-bar" aria-hidden="true"><i></i></span>
-        <div class="tv-end"><p class="tv-end-k">That's Appify.</p><p class="tv-end-h">Your idea next?</p><div class="tv-end-btns"><a class="btn primary magnetic" href="/book">Book a call${icon.arrow}</a><button class="btn ghost tv-again" type="button">Watch again</button></div></div>
+        <div class="tv-end"><p class="tv-end-k">That's Appify.</p><p class="tv-end-h">Your idea next?</p><div class="tv-end-btns"><a class="btn primary" href="/book">Book a call${icon.arrow}</a><button class="btn ghost tv-again" type="button">Watch again</button></div></div>
       </div>
       <div class="hero-dev">
         <div class="orbit" aria-hidden="true">${["Websites", "Apps", "Motion", "Meta ads", "3D", "UI/UX"].map((x) => `<span><i>${x}</i></span>`).join("")}</div>
@@ -202,19 +201,18 @@ export function homePage(site) {
       </div>
     </div>
   </div>
-  <div class="marquee" aria-hidden="true"><div class="marquee-in">${[...marquee, ...marquee].map((m) => `<span>${m}</span>${sparkSVG("m-spark")}`).join("")}</div></div>
 </section>
 
 <section class="section svcs" aria-labelledby="svc-h">
   <div class="wrap">
-    ${head("00", "What we do", `<span id="svc-h">Four ways we grow your brand</span>`, "")}
+    ${head("01", "What we do", `<span id="svc-h">Four ways we grow your brand</span>`, "")}
     <div class="svc-grid">${site.services.map(serviceCard).join("")}</div>
   </div>
 </section>
 
 <section class="section work" id="work" aria-labelledby="work-h">
   <div class="wrap">
-    ${head("01", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "A live client store and four concept builds from our Animated Website series. Tap any video to watch it with sound.")}
+    ${head("02", "Websites", `<span id="work-h">Websites we designed &amp; built</span>`, "A live client store and four concept builds from our Animated Website series. Tap any video to watch it with sound.")}
     ${rowBar("work-row", `<div class="filters" role="group" aria-label="Filter websites" data-filter="#work-row .reel"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="animated">Animated</button><button type="button" data-f="ecommerce">E-commerce</button></div>`)}
   </div>
   <div class="hrow reel-row" id="work-row" data-row tabindex="0" aria-label="Websites we built">${websites.slice(0, 5).map(siteReel).join("")}</div>
@@ -223,7 +221,7 @@ export function homePage(site) {
 
 <section class="section apps" id="apps" aria-labelledby="apps-h">
   <div class="wrap">
-    ${head("02", "Mobile apps", `<span id="apps-h">Apps for iOS &amp; Android</span>`, "From the first screens to the App Store and Google Play, with the admin side your team needs.")}
+    ${head("03", "Mobile apps", `<span id="apps-h">Apps for iOS &amp; Android</span>`, "From the first screens to the App Store and Google Play, with the admin side your team needs.")}
     ${rowBar("apps-row", "<span></span>")}
   </div>
   <div class="hrow reel-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">${apps.map(appReel).join("")}</div>
@@ -232,26 +230,26 @@ export function homePage(site) {
 
 <section class="section motion" id="motion" aria-labelledby="motion-h">
   <div class="wrap">
-    ${head("03", "Motion graphics & content ads", `<span id="motion-h">Content that holds attention</span>`, "Reels, ads, 3D and brand films, every frame and every sound made by us. Tap any video to watch it with sound.")}
+    ${head("04", "Motion graphics & content ads", `<span id="motion-h">Content that holds attention</span>`, "Reels, ads, 3D and brand films, every frame and every sound made by us. Tap any video to watch it with sound.")}
     ${rowBar("reel-row", `<div class="filters" role="group" aria-label="Filter videos" data-filter="#reel-row .reel"><button type="button" class="on" data-f="*">All</button><button type="button" data-f="ad">Ads</button><button type="button" data-f="brand">Brand</button><button type="button" data-f="reel">Reels</button><button type="button" data-f="client">Client work</button></div>`)}
   </div>
   <div class="hrow reel-row" id="reel-row" data-row tabindex="0" aria-label="Motion graphics videos">${motion.map(motionCard).join("")}</div>
   ${rowProg("reel-row")}
 </section>
 
-<section class="section spot" aria-label="Why Appify">
-  <div class="wrap spot-in" data-reveal>
-    <p class="spot-k">You just scrolled past ${motion.length} videos and ${Math.min(5, websites.length)} websites.</p>
-    <p class="spot-big">That's what we do to your brand: <span class="grad">put it in the spotlight.</span></p>
-    <a class="btn primary big magnetic" href="/book">Get a free prototype${icon.arrow}</a>
-  </div>
+<section class="section spot" aria-label="Start a project">
+  <div class="wrap"><div class="spot-in">
+    <p class="spot-big">Got an idea? <span class="grad">Appify it.</span></p>
+    <p class="spot-sub">Book a free call. We'll turn your idea into a prototype and give you a clear price.</p>
+    <a class="btn primary big" href="/book">Get a free prototype${icon.arrow}</a>
+  </div></div>
 </section>
 
-${booking(site, false, "04")}
+${booking(site, false, "05")}
 
 <section class="section faqs" id="faq" aria-labelledby="faq-h">
   <div class="wrap faq-grid">
-    <div data-reveal>${head("05", "FAQ", `<span id="faq-h">Questions people ask us</span>`, `Still unsure? <a href="#book">Book a call</a> or email <a href="mailto:${esc(site.settings.email)}">${esc(site.settings.email)}</a>.`)}</div>
+    <div data-reveal>${head("06", "FAQ", `<span id="faq-h">Questions people ask us</span>`, `Still unsure? <a href="#book">Book a call</a> or email <a href="mailto:${esc(site.settings.email)}">${esc(site.settings.email)}</a>.`)}</div>
     ${faqList(site.faqs)}
   </div>
 </section>`;
@@ -276,7 +274,7 @@ export function workPage(site, p) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(p.category)}</span><span class="dot"></span><span>${esc(p.client)}</span></p>
       <h1 class="case-title" data-split>${esc(p.title)}</h1>
       <p class="lede">${esc(p.summary)}</p>
-      <div class="cta-row">${p.live_url ? `<a class="btn primary big magnetic" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit the live site${icon.ext}</a>` : ""}<a class="btn ghost big" href="/book">Get a website like this</a></div>
+      <div class="cta-row">${p.live_url ? `<a class="btn primary big" href="${esc(p.live_url)}" target="_blank" rel="noopener">Visit the live site${icon.ext}</a>` : ""}<a class="btn ghost big" href="/book">Get a website like this</a></div>
     </div>
   </section>
   ${p.video ? `<div class="wrap case-video" data-reveal><video controls playsinline preload="metadata" poster="${esc(p.poster)}" style="aspect-ratio:${p.aspect}"><source src="${esc(p.video)}" type="video/mp4"></video></div>` : ""}
@@ -312,7 +310,7 @@ export function servicePage(site, s) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(s.name)}</span><span class="dot"></span><span>Lebanon</span></p>
       <h1 class="case-title" data-split>${esc(s.h1)}</h1>
       <p class="lede">${esc(s.intro)}</p>
-      <div class="cta-row"><a class="btn primary big magnetic" href="/book">Get a free prototype${icon.arrow}</a>${PRICING[s.slug] ? `<a class="btn ghost big" href="#pricing">See pricing</a>` : `<a class="btn ghost big" href="/#work">See our work</a>`}</div>
+      <div class="cta-row"><a class="btn primary big" href="/book">Get a free prototype${icon.arrow}</a>${PRICING[s.slug] ? `<a class="btn ghost big" href="#pricing">See pricing</a>` : `<a class="btn ghost big" href="/#work">See our work</a>`}</div>
     </div>
     <div class="svc-dev" aria-hidden="true">${devSVG({ thumbs: 1, brow: 14, lid: 0.05, smile: 1, look: -4, tilt: 3 }, "")}</div>
   </div>

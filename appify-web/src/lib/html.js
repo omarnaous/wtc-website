@@ -4,7 +4,7 @@ import { WORDMARK, sparkPath } from "../../public/assets/js/brand.js";
 
 export const esc = (s = "") => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 export const json = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
-export const ASSET_V = "20261017b";
+export const ASSET_V = "20261017c";
 
 export const icon = {
   arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -72,7 +72,7 @@ ${ld}
       ${NAV.map(([t, h]) => `<a href="${h}">${t}</a>`).join("")}
       <details class="nav-more"><summary>Services</summary><div class="nav-menu">${site.services.map((s) => `<a href="/services/${s.slug}">${esc(s.name)}</a>`).join("")}</div></details>
     </nav>
-    <a class="btn primary sm magnetic nav-cta" href="/book">Book a call</a>
+    <a class="btn primary sm nav-cta" href="/book">Book a call</a>
     <button class="nav-burger" aria-label="Open menu" aria-expanded="false" data-burger><span></span><span></span></button>
   </div>
   <div class="nav-mobile" data-mobile-menu>
@@ -111,6 +111,6 @@ function footer(site) {
       <a href="${esc(site.settings.instagram)}" rel="noopener me" target="_blank">${icon.ig}${esc(site.settings.instagram_handle)}</a>
     </div>
   </div>
-  <div class="wrap foot-bottom"><span>© ${y} Appify. All rights reserved.</span><span>Concept builds are labelled as concepts.</span></div>
+  <div class="wrap foot-bottom"><span>© ${y} Appify. All rights reserved.</span><span>Made in Lebanon.</span></div>
 </footer>`;
 }
