@@ -371,7 +371,8 @@ textarea.field { resize: vertical; }
 .hp { position: absolute; left: -9999px; }
 .send { display: flex; flex-wrap: wrap; gap: 12px; }
 .send .btn { flex: 1 1 220px; justify-content: center; }
-.form-msg { min-height: 1.4em; font-weight: 600; color: var(--sky); }
+.form-msg { font-weight: 600; color: var(--sky); }
+.form-msg:empty { display: none; }   /* no empty line (and two gaps) above the button until there is something to say */
 .form-msg.err { color: var(--alert); }
 .form-msg.ok { color: var(--green); }
 @media (max-width: 920px) { .book-grid { grid-template-columns: 1fr; } .book-dev { display: none; } }
