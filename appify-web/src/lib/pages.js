@@ -62,13 +62,16 @@ const rowProg = (id) => `<div class="wrap"><div class="row-prog" data-prog-for="
 
 // A video card: its thumbnail; tapping it opens the video where it lives (m.href: the Instagram reel, or the App Store).
 function motionCard(m, i) {
-  const where = m.where || "Instagram";
+  const where = m.where || "Instagram", fit = m.aspect === "9/16" ? "" : " fit";
+  const open = m.play
+    ? `<button class="reel-media${fit}" type="button" data-play="${esc(m.video)}" data-title="${esc(m.title)}" aria-label="Play ${esc(m.title)} with sound">`
+    : `<a class="reel-media${fit}" href="${esc(m.href)}" target="_blank" rel="noopener" aria-label="${where === "Instagram" ? "Watch" : "View"} ${esc(m.title)} on ${where === "Instagram" ? "" : "the "}${where} (opens in a new tab)">`;
+  const badge = m.play ? "" : `<span class="reel-ig">${where === "Instagram" ? `${icon.ig}Watch on Instagram` : `View on the ${where}`}</span>`;
   return `<article class="reel" data-kind="${m.kind}" data-reveal>
-  <a class="reel-media${m.aspect === "9/16" ? "" : " fit"}" href="${esc(m.href)}" target="_blank" rel="noopener" aria-label="Watch ${esc(m.title)} on ${where} (opens in a new tab)">
+  ${open}
     <img src="${esc(m.poster)}" alt="" loading="lazy" decoding="async">
-    <span class="reel-ig">${where === "Instagram" ? icon.ig : ""}${where === "Instagram" ? "Watch on Instagram" : `View on the ${where}`}</span>
-    <span class="reel-play">${icon.play}</span>${m.duration ? `<span class="reel-time">${mmss(m.duration)}</span>` : ""}
-  </a>
+    ${badge}${m.play || where === "Instagram" ? `<span class="reel-play">${icon.play}</span>` : ""}${m.duration ? `<span class="reel-time">${mmss(m.duration)}</span>` : ""}
+  ${m.play ? "</button>" : "</a>"}
   <p class="meta">${esc(KIND[m.kind] || m.kind)}${m.client !== "Appify" ? ` · ${esc(m.client)}` : ""}</p>
   <h3>${esc(m.title)}</h3>
   <p class="summary">${esc(m.summary)}</p>
@@ -76,9 +79,21 @@ function motionCard(m, i) {
 }
 
 // Apps use the same video card as section 3. Until an app has its own video, it shows a placeholder one.
+// What each app shows: first a photo of the real app (opens its store page), then a video of its features (plays here).
+// Made in appify-darebni/ from the screens on darebniai.com.
+const APP_MEDIA = {
+  "darebni-ai": [
+    { poster: "/media/darebni-photo.webp", summary: "An AI workout coach for iPhone that builds and adapts your training plan. Live on the App Store." },
+    { poster: "/media/darebni-showcase.webp", video: "/media/darebni-showcase.mp4", duration: 20, play: true, title: "Darebni AI: inside the app",
+      summary: "The features we built, on the real screens: onboarding, today's session, set logging, the workout builder, AI analytics, pinned lifts and the exercise library." },
+  ],
+};
 const APP_PLACEHOLDER = { video: "/media/ecommerce-chat.mp4", poster: "/media/ecommerce-chat.webp", aspect: "9/16", duration: 24 };
-const appReel = (site) => (p, i) => motionCard({ ...APP_PLACEHOLDER, ...(p.video ? { video: p.video, poster: p.poster, aspect: p.aspect, duration: 0 } : {}), title: p.title, summary: p.summary, kind: p.category, client: "Appify",
-  ...(p.store_url ? { href: p.store_url, where: "App Store" } : { href: igOf(site, p) }) }, i);
+const appCards = (site) => (p) => {
+  const store = p.store_url ? { href: p.store_url, where: "App Store" } : { href: igOf(site, p) };
+  const base = { title: p.title, summary: p.summary, kind: p.category, client: "Appify", aspect: "9/16", ...store };
+  return (APP_MEDIA[p.slug] || [{ ...APP_PLACEHOLDER }]).map((m, i) => motionCard({ ...base, ...m }, i)).join("");
+};
 
 const SERVICE_ICON = {
   "web-design-lebanon": '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="9" width="38" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M5 16h38M17 43h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
@@ -225,7 +240,7 @@ export function homePage(site) {
     ${head("03", "Mobile apps", `<span id="apps-h">Apps for iOS &amp; Android</span>`, "From the first screens to the App Store and Google Play, with the admin side your team needs.")}
     ${rowBar("apps-row", "<span></span>")}
   </div>
-  <div class="hrow reel-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">${apps.map(appReel(site)).join("")}</div>
+  <div class="hrow reel-row" id="apps-row" data-row tabindex="0" aria-label="Apps we built">${apps.map(appCards(site)).join("")}</div>
   ${rowProg("apps-row")}
 </section>
 
@@ -300,7 +315,7 @@ ${booking(site)}`;
 export function servicePage(site, s) {
   const faqs = site.faqs.filter((f) => f.topic === s.faq_topic || f.topic === "general");
   const related = s.related === "motion" ? `<div class="hrow reel-row static" data-row>${site.motion.slice(0, 6).map(reelOf(site)).join("")}</div>`
-    : s.related === "apps" ? `<div class="hrow reel-row static" data-row>${site.projects.filter((p) => p.kind === "app").map(appReel(site)).join("")}</div>`
+    : s.related === "apps" ? `<div class="hrow reel-row static" data-row>${site.projects.filter((p) => p.kind === "app").map(appCards(site)).join("")}</div>`
     : `<div class="wrap"><div class="site-grid">${site.projects.filter((p) => p.kind === "website" && isLive(p)).map(siteCard).join("")}</div></div>`;
   const body = `
 <section class="case-hero svc-hero">
