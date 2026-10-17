@@ -369,8 +369,8 @@ fieldset.row legend { grid-column: 1 / -1; }
 .field:focus { outline: none; border-color: var(--iris); box-shadow: 0 0 0 4px rgba(143, 114, 255, .2); }
 textarea.field { resize: vertical; }
 .hp { position: absolute; left: -9999px; }
-.send { display: flex; flex-wrap: wrap; gap: 12px; }
-.send .btn { flex: 1 1 220px; justify-content: center; }
+.send { display: grid; gap: 12px; }   /* Book on WhatsApp, then DM us on Instagram underneath */
+.send .btn { justify-content: center; }
 .form-msg { font-weight: 600; color: var(--sky); }
 .form-msg:empty { display: none; }   /* no empty line (and two gaps) above the button until there is something to say */
 .form-msg.err { color: var(--alert); }

@@ -174,6 +174,7 @@ function booking(site, page = false, num = "") {
       <p class="form-msg" role="status" aria-live="polite"></p>
       <div class="send">
         <button class="btn primary big" type="submit" name="channel" value="whatsapp">${icon.wa}Book on WhatsApp</button>
+        ${s.instagram_handle ? `<a class="btn ghost big" href="https://ig.me/m/${esc(s.instagram_handle.replace(/^@/, ""))}" target="_blank" rel="noopener">${icon.ig}DM us on Instagram</a>` : ""}
       </div>
     </form>
   </div>
