@@ -173,8 +173,7 @@ function booking(site, page = false, num = "") {
       </fieldset>
       <p class="form-msg" role="status" aria-live="polite"></p>
       <div class="send">
-        ${s.whatsapp ? `<button class="btn primary big" type="submit" name="channel" value="whatsapp">${icon.wa}Book on WhatsApp</button>` : ""}
-        <button class="btn ${s.whatsapp ? "ghost" : "primary"} big" type="submit" name="channel" value="email">Book my call${icon.arrow}</button>
+        <button class="btn primary big" type="submit" name="channel" value="whatsapp">${icon.wa}Book on WhatsApp</button>
       </div>
     </form>
   </div>

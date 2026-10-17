@@ -1,6 +1,6 @@
 // Motion and interaction on top of the server-rendered page. Everything degrades: without this script
 // the content, links, videos (poster + tap to play) and the booking form (plain POST) still work.
-import { devSVG } from "./dev.js?v=20261017e";
+import { devSVG } from "./dev.js?v=20261017f";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -276,7 +276,7 @@ if (form) {
   const msg = $(".form-msg", form);
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const fd = new FormData(form), channel = e.submitter?.value || "email";
+    const fd = new FormData(form), channel = e.submitter?.value || "whatsapp";
     const body = { ...Object.fromEntries(fd), services: fd.getAll("services"), channel };
     msg.className = "form-msg";
     if (!body.name?.trim()) { msg.textContent = "Please add your name."; msg.classList.add("err"); form.elements.name.focus(); return; }

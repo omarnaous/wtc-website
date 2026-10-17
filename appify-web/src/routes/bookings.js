@@ -18,7 +18,7 @@ export async function createBooking(request, env) {
   if (b.website) return json({ ok: true });                                   // honeypot: quietly accept bots
   const d = {
     name: clip(b.name, 80), phone: clip(b.phone, 30), email: clip(b.email, 120), message: clip(b.message, 1200),
-    day: clip(b.day, 20), time: clip(b.time, 10), channel: b.channel === "whatsapp" ? "whatsapp" : "email",
+    day: clip(b.day, 20), time: clip(b.time, 10), channel: b.channel === "email" ? "email" : "whatsapp",
     services: (Array.isArray(b.services) ? b.services : [b.services]).filter(Boolean).map((s) => clip(s, 40)).slice(0, 8),
   };
   if (!d.name) return json({ ok: false, error: "Please add your name." }, 400);
