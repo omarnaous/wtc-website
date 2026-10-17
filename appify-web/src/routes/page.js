@@ -24,7 +24,7 @@ export async function renderPage(request, env, ctx) {
   let res;
   if (p === "/") res = page(homePage(site), 200, noindex);
   else if (p === "/book") res = page(bookPage(site), 200, noindex);
-  else if (p === "/robots.txt") res = new Response(`User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${site.url}/sitemap.xml\n`, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } });
+  else if (p === "/robots.txt") res = new Response(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /admin\n\nSitemap: ${site.url}/sitemap.xml\n`, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } });
   else if (p === "/sitemap.xml") res = new Response(sitemap(site), { headers: { "content-type": "application/xml; charset=utf-8", "cache-control": "public, max-age=3600" } });
   else if (p.startsWith("/work/")) {
     const pr = site.projects.find((x) => x.kind === "website" && x.slug === p.slice(6));

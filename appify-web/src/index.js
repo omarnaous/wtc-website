@@ -1,7 +1,8 @@
 // Worker entry for www.appify-lb.com. Files in public/ are served straight from Workers static assets (with the
-// headers in public/_headers); every other request lands here: the booking API, or a server-rendered page.
+// headers in public/_headers); every other request lands here: the booking API, the admin, or a server-rendered page.
 import { renderPage } from "./routes/page.js";
 import { createBooking } from "./routes/bookings.js";
+import { handleAdmin } from "./routes/admin.js";
 
 // _headers only applies to static files, so the worker adds the same security headers to its own responses.
 const SECURITY = {
@@ -29,6 +30,7 @@ export default {
     if (url.pathname === "/api/bookings") {
       return secure(request.method === "POST" ? await createBooking(request, env) : methodNotAllowed("POST"));
     }
+    if (url.pathname === "/admin" || url.pathname.startsWith("/admin/")) return secure(await handleAdmin(request, env));
     if (request.method === "GET") return secure(await renderPage(request, env, ctx));
     if (request.method === "HEAD") {
       const res = await renderPage(new Request(request, { method: "GET" }), env, ctx);
