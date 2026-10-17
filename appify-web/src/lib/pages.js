@@ -9,8 +9,8 @@ const isoDur = (s) => `PT${Math.floor(s / 60) ? Math.floor(s / 60) + "M" : ""}${
 const poster = (p) => `--poster:url('${esc((p || "").replace("/media/", "/media/b/"))}')`; // pre-blurred backdrop
 const DEV_LINES = ["Hi, I'm Dev. Watch this!", "Tap the screen to watch.", "We made every frame of it.", "Tap me, I do tricks."];
 // The hero intro (source: appify-intro/): the screen next to Dev shows the poster; tap to play it with sound. Made with scripts/intro.sh, which fits any
-// video to the 16:9 screen at full sharpness (now: the showreel as a placeholder; run it on the real intro to replace).
-const INTRO = { video: "/media/intro.mp4?v=2", poster: "/media/intro.webp?v=2" };
+// video to the 16:9 screen at full sharpness.
+const INTRO = { video: "/media/intro.mp4?v=3", poster: "/media/intro.webp?v=3" };
 
 // ── structured data ──────────────────────────────────────────────────────────────────────────────
 function orgLD(site) {
@@ -23,8 +23,10 @@ function orgLD(site) {
     sameAs: [s.instagram].filter(Boolean), ...(s.whatsapp ? { telephone: "+" + s.whatsapp } : {}),
     knowsAbout: ["Web design", "E-commerce websites", "Animated websites", "Mobile app development", "Motion graphics", "Video ads", "Meta ads", "UI/UX design"],
     makesOffer: [
-      { "@type": "Offer", name: "Lifetime website", price: "360", priceCurrency: "USD", description: "UI/UX design, admin panel, custom analytics, motion graphics and free hosting. One payment, $0 per month, delivered in under 7 days." },
-      { "@type": "Offer", name: "Animated website", priceSpecification: { "@type": "PriceSpecification", minPrice: "500", priceCurrency: "USD" } },
+      { "@type": "Offer", name: "E-commerce website", price: "360", priceCurrency: "USD", description: "Premium template, admin panel and hosting included. Pay once, no monthly fees." },
+      { "@type": "Offer", name: "Web app", priceSpecification: { "@type": "PriceSpecification", minPrice: "500", priceCurrency: "USD" }, description: "CRMs, business systems, automations and dashboards, with an admin panel and hosting. Pay once." },
+      { "@type": "Offer", name: "Mobile app", priceSpecification: { "@type": "PriceSpecification", minPrice: "999", priceCurrency: "USD" } },
+      { "@type": "Offer", name: "Motion graphics, 3 videos", price: "199", priceCurrency: "USD" },
     ],
   };
 }
@@ -120,7 +122,7 @@ function faqList(faqs) {
   return `<div class="faq-list">${faqs.map((f, i) => `<details class="faq" data-reveal style="--d:${(i % 4) * 50}ms"${i === 0 ? " open" : ""}><summary><h3>${esc(f.question)}</h3><span class="faq-ic" aria-hidden="true"></span></summary><div class="faq-a"><p>${esc(f.answer)}</p></div></details>`).join("")}</div>`;
 }
 
-function booking(site, page = false) {
+function booking(site, page = false, num = "") {
   const s = site.settings;
   const services = ["Website", "Online store", "Animated website", "Mobile app", "Motion graphics", "Meta ads", "Something else"];
   const slots = JSON.parse(s.booking_slots || "[]");
@@ -129,7 +131,7 @@ function booking(site, page = false) {
   ${page ? `<div class="hero-bg" aria-hidden="true"><div class="grid"></div><div class="glow"></div><div class="spot"></div><div class="beam"></div></div>` : ""}
   <div class="wrap book-grid">
     <div class="book-copy" data-reveal>
-      ${page ? `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span aria-current="page">Book a call</span></nav><p class="eyebrow"><span>Free</span>Prototype call</p>` : `<p class="eyebrow"><span>04</span>Book a call</p>`}
+      ${page ? `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span aria-current="page">Book a call</span></nav><p class="eyebrow"><span>Free</span>Prototype call</p>` : `<p class="eyebrow"><span>${num}</span>Book a call</p>`}
       <${h} id="book-h">Tell us your idea. <span class="grad">We'll appify it.</span></${h}>
       <p class="sec-text">Pick a day and a time, tell us what you need, and book it. We reply to confirm your call.</p>
       <ul class="contact-list">
@@ -241,11 +243,11 @@ export function homePage(site) {
   <div class="wrap spot-in" data-reveal>
     <p class="spot-k">You just scrolled past ${motion.length} videos and ${Math.min(5, websites.length)} websites.</p>
     <p class="spot-big">That's what we do to your brand: <span class="grad">put it in the spotlight.</span></p>
-    <a class="btn primary big magnetic" href="#book">Start your project${icon.arrow}</a>
+    <a class="btn primary big magnetic" href="/book">Get a free prototype${icon.arrow}</a>
   </div>
 </section>
 
-${booking(site)}
+${booking(site, false, "04")}
 
 <section class="section faqs" id="faq" aria-labelledby="faq-h">
   <div class="wrap faq-grid">
@@ -310,7 +312,7 @@ export function servicePage(site, s) {
       <p class="kicker">${sparkSVG("k-spark")}<span>${esc(s.name)}</span><span class="dot"></span><span>Lebanon</span></p>
       <h1 class="case-title" data-split>${esc(s.h1)}</h1>
       <p class="lede">${esc(s.intro)}</p>
-      <div class="cta-row"><a class="btn primary big magnetic" href="#book">Book a free call${icon.arrow}</a>${PRICING[s.slug] ? `<a class="btn ghost big" href="#pricing">See pricing</a>` : `<a class="btn ghost big" href="/#work">See our work</a>`}</div>
+      <div class="cta-row"><a class="btn primary big magnetic" href="/book">Get a free prototype${icon.arrow}</a>${PRICING[s.slug] ? `<a class="btn ghost big" href="#pricing">See pricing</a>` : `<a class="btn ghost big" href="/#work">See our work</a>`}</div>
     </div>
     <div class="svc-dev" aria-hidden="true">${devSVG({ thumbs: 1, brow: 14, lid: 0.05, smile: 1, look: -4, tilt: 3 }, "")}</div>
   </div>

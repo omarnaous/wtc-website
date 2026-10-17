@@ -1,0 +1,3 @@
+-- Copy that still named the old "lifetime website", brought in line with the price cards ($360 e-commerce website, web apps from $500).
+UPDATE faqs SET answer = 'An e-commerce website is $360, paid once: a premium template, an admin panel and hosting, with no monthly fees. A web app with custom features (a CRM, business systems, automations or dashboards) starts from $500. Send us what you need and we''ll confirm the price before we start.' WHERE id = 1;
+UPDATE services SET meta_description = 'Appify designs and builds fast websites, online stores and web apps in Lebanon: admin panel and hosting included, pay once with no monthly fees. E-commerce websites $360, web apps from $500.' WHERE slug = 'web-design-lebanon';
