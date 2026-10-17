@@ -44,8 +44,11 @@ function Hello({ f }) {
   const dev = sp(f, DEV_IN, 14, 140), idea = f >= IDEA - 4;
   const out = interpolate(f, [IDEA - 6, IDEA], [0, 1], clamp);
   const s = sp(f, SPARK, 8, 300), fly = interpolate(f, [FLY, WEB], [0, 1], { ...clamp, easing: easeIn });
+  // the camera pushes into the idea: the whole scene scales up around the spark while it glows
+  const zoom = 1 + 0.9 * fly;
   return (
     <AbsoluteFill>
+      <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: `${SPARK_AT[0]}px ${SPARK_AT[1]}px`, filter: `blur(${fly * 6}px)` }}>
       <Stage f={f} beam={interpolate(f, [0, 20], [0, 1], clamp)} />
       <div style={{ position: "absolute", left: 160, top: 330 }}>
         {!idea && <div style={{ opacity: 1 - out }}>
@@ -63,11 +66,14 @@ function Hello({ f }) {
       {f >= SPARK && (
         <>
           <div style={{ position: "absolute", left: SPARK_AT[0], top: SPARK_AT[1], width: 0, height: 0 }}>
-            <div style={{ position: "absolute", left: -90, top: -90, width: 180, height: 180, transform: `scale(${Math.min(1.2, s) * (1 + fly * 18)}) rotate(${f * 2}deg)`, filter: `drop-shadow(0 0 ${30 + 40 * fly}px rgba(143,114,255,.9))` }}><Spark size={180} color="#fff" /></div>
+            <div style={{ position: "absolute", left: -90, top: -90, width: 180, height: 180, transform: `scale(${Math.min(1.2, s) * (1 + fly * 1.2)}) rotate(${f * 2}deg)`, filter: `drop-shadow(0 0 ${30 + 50 * fly}px rgba(143,114,255,.95))` }}><Spark size={180} color="#fff" /></div>
           </div>
           <Burst f={f} cx={SPARK_AT[0]} cy={SPARK_AT[1]} start={SPARK + 2} count={50} speed={26} seed="idea" colors={["#fff", C.iris, C.sky]} />
         </>
       )}
+      </AbsoluteFill>
+      {/* the spark's light blooms toward the lens just before the cut opens through it */}
+      <AbsoluteFill style={{ background: `radial-gradient(circle at ${SPARK_AT[0]}px ${SPARK_AT[1]}px, rgba(255,255,255,${0.5 * fly}), rgba(143,114,255,${0.35 * fly}) 30%, transparent 65%)` }} />
     </AbsoluteFill>
   );
 }
