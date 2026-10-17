@@ -13,7 +13,7 @@ export const FAQS = [
   { id: "Apps", kind: "app", bg: "photoApp", tilt: -2, q: "Do you build mobile apps?",
     a: ["Yes. iOS + Android."], b: "From the first screens to the App Store and Google Play.", link: "Darebni AI · App Store" },
   { id: "Motion", kind: "tags", bg: "magenta", tilt: 2, q: "What are motion graphics and content ads?",
-    a: ["Short videos", "made for social media."], tags: ["#reels", "#productads", "#logoreveals", "#3D", "#kinetictype"], b: "With sound designed to the picture.", photo: "img/balloon.webp" },
+    a: ["Short videos", "made for social media."], tags: ["#reels", "#productads", "#logoreveals", "#3D", "#kinetictype"], b: "With sound designed to the picture." },
   { id: "Ads", kind: "quiz", bg: "midnight", tilt: -3, q: "Is boosting a post the same as running Meta ads?",
     quiz: { title: "Boosting a post =", options: ["Running Meta ads", "One button, limited targeting"], right: 1 }, a: ["We run real campaigns:"], b: "the right objective, retargeting, creative tests and tracked results." },
   { id: "Book", kind: "link", bg: "violet2", tilt: 2, q: "How do I book a call with Appify?",
