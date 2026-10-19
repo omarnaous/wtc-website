@@ -190,6 +190,7 @@ function Smoke({ f }) {
       const age = f - born;
       const src = phoneAt(born);
       if (age < 0 || src.thrust < 0.05) { s.visible = false; return; }
+      s.visible = true;
       const r = (k) => random(`s${i}-${k}`) * 2 - 1;
       const nozzle = src.p.clone().addScaledVector(src.up, -PH / 2 - 0.1);
       // the jet carries it down the phone's axis, slowing; what would go below the ground spreads out along it
