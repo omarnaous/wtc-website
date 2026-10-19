@@ -1,270 +1,11 @@
 {
  "fps": 30,
- "duration": 16.0,
+ "duration": 17.433333333333334,
  "seed": 9,
  "fade_out": 1.0,
  "lowpass": 11000,
  "peak_db": -3,
  "cues": [
-  {
-   "type": "blip",
-   "frame": 10,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 13,
-   "gain": 0.05,
-   "freq": 1174.7,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 16,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 19,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 22,
-   "gain": 0.05,
-   "freq": 1046.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 25,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 28,
-   "gain": 0.05,
-   "freq": 1174.7,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 86,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 89,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 92,
-   "gain": 0.05,
-   "freq": 1046.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 95,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 98,
-   "gain": 0.05,
-   "freq": 1174.7,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 101,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 104,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 154,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 157,
-   "gain": 0.05,
-   "freq": 1046.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 160,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 163,
-   "gain": 0.05,
-   "freq": 1174.7,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 166,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 169,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 218,
-   "gain": 0.05,
-   "freq": 1174.7,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 221,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 224,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 227,
-   "gain": 0.05,
-   "freq": 1046.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 230,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 300,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 303,
-   "gain": 0.05,
-   "freq": 1174.7,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 306,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 309,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 312,
-   "gain": 0.05,
-   "freq": 1046.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 315,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 366,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 369,
-   "gain": 0.05,
-   "freq": 1318.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 372,
-   "gain": 0.05,
-   "freq": 1046.5,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 375,
-   "gain": 0.05,
-   "freq": 880,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 378,
-   "gain": 0.05,
-   "freq": 1174.7,
-   "pan": -0.2
-  },
-  {
-   "type": "blip",
-   "frame": 381,
-   "gain": 0.05,
-   "freq": 987.8,
-   "pan": -0.2
-  },
   {
    "type": "pop",
    "frame": 2,
@@ -272,59 +13,59 @@
   },
   {
    "type": "swoosh",
-   "start": 142,
-   "end": 158,
+   "start": 118,
+   "end": 134,
    "peak": 0.5,
    "f": 2200,
    "gain": 0.14
   },
   {
    "type": "typing",
-   "start": 214,
-   "end": 296,
+   "start": 186,
+   "end": 258,
    "gain": 0.16,
    "pan": 0.15
   },
   {
    "type": "glint",
-   "frame": 300,
+   "frame": 264,
    "gain": 0.08,
    "freq": 1318.5
   },
   {
    "type": "pop",
-   "frame": 302,
+   "frame": 266,
    "gain": 0.12
   },
   {
    "type": "sample",
    "file": "/root/.claude/skills/motion-graphics/assets/sfx/receive.ogg",
-   "frame": 318,
+   "frame": 288,
    "gain": 0.3
   },
   {
    "type": "swoosh",
-   "start": 358,
-   "end": 374,
+   "start": 314,
+   "end": 330,
    "peak": 0.5,
    "f": 2000,
    "gain": 0.16
   },
   {
    "type": "typing",
-   "start": 392,
-   "end": 410,
+   "start": 376,
+   "end": 394,
    "gain": 0.16
   },
   {
    "type": "sample",
    "file": "/root/.claude/skills/motion-graphics/assets/sfx/send.ogg",
-   "frame": 414,
+   "frame": 398,
    "gain": 0.3
   },
   {
    "type": "chime",
-   "frame": 428,
+   "frame": 412,
    "gain": 0.06,
    "freq": 1760
   }

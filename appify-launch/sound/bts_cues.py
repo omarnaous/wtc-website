@@ -1,21 +1,16 @@
-"""Soundtrack for the "how we made it" reel, on src/bts-timing.js. A lo-fi tape bed under Dev talking, a little voice
-blip on each word as his line types out, a whoosh into the Claude chat, keyboard typing under the prompt, a glint as the
-rest blurs behind the lock, a message-received sound for the reply, then the CTA: whoosh, typing PROMPT, a tap on Post,
-a chime on the logo.
-  python3 sound/bts_cues.py  ->  sound/bts.json, sound/bts-sfx.json"""
-import json, re
-src = open("src/bts-timing.js").read()
-n = lambda k: int(re.search(rf"export const {k} = (\d+)", src).group(1))
-DUR, CHAT, TYPE, TYPE_END, LOCK, REPLY, CTA, COMMENT = (n(k) for k in ["BTS_DURATION", "CHAT", "TYPE", "TYPE_END", "LOCK", "REPLY", "CTA", "COMMENT"])
-LINES = [(int(a), int(b), t) for a, b, t in re.findall(r'\[(\d+), (\d+), "([^"]+)"\]', src)]
+"""Sound for the "how we made it" reel, on Dev's voice (src/bts-vo.json, same anchors as src/bts-timing.js).
+A lo-fi tape bed, a whoosh into the Claude chat, keyboard typing under the prompt, a glint as the rest blurs behind
+the lock, a message-received sound for the reply, then the CTA: whoosh, typing PROMPT, the send, a chime on the logo.
+Then vo/ is mixed on top with the bed ducked under the voice.
+  python3 sound/bts_cues.py   ->  sound/bts.json, sound/bts-sfx.json (then sound/bts_mix.py)"""
+import json
+VO = json.load(open("src/bts-vo.json")); L = {l["key"]: l for l in VO["lines"]}
+DUR = VO["duration"]
+CHAT, TYPE, TYPE_END, LOCK = L["claude"]["start"] - 4, L["prompt"]["start"] + 6, L["nah"]["start"] - 6, L["nah"]["start"]
+REPLY, CTA, COMMENT = LOCK + 24, L["join"]["start"] - 4, L["cta"]["start"] + 4
 smp = lambda name, frame, gain: {"type": "sample", "file": f"/root/.claude/skills/motion-graphics/assets/sfx/{name}.ogg", "frame": frame, "gain": gain}
 music = [{"type": "lofi_tape", "start": 0, "end": DUR, "gain": 0.32}]
-voice = []
-for a, b, text in LINES:                       # Dev "speaks": one soft blip per word, pitch wandering (A minor pentatonic)
-    notes = [880, 987.8, 1046.5, 1174.7, 1318.5]
-    for k, _ in enumerate(text.split(" ")):
-        voice.append({"type": "blip", "frame": a + 3 * k, "gain": 0.05, "freq": notes[(k * 3 + a) % 5], "pan": -0.2})
-fx = voice + [
+fx = [
     {"type": "pop", "frame": 2, "gain": 0.12},
     {"type": "swoosh", "start": CHAT - 8, "end": CHAT + 8, "peak": 0.5, "f": 2200, "gain": 0.14},
     {"type": "typing", "start": TYPE, "end": TYPE_END, "gain": 0.16, "pan": 0.15},

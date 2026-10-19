@@ -2,7 +2,7 @@
 // Claude chat where the prompt types out and is cut off behind a blur ("full prompt in your DMs"), the reply with the
 // finished reel, and the call to action: comment PROMPT and we DM you how to do it.
 import { AbsoluteFill, Audio, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
-import { FPS, BTS_DURATION, LINES, CHAT, TYPE, TYPE_END, LOCK, REPLY, CTA, COMMENT } from "./bts-timing.js";
+import { FPS, VO, CHAT, TYPE, TYPE_END, LOCK, REPLY, CTA, COMMENT, OURS, NAH } from "./bts-timing.js";
 import { useFonts, clamp, easeOut, Grain } from "./fx.jsx";
 import { Dev } from "./Dev.jsx";
 import { WORDMARK } from "./brand.js";
@@ -84,29 +84,35 @@ function Cta({ f }) {
   );
 }
 
-// Dev's speech bubble: the line types out word by word while his mouth moves
+// Dev's captions, as in the other reels: the line in a bubble in chunks of up to four words, each word lighting up
+// and popping as he says it
+const CHUNKS = (() => {
+  const out = []; let cur = [];
+  VO.words.forEach((w, i) => {
+    const prev = VO.words[i - 1];
+    if (cur.length && (cur.length >= 4 || w.line !== prev.line || /[.?!,…]$/.test(prev.w))) { out.push(cur); cur = []; }
+    cur.push(w);
+  });
+  if (cur.length) out.push(cur);
+  return out;
+})();
 function Speech({ f }) {
-  const line = LINES.find(([a, b]) => f >= a - 2 && f < b);
-  if (!line) return null;
-  const [a, b, text] = line;
-  const words = text.split(" "), shown = Math.min(words.length, Math.floor((f - a) / 3) + 1);
-  const p = sp(f, a, 12, 260), o = interpolate(f, [b - 6, b], [1, 0], clamp);
+  const chunk = CHUNKS.find((c) => f >= c[0].start - 2 && f < c[c.length - 1].end + 10);
+  if (!chunk) return null;
+  const t = f - chunk[0].start;
   return (
-    <div style={{ position: "absolute", left: 400, top: 1140, width: 540, opacity: o, transform: `scale(${interpolate(p, [0, 1], [0.6, 1])})`, transformOrigin: "0 100%" }}>
-      <div style={{ position: "relative", background: "#fff", border: `5px solid ${C.ink}`, borderRadius: 28, boxShadow: `0 8px 0 ${C.ink}`, padding: "24px 30px", ...UI, fontSize: 42, lineHeight: 1.22, color: C.ink }}>
-        {words.slice(0, shown).join(" ")}<span style={{ opacity: 0 }}>{" " + words.slice(shown).join(" ")}</span>
-        <svg width="54" height="44" style={{ position: "absolute", left: -40, bottom: 30 }}><path d="M50 4 L4 26 L50 40 Z" fill="#fff" stroke={C.ink} strokeWidth="5" strokeLinejoin="round" /><rect x="44" y="2" width="12" height="40" fill="#fff" /></svg>
+    <div style={{ position: "absolute", left: 400, top: 1170, width: 540, display: "flex" }}>
+      <div style={{ position: "relative", padding: "22px 28px", background: "#fff", border: `5px solid ${C.ink}`, borderRadius: 14, boxShadow: `0 8px 0 ${C.ink}`, fontFamily: "Mono", fontSize: 44, lineHeight: 1.2, letterSpacing: "-0.01em",
+        transform: `translateY(${interpolate(t, [-2, 3], [14, 0], clamp)}px) rotate(${interpolate(sp(f, chunk[0].start, 8, 200), [0, 1], [-3, 0])}deg)`, opacity: interpolate(t, [-2, 2], [0, 1], clamp) }}>
+        {chunk.map((w, i) => {
+          const on = f >= w.start, pop = on ? interpolate(f - w.start, [0, 3, 6], [1, 1.12, 1], clamp) : 1;
+          return <span key={i} style={{ display: "inline-block", marginRight: i < chunk.length - 1 ? "0.5em" : 0, color: on ? C.ink : "rgba(10,9,19,.3)", fontWeight: 600, transform: `scale(${pop})` }}>{w.w}</span>;
+        })}
+        <svg width="54" height="44" style={{ position: "absolute", left: -40, bottom: 26 }}><path d="M50 4 L4 26 L50 40 Z" fill="#fff" stroke={C.ink} strokeWidth="5" strokeLinejoin="round" /><rect x="44" y="2" width="12" height="40" fill="#fff" /></svg>
       </div>
     </div>
   );
 }
-
-const talkAt = (f) => {
-  const line = LINES.find(([a, b]) => f >= a && f < b - 10);
-  if (!line) return 0;
-  const words = line[2].split(" ").length;
-  return f - line[0] < words * 3 + 6 ? 0.2 + 0.6 * Math.abs(Math.sin((f - line[0]) * 0.95)) : 0;
-};
 
 export const Bts = ({ music = true }) => {
   const f = useCurrentFrame();
@@ -114,7 +120,9 @@ export const Bts = ({ music = true }) => {
   const devIn = sp(f, -4, 12, 200);
   const clipP = sp(f, 0) * (1 - interpolate(f, [CHAT - 10, CHAT], [0, 1], clamp));
   const pointUp = interpolate(f, [CTA, CTA + 10], [0, 1], { ...clamp, easing: easeOut });
-  const nah = f >= 300 && f < 362;
+  const nah = f >= NAH.start && f < NAH.end + 20;
+  const m = VO.mouth, open = Math.max(m[f] ?? 0, ((m[f - 1] ?? 0) + (m[f + 1] ?? 0)) / 2), talking = open > 0.08;
+  const blink = f % 97 < 3 ? [0.6, 1, 0.6][f % 97] : 0;
   return (
     <AbsoluteFill style={{ background: C.ink }}>
       <Grid f={f} />
@@ -125,8 +133,9 @@ export const Bts = ({ music = true }) => {
       <Cta f={f} />
       {/* Dev, bottom left, talking */}
       <div style={{ position: "absolute", left: 50, top: 1130, transform: `translateY(${(1 - devIn) * 500}px)` }}>
-        <Dev width={340} open={talkAt(f)} smile={1} brow={nah ? 18 : 12} lid={0.06} wink={nah ? 1 : 0} happy={f >= CTA ? 1 : 0}
-          point={pointUp} thumbs={f >= 86 && f < 150 ? 1 : 0} tilt={Math.sin(f / 9) * 2.5} bob={Math.sin(f / 7) * 4} look={f >= TYPE && f < CTA ? -8 : 0} />
+        <Dev width={340} open={open} smile={1} brow={nah ? 18 : 12} lid={Math.max(0.06, blink)} wink={nah ? 1 : 0} happy={f >= COMMENT + 40 ? 1 : 0}
+          point={pointUp} thumbs={f >= OURS.start + 10 && f < CHAT ? 1 : 0} look={f >= TYPE && f < CTA ? -8 : 0}
+          tilt={talking ? Math.sin(f / 9) * 0.8 * open : Math.sin(f / 22) * 0.8} bob={talking ? -open * 2 - Math.abs(Math.sin(f / 4)) * 2 : Math.sin(f / 22) * 0.8} />
       </div>
       <Speech f={f} />
       <Grain f={f} opacity={0.05} />

@@ -1,3 +1,5 @@
 node_modules
 out
 public/launch.mp4
+sound/bts.wav
+sound/bts-sfx.wav
