@@ -26,7 +26,7 @@
      "drop"
     ],
     [
-     300,
+     290,
      "outro"
     ]
    ],
@@ -48,7 +48,7 @@
      9500
     ],
     [
-     300,
+     290,
      6000
     ]
    ]
@@ -151,50 +151,59 @@
    "gain": 0.22
   },
   {
-   "type": "swoosh",
-   "start": 224,
-   "end": 254,
-   "peak": 0.7,
-   "f": 1800,
-   "gain": 0.14
+   "type": "whoosh",
+   "start": 178,
+   "end": 200,
+   "gain": 0.12,
+   "pan": 0.2
+  },
+  {
+   "type": "impact",
+   "frame": 248,
+   "gain": 0.2
+  },
+  {
+   "type": "thump",
+   "frame": 248,
+   "gain": 0.3
   },
   {
    "type": "glint",
-   "frame": 240,
+   "frame": 254,
    "gain": 0.07,
    "freq": 1318.5
   },
   {
    "type": "swoosh",
-   "start": 292,
-   "end": 308,
+   "start": 282,
+   "end": 298,
    "peak": 0.5,
    "f": 2200,
    "gain": 0.16
   },
   {
    "type": "pop",
-   "frame": 306,
+   "frame": 296,
    "gain": 0.14
   },
   {
    "type": "pop",
-   "frame": 316,
+   "frame": 306,
    "gain": 0.1
   },
   {
    "type": "pop",
-   "frame": 326,
+   "frame": 316,
    "gain": 0.13
   },
   {
    "type": "thump",
-   "frame": 326,
+   "frame": 316,
    "gain": 0.12
   },
   {
    "type": "glint",
-   "frame": 336,
+   "frame": 326,
    "gain": 0.07,
    "freq": 2349
   }

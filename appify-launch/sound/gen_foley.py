@@ -1,6 +1,7 @@
 """Foley the bundled cues don't cover, synthesized and locked to src/timing.js:
 roll.wav: steel wheels on the track, a low rumble that rises in pitch and level as the phone speeds up (RIDE -> LAUNCH).
-roar.wav: the thrusters, from IGNITE: a crackling rocket roar, full at LAUNCH, thinning to a hover hiss after CLOSE.
+roar.wav: the thrusters, from IGNITE: a crackling rocket roar, full at LAUNCH, a steady landing burn, cut at touchdown (CLOSE)
+with a short hiss of venting gas.
     python3 sound/gen_foley.py  ->  sound/sfx/roll.wav, sound/sfx/roar.wav"""
 import re
 import numpy as np
@@ -10,7 +11,7 @@ from scipy.io import wavfile
 SR = 48000
 src = open("src/timing.js").read()
 g = lambda k: int(re.search(rf"export const {k} = (\d+)", src).group(1))
-FPS, RIDE, IGNITE, LAUNCH, CLOSE, END = (g(k) for k in ["FPS", "RIDE", "IGNITE", "LAUNCH", "CLOSE", "END"])
+FPS, RIDE, IGNITE, LAUNCH, HOVER, CLOSE, END = (g(k) for k in ["FPS", "RIDE", "IGNITE", "LAUNCH", "HOVER", "CLOSE", "END"])
 rng = np.random.default_rng(5)
 filt = lambda x, kind, f, o=2: sosfilt(butter(o, f, btype=kind, fs=SR, output="sos"), x)
 sec = lambda fr: int(fr / FPS * SR)
@@ -36,8 +37,8 @@ while k < n:
 write("roll", roll + clacks * 0.6)
 
 # roar: low rumble + mid roar + crackle, with an envelope from the beat sheet
-n = sec(END + 30 - IGNITE); fr = IGNITE + np.arange(n) / SR * FPS
-env = np.interp(fr, [IGNITE, IGNITE + 4, LAUNCH - 2, LAUNCH + 2, CLOSE - 30, CLOSE, END, END + 30], [0, 0.55, 0.7, 1, 0.85, 0.35, 0.18, 0])
+n = sec(CLOSE + 50 - IGNITE); fr = IGNITE + np.arange(n) / SR * FPS
+env = np.interp(fr, [IGNITE, IGNITE + 4, LAUNCH - 2, LAUNCH + 2, HOVER, CLOSE - 4, CLOSE + 3, CLOSE + 50], [0, 0.55, 0.7, 1, 0.8, 0.85, 0.08, 0])
 w = rng.standard_normal(n)
 low = filt(np.cumsum(w) - filt(np.cumsum(w), "lowpass", 10), "lowpass", 160, 4)
 mid = filt(w, "bandpass", [250, 2200])

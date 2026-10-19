@@ -1,6 +1,6 @@
 // "Launch day" (3D). The test-track trend with an app instead of a car: a phone running Darebni AI (built by Appify)
-// rides a steel track at night, fires its thrusters, launches through the smoke and flies to the camera.
-// Hook caption -> ride -> ignition -> launch -> close-up with a chip -> end card.
+// rides a steel track at night, fires its thrusters, launches off the top and lands upright on its thrusters in smoke.
+// Hook caption -> ride -> ignition -> launch -> landing burn -> touchdown with a chip -> end card over the landed shot.
 import { useEffect, useState } from "react";
 import { AbsoluteFill, Audio, continueRender, delayRender, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { ThreeCanvas } from "@remotion/three";
@@ -51,21 +51,23 @@ function Chip({ f }) {
   );
 }
 
+// the end card sits above the landed phone, so the landing stays the last image (and the thumbnail)
 function EndCard({ f }) {
   if (f < END - 6) return null;
-  const bg = interpolate(f, [END - 6, END + 10], [0, 0.82], clamp);
-  const a = sp(f, END + 4), b = sp(f, END + 14), c = sp(f, END + 24), d = sp(f, END + 34);
-  const up = (p) => ({ opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 40}px)` });
-  const wm = 380, wmh = (wm * 1167) / 3224;
+  const shade = interpolate(f, [END - 6, END + 14], [0, 1], clamp);
+  const a = sp(f, END), b = sp(f, END + 8), c = sp(f, END + 16), d = sp(f, END + 26);
+  const up = (p) => ({ opacity: Math.min(1, p * 1.5), transform: `translateY(${(1 - p) * 30}px)` });
+  const wm = 230, wmh = (wm * 1167) / 3224;
   return (
-    <AbsoluteFill style={{ background: `rgba(4,3,9,${bg})`, alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-      <div style={{ ...D, fontSize: 132, color: "#fff", ...up(a) }}>Your app,<br />launched.</div>
-      <div style={{ ...UI, fontSize: 44, color: "rgba(255,255,255,.75)", fontWeight: 400, marginTop: 40, ...up(b) }}>iOS + Android · from $999</div>
-      <div style={{ ...up(c), marginTop: 70, padding: "26px 48px", borderRadius: 999, background: C.uv, ...UI, fontSize: 42, color: "#fff", boxShadow: `0 0 60px ${C.uv}aa` }}>DM us · appify-lb.com</div>
-      <svg width={wm} height={wmh} viewBox={WORDMARK.viewBox} style={{ marginTop: 120, ...up(d) }}>
+    <AbsoluteFill style={{ alignItems: "center", textAlign: "center" }}>
+      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(4,3,9,.85) 0%, rgba(4,3,9,.6) 28%, rgba(4,3,9,0) 40%)", opacity: shade }} />
+      <svg width={wm} height={wmh} viewBox={WORDMARK.viewBox} style={{ marginTop: 150, ...up(a) }}>
         <path d={WORDMARK.letters} fill="#fff" />
         <path d={WORDMARK.spark} fill={C.yellow} />
       </svg>
+      <div style={{ ...D, fontSize: 92, color: "#fff", marginTop: 36, textShadow: "0 4px 30px rgba(0,0,0,.7)", ...up(b) }}>Your app, launched.</div>
+      <div style={{ ...UI, fontSize: 40, color: "rgba(255,255,255,.8)", fontWeight: 400, marginTop: 26, ...up(c) }}>iOS + Android · from $999</div>
+      <div style={{ ...up(d), marginTop: 34, padding: "22px 44px", borderRadius: 999, background: C.uv, ...UI, fontSize: 38, color: "#fff", boxShadow: `0 0 60px ${C.uv}aa` }}>DM us · appify-lb.com</div>
     </AbsoluteFill>
   );
 }

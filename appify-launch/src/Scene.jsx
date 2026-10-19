@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { interpolate, random, Easing } from "remotion";
-import { RIDE, IGNITE, LAUNCH, CLOSE } from "./timing.js";
+import { RIDE, IGNITE, LAUNCH, HOVER, CLOSE, DURATION } from "./timing.js";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" };
 const smooth = (a, b, f) => interpolate(f, [a, b], [0, 1], { ...clamp, easing: Easing.bezier(0.45, 0, 0.2, 1) });
@@ -105,35 +105,42 @@ function useScreen(img) {
   return useMemo(() => { const t = new THREE.Texture(img); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; t.needsUpdate = true; return t; }, [img]);
 }
 
+// the landing spot, clear of the track, and where the camera ends up looking at it
+export const PAD = V(6, 0, 2.2);
+const REST = PH / 2 + 0.01;
+export const CAM_END = V(6.85, 0.98, 7.12);
 // where the phone is, how it's turned, and how hard the thrusters burn, at frame f
-export function phoneAt(f, cam) {
+export function phoneAt(f) {
   const ride = interpolate(f, [RIDE, LAUNCH], [0, 1], { ...clamp, easing: Easing.bezier(0.55, 0, 0.9, 0.45) });
   const s = 0.8 + ride * (L - 0.8 - PH / 2);
   const on = track(s);
   const basis = (t, n) => new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(V(1, 0, 0), t, n));
   const lift = 0.06 + PD / 2;
   if (f <= LAUNCH) return { p: on.p.clone().addScaledVector(on.n, lift), q: basis(on.t, on.n), thrust: interpolate(f, [IGNITE, IGNITE + 6], [0, 1], clamp), up: on.t };
-  // after launch: up and over to the camera, turning its screen to face it
+  // after launch: up off the track, across to the landing spot, then straight down on the thrusters
   const A = track(L - PH / 2).p.clone().addScaledVector(V(0, 0, 1), lift);
-  const B = cam.pos.clone().addScaledVector(cam.dir, 3.6).add(V(0, 0.22, 0));
-  const u = smooth(LAUNCH, CLOSE, f);
-  const c1 = A.clone().add(V(0, 4.5, 0)), c2 = B.clone().add(V(0, 1.6, -1.2));
-  const p = new THREE.CubicBezierCurve3(A, c1, c2, B).getPoint(u);
-  const qA = basis(V(0, 1, 0), V(0, 0, 1));
-  const fz = cam.pos.clone().sub(B).normalize(), fx = V(0, 1, 0).cross(fz).normalize(), fy = fz.clone().cross(fx);
-  const face = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(fx, fy, fz));   // screen to the camera
-  const q = qA.clone().slerp(face, u);
-  const bob = f > CLOSE ? Math.sin((f - CLOSE) / 9) * 0.03 : 0;
-  p.y += bob;
-  const thrust = interpolate(f, [LAUNCH, CLOSE - 30, CLOSE], [1, 0.8, 0.25], clamp);
+  const H = PAD.clone().add(V(0, 6.2, 0)), G = PAD.clone().add(V(0, REST, 0));
+  let p;
+  if (f <= HOVER) p = new THREE.CubicBezierCurve3(A, A.clone().add(V(0, 3.2, 0.6)), H.clone().add(V(-2.2, 1.4, -1.6)), H).getPoint(smooth(LAUNCH, HOVER, f));
+  else p = H.clone().lerp(G, interpolate(f, [HOVER, CLOSE], [0, 1], { ...clamp, easing: Easing.bezier(0.3, 0.35, 0.25, 1) }));
+  if (f > CLOSE) p.y -= 0.035 * Math.exp(-(f - CLOSE) / 4) * Math.sin((f - CLOSE) / 1.3);     // settles on its base
+  // upright, screen turned to where the camera ends up, banking into the turn and swaying as the burn holds it
+  const fly = interpolate(f, [LAUNCH, HOVER], [0, 1], clamp);
+  const turn = interpolate(f, [LAUNCH, HOVER + 20], [0, 1], { ...clamp, easing: Easing.bezier(0.45, 0, 0.2, 1) });
+  const yaw = Math.atan2(CAM_END.x - PAD.x, CAM_END.z - PAD.z) * turn;
+  const sway = f < CLOSE ? interpolate(f, [HOVER, CLOSE], [1, 0], clamp) : 0;
+  const bank = -0.32 * Math.sin(Math.PI * fly) + 0.05 * Math.sin(f / 6) * sway;
+  const pitch = 0.12 * Math.sin(Math.PI * fly) + 0.03 * Math.cos(f / 7) * sway;
+  const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, yaw, bank, "YXZ"));
+  const thrust = interpolate(f, [LAUNCH, HOVER, CLOSE - 3, CLOSE + 4], [1, 0.95, 0.85, 0], clamp);
   return { p, q, thrust, up: V(0, 1, 0).applyQuaternion(q) };
 }
 const NOZZLES = [-0.22, 0, 0.22];
 
-function Phone({ f, cam, img }) {
+function Phone({ f, img }) {
   const screen = useScreen(img);
   const body = useMemo(() => new RoundedBoxGeometry(PW, PH, PD, 6, 0.09), []);
-  const { p, q, thrust } = phoneAt(f, cam);
+  const { p, q, thrust } = phoneAt(f);
   const flick = (k) => 0.85 + 0.3 * random(`fl${k}-${f}`);
   return (
     <group position={p} quaternion={q}>
@@ -166,52 +173,86 @@ function useSoftTexture() {
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
   }, []);
 }
-const PUFFS = 420, LIFE = 120;
-function Smoke({ f, cam }) {
+const PUFFS = 820, RATE = 0.17;                         // ~6 puffs a frame from ignition to touchdown
+const GROUND = 0.12;
+const CAM_YAW = Math.atan2(CAM_END.x - PAD.x, CAM_END.z - PAD.z);   // direction from the pad to the camera
+// a third of the ground smoke rolls toward the camera (kept low), the rest out to the sides and behind
+const groundAngle = (i) => { const k = random(`b${i}`); return CAM_YAW + (random(`a${i}`) < 0.5 ? -1 : 1) * (k < 0.33 ? (k / 0.33) * Math.PI / 2 : Math.PI / 2 + ((k - 0.33) / 0.67) * Math.PI * 0.55); };
+const toCamOf = (i) => Math.max(0, Math.cos(groundAngle(i) - CAM_YAW));
+function Smoke({ f }) {
   const tex = useSoftTexture();
   const sprites = useMemo(() => Array.from({ length: PUFFS }, () => new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0 }))), [tex]);
   const group = useMemo(() => { const g = new THREE.Group(); sprites.forEach((s) => g.add(s)); return g; }, [sprites]);
   useLayoutEffect(() => {
     sprites.forEach((s, i) => {
-      const born = IGNITE + i * 0.42;                      // ~2.4 puffs a frame for about 6 s
+      const born = IGNITE + i * RATE;
       const age = f - born;
-      if (age < 0 || age > LIFE) { s.visible = false; return; }
-      s.visible = true;
-      const src = phoneAt(born, cam);
-      const nozzle = src.p.clone().addScaledVector(src.up, -PH / 2 - 0.25);
+      const src = phoneAt(born);
+      if (age < 0 || src.thrust < 0.05) { s.visible = false; return; }
       const r = (k) => random(`s${i}-${k}`) * 2 - 1;
-      // exhaust goes back along the phone, slows down, spreads, and the warm cloud rises
-      const push = 3.2 * src.thrust * (1 - Math.exp(-age / 14));
-      const pos = nozzle.clone().addScaledVector(src.up, -push);
-      pos.x += r(1) * (0.15 + age * 0.03); pos.z += r(2) * (0.15 + age * 0.025);
-      pos.y += age * 0.012 + r(3) * 0.1;
-      if (pos.y < 0.25) { const over = 0.25 - pos.y; pos.y = 0.25 + over * 0.2; pos.x += r(4) * over * 1.6; pos.z += Math.abs(r(5)) * over * 0.8; }   // it spreads along the ground
+      const nozzle = src.p.clone().addScaledVector(src.up, -PH / 2 - 0.1);
+      // the jet carries it down the phone's axis, slowing; what would go below the ground spreads out along it
+      const reach = (4.5 + 1.5 * r(1)) * src.thrust * (1 - Math.exp(-age / 9));
+      const pos = nozzle.clone().addScaledVector(src.up, -reach);
+      const jet = Math.min(1, age / 30);
+      pos.x += r(2) * (0.06 + jet * 0.35 + age * 0.004); pos.z += r(3) * (0.06 + jet * 0.35 + age * 0.004);
+      let ground = 0;
+      if (pos.y < GROUND) {
+        // it hits the ground and rolls out to the sides and back; very little comes toward the camera
+        ground = GROUND - pos.y;
+        const a = groundAngle(i), toCam = toCamOf(i);
+        const spread = Math.min(ground * 1.25, 3.2) * (1 - 0.3 * toCam) + age * 0.006;
+        const mound = Math.max(0, 1 - spread / 3.6) * (1 - 0.8 * toCam);   // piled up beside and behind it, hugging the ground in front
+        pos.set(nozzle.x + Math.sin(a) * spread, GROUND + Math.abs(r(5)) * (0.08 + 0.6 * mound) + Math.min(age, 120) * 0.002, nozzle.z + Math.cos(a) * spread);
+      } else pos.y += age * 0.006;
       s.position.copy(pos);
-      const size = 0.35 + age * 0.03 + Math.abs(r(6)) * 0.4;
-      s.scale.set(size, size, 1);
-      s.material.rotation = r(7) * 3;
-      const fade = interpolate(age, [0, 6, LIFE * 0.55, LIFE], [0, 0.55, 0.42, 0], clamp);
-      s.material.opacity = fade * (0.6 + 0.4 * Math.abs(r(8)));
-      // fresh smoke glows warm from the flame, older smoke cools to grey, a hint of the rail pink near the track
-      const warm = Math.exp(-age / 10);
-      s.material.color.setRGB(0.62 + 0.38 * warm, 0.6 + 0.2 * warm, 0.64 - 0.1 * warm);
+      const size = ground > 0 ? (0.6 + Math.min(age, 120) * 0.006 + Math.abs(r(6)) * 0.7) * (1 - 0.35 * toCamOf(i)) : 0.22 + Math.min(age, 60) * 0.012 + Math.abs(r(6)) * 0.3;
+      s.scale.set(size, size * (ground > 0 ? 0.75 : 1), 1);
+      s.material.rotation = r(7) * 3 + age * 0.004 * r(9);
+      // air smoke thins out; smoke on the ground lingers to the end
+      const life = ground > 0 ? interpolate(age, [0, 5, 160, 300], [0, 0.34, 0.26, 0.16], clamp) : interpolate(age, [0, 4, 30, 80], [0, 0.5, 0.3, 0], clamp);
+      s.material.opacity = life * (0.55 + 0.45 * Math.abs(r(8))) * (ground > 0 ? 1 - 0.4 * toCamOf(i) : 1);
+      const warm = Math.exp(-age / 7);                     // fresh smoke glows from the flame, then cools to white-grey
+      const g = (ground > 0 ? 0.5 : 0.72) + 0.16 * r(10);
+      s.material.color.setRGB(g + (1 - g) * warm, g - 0.02 + 0.12 * warm, g + 0.02 - 0.2 * warm);
     });
-  }, [f, sprites, cam]);
+  }, [f, sprites]);
   return <primitive object={group} />;
 }
 
-// ── camera: low and wide behind the start, panning with the phone as it climbs, then up to meet it ────────────
+// ── camera: low and wide behind the start, panning with the phone as it climbs, following it across, then down
+// to ground level for the landing, easing in on it ───────────────────────────────────────────────────────────
 const LOOK0 = V(0, 3.2, -1);
-const K0 = V(5.5, 1.2, 15), K1 = V(7.5, 2.2, 9), K2 = V(4.5, 9.6, 7.8), LOOK2 = V(0, 11.6, -1.2);
-const lookAtLaunch = () => LOOK0.clone().lerp(phoneAt(LAUNCH, null).p, 0.45);
+const K0 = V(5.5, 1.2, 15), K1 = V(7.5, 2.2, 9), K2 = V(8.2, 3.2, 10.5);
+const lookAtLaunch = () => LOOK0.clone().lerp(phoneAt(LAUNCH).p, 0.45);
 export function cameraAt(f) {
-  const a = smooth(0, LAUNCH, f), b = smooth(LAUNCH - 6, CLOSE, f);
-  const pos = K0.clone().lerp(K1, a).lerp(K2, b);
-  const follow = f <= LAUNCH ? LOOK0.clone().lerp(phoneAt(f, null).p, interpolate(f, [0, LAUNCH], [0.72, 0.45], clamp)) : lookAtLaunch();
-  const look = follow.lerp(LOOK2, b);
-  // a little handheld drift
-  pos.x += Math.sin(f / 23) * 0.05; pos.y += Math.cos(f / 29) * 0.04;
+  const a = smooth(0, LAUNCH, f), b = smooth(LAUNCH - 6, HOVER, f), c = smooth(HOVER - 10, CLOSE + 6, f);
+  const pos = K0.clone().lerp(K1, a).lerp(K2, b).lerp(CAM_END, c);
+  pos.lerp(CAM_END.clone().add(V(-0.06, 0, -0.35)), interpolate(f, [CLOSE, DURATION], [0, 1], clamp));   // slow push-in on the landed phone
+  let look;
+  if (f <= LAUNCH) look = LOOK0.clone().lerp(phoneAt(f).p, interpolate(f, [0, LAUNCH], [0.72, 0.45], clamp));
+  else {
+    const chase = phoneAt(f - 3).p.add(V(0, 0.15, 0));   // a beat behind the phone, like an operator
+    look = lookAtLaunch().lerp(chase, smooth(LAUNCH, LAUNCH + 22, f));
+    look.lerp(PAD.clone().add(V(0, REST + 0.39, 0)), smooth(CLOSE - 24, CLOSE + 10, f));
+  }
+  pos.x += Math.sin(f / 23) * 0.05; pos.y += Math.cos(f / 29) * 0.03;
   return { pos, look, dir: look.clone().sub(pos).normalize() };
+}
+
+// dark asphalt: a speckled grain texture, rough, catching the flame light at the landing spot
+function Ground() {
+  const tex = useMemo(() => {
+    const c = document.createElement("canvas"); c.width = c.height = 512;
+    const g = c.getContext("2d"); g.fillStyle = "#3a3a40"; g.fillRect(0, 0, 512, 512);
+    for (let k = 0; k < 26000; k++) {
+      const v = 30 + Math.floor(random(`g${k}`) * 70);
+      g.fillStyle = `rgb(${v},${v},${v + 4})`; g.fillRect(random(`gx${k}`) * 512, random(`gy${k}`) * 512, 1 + random(`gs${k}`) * 2, 1 + random(`gt${k}`) * 2);
+    }
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(40, 40); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+    return t;
+  }, []);
+  return <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -2]}><planeGeometry args={[120, 120]} /><meshStandardMaterial map={tex} color="#2a2a33" roughness={0.9} metalness={0.05} /></mesh>;
 }
 
 export function World({ f, img, shake = [0, 0] }) {
@@ -228,10 +269,10 @@ export function World({ f, img, shake = [0, 0] }) {
       <hemisphereLight args={["#3a3550", "#050308", 0.35]} />
       <directionalLight position={[8, 12, 10]} intensity={0.9} color="#d9dcff" />
       <spotLight position={[4, 16, 6]} target-position={[0, 6, -4]} angle={0.5} penumbra={0.8} intensity={60} distance={40} color="#e8e6ff" />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -2]}><planeGeometry args={[120, 120]} /><meshStandardMaterial color="#0c0b12" roughness={0.55} metalness={0.25} /></mesh>
+      <Ground />
       <Track />
-      <Phone f={f} cam={cam} img={img} />
-      <Smoke f={f} cam={cam} />
+      <Phone f={f} img={img} />
+      <Smoke f={f} />
     </>
   );
 }
