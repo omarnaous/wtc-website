@@ -183,7 +183,8 @@ function Smoke({ f }) {
   const tex = useSoftTexture();
   const sprites = useMemo(() => Array.from({ length: PUFFS }, () => new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0 }))), [tex]);
   const group = useMemo(() => { const g = new THREE.Group(); sprites.forEach((s) => g.add(s)); return g; }, [sprites]);
-  useLayoutEffect(() => {
+  // updated during render, not in an effect, so the frame that gets drawn always has this frame's smoke
+  {
     sprites.forEach((s, i) => {
       const born = IGNITE + i * RATE;
       const age = f - born;
@@ -216,7 +217,7 @@ function Smoke({ f }) {
       const g = (ground > 0 ? 0.5 : 0.72) + 0.16 * r(10);
       s.material.color.setRGB(g + (1 - g) * warm, g - 0.02 + 0.12 * warm, g + 0.02 - 0.2 * warm);
     });
-  }, [f, sprites]);
+  }
   return <primitive object={group} />;
 }
 
