@@ -38,3 +38,4 @@ exports/faq/
 .dev.vars
 # Admin password for /admin (the Worker secret ADMIN_PASSWORD) — never commit.
 .admin-password.txt
+exports/launch/

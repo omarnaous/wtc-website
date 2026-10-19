@@ -1,0 +1,202 @@
+{
+ "fps": 30,
+ "duration": 13.0,
+ "seed": 13,
+ "fade_out": 1.0,
+ "lowpass": 11000,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "house",
+   "start": 0,
+   "end": 390,
+   "bpm": 120,
+   "gain": 0.36,
+   "sections": [
+    [
+     0,
+     "intro"
+    ],
+    [
+     110,
+     "gap"
+    ],
+    [
+     150,
+     "drop"
+    ],
+    [
+     300,
+     "outro"
+    ]
+   ],
+   "lp_auto": [
+    [
+     0,
+     700
+    ],
+    [
+     109,
+     1400
+    ],
+    [
+     149,
+     700
+    ],
+    [
+     152,
+     9500
+    ],
+    [
+     300,
+     6000
+    ]
+   ]
+  },
+  {
+   "type": "drone",
+   "start": 0,
+   "end": 150,
+   "gain": 0.07
+  },
+  {
+   "type": "pop",
+   "frame": 10,
+   "gain": 0.12
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/roll.wav",
+   "frame": 40,
+   "gain": 0.32
+  },
+  {
+   "type": "tick",
+   "frame": 18,
+   "gain": 0.1,
+   "pan": 0.35
+  },
+  {
+   "type": "tick",
+   "frame": 33,
+   "gain": 0.1,
+   "pan": 0.35
+  },
+  {
+   "type": "tick",
+   "frame": 48,
+   "gain": 0.1,
+   "pan": 0.35
+  },
+  {
+   "type": "tick",
+   "frame": 63,
+   "gain": 0.1,
+   "pan": 0.35
+  },
+  {
+   "type": "tick",
+   "frame": 78,
+   "gain": 0.1,
+   "pan": 0.35
+  },
+  {
+   "type": "tick",
+   "frame": 93,
+   "gain": 0.1,
+   "pan": 0.35
+  },
+  {
+   "type": "tick",
+   "frame": 108,
+   "gain": 0.1,
+   "pan": 0.35
+  },
+  {
+   "type": "riser",
+   "start": 60,
+   "end": 112,
+   "gain": 0.1
+  },
+  {
+   "type": "impact",
+   "frame": 118,
+   "gain": 0.22
+  },
+  {
+   "type": "thump",
+   "frame": 118,
+   "gain": 0.22
+  },
+  {
+   "type": "sample",
+   "file": "sound/sfx/roar.wav",
+   "frame": 118,
+   "gain": 0.55
+  },
+  {
+   "type": "whoosh",
+   "start": 142,
+   "end": 164,
+   "gain": 0.2
+  },
+  {
+   "type": "impact",
+   "frame": 150,
+   "gain": 0.3
+  },
+  {
+   "type": "bass_drop",
+   "frame": 150,
+   "gain": 0.22
+  },
+  {
+   "type": "swoosh",
+   "start": 224,
+   "end": 254,
+   "peak": 0.7,
+   "f": 1800,
+   "gain": 0.14
+  },
+  {
+   "type": "glint",
+   "frame": 240,
+   "gain": 0.07,
+   "freq": 1318.5
+  },
+  {
+   "type": "swoosh",
+   "start": 292,
+   "end": 308,
+   "peak": 0.5,
+   "f": 2200,
+   "gain": 0.16
+  },
+  {
+   "type": "pop",
+   "frame": 306,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 316,
+   "gain": 0.1
+  },
+  {
+   "type": "pop",
+   "frame": 326,
+   "gain": 0.13
+  },
+  {
+   "type": "thump",
+   "frame": 326,
+   "gain": 0.12
+  },
+  {
+   "type": "glint",
+   "frame": 336,
+   "gain": 0.07,
+   "freq": 2349
+  }
+ ]
+}
