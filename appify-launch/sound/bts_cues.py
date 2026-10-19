@@ -7,11 +7,15 @@ import json
 VO = json.load(open("src/bts-vo.json")); L = {l["key"]: l for l in VO["lines"]}
 DUR = VO["duration"]
 CHAT, TYPE, TYPE_END, LOCK = L["claude"]["start"] - 4, L["prompt"]["start"] + 6, L["nah"]["start"] - 6, L["nah"]["start"]
-REPLY, CTA, COMMENT = LOCK + 24, L["join"]["start"] - 4, L["cta"]["start"] + 4
+REPLY, CTA, COMMENT = L["too"]["start"] + 2, L["cta"]["start"] - 6, L["cta"]["start"] + 2
 smp = lambda name, frame, gain: {"type": "sample", "file": f"/root/.claude/skills/motion-graphics/assets/sfx/{name}.ogg", "frame": frame, "gain": gain}
 music = [{"type": "lofi_tape", "start": 0, "end": DUR, "gain": 0.32}]
 fx = [
     {"type": "pop", "frame": 2, "gain": 0.12},
+    {"type": "pop", "frame": L["hook"]["start"] + 2, "gain": 0.12},                                   # "!" pops over his head
+    {"type": "thump", "frame": L["ours"]["start"] + 14, "gain": 0.16},                                # lands his jump
+    {"type": "swish", "start": L["nah"]["start"], "end": L["nah"]["start"] + 14, "gain": 0.08},        # the no-no wave
+    {"type": "thump", "frame": L["deal"]["start"] + 14, "gain": 0.14}, {"type": "glint", "frame": L["deal"]["start"] + 4, "gain": 0.06, "freq": 1760},
     {"type": "swoosh", "start": CHAT - 8, "end": CHAT + 8, "peak": 0.5, "f": 2200, "gain": 0.14},
     {"type": "typing", "start": TYPE, "end": TYPE_END, "gain": 0.16, "pan": 0.15},
     {"type": "glint", "frame": LOCK, "gain": 0.08, "freq": 1318.5}, {"type": "pop", "frame": LOCK + 2, "gain": 0.12},

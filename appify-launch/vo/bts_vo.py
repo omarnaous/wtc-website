@@ -10,18 +10,20 @@ from parselmouth.praat import call
 from kokoro_onnx import Kokoro
 
 FPS, SR = 30, 24000
-VOICE, PACE, GAP, TAIL = "am_puck", 1.2 / 1.1, 0.18, 75
+VOICE, PACE, GAP, TAIL = "am_puck", 1.22 / 1.1, 0.12, 70
 P = lambda key, spoken, cap=None, mn=40, speed=1.1, shift=0, rng=1.5, mel="fall", gain=0: dict(
     key=key, text=spoken, cap=cap or spoken, min=mn, speed=speed, shift=shift, rng=rng, mel=mel, gain=gain)
 # key, spoken, caption, minimum frames before the next line (so the scene under it has time)
 SCRIPT = [
-    P("hook", "Everyone's posting the Tesla Roadster trend.", "Everyone's posting the Tesla Roadster trend 🚀", mn=70, shift=1, rng=1.6, mel="arch", gain=1),
-    P("ours", "So we made one, with an app.", "So we made one… with an app.", mn=50, shift=0.5, rng=1.6, mel="fall"),
-    P("claude", "The whole video? Built with Claude.", mn=50, speed=1.08, shift=1, rng=1.6, mel="arch", gain=0.5),
-    P("prompt", "Here's the prompt we used.", "Here's the prompt we used…", mn=84, speed=1.05, shift=0, rng=1.5, mel="dip"),
-    P("nah", "Nah. Not all of it.", "…nah, not all of it 😏", mn=82, speed=1.05, shift=-1, rng=1.6, mel="fall", gain=0.5),
-    P("join", "Want to join the Roadster trend?", mn=30, shift=1.5, rng=1.6, mel="rise", gain=1),
-    P("cta", "Comment prompt, and we'll DM you how to make yours.", "Comment PROMPT and we'll DM you how to make yours", mn=30, shift=0.5, rng=1.6, mel="fall", gain=0.5),
+    P("hook", "Wait, wait. Did you see the Tesla Roadster fly?", "Wait, wait… did you see the Tesla Roadster fly?! 🚀", mn=40, speed=1.16, shift=2.5, rng=1.9, mel="rise", gain=1.5),
+    P("ours", "Yeah. So we made our app do that.", "Yeah. So we made our app do that 😎", mn=40, speed=1.1, shift=0.5, rng=1.8, mel="arch", gain=0.5),
+    P("studio", "And no, we didn't hire some fancy 3D studio.", "And no, we didn't hire some fancy 3D studio.", mn=36, speed=1.18, shift=1, rng=1.7, mel="arch"),
+    P("claude", "We literally just told Claude what we wanted.", mn=36, speed=1.12, shift=0.5, rng=1.8, mel="fall", gain=0.5),
+    P("prompt", "Like, this exact prompt.", "Like… this exact prompt 👀", mn=78, speed=1.0, shift=-0.5, rng=1.6, mel="dip"),
+    P("nah", "Okay, okay. I'm not giving you all of it.", "Okay okay… I'm not giving you ALL of it 😏", mn=46, speed=1.14, shift=1, rng=1.9, mel="arch", gain=0.5),
+    P("too", "But here's the thing. You can make one too.", "But here's the thing: you can make one too.", mn=40, speed=1.08, shift=0, rng=1.7, mel="fall", gain=0.5),
+    P("cta", "Comment prompt, and I'll slide into your DMs with the whole thing.", "Comment PROMPT and I'll slide into your DMs with the whole thing", mn=30, speed=1.12, shift=1, rng=1.8, mel="arch", gain=1),
+    P("deal", "Deal?", "Deal? 🤝", mn=20, speed=1.0, shift=2, rng=1.6, mel="rise", gain=1),
 ]
 START = 10
 

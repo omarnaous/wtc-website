@@ -10,7 +10,7 @@ export const CHAT = L.claude.start - 4;     // the clip makes way for the Claude
 export const TYPE = L.prompt.start + 6;     // the prompt starts typing
 export const TYPE_END = L.nah.start - 6;
 export const LOCK = L.nah.start;            // the rest of the prompt blurs, lock chip
-export const REPLY = LOCK + 24;             // the reply with the finished reel
-export const CTA = L.join.start - 4;        // "Join the Roadster trend"
-export const COMMENT = L.cta.start + 4;     // PROMPT gets typed into the comment box
-export const OURS = L.ours, NAH = L.nah;
+export const REPLY = L.too.start + 2;       // the reply with the finished reel, as he says "you can make one too"
+export const CTA = L.cta.start - 6;         // "Join the Roadster trend"
+export const COMMENT = L.cta.start + 2;     // PROMPT gets typed into the comment box as he says it
+export { L };

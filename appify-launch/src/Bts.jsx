@@ -2,7 +2,7 @@
 // Claude chat where the prompt types out and is cut off behind a blur ("full prompt in your DMs"), the reply with the
 // finished reel, and the call to action: comment PROMPT and we DM you how to do it.
 import { AbsoluteFill, Audio, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
-import { FPS, VO, CHAT, TYPE, TYPE_END, LOCK, REPLY, CTA, COMMENT, OURS, NAH } from "./bts-timing.js";
+import { FPS, VO, L, CHAT, TYPE, TYPE_END, LOCK, REPLY, CTA, COMMENT } from "./bts-timing.js";
 import { useFonts, clamp, easeOut, Grain } from "./fx.jsx";
 import { Dev } from "./Dev.jsx";
 import { WORDMARK } from "./brand.js";
@@ -114,13 +114,37 @@ function Speech({ f }) {
   );
 }
 
+// how Dev reacts on each line: [what, line, from, to] in frames relative to that line (to < 0 = from its end)
+const ACTS = [
+  ["shock", "hook", 0, -4], ["lean", "hook", 0, -2], ["emote!", "hook", 0, 26],
+  ["thumbs", "ours", 6, -1], ["happy", "ours", 8, -1], ["jump", "ours", 0, 14],
+  ["tilt", "studio", 0, -1],
+  ["point", "claude", 4, -1], ["look", "claude", 10, -1],
+  ["look", "prompt", 0, 70], ["lean", "prompt", 6, 60],
+  ["wink", "nah", 4, -1], ["wave", "nah", 0, -1], ["happy", "nah", 10, -1],
+  ["lean", "too", 0, -1], ["thumbs", "too", 10, -1],
+  ["point", "cta", 0, -1], ["happy", "deal", 0, 200], ["thumbs", "deal", 2, 200], ["jump", "deal", 0, 14], ["emote?", "deal", 0, 30],
+].map(([k, key, a, b]) => [k, L[key].start + a, b < 0 ? L[key].end - b * -1 + 8 : L[key].start + b]);
+const env = (f, a, b, r = 6) => { r = Math.min(r, (b - a) / 2 - 0.01); return interpolate(f, [a, a + r, b - r, b], [0, 1, 1, 0], clamp); };
+const act = (f, k) => ACTS.filter((x) => x[0] === k).reduce((v, [, a, b]) => Math.max(v, env(f, a, b)), 0);
+
+function Emote({ kind, p, f }) {
+  const bg = kind === "!" ? C.pink : "#74C6FF";
+  return <div style={{ position: "absolute", left: 300, top: 1100 + Math.sin(f / 4) * 4, width: 84, height: 84, borderRadius: 99, background: bg, border: `5px solid ${C.ink}`, boxShadow: `0 6px 0 ${C.ink}`, display: "grid", placeItems: "center", ...D, fontSize: 56, color: "#fff", transform: `scale(${Math.min(1, p * 1.4)}) rotate(${(1 - p) * -20}deg)`, transformOrigin: "50% 100%" }}>{kind}</div>;
+}
+
 export const Bts = ({ music = true }) => {
   const f = useCurrentFrame();
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }], ["UI", "Geist-400.ttf", { weight: "400" }]]);
   const devIn = sp(f, -4, 12, 200);
   const clipP = sp(f, 0) * (1 - interpolate(f, [CHAT - 10, CHAT], [0, 1], clamp));
-  const pointUp = interpolate(f, [CTA, CTA + 10], [0, 1], { ...clamp, easing: easeOut });
-  const nah = f >= NAH.start && f < NAH.end + 20;
+  const point = act(f, "point"), thumbs = act(f, "thumbs") * (1 - act(f, "point")), wave = act(f, "wave"), shock = act(f, "shock"), happy = act(f, "happy");
+  const wink = act(f, "wink"), lean = act(f, "lean"), look = act(f, "look"), tiltA = act(f, "tilt");
+  let jumpY = 0, squash = 1;
+  ACTS.filter((x) => x[0] === "jump").forEach(([, a, b]) => {
+    if (f >= a && f < b) jumpY = -Math.sin(((f - a) / (b - a)) * Math.PI) * 80;
+    if (f >= b && f < b + 8) squash = 1 - 0.08 * Math.sin(((f - b) / 8) * Math.PI);
+  });
   const m = VO.mouth, open = Math.max(m[f] ?? 0, ((m[f - 1] ?? 0) + (m[f + 1] ?? 0)) / 2), talking = open > 0.08;
   const blink = f % 97 < 3 ? [0.6, 1, 0.6][f % 97] : 0;
   return (
@@ -128,15 +152,16 @@ export const Bts = ({ music = true }) => {
       <Grid f={f} />
       <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 30%, rgba(91,43,255,.35), transparent 60%)" }} />
       {f < CHAT && <Clip from={120} start={0} len={CHAT} w={500} x={290} y={170} p={clipP} rot={-2} />}
-      {f < CHAT && <div style={{ position: "absolute", left: 230, top: 140, ...M, fontSize: 26, color: "#fff", background: C.pink, padding: "10px 18px", borderRadius: 10, transform: `rotate(-6deg) scale(${sp(f, 14, 10, 300)})` }}>Our version</div>}
+      {f < CHAT && f >= L.ours.start - 2 && <div style={{ position: "absolute", left: 230, top: 140, ...M, fontSize: 26, color: "#fff", background: C.pink, padding: "10px 18px", borderRadius: 10, transform: `rotate(-6deg) scale(${sp(f, L.ours.start, 10, 300)})` }}>Our version</div>}
       <Chat f={f} />
       <Cta f={f} />
       {/* Dev, bottom left, talking */}
-      <div style={{ position: "absolute", left: 50, top: 1130, transform: `translateY(${(1 - devIn) * 500}px)` }}>
-        <Dev width={340} open={open} smile={1} brow={nah ? 18 : 12} lid={Math.max(0.06, blink)} wink={nah ? 1 : 0} happy={f >= COMMENT + 40 ? 1 : 0}
-          point={pointUp} thumbs={f >= OURS.start + 10 && f < CHAT ? 1 : 0} look={f >= TYPE && f < CTA ? -8 : 0}
-          tilt={talking ? Math.sin(f / 9) * 0.8 * open : Math.sin(f / 22) * 0.8} bob={talking ? -open * 2 - Math.abs(Math.sin(f / 4)) * 2 : Math.sin(f / 22) * 0.8} />
+      <div style={{ position: "absolute", left: 50 - shock * 8, top: 1130 + jumpY, transform: `translateY(${(1 - devIn) * 500}px) scale(${1 + lean * 0.06}, ${(1 + lean * 0.06) * squash})`, transformOrigin: "50% 100%" }}>
+        <Dev width={340} open={open} smile={Math.max(0.8, happy)} brow={12 + shock * 10 + wink * 6} lid={Math.max(0.06 * (1 - happy), blink * (1 - happy))} wink={wink} happy={happy} shock={shock * 0.7}
+          point={point} thumbs={thumbs} wave={wave} waveAng={Math.sin(f / 2.2) * 24} look={-8 * look}
+          tilt={-6 * tiltA - lean * 3 + (talking ? Math.sin(f / 9) * 0.8 * open : Math.sin(f / 22) * 0.8)} bob={talking ? -open * 2 - Math.abs(Math.sin(f / 4)) * 2 : Math.sin(f / 22) * 0.8} />
       </div>
+      {["!", "?"].map((k) => { const v = act(f, "emote" + k); return v > 0 ? <Emote key={k} kind={k} p={v} f={f} /> : null; })}
       <Speech f={f} />
       <Grain f={f} opacity={0.05} />
       <Audio src={staticFile(music ? "bts.wav" : "bts-sfx.wav")} />
