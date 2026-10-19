@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "duration": 17.433333333333334,
+ "duration": 18.1,
  "seed": 9,
  "fade_out": 1.0,
  "lowpass": 11000,
@@ -45,27 +45,27 @@
   },
   {
    "type": "swoosh",
-   "start": 314,
-   "end": 330,
+   "start": 334,
+   "end": 350,
    "peak": 0.5,
    "f": 2000,
    "gain": 0.16
   },
   {
    "type": "typing",
-   "start": 376,
-   "end": 394,
+   "start": 396,
+   "end": 414,
    "gain": 0.16
   },
   {
    "type": "sample",
    "file": "/root/.claude/skills/motion-graphics/assets/sfx/send.ogg",
-   "frame": 398,
+   "frame": 418,
    "gain": 0.3
   },
   {
    "type": "chime",
-   "frame": 412,
+   "frame": 432,
    "gain": 0.06,
    "freq": 1760
   }
