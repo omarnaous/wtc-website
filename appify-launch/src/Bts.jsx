@@ -83,7 +83,8 @@ function Cta({ f }) {
         <div style={{ ...UI, fontSize: 36, color: "#fff", background: C.uv, borderRadius: 999, padding: "16px 30px", transform: `scale(${1 + 0.18 * Math.sin(Math.PI * Math.min(1, sent))})` }}>Post</div>
       </div>
       <div style={{ ...UI, fontWeight: 400, fontSize: 44, color: "rgba(255,255,255,.85)", marginTop: 44, lineHeight: 1.3, ...up(c) }}>Comment <span style={{ color: C.yellow, fontWeight: 600 }}>PROMPT</span> and we'll DM you<br />how to make yours</div>
-      <svg width={wm} height={wmh} viewBox={WORDMARK.viewBox} style={{ marginTop: 50, ...up(sp(f, COMMENT + 36)) }}>
+      {L.mg && f >= L.mg.start && <div style={{ ...up(sp(f, L.mg.start + 4)), marginTop: 40, display: "inline-block", ...UI, fontSize: 38, color: "#fff", background: "rgba(255,255,255,.08)", border: "2px solid rgba(255,255,255,.2)", borderRadius: 999, padding: "18px 34px" }}>✨ Need motion graphics? <span style={{ color: C.yellow }}>We've got you</span></div>}
+      <svg width={wm} height={wmh} viewBox={WORDMARK.viewBox} style={{ display: "block", margin: "50px auto 0", ...up(sp(f, COMMENT + 36)) }}>
         <path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.yellow} />
       </svg>
     </div>
@@ -130,7 +131,8 @@ const ACTS = [
   ["wink", "nah", 4, -1], ["wave", "nah", 0, -1], ["happy", "nah", 10, -1],
   ["lean", "too", 0, -1], ["thumbs", "too", 10, -1],
   ["point", "cta", 0, -1], ["happy", "deal", 0, 200], ["thumbs", "deal", 2, 200], ["jump", "deal", 0, 14], ["emote?", "deal", 0, 30],
-].map(([k, key, a, b]) => [k, L[key].start + a, b < 0 ? L[key].end - b * -1 + 8 : L[key].start + b]);
+  ["happy", "mg", 4, 300], ["thumbs", "mg", 8, 300], ["jump", "mg", 0, 14], ["lean", "mg", 0, -1],
+].filter(([, key]) => L[key]).map(([k, key, a, b]) => [k, L[key].start + a, b < 0 ? L[key].end - b * -1 + 8 : L[key].start + b]);
 const env = (f, a, b, r = 6) => { r = Math.min(r, (b - a) / 2 - 0.01); return interpolate(f, [a, a + r, b - r, b], [0, 1, 1, 0], clamp); };
 const act = (f, k) => ACTS.filter((x) => x[0] === k).reduce((v, [, a, b]) => Math.max(v, env(f, a, b)), 0);
 

@@ -10,7 +10,7 @@ from parselmouth.praat import call
 from kokoro_onnx import Kokoro
 
 FPS, SR = 30, 24000
-VOICE, SPEED, GAP, START, TAIL = "am_puck", 1.08, 0.24, 10, 70
+VOICE, SPEED, GAP, START, TAIL = "am_puck", 1.08, 0.24, 10, 60
 # passages: (melody, pitch shift, range, [(key, spoken, caption)])
 PASSAGES = [
     ("arch", 1.0, 1.3, [
@@ -22,12 +22,12 @@ PASSAGES = [
     ("fall", 0.3, 1.3, [
         ("prompt", "It was this prompt, a phone on a giant test track, rockets, smoke, the whole vibe,",
                    "It was this prompt: a phone on a giant test track, rockets, smoke, the whole vibe 👀"),
-        ("nah", "but okay, I'm not giving you all of it.", "but okay… I'm not giving you ALL of it 😏"),
+        ("nah", "but nope, I'm not giving you the whole thing in this video.", "but nope… I'm not giving you the whole thing in this video 😏"),
     ]),
     ("fall", 0.6, 1.35, [
         ("too", "The good news is, you can make one too,", "The good news? You can make one too."),
-        ("cta", "just comment prompt, and I'll DM you the whole thing.", "Just comment PROMPT and I'll DM you the whole thing"),
-        ("deal", "Deal?", "Deal? 🤝"),
+        ("cta", "just comment prompt, and I'll DM you the whole thing,", "Just comment PROMPT and I'll DM you the whole thing,"),
+        ("mg", "and if you need motion graphics for your brand, we can help you out too.", "and if you need motion graphics for your brand, we can help you out too ✨"),
     ]),
 ]
 
