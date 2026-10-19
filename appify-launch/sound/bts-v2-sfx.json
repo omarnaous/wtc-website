@@ -1,0 +1,100 @@
+{
+ "fps": 30,
+ "duration": 24.366666666666667,
+ "seed": 9,
+ "fade_out": 1.0,
+ "lowpass": 11000,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "pop",
+   "frame": 2,
+   "gain": 0.12
+  },
+  {
+   "type": "pop",
+   "frame": 12,
+   "gain": 0.12
+  },
+  {
+   "type": "thump",
+   "frame": 95,
+   "gain": 0.16
+  },
+  {
+   "type": "swish",
+   "start": 433,
+   "end": 447,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 651,
+   "gain": 0.14
+  },
+  {
+   "type": "glint",
+   "frame": 641,
+   "gain": 0.06,
+   "freq": 1760
+  },
+  {
+   "type": "swoosh",
+   "start": 204,
+   "end": 220,
+   "peak": 0.5,
+   "f": 2200,
+   "gain": 0.14
+  },
+  {
+   "type": "typing",
+   "start": 307,
+   "end": 427,
+   "gain": 0.16,
+   "pan": 0.15
+  },
+  {
+   "type": "glint",
+   "frame": 433,
+   "gain": 0.08,
+   "freq": 1318.5
+  },
+  {
+   "type": "pop",
+   "frame": 435,
+   "gain": 0.12
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/receive.ogg",
+   "frame": 511,
+   "gain": 0.3
+  },
+  {
+   "type": "swoosh",
+   "start": 544,
+   "end": 560,
+   "peak": 0.5,
+   "f": 2000,
+   "gain": 0.16
+  },
+  {
+   "type": "typing",
+   "start": 560,
+   "end": 578,
+   "gain": 0.16
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/send.ogg",
+   "frame": 582,
+   "gain": 0.3
+  },
+  {
+   "type": "chime",
+   "frame": 596,
+   "gain": 0.06,
+   "freq": 1760
+  }
+ ]
+}

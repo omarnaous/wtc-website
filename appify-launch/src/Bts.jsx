@@ -2,7 +2,9 @@
 // Claude chat where the prompt types out and is cut off behind a blur ("full prompt in your DMs"), the reply with the
 // finished reel, and the call to action: comment PROMPT and we DM you how to do it.
 import { AbsoluteFill, Audio, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
-import { FPS, VO, L, CHAT, TYPE, TYPE_END, LOCK, REPLY, CTA, COMMENT } from "./bts-timing.js";
+import { FPS, timing } from "./bts-timing.js";
+import VO1 from "./bts-vo.json";
+import VO2 from "./bts-vo-v2.json";
 import { useFonts, clamp, easeOut, Grain } from "./fx.jsx";
 import { Dev } from "./Dev.jsx";
 import { WORDMARK } from "./brand.js";
@@ -25,6 +27,10 @@ function Clip({ from, start, len, w, x, y, p = 1, rot = 0 }) {
     </div>
   );
 }
+
+// one reel per voice take: the scenes, captions and Dev's reactions all hang off that take's timings
+export function makeBts(VO, wav) {
+const { L, CHAT, TYPE, TYPE_END, LOCK, REPLY, CTA, COMMENT } = timing(VO);
 
 function Chat({ f }) {
   const inP = sp(f, CHAT - 4), out = interpolate(f, [CTA - 8, CTA + 4], [0, 1], clamp);
@@ -133,7 +139,7 @@ function Emote({ kind, p, f }) {
   return <div style={{ position: "absolute", left: 300, top: 1100 + Math.sin(f / 4) * 4, width: 84, height: 84, borderRadius: 99, background: bg, border: `5px solid ${C.ink}`, boxShadow: `0 6px 0 ${C.ink}`, display: "grid", placeItems: "center", ...D, fontSize: 56, color: "#fff", transform: `scale(${Math.min(1, p * 1.4)}) rotate(${(1 - p) * -20}deg)`, transformOrigin: "50% 100%" }}>{kind}</div>;
 }
 
-export const Bts = ({ music = true }) => {
+const Bts = ({ music = true }) => {
   const f = useCurrentFrame();
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["Mono", "GeistMono-500.ttf"], ["UI", "Geist-600.ttf", { weight: "600" }], ["UI", "Geist-400.ttf", { weight: "400" }]]);
   const devIn = sp(f, -4, 12, 200);
@@ -164,7 +170,13 @@ export const Bts = ({ music = true }) => {
       {["!", "?"].map((k) => { const v = act(f, "emote" + k); return v > 0 ? <Emote key={k} kind={k} p={v} f={f} /> : null; })}
       <Speech f={f} />
       <Grain f={f} opacity={0.05} />
-      <Audio src={staticFile(music ? "bts.wav" : "bts-sfx.wav")} />
+      <Audio src={staticFile(music ? `${wav}.wav` : `${wav}-sfx.wav`)} />
     </AbsoluteFill>
   );
 };
+return Bts;
+}
+
+export const Bts = makeBts(VO1, "bts");          // V1: punchy, quick lines
+export const BtsV2 = makeBts(VO2, "bts-v2");     // V2: one smooth, slower read
+export const BTS_DURATIONS = { v1: VO1.duration, v2: VO2.duration };

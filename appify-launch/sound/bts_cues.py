@@ -2,9 +2,10 @@
 A lo-fi tape bed, a whoosh into the Claude chat, keyboard typing under the prompt, a glint as the rest blurs behind
 the lock, a message-received sound for the reply, then the CTA: whoosh, typing PROMPT, the send, a chime on the logo.
 Then vo/ is mixed on top with the bed ducked under the voice.
-  python3 sound/bts_cues.py   ->  sound/bts.json, sound/bts-sfx.json (then sound/bts_mix.py)"""
-import json
-VO = json.load(open("src/bts-vo.json")); L = {l["key"]: l for l in VO["lines"]}
+  python3 sound/bts_cues.py [src/bts-vo-v2.json bts-v2]  ->  sound/<name>.json, sound/<name>-sfx.json (then sound/bts_mix.py)"""
+import json, sys
+SRC, NAME = (sys.argv[1], sys.argv[2]) if len(sys.argv) > 2 else ("src/bts-vo.json", "bts")   # V2: src/bts-vo-v2.json bts-v2
+VO = json.load(open(SRC)); L = {l["key"]: l for l in VO["lines"]}
 DUR = VO["duration"]
 CHAT, TYPE, TYPE_END, LOCK = L["claude"]["start"] - 4, L["prompt"]["start"] + 6, L["nah"]["start"] - 6, L["nah"]["start"]
 REPLY, CTA, COMMENT = L["too"]["start"] + 2, L["cta"]["start"] - 6, L["cta"]["start"] + 2
@@ -27,5 +28,5 @@ fx = [
 ]
 for music_on in (True, False):
     spec = {"fps": 30, "duration": DUR / 30, "seed": 9, "fade_out": 1.0, "lowpass": 11000, "peak_db": -3, "cues": (music if music_on else []) + fx}
-    out = "sound/bts.json" if music_on else "sound/bts-sfx.json"
+    out = f"sound/{NAME}.json" if music_on else f"sound/{NAME}-sfx.json"
     json.dump(spec, open(out, "w"), indent=1); print(out, len(spec["cues"]), "cues")
