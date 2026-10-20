@@ -1,4 +1,5 @@
 import { Composition } from "remotion";
+import { ShopThumb } from "./ShopThumb.jsx";
 import { Main } from "./Main.jsx";
 import { FPS, DURATION } from "./timing.js";
 import { Magazine } from "./Magazine.jsx";
@@ -13,6 +14,7 @@ export const Root = () => (
     <Composition id="Magazine" component={Magazine} durationInFrames={MAG} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="Magazine-NoMusic" component={Magazine} durationInFrames={MAG} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="Shop" component={Shop} durationInFrames={SHOP} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="Shop-Thumb" component={ShopThumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
     <Composition id="Shop-NoMusic" component={Shop} durationInFrames={SHOP} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
   </>
 );
