@@ -1,14 +1,14 @@
 """Soundtrack for "Follies — the boutique" on src/shop-timing.js: 120 BPM tech-house (beat = 15 frames, bar = 60).
 The drop lands on frame 0 under the lookbook rush (a camera shutter + kick on every 8th cut), swooshes on the triptych
-strips, a one-beat gap before the flash into the site, then the drop again. In the browser: a scroll swish per page
-move, the real add-to-cart and drawer sounds on the bag shots. End card: the bed breaks, Dev pops in, a tick for every
+strips, a one-beat gap before the flash into the site, then the drop again. In the browser: one long scroll swish down the
+homepage and a pop as each section chip lands. End card: the bed breaks, Dev pops in, a tick for every
 feature, a hit + chime on the DM pill, a glint on the credit.
   python3 sound/shop_cues.py  ->  sound/shop.json, sound/shop-sfx.json"""
 import json, re
 src = open("src/shop-timing.js").read()
 n = lambda k: int(re.search(rf"\b{k} = (\d+)", src).group(1))
 DUR, TRI, PUNCH, SITE, END, BEAT, FEAT0 = n("DURATION"), n("TRIPTYCH"), n("PUNCH"), n("SITE"), n("END"), n("BEAT"), n("FEAT0")
-SHOTS = [(int(a), k) for a, k in re.findall(r'\[(\d+), "(\w+)"', src)]
+CHIPS = [int(a) for a in re.findall(r'^  \[(\d+), "', src, re.M)]
 NFEAT = len(re.search(r"FEATURES = \[(.*?)\];", src, re.S).group(1).split('","'))
 SFX = "/root/.claude/skills/motion-graphics/assets/sfx/"
 music = [{"type": "house", "start": 0, "end": DUR, "bpm": 120, "gain": 0.45,
@@ -23,12 +23,9 @@ for b in range(4):                                                              
 fx += [shutter(PUNCH + i * 7.5, 0.12, (-0.25, 0.25)[i % 2]) for i in range(6)]                              # punch frames
 fx += [{"type": "riser", "start": PUNCH + 30, "end": SITE - 1, "gain": 0.07},
        {"type": "impact", "frame": SITE, "gain": 0.2}, {"type": "glint", "frame": SITE + 2, "gain": 0.05, "freq": 1760}]
-for i, (a, kind) in enumerate(SHOTS):
-    if i: fx += [{"type": "whoosh", "start": a - 4, "end": a + 6, "gain": 0.06}]                            # punch-in per shot
-    if kind == "page": fx += [{"type": "swish", "start": a + 4, "end": a + 30, "gain": 0.06}]               # the scroll
-    if kind == "added": fx += [{"type": "sample", "file": SFX + "add-to-cart.ogg", "frame": a + 3, "gain": 0.35}]
-    if kind == "bag": fx += [{"type": "sample", "file": SFX + "open.ogg", "frame": a + 3, "gain": 0.3}]
-    if kind == "product": fx += [{"type": "click", "frame": a + 20, "gain": 0.06, "freq": 2400}]
+fx += [{"type": "swish", "start": SITE + 34, "end": SITE + 344, "gain": 0.025}]                          # the long scroll
+for i, a in enumerate(CHIPS):                                                                             # a chip per section
+    fx += [{"type": "pop", "frame": SITE + a, "gain": 0.07}, {"type": "glint", "frame": SITE + a + 1, "gain": 0.025, "freq": (1318.5, 1568, 1760)[i % 3]}]
 fx += [{"type": "impact", "frame": END, "gain": 0.14}, {"type": "pop", "frame": END + 12, "gain": 0.12}]
 fx += [{"type": "tick", "frame": round(FEAT0 + i * 7.5), "gain": 0.035, "freq": 1760 + 60 * i} for i in range(NFEAT)]
 cta = round(FEAT0 + NFEAT * 7.5 + 8)

@@ -235,76 +235,76 @@
    "freq": 1760
   },
   {
-   "type": "whoosh",
-   "start": 236,
-   "end": 246,
-   "gain": 0.06
-  },
-  {
    "type": "swish",
-   "start": 244,
-   "end": 270,
-   "gain": 0.06
+   "start": 214,
+   "end": 524,
+   "gain": 0.025
   },
   {
-   "type": "whoosh",
-   "start": 296,
-   "end": 306,
-   "gain": 0.06
+   "type": "pop",
+   "frame": 186,
+   "gain": 0.07
   },
   {
-   "type": "swish",
-   "start": 304,
-   "end": 330,
-   "gain": 0.06
+   "type": "glint",
+   "frame": 187,
+   "gain": 0.025,
+   "freq": 1318.5
   },
   {
-   "type": "whoosh",
-   "start": 356,
-   "end": 366,
-   "gain": 0.06
+   "type": "pop",
+   "frame": 251,
+   "gain": 0.07
   },
   {
-   "type": "click",
-   "frame": 380,
-   "gain": 0.06,
-   "freq": 2400
+   "type": "glint",
+   "frame": 252,
+   "gain": 0.025,
+   "freq": 1568
   },
   {
-   "type": "whoosh",
-   "start": 386,
-   "end": 396,
-   "gain": 0.06
+   "type": "pop",
+   "frame": 311,
+   "gain": 0.07
   },
   {
-   "type": "sample",
-   "file": "/root/.claude/skills/motion-graphics/assets/sfx/add-to-cart.ogg",
-   "frame": 393,
-   "gain": 0.35
+   "type": "glint",
+   "frame": 312,
+   "gain": 0.025,
+   "freq": 1760
   },
   {
-   "type": "whoosh",
-   "start": 416,
-   "end": 426,
-   "gain": 0.06
+   "type": "pop",
+   "frame": 354,
+   "gain": 0.07
   },
   {
-   "type": "sample",
-   "file": "/root/.claude/skills/motion-graphics/assets/sfx/open.ogg",
-   "frame": 423,
-   "gain": 0.3
+   "type": "glint",
+   "frame": 355,
+   "gain": 0.025,
+   "freq": 1318.5
   },
   {
-   "type": "whoosh",
-   "start": 476,
-   "end": 486,
-   "gain": 0.06
+   "type": "pop",
+   "frame": 397,
+   "gain": 0.07
   },
   {
-   "type": "swish",
-   "start": 484,
-   "end": 510,
-   "gain": 0.06
+   "type": "glint",
+   "frame": 398,
+   "gain": 0.025,
+   "freq": 1568
+  },
+  {
+   "type": "pop",
+   "frame": 437,
+   "gain": 0.07
+  },
+  {
+   "type": "glint",
+   "frame": 438,
+   "gain": 0.025,
+   "freq": 1760
   },
   {
    "type": "impact",

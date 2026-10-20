@@ -11,14 +11,16 @@ export const PUNCH = 120;         // bar 3: full-bleed photos punching in on the
 export const SITE = 180;          // the browser window
 export const END = 540;           // Dev, the feature list, the logo
 // what the browser shows, bar by bar: [from, kind, page-y from, page-y to (css px), chip]
-export const SHOTS = [
-  [180, "hero", 0, 0, "A cinematic film as the homepage"],
-  [240, "page", 860, 1000, "Six floors to explore the house"],
-  [300, "page", 1900, 2000, "The boutique, by collection"],
-  [360, "product", 0, 0, "Product pages, sizes & size chart"],
-  [390, "added", 0, 0, "Add to bag in one tap"],
-  [420, "bag", 0, 0, "A bag with subtotal & checkout"],
-  [480, "page", 3600, 4500, "Shop the lookbook · pop-ups"],
+// the site: public/rec is a frame-accurate recording of the live homepage (one frame per reel frame, from SITE),
+// a 1.2 s hold on the hero film, then one scroll to the footer. Chips change as each section enters (frames from SITE).
+export const REC_FRAMES = 360;
+export const CHIPS = [
+  [6, "A cinematic film as the homepage"],
+  [71, "Six floors to explore the house"],
+  [131, "The boutique, by collection"],
+  [174, "Accessories boutique"],
+  [217, "Shop the lookbook"],
+  [257, "Pop-ups & newsletter sign-up"],
 ];
 export const FEATURES = [
   "Collections & categories",

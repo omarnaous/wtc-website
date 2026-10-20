@@ -1,11 +1,12 @@
 // "Follies d'Après-Midi — the boutique, online": a fast lookbook rush, the live site in a browser window (as in the
-// other concept reels) with a chip per feature, then Dev with the house's orange bags beside every e-commerce
+// other concept reels): one continuous desktop scroll of the homepage with a chip per section, then Dev with the house's orange bags beside every e-commerce
 // feature the site has, the appify logo and the DM. Pictures and screens are the brand's own (lookbook, live site).
-import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, Easing } from "remotion";
-import { FPS, BEAT, EIGHTH, RUSH, TRIPTYCH, PUNCH, SITE, END, SHOTS, FEATURES, FEAT0, DURATION } from "./shop-timing.js";
-import { useFonts, clamp, shake, Grain } from "./fx.jsx";
+import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame, Easing } from "remotion";
+import { FPS, BEAT, EIGHTH, RUSH, TRIPTYCH, PUNCH, SITE, END, CHIPS, REC_FRAMES, FEATURES, FEAT0, DURATION } from "./shop-timing.js";
+import { useFonts, clamp, Grain } from "./fx.jsx";
 import { WORDMARK, sparkPath } from "./brand.js";
 import { DevBags } from "./DevBags.jsx";
+import scroll from "../public/rec/scroll.json";   // the recording's scroll positions (public/rec, see shop-timing.js)
 
 const C = { paper: "#F2EDE6", ink: "#0C0B0A", orange: "#F27043", night: "#0A0913", iris: "#8F72FF", uv: "#5B2BFF" };
 const G = { fontFamily: "Giaza", lineHeight: 0.86 };
@@ -31,8 +32,8 @@ function Rush({ f }) {
   const t = f - RUSH - k * EIGHTH, punch = 1.08 - 0.08 * Math.min(1, t / 5);
   return (
     <AbsoluteFill style={{ background: bg, overflow: "hidden" }}>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 560, textAlign: "center", ...G, fontSize: 300, color: fg, transform: `scale(${punch})` }}>{WORDS[Math.floor(k / 2) % 4]}</div>
-      <Img src={staticFile(`cut/${shot}.png`)} style={{ position: "absolute", left: "50%", bottom: -30, height: 1580, transform: `translateX(-50%) scale(${punch})`, transformOrigin: "50% 100%" }} />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 640, textAlign: "center", ...G, fontSize: 300, color: fg, transform: `scale(${punch})` }}>{WORDS[Math.floor(k / 2) % 4]}</div>
+      <Img src={staticFile(`cut/${shot}.png`)} style={{ position: "absolute", left: "50%", bottom: -30, height: 1420, transform: `translateX(-50%) scale(${punch})`, transformOrigin: "50% 100%" }} />
     </AbsoluteFill>
   );
 }
@@ -52,7 +53,7 @@ function Triptych({ f }) {
         );
       }))}
       <div style={{ position: "absolute", left: 0, right: 0, top: 1460, textAlign: "center", ...G, fontSize: 210, color: C.paper, textShadow: "0 10px 50px rgba(0,0,0,.5)", ...pop(sp(f, TRIPTYCH + b * BEAT, 9, 320), 1.6) }}>{WORDS[look]}</div>
-      <div style={{ position: "absolute", left: 70, top: 300, ...M, fontSize: 26, color: C.paper, textShadow: "0 2px 10px rgba(0,0,0,.6)" }}>Look {id2(look + 1)} / 04</div>
+      <div style={{ position: "absolute", left: 70, top: 1340, ...M, fontSize: 26, color: C.paper, textShadow: "0 2px 10px rgba(0,0,0,.6)" }}>Look {id2(look + 1)} / 04</div>
     </AbsoluteFill>
   );
 }
@@ -72,87 +73,63 @@ function Punch({ f }) {
   );
 }
 function Hook({ f }) {
-  if (f >= TRIPTYCH - 2) return null;
+  // on solid ink labels so it reads on every colour field and photo; sits above the heads (cut-outs start below it)
+  if (f >= PUNCH - 2) return null;
+  const out = interpolate(f, [PUNCH - 8, PUNCH - 2], [1, 0], clamp);
+  const box = (bg, fg) => ({ display: "inline-block", padding: "10px 26px 16px", borderRadius: 18, background: bg, color: fg, ...D, fontSize: 80 });
   return (
-    <div style={{ position: "absolute", left: 40, right: 40, top: 300, ...caption }}>
-      <div style={{ ...D, fontSize: 84, ...pop(sp(f, -4, 11, 300), 1.3) }}>POV: a Beirut label</div>
-      <div style={{ ...D, fontSize: 84, marginTop: 8, color: C.orange, textShadow: "0 4px 24px rgba(0,0,0,.5)", ...pop(sp(f, 8, 10, 300), 1.5) }}>goes online</div>
+    <div style={{ position: "absolute", left: 0, right: 0, top: 210, textAlign: "center", opacity: out }}>
+      <div style={{ ...pop(sp(f, -4, 11, 300), 1.3) }}><span style={box(C.ink, "#fff")}><span style={{ color: C.orange }}>POV:</span> FDM launched</span></div>
+      <div style={{ marginTop: 10, ...pop(sp(f, 8, 10, 300), 1.5) }}><span style={box(C.ink, C.orange)}>their new website</span></div>
     </div>
   );
 }
 
-// ── 2 · the live site in a browser window ────────────────────────────────────────────────────────────────────
-const PW = 1440;                                  // css width of the captures (page.jpg is 1.25x)
-function Screen({ f, w, h }) {
-  const shot = SHOTS.filter(([a]) => f >= a).pop();
-  const [a, kind, y0, y1] = shot;
-  const next = SHOTS[SHOTS.indexOf(shot) + 1];
-  const b = next ? next[0] : END;
-  const k = w / PW;
-  if (kind === "page") {
-    const y = interpolate(f, [a + 4, b - 4], [y0, y1], { ...clamp, easing: Easing.bezier(0.45, 0, 0.25, 1) });
-    return (
-      <>
-        <Img src={staticFile("site/page.jpg")} style={{ position: "absolute", left: 0, top: -y * k, width: w }} />
-        <Img src={staticFile("site/header.jpg")} style={{ position: "absolute", left: 0, top: 0, width: w, height: 66 * k }} />
-      </>
-    );
-  }
-  // the 1440x900 captures cover the taller window: fit the height, slide to the part that matters
-  const bw = (h * PW) / 900, left = -(bw - w) * { hero: 0.5, product: 0.88, added: 0.88, bag: 1 }[kind];
-  const file = { product: "product", added: "bag", bag: "bagopen" }[kind];
+// ── 2 · the live site in a browser window: one continuous desktop scroll of the homepage ─────────────────────
+const rec = (f) => staticFile(`rec/${String(Math.max(1, Math.min(REC_FRAMES, f - SITE + 1))).padStart(4, "0")}.jpg`);
+function Browser({ f, w }) {
+  const h = (w * 900) / 1440, i = Math.max(0, Math.min(REC_FRAMES - 1, f - SITE));
+  const pos = scroll.ys[i] / (scroll.H - 900), thumb = (h * 900) / scroll.H;
   return (
-    <div style={{ position: "absolute", left, top: 0, width: bw, height: h }}>
-      {kind === "hero" ? (
-        <>
-          <Sequence from={a} layout="none"><OffthreadVideo src={staticFile("film.mp4")} muted style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} /></Sequence>
-          <Img src={staticFile("site/chrome.png")} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
-        </>
-      ) : <Img src={staticFile(`site/${file}.jpg`)} style={{ width: "100%", height: "100%" }} />}
-    </div>
-  );
-}
-function Browser({ f, w, h, z, fx = 0.5, fy = 0.4, style }) {
-  return (
-    <div style={{ width: w, borderRadius: 26, overflow: "hidden", background: "#1B1714", boxShadow: "0 50px 120px rgba(0,0,0,.6), 0 0 0 2px rgba(242,112,67,.35)", ...style }}>
-      <div style={{ height: 50, display: "flex", alignItems: "center", gap: 10, padding: "0 20px" }}>
-        {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => <i key={c} style={{ width: 14, height: 14, borderRadius: 99, background: c }} />)}
-        <div style={{ marginLeft: 16, padding: "6px 16px", borderRadius: 10, background: "rgba(255,255,255,.08)", ...UI, fontWeight: 400, fontSize: 18, color: "rgba(255,255,255,.8)" }}>folliesdapresmidi.com</div>
+    <div style={{ width: w, borderRadius: 22, overflow: "hidden", background: "#1B1714", boxShadow: "0 50px 120px rgba(0,0,0,.6), 0 0 0 2px rgba(242,112,67,.35)" }}>
+      <div style={{ height: 46, display: "flex", alignItems: "center", gap: 10, padding: "0 18px" }}>
+        {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => <i key={c} style={{ width: 13, height: 13, borderRadius: 99, background: c }} />)}
+        <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+          <div style={{ padding: "5px 40px", borderRadius: 9, background: "rgba(255,255,255,.08)", ...UI, fontWeight: 400, fontFamily: "UIR", fontSize: 18, color: "rgba(255,255,255,.85)" }}>folliesdapresmidi.com</div>
+        </div>
+        <div style={{ width: 66 }} />
       </div>
-      <div style={{ width: w, height: h, overflow: "hidden", position: "relative", background: C.paper }}>
-        <div style={{ position: "absolute", inset: 0, transformOrigin: `${fx * 100}% ${fy * 100}%`, transform: `scale(${z})` }}><Screen f={f} w={w} h={h} /></div>
+      <div style={{ width: w, height: h, position: "relative", overflow: "hidden" }}>
+        <Img src={rec(f)} style={{ width: w, height: h, display: "block" }} />
+        <div style={{ position: "absolute", right: 4, top: 4 + pos * (h - thumb - 8), width: 6, height: thumb, borderRadius: 9, background: "rgba(0,0,0,.35)" }} />
       </div>
     </div>
   );
 }
 function Site({ f }) {
-  const shot = SHOTS.filter(([a]) => f >= a).pop(), ts = f - shot[0];
-  const z = 1.04 + 0.08 * interpolate(ts, [0, 60], [0, 1], clamp) + 0.1 * Math.exp(-ts / 5);
-  const focus = { hero: [0.5, 0.5], page: [0.5, 0.35], product: [0.6, 0.4], added: [0.62, 0.6], bag: [0.6, 0.3] }[shot[1]];
-  const [sx, sy] = shake(f, SITE, 18, 5);
-  const chip = SHOTS.filter(([a]) => f >= a + 4 && f < a + 50).pop();
-  const enter = sp(f, SITE, 13, 160);
+  const t = f - SITE, enter = sp(t, 0, 14, 170);
+  const chip = CHIPS.filter(([a]) => t >= a).pop();
   return (
     <AbsoluteFill style={{ background: C.ink }}>
-      <AbsoluteFill style={{ transform: "scale(1.35)", filter: "blur(30px) saturate(1.2) brightness(.6)" }}>
-        <Img src={staticFile(`look/${id2(1 + (Math.floor((f - SITE) / 60) * 3) % 12)}.jpg`)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      <AbsoluteFill style={{ transform: "scale(1.3)", filter: "blur(34px) saturate(1.2) brightness(.55)" }}>
+        <Img src={rec(f)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       </AbsoluteFill>
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.05), rgba(0,0,0,.55))" }} />
-      <div style={{ position: "absolute", left: 40, right: 40, top: 300, ...caption }}>
-        <div style={{ ...D, fontSize: 76, ...pop(sp(f, SITE + 2, 11, 300), 1.3) }}>Their new boutique</div>
-        <div style={{ ...D, fontSize: 76, color: C.orange, marginTop: 8, textShadow: "0 4px 24px rgba(0,0,0,.5)", ...pop(sp(f, SITE + 10, 10, 300), 1.5) }}>built by Appify</div>
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.1), rgba(0,0,0,.6))" }} />
+      <div style={{ position: "absolute", left: 40, right: 40, top: 330, ...caption }}>
+        <div style={{ ...D, fontSize: 76, ...pop(sp(t, 2, 11, 300), 1.3) }}>Their new boutique</div>
+        <div style={{ ...D, fontSize: 76, color: C.orange, marginTop: 8, textShadow: "0 4px 24px rgba(0,0,0,.5)", ...pop(sp(t, 10, 10, 300), 1.5) }}>built by Appify</div>
       </div>
-      <div style={{ position: "absolute", left: 14, top: 500, transform: `translate(${sx}px, ${sy + (1 - enter) * 600}px) scale(${0.9 + 0.1 * enter})` }}>
-        <Browser f={f} w={1052} h={1010} z={z} fx={focus[0]} fy={focus[1]} />
+      <div style={{ position: "absolute", left: 16, top: 600, transform: `translateY(${(1 - enter) * 500}px) scale(${0.92 + 0.08 * enter})`, opacity: Math.min(1, enter * 2) }}>
+        <Browser f={f} w={1048} />
       </div>
       {chip && (
-        <div key={chip[0]} style={{ position: "absolute", left: 0, right: 0, top: 1610, display: "flex", justifyContent: "center", opacity: interpolate(f - chip[0], [4, 8, 46, 50], [0, 1, 1, 0], clamp) }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 28px 16px 20px", borderRadius: 99, background: "rgba(12,11,10,.65)", border: "2px solid rgba(242,112,67,.6)", ...UI, fontSize: 38, color: "#fff", transform: `translateY(${(1 - Math.min(1, sp(f, chip[0] + 4, 12, 260))) * 30}px)` }}>
-            <Spark size={34} />{chip[4]}
+        <div key={chip[0]} style={{ position: "absolute", left: 0, right: 0, top: 1380, display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 28px 16px 20px", borderRadius: 99, background: "rgba(12,11,10,.7)", border: "2px solid rgba(242,112,67,.6)", ...UI, fontSize: 38, color: "#fff", ...pop(sp(t, chip[0], 12, 280), 1.25) }}>
+            <Spark size={34} />{chip[1]}
           </div>
         </div>
       )}
-      <AbsoluteFill style={{ background: "#fff", opacity: interpolate(f, [SITE, SITE + 6], [0.9, 0], clamp) }} />
+      <AbsoluteFill style={{ background: "#fff", opacity: interpolate(t, [0, 6], [0.9, 0], clamp) }} />
     </AbsoluteFill>
   );
 }
