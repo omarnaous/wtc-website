@@ -1,6 +1,6 @@
 // "Échappée": the lookbook stepping into the Follies d'Après-Midi desert film. All picture is the brand's own: the
 // hero film and the lookbook (cut out of the studio backdrop), set in the house typefaces (Giaza, Bodoni).
-import { AbsoluteFill, Audio, Img, OffthreadVideo, interpolate, spring, staticFile, useCurrentFrame, Easing } from "remotion";
+import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, Easing } from "remotion";
 import { FPS, BEAT, BAR, DROP, LOOKS, LINEUP, TURN, END, END_TEXT, DURATION } from "./timing.js";
 import { useFonts, clamp, Grain } from "./fx.jsx";
 import { WORDMARK } from "./brand.js";
@@ -13,13 +13,14 @@ const silk = Easing.bezier(0.19, 1, 0.22, 1), cut = Easing.bezier(0.76, 0, 0.24,
 const sp = (f, at, d = 16, s = 160) => spring({ frame: f - at, fps: FPS, config: { damping: d, stiffness: s } });
 
 // the desert film, framed for 9:16: woman and tree centred, a slow push across the whole piece
-function Film({ f, focus = 0.6, zoom = 1, y = 0, dim = 0 }) {
+// the film is 11.5 s long, so every scene plays it from its own first frame (`from` = the scene start)
+function Film({ f, from = 0, focus = 0.6, zoom = 1, y = 0, dim = 0 }) {
   const H = 1920 * zoom, W = (H * 1440) / 1080;
   const push = 1 + 0.06 * (f / DURATION);
   return (
     <AbsoluteFill style={{ overflow: "hidden", background: C.sand }}>
       <div style={{ position: "absolute", left: 540 - W * focus, top: 1920 - H + y, width: W, height: H, transform: `scale(${push})`, transformOrigin: `${focus * 100}% 90%` }}>
-        <OffthreadVideo src={staticFile("film.mp4")} muted style={{ width: "100%", height: "100%" }} />
+        <Sequence from={from} layout="none"><OffthreadVideo src={staticFile("film.mp4")} muted style={{ width: "100%", height: "100%" }} /></Sequence>
       </div>
       {dim > 0 && <AbsoluteFill style={{ background: C.ink, opacity: dim }} />}
     </AbsoluteFill>
@@ -33,7 +34,7 @@ function Word({ text, f, at, color, italic, size = 300, top = 300 }) {
       {text.split("").map((ch, i) => {
         const t = interpolate(f - at - i * 1.6, [0, 16], [1, 0], { ...clamp, easing: silk });
         return (
-          <span key={i} style={{ display: "inline-block", overflow: "hidden", paddingTop: "0.12em", paddingBottom: "0.08em" }}>
+          <span key={i} style={{ display: "inline-block", overflow: "hidden", paddingTop: "0.34em", marginTop: "-0.22em", paddingBottom: "0.08em" }}>
             <span style={{ display: "block", whiteSpace: "pre", transform: `translateY(${t * 110}%)` }}>{ch}</span>
           </span>
         );
@@ -50,13 +51,14 @@ const Model = ({ shot, h, x = 540, bottom = 0, style }) => (
 // the shutter between looks: three bands slam across, the next look is behind them
 function Shutter({ f, at }) {
   const t = f - at;
-  if (t < -6 || t > 8) return null;
+  if (t < -5 || t > 6) return null;
   return (
     <>
-      {[0, 1, 2].map((k) => {
-        const p = interpolate(t, [-6 + k, -1 + k, 2 + k, 7 + k], [0, 1, 1, 0], { ...clamp, easing: cut });
+      {[0, 1, 2, 3, 4].map((k) => {
+        const d = k * 0.5;
+        const p = interpolate(t, [-5 + d, -1 + d, 1 + d, 5 + d], [0, 1, 1, 0], { ...clamp, easing: cut });
         const fromLeft = k % 2 === 0;
-        return <div key={k} style={{ position: "absolute", top: (1920 / 3) * k, height: 1920 / 3 + 1, left: 0, width: 1080, background: k === 1 ? C.orange : C.ink, transform: `translateX(${(fromLeft ? -1 : 1) * (1 - p) * 1080}px)` }} />;
+        return <div key={k} style={{ position: "absolute", top: 384 * k, height: 385, left: 0, width: 1080, background: k === 2 ? C.orange : C.ink, transform: `translateX(${(fromLeft ? -1 : 1) * (1 - p) * 1080}px)` }} />;
       })}
     </>
   );
@@ -68,16 +70,16 @@ function Look({ f, look, i }) {
   const beat = Math.min(3, Math.floor(t / BEAT));
   const shot = look.shots[[0, 1, 2, 0][beat]];
   const land = sp(f, look.at, 14, 180);
-  const bg = look.bg === "film" ? <Film f={f} focus={0.56} /> : look.bg === "film2" ? <Film f={f} focus={0.74} zoom={1.15} y={60} />
+  const bg = look.bg === "film" ? <Film f={f} from={look.at} focus={0.56} /> : look.bg === "film2" ? <Film f={f} from={look.at} focus={0.74} zoom={1.15} y={60} />
     : <AbsoluteFill style={{ background: look.bg === "orange" ? C.orange : C.ink }} />;
   const desert = look.bg.startsWith("film");
   return (
     <AbsoluteFill>
       {bg}
-      <Word text={look.word} f={f} at={look.at + 2} color={look.ink} italic={look.italic} size={look.word.length > 6 ? 250 : 300} top={360} />
+      <Word text={look.word} f={f} at={look.at + 2} color={look.ink} italic={look.italic} size={look.italic ? 400 : look.word.length > 5 ? 255 : 300} top={look.italic ? 220 : 270} />
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 1920, transform: `translateY(${(1 - land) * 80}px) scale(${1.04 - 0.04 * land})`, transformOrigin: "50% 100%" }}>
         {desert && <div style={{ position: "absolute", left: 540 - 330, bottom: 18, width: 660, height: 70, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(40,25,10,.45), rgba(40,25,10,0))" }} />}
-        <Model shot={shot} h={1560} bottom={-40} style={desert ? { filter: "sepia(0.18) saturate(1.05) contrast(1.03)" } : {}} />
+        <Model shot={shot} h={1500} bottom={-40} style={desert ? { filter: "sepia(0.18) saturate(1.05) contrast(1.03)" } : {}} />
       </div>
       {/* slate: look number, top-left; brand, top-right */}
       <div style={{ position: "absolute", left: 70, top: 200, ...CAPS, fontSize: 24, color: look.bg === "orange" ? C.ink : C.cream, opacity: interpolate(t, [4, 12], [0, 1], clamp) }}>Look {String(i + 1).padStart(2, "0")}<span style={{ opacity: 0.5 }}> / 04</span></div>
@@ -89,10 +91,10 @@ function Look({ f, look, i }) {
 function Lineup({ f }) {
   const t = f - LINEUP;
   if (t < 0 || t >= END - LINEUP) return null;
-  const xs = [190, 420, 660, 890];
+  const xs = [165, 405, 665, 915];
   return (
     <AbsoluteFill>
-      <Film f={f} focus={0.6} />
+      <Film f={f} from={LINEUP} focus={0.6} />
       <div style={{ position: "absolute", left: 0, right: 0, top: 300, textAlign: "center", color: C.cream }}>
         <div style={{ ...CAPS, fontSize: 24, opacity: interpolate(t, [0, 10], [0, 1], clamp) }}>Follies d'après-midi</div>
       </div>
@@ -104,7 +106,7 @@ function Lineup({ f }) {
         return (
           <div key={k} style={{ position: "absolute", left: 0, top: 0, width: 1080, height: 1920, opacity: Math.min(1, p * 2) * (1 - walk), transform: `translateX(${(1 - p) * 260}px) translateY(${-walk * 40}px) scale(${1 - walk * 0.08})`, transformOrigin: `${xs[k]}px 1880px` }}>
             <div style={{ position: "absolute", left: xs[k] - 120, bottom: 22, width: 240, height: 36, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(40,25,10,.4), rgba(40,25,10,0))" }} />
-            <Model shot={back ? lk.shots[2] : lk.shots[0]} h={980} x={xs[k]} bottom={10} style={{ filter: "sepia(0.2) saturate(1.05)" }} />
+            <Model shot={back ? lk.shots[2] : lk.shots[0]} h={900} x={xs[k]} bottom={14} style={{ filter: "sepia(0.2) saturate(1.05)" }} />
           </div>
         );
       })}
@@ -134,7 +136,7 @@ function End({ f }) {
   const wm = 170, wmh = (wm * 1167) / 3224;
   return (
     <AbsoluteFill>
-      <Film f={f} focus={0.6} />
+      <Film f={f} from={END} focus={0.6} />
       <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,0) 55%)", opacity: interpolate(t, [0, 20], [0, 1], clamp) }} />
       <div style={{ position: "absolute", left: 0, right: 0, top: 430, textAlign: "center", color: C.cream }}>
         <Img src={staticFile("wordmark.png")} style={{ width: 760, ...up(END_TEXT[0]) }} />
