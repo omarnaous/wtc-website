@@ -2,7 +2,8 @@
 The drop lands on frame 0 under the lookbook rush (a camera shutter + kick on every 8th cut), swooshes on the triptych
 strips, a one-beat gap before the flash into the site, then the drop again. In the browser: one long scroll swish down the
 homepage and a pop as each section chip lands. End card: the bed breaks, Dev pops in, a tick for every
-feature, a hit + chime on the DM pill, a glint on the credit.
+feature, a hit on "Pay once. Own it forever.", a chime on the DM pill,
+a glint on the credit.
   python3 sound/shop_cues.py  ->  sound/shop.json, sound/shop-sfx.json"""
 import json, re
 src = open("src/shop-timing.js").read()
@@ -28,9 +29,10 @@ for i, a in enumerate(CHIPS):                                                   
     fx += [{"type": "pop", "frame": SITE + a, "gain": 0.07}, {"type": "glint", "frame": SITE + a + 1, "gain": 0.025, "freq": (1318.5, 1568, 1760)[i % 3]}]
 fx += [{"type": "impact", "frame": END, "gain": 0.14}, {"type": "pop", "frame": END + 12, "gain": 0.12}]
 fx += [{"type": "tick", "frame": round(FEAT0 + i * 7.5), "gain": 0.035, "freq": 1760 + 60 * i} for i in range(NFEAT)]
-cta = round(FEAT0 + NFEAT * 7.5 + 8)
-fx += [{"type": "impact", "frame": cta, "gain": 0.14}, {"type": "chime", "frame": cta + 2, "gain": 0.05, "freq": 1318.5},
-       {"type": "glint", "frame": END + 130, "gain": 0.04, "freq": 2093}]
+own = round(FEAT0 + NFEAT * 7.5 + 8)                                                                      # pay once, own it
+fx += [{"type": "impact", "frame": own, "gain": 0.15}, {"type": "glint", "frame": own + 2, "gain": 0.045, "freq": 1760},
+       {"type": "chime", "frame": own + 20, "gain": 0.05, "freq": 1318.5},                                         # the DM pill
+       {"type": "glint", "frame": own + 40, "gain": 0.035, "freq": 2093}]
 for music_on in (True, False):
     spec = {"fps": 30, "duration": DUR / 30, "seed": 23, "fade_out": 1.5, "lowpass": 11000, "peak_db": -3, "cues": (music if music_on else []) + fx}
     out = "sound/shop.json" if music_on else "sound/shop-sfx.json"

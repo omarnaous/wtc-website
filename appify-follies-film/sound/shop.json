@@ -253,56 +253,56 @@
   },
   {
    "type": "pop",
-   "frame": 251,
+   "frame": 285,
    "gain": 0.07
   },
   {
    "type": "glint",
-   "frame": 252,
+   "frame": 286,
    "gain": 0.025,
    "freq": 1568
   },
   {
    "type": "pop",
-   "frame": 311,
+   "frame": 338,
    "gain": 0.07
   },
   {
    "type": "glint",
-   "frame": 312,
+   "frame": 339,
    "gain": 0.025,
    "freq": 1760
   },
   {
    "type": "pop",
-   "frame": 354,
+   "frame": 375,
    "gain": 0.07
   },
   {
    "type": "glint",
-   "frame": 355,
+   "frame": 376,
    "gain": 0.025,
    "freq": 1318.5
   },
   {
    "type": "pop",
-   "frame": 397,
+   "frame": 413,
    "gain": 0.07
   },
   {
    "type": "glint",
-   "frame": 398,
+   "frame": 414,
    "gain": 0.025,
    "freq": 1568
   },
   {
    "type": "pop",
-   "frame": 437,
+   "frame": 448,
    "gain": 0.07
   },
   {
    "type": "glint",
-   "frame": 438,
+   "frame": 449,
    "gain": 0.025,
    "freq": 1760
   },
@@ -325,18 +325,24 @@
   {
    "type": "impact",
    "frame": 582,
-   "gain": 0.14
+   "gain": 0.15
+  },
+  {
+   "type": "glint",
+   "frame": 584,
+   "gain": 0.045,
+   "freq": 1760
   },
   {
    "type": "chime",
-   "frame": 584,
+   "frame": 602,
    "gain": 0.05,
    "freq": 1318.5
   },
   {
    "type": "glint",
-   "frame": 670,
-   "gain": 0.04,
+   "frame": 622,
+   "gain": 0.035,
    "freq": 2093
   }
  ]

@@ -1,6 +1,6 @@
 // "Follies d'Après-Midi — the boutique, online": a fast lookbook rush, the live site in a browser window (as in the
 // other concept reels): one continuous desktop scroll of the homepage with a chip per section, then Dev with the house's orange bags beside every e-commerce
-// feature the site has, the appify logo and the DM. Pictures and screens are the brand's own (lookbook, live site).
+// feature the site has, no subscription (pay once, own it), the appify logo and the DM. Pictures and screens are the brand's own (lookbook, live site).
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame, Easing } from "remotion";
 import { FPS, BEAT, EIGHTH, RUSH, TRIPTYCH, PUNCH, SITE, END, CHIPS, REC_FRAMES, FEATURES, FEAT0, DURATION } from "./shop-timing.js";
 import { useFonts, clamp, Grain } from "./fx.jsx";
@@ -136,8 +136,9 @@ function Site({ f }) {
 
 // ── 3 · Dev, the features, the logo ──────────────────────────────────────────────────────────────────────────
 function End({ f }) {
-  const t = f - END, devP = sp(t, 8, 13, 200), cta = sp(t, FEAT0 - END + FEATURES.length * EIGHTH + 8, 9, 260);
-  const pulse = 1 + 0.025 * Math.sin(Math.max(0, t - 110) / 4);
+  const t = f - END, devP = sp(t, 8, 13, 200), OWN = FEAT0 - END + FEATURES.length * EIGHTH + 8;
+  const own = sp(t, OWN, 10, 260), cta = sp(t, OWN + 20, 9, 260);
+  const pulse = 1 + 0.025 * Math.sin(Math.max(0, t - OWN - 30) / 4);
   const wm = 300, wmh = (wm * 1167) / 3224;
   return (
     <AbsoluteFill style={{ background: `linear-gradient(180deg, #08070F, ${C.night} 55%, #1A0F0A)` }}>
@@ -155,7 +156,7 @@ function End({ f }) {
         {FEATURES.map((ft, i) => {
           const p = sp(f, FEAT0 + i * EIGHTH, 12, 260);
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 18, height: 74, borderBottom: "1px solid rgba(255,255,255,.1)", ...rise(p, 24) }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 18, height: 64, borderBottom: "1px solid rgba(255,255,255,.1)", ...rise(p, 24) }}>
               <div style={{ width: 40, height: 40, borderRadius: 99, background: C.orange, display: "grid", placeItems: "center", transform: `scale(${interpolate(p, [0, 1], [0.3, 1])})` }}>
                 <svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6" fill="none" stroke={C.night} strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </div>
@@ -164,14 +165,19 @@ function End({ f }) {
           );
         })}
       </div>
-      <div style={{ position: "absolute", left: 70, top: 1290, transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * pulse})`, transformOrigin: "0% 50%", opacity: Math.min(1, cta * 2) }}>
+      <div style={{ position: "absolute", left: 70, top: 1170, ...pop(own, 1.25), transformOrigin: "0% 50%" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 12, padding: "8px 16px", borderRadius: 99, border: `2px solid ${C.orange}`, ...M, fontSize: 22, color: C.orange }}><Spark size={22} />No subscription</div>
+        <div style={{ ...D, fontSize: 64, color: "#fff", marginTop: 16 }}>Pay once.</div>
+        <div style={{ ...D, fontSize: 64, color: C.orange, marginTop: 6 }}>Own it forever.</div>
+      </div>
+      <div style={{ position: "absolute", left: 70, top: 1400, transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * pulse})`, transformOrigin: "0% 50%", opacity: Math.min(1, cta * 2) }}>
         <div style={{ padding: "20px 40px", borderRadius: 28, background: C.orange, boxShadow: "0 20px 60px rgba(242,112,67,.35)" }}>
           <div style={{ ...M, fontSize: 22, color: C.night, letterSpacing: "0.2em" }}>DM</div>
           <div style={{ ...D, fontSize: 66, color: C.night, marginTop: 4 }}>“ECOMMERCE”</div>
           <div style={{ ...UI, fontSize: 26, color: C.night, marginTop: 6 }}>for a store like this</div>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 70, top: 1540, ...UI, fontWeight: 400, fontFamily: "UIR", fontSize: 24, color: "rgba(255,255,255,.6)", ...rise(sp(t, 130, 12, 220)) }}>Follies d'Après-Midi · designed & built by Appify</div>
+      <div style={{ position: "absolute", left: 70, top: 1605, ...UI, fontWeight: 400, fontFamily: "UIR", fontSize: 24, color: "rgba(255,255,255,.6)", ...rise(sp(t, OWN + 40, 12, 220)) }}>Follies d'Après-Midi · designed & built by Appify</div>
       <div style={{ position: "absolute", left: 640, top: 760, transform: `translateY(${(1 - Math.min(1, devP)) * 800}px)` }}>
         <DevBags width={390} t={t} tilt={Math.sin(t / 9) * 2.5} bob={Math.sin(t / 6) * 3} face={{ brow: 16, lid: t % 80 > 76 ? 1 : 0.05, smile: 1, look: -6, happy: t > 30 ? 1 : 0, open: t > 14 && t < 28 ? 0.5 : 0 }} />
       </div>
