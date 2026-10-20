@@ -1,10 +1,12 @@
-"""Soundtrack for "Follies — the boutique" on src/shop-timing.js: 120 BPM tech-house (beat = 15 frames, bar = 60).
-The drop lands on frame 0 under the lookbook rush (a camera shutter + kick on every 8th cut), swooshes on the triptych
-strips, a one-beat gap before the flash into the site, then the drop again. In the browser: one long scroll swish down the
-homepage and a pop as each section chip lands. End card: the bed breaks, Dev pops in, a tick for every
+"""Effects for "Follies — the boutique" on src/shop-timing.js (120 BPM: beat = 15 frames, bar = 60). The music is
+sound/runway.py, which mixes these on top. A camera shutter on every 8th cut of the lookbook rush, swooshes on the
+triptych strips, a riser and a hit into the site. In the browser: one long scroll swish down the
+homepage and a pop as each section chip lands. End card: Dev pops in, a tick for every
 feature, a hit on "Pay once. Own it forever.", a chime on the DM pill,
 a glint on the credit.
-  python3 sound/shop_cues.py  ->  sound/shop.json, sound/shop-sfx.json"""
+  python3 sound/shop_cues.py  ->  sound/shop-sfx.json
+  python3 <motion-graphics>/scripts/sound.py sound/shop-sfx.json public/shop-sfx.wav
+  python3 sound/runway.py public/shop-sfx.wav public/shop.wav"""
 import json, re
 src = open("src/shop-timing.js").read()
 n = lambda k: int(re.search(rf"\b{k} = (\d+)", src).group(1))
@@ -12,9 +14,6 @@ DUR, TRI, PUNCH, SITE, END, BEAT, FEAT0 = n("DURATION"), n("TRIPTYCH"), n("PUNCH
 CHIPS = [int(a) for a in re.findall(r'^  \[(\d+), "', src, re.M)]
 NFEAT = len(re.search(r"FEATURES = \[(.*?)\];", src, re.S).group(1).split('","'))
 SFX = "/root/.claude/skills/motion-graphics/assets/sfx/"
-music = [{"type": "house", "start": 0, "end": DUR, "bpm": 120, "gain": 0.45,
-          "sections": [[0, "drop"], [SITE - 15, "gap"], [SITE, "drop"], [END, "break"], [END + 120, "outro"]],
-          "lp_auto": [[0, 10000], [SITE - 16, 10000], [SITE - 14, 1200], [SITE, 10000], [END - 2, 10000], [END + 4, 2600], [END + 118, 2600], [END + 122, 10000]]}]
 fx = [{"type": "impact", "frame": 0, "gain": 0.2}]
 shutter = lambda fr, g=0.12, p=0.0: {"type": "click", "frame": round(fr), "gain": g, "freq": 1700, "pan": p}
 fx += [shutter(i * 7.5, 0.11, ((i % 3) - 1) * 0.3) for i in range(1, 8)]                                  # rush cuts
@@ -33,7 +32,5 @@ own = round(FEAT0 + NFEAT * 7.5 + 8)                                            
 fx += [{"type": "impact", "frame": own, "gain": 0.15}, {"type": "glint", "frame": own + 2, "gain": 0.045, "freq": 1760},
        {"type": "chime", "frame": own + 20, "gain": 0.05, "freq": 1318.5},                                         # the DM pill
        {"type": "glint", "frame": own + 40, "gain": 0.035, "freq": 2093}]
-for music_on in (True, False):
-    spec = {"fps": 30, "duration": DUR / 30, "seed": 23, "fade_out": 1.5, "lowpass": 11000, "peak_db": -3, "cues": (music if music_on else []) + fx}
-    out = "sound/shop.json" if music_on else "sound/shop-sfx.json"
-    json.dump(spec, open(out, "w"), indent=1); print(out, len(spec["cues"]), "cues")
+spec = {"fps": 30, "duration": DUR / 30, "seed": 23, "fade_out": 1.5, "lowpass": 11000, "peak_db": -3, "cues": fx}
+json.dump(spec, open("sound/shop-sfx.json", "w"), indent=1); print("sound/shop-sfx.json", len(fx), "cues")
