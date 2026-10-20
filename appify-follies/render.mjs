@@ -1,6 +1,7 @@
 // node render.mjs                 -> every composition to out/<id>.mp4
 // node render.mjs A,B             -> only those compositions
 // node render.mjs A 0,40,84       -> PNG stills of those frames (out/<id>-f<frame>.png)
+// FRAMES=240-520 MUTED=1 node render.mjs A  -> only that frame range, no audio track
 import { bundle } from "@remotion/bundler";
 import { getCompositions, renderMedia, renderStill, selectComposition } from "@remotion/renderer";
 import fs from "node:fs";
@@ -29,7 +30,7 @@ for (const id of ids) {
   }
   await renderMedia({
     composition, serveUrl, codec: "h264", crf: 16, pixelFormat: "yuv420p",
-    audioCodec: "aac", audioBitrate: "320k", outputLocation: `out/${id}.mp4`, browserExecutable, chromiumOptions, concurrency, timeoutInMilliseconds: 120000,
+    audioCodec: "aac", audioBitrate: "320k", outputLocation: `out/${id}.mp4`, frameRange: process.env.FRAMES ? process.env.FRAMES.split("-").map(Number) : undefined, muted: !!process.env.MUTED, browserExecutable, chromiumOptions, concurrency, timeoutInMilliseconds: 120000,
     onProgress: ({ progress }) => process.stdout.write(`\r${id} ${(progress * 100).toFixed(0)}%   `),
   });
   console.log(`\n${id}: out/${id}.mp4`);

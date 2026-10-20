@@ -1,39 +1,41 @@
-"""Soundtrack on src/timing.js: an 80 BPM tape lo-fi bed (an afternoon in Beirut), muffled under the hero film and
-opening up when the lift doors first open. The lift is the sound design: a soft slide as the doors close, a two-note
-lift bell as they open on each floor (tuned to that bar's chord: ii-V-I-VI in C), a tick as the Maison floor buttons
-light up, a swish for each carousel slide, a camera click on every lookbook frame (on the 8ths), a reverse swell
-into the end card and a glint on the credit.
+"""Soundtrack for the launch reel, on src/timing.js. The film part is scored like a runway show: projector air and a
+beep per count on the leader, a reverse swell into the flash, then a 120 BPM tech-house bed drops as ÉPICÉE rises.
+A swoosh on every wipe, a shutter click as each photo of the contact sheet and the paper prints lands, the bed
+breaks (filtered, pads) under the wordmark and rises into the chilli wipe, then drops again on "Now online." with
+the devices landing; a tick for the URL, a glint for the credit.  Tonal hits are in A minor (the bed is Am F C G).
   python3 sound/build_cues.py  ->  sound/cues.json (music + effects), sound/cues-sfx.json (effects only)"""
 import json, re
 src = open("src/timing.js").read()
 n = lambda k: int(re.search(rf"export const {k} = (\d+)", src).group(1))
-DUR, END, CREDIT, LOOK0 = n("DURATION"), n("END"), n("CREDIT"), n("LOOK0")
-FLOORS = [(int(a), int(b)) for a, b in re.findall(r"start: (\d+), end: (\d+)", src)]
-MAISON = [int(x) for x in re.search(r"MAISON_STEPS = \[([\d, ]+)\]", src).group(1).split(",")]
-SLIDES = [int(x) for x in re.findall(r"\[(\d+, \d+, \d+)\]", re.search(r"SLIDES = \{(.+?)\};", src).group(1)) for x in x.split(",")] if False else \
-    [int(x) for grp in re.findall(r"\[([\d, ]+)\]", re.search(r"SLIDES = \{(.+?)\};", src).group(1)) for x in grp.split(",")]
-# the lift bell for each floor start, tuned to the chord under it (bar k: Dm9, G13, Cmaj9, A7 ...)
-BELL = {0: (880.0, 698.5), 1: (987.8, 784.0), 2: (1318.5, 1046.5), 3: (1108.7, 880.0)}
-bell = lambda frame: [{"type": "chime", "frame": frame, "gain": 0.07, "freq": BELL[(frame // 90) % 4][0], "pan": -0.15},
-                      {"type": "chime", "frame": frame + 5, "gain": 0.06, "freq": BELL[(frame // 90) % 4][1], "pan": 0.15}]
-music = [{"type": "lofi_tape", "start": 0, "end": DUR, "gain": 0.42, "lp_auto": [[0, 900], [86, 900], [96, 9000], [DUR, 9000]]}]
+CUT = n("FILM_CUT"); DUR = CUT + n("STAGE_LEN"); ST = CUT
+music = [{"type": "house", "start": 0, "end": DUR, "bpm": 120, "gain": 0.38,
+          "sections": [[0, "gap"], [72, "drop"], [565, "break"], [ST + 10, "drop"], [ST + 200, "outro"]],
+          "lp_auto": [[0, 500], [70, 500], [74, 9500], [560, 9500], [570, 1400], [ST - 30, 1400], [ST + 8, 9500], [DUR, 9500]]}]
 fx = [
-    {"type": "glint", "frame": 3, "gain": 0.06, "freq": 2349},                     # the wordmark on the film
-    {"type": "pad", "start": 0, "end": 92, "gain": 0.05},                          # warm air over the desert film
-    {"type": "swoosh", "start": 50, "end": 80, "peak": 0.6, "f": 900, "gain": 0.1},  # the film shrinks into the phone
+    {"type": "drone", "start": 0, "end": 76, "gain": 0.05},                                         # projector air
+    *[{"type": "blip", "frame": f, "gain": 0.09, "freq": 880} for f in (0, 26, 52)],                 # 3, 2, 1
+    {"type": "reverse_swell", "start": 44, "end": 72, "gain": 0.1, "notes": ["A3", "C4", "E4"]},
+    {"type": "impact", "frame": 72, "gain": 0.2}, {"type": "glint", "frame": 72, "gain": 0.05, "freq": 1760},   # the flash
+    {"type": "glint", "frame": 118, "gain": 0.05, "freq": 1318.5},                                  # the chilli rule under ÉPICÉE
+    {"type": "swoosh", "start": 238, "end": 262, "peak": 0.5, "f": 2400, "gain": 0.16},              # chilli wipe
+    *[{"type": "click", "frame": 260 + 6 * i, "gain": 0.1, "freq": 1600 + 120 * i, "pan": (-0.3, 0.3)[i % 2]} for i in range(4)],  # contact sheet
+    {"type": "glint", "frame": 300, "gain": 0.05, "freq": 1760},                                    # LIBRE.
+    {"type": "swoosh", "start": 424, "end": 446, "peak": 0.55, "f": 1800, "gain": 0.14},             # paper rises
+    *[{"type": "click", "frame": 440 + 8 * i, "gain": 0.1, "freq": 1500, "pan": (-0.25, 0.25)[i]} for i in range(2)],
+    {"type": "swish", "start": 464, "end": 482, "gain": 0.08},                                      # the ink band
+    {"type": "swoosh", "start": 552, "end": 576, "peak": 0.5, "f": 1400, "gain": 0.16},              # ink wipe
+    {"type": "impact", "frame": 565, "gain": 0.14},                                                  # wordmark
+    {"type": "glint", "frame": 652, "gain": 0.05, "freq": 1318.5},                                  # its rule
+    {"type": "riser", "start": ST - 60, "end": ST, "gain": 0.09},
+    {"type": "swoosh", "start": ST - 12, "end": ST + 10, "peak": 0.5, "f": 2600, "gain": 0.18},      # chilli wipe to the launch card
+    {"type": "impact", "frame": ST + 10, "gain": 0.22}, {"type": "thump", "frame": ST + 12, "gain": 0.16},   # laptop lands
+    {"type": "thump", "frame": ST + 28, "gain": 0.1},                                                # phone lands
+    {"type": "pop", "frame": ST + 30, "gain": 0.08}, {"type": "pop", "frame": ST + 38, "gain": 0.08},  # Now / online.
+    {"type": "swish", "start": ST + 96, "end": ST + 140, "gain": 0.06, "pan": 0.2},                  # the pages scroll
+    {"type": "blip", "frame": ST + 62, "gain": 0.06, "freq": 1318.5},                                # the URL
+    {"type": "glint", "frame": ST + 120, "gain": 0.06, "freq": 2093},                                # Website by appify
 ]
-for a, b in FLOORS:
-    fx.append({"type": "swoosh", "start": b - 14, "end": b + 2, "peak": 0.75, "f": 600, "gain": 0.09})   # doors slide shut
-    fx.append({"type": "thump", "frame": b, "gain": 0.07})
-    if b < DUR: fx += bell(b + 2)                                                                     # doors open: ding
-fx += [{"type": "tick", "frame": s, "gain": 0.035, "freq": 2637, "pan": 0.3} for s in MAISON[1:]]
-fx += [{"type": "swish", "start": s - 2, "end": s + 10, "gain": 0.08, "pan": 0.25} for s in SLIDES]
-fx += [{"type": "click", "frame": round(LOOK0 + k * 11.25), "gain": 0.12, "freq": 1800, "pan": (k % 3 - 1) * 0.2} for k in range(1, 12)]
-fx += [{"type": "swish", "start": FLOORS[-1][0] + 16, "end": FLOORS[-1][0] + 60, "gain": 0.05}]     # the pop-ups scroll
-fx += [{"type": "reverse_swell", "start": END - 30, "end": END + 12, "gain": 0.08, "notes": ["C4", "E4", "G4", "B4"]},
-       {"type": "glint", "frame": END + 28, "gain": 0.06, "freq": 1975.5},                           # the wordmark lands
-       {"type": "glint", "frame": CREDIT + 2, "gain": 0.05, "freq": 2637}]
 for music_on in (True, False):
-    spec = {"fps": 30, "duration": DUR / 30, "seed": 5, "fade_out": 1.4, "lowpass": 10500, "peak_db": -3, "cues": (music if music_on else []) + fx}
+    spec = {"fps": 30, "duration": DUR / 30, "seed": 3, "fade_out": 1.6, "lowpass": 11000, "peak_db": -3, "cues": (music if music_on else []) + fx}
     out = "sound/cues.json" if music_on else "sound/cues-sfx.json"
     json.dump(spec, open(out, "w"), indent=1); print(out, len(spec["cues"]), "cues")

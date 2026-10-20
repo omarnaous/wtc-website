@@ -41,3 +41,4 @@ exports/faq/
 exports/launch/
 exports/follies/
 appify-follies/public/film.mp4
+appify-follies/public/hero-*.mp4
