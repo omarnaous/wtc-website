@@ -1,0 +1,376 @@
+{
+ "fps": 30,
+ "duration": 24.0,
+ "seed": 5,
+ "fade_out": 1.4,
+ "lowpass": 10500,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "glint",
+   "frame": 3,
+   "gain": 0.06,
+   "freq": 2349
+  },
+  {
+   "type": "pad",
+   "start": 0,
+   "end": 92,
+   "gain": 0.05
+  },
+  {
+   "type": "swoosh",
+   "start": 50,
+   "end": 80,
+   "peak": 0.6,
+   "f": 900,
+   "gain": 0.1
+  },
+  {
+   "type": "swoosh",
+   "start": 76,
+   "end": 92,
+   "peak": 0.75,
+   "f": 600,
+   "gain": 0.09
+  },
+  {
+   "type": "thump",
+   "frame": 90,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "frame": 92,
+   "gain": 0.07,
+   "freq": 987.8,
+   "pan": -0.15
+  },
+  {
+   "type": "chime",
+   "frame": 97,
+   "gain": 0.06,
+   "freq": 784.0,
+   "pan": 0.15
+  },
+  {
+   "type": "swoosh",
+   "start": 166,
+   "end": 182,
+   "peak": 0.75,
+   "f": 600,
+   "gain": 0.09
+  },
+  {
+   "type": "thump",
+   "frame": 180,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "frame": 182,
+   "gain": 0.07,
+   "freq": 1318.5,
+   "pan": -0.15
+  },
+  {
+   "type": "chime",
+   "frame": 187,
+   "gain": 0.06,
+   "freq": 1046.5,
+   "pan": 0.15
+  },
+  {
+   "type": "swoosh",
+   "start": 256,
+   "end": 272,
+   "peak": 0.75,
+   "f": 600,
+   "gain": 0.09
+  },
+  {
+   "type": "thump",
+   "frame": 270,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "frame": 272,
+   "gain": 0.07,
+   "freq": 1108.7,
+   "pan": -0.15
+  },
+  {
+   "type": "chime",
+   "frame": 277,
+   "gain": 0.06,
+   "freq": 880.0,
+   "pan": 0.15
+  },
+  {
+   "type": "swoosh",
+   "start": 346,
+   "end": 362,
+   "peak": 0.75,
+   "f": 600,
+   "gain": 0.09
+  },
+  {
+   "type": "thump",
+   "frame": 360,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "frame": 362,
+   "gain": 0.07,
+   "freq": 880.0,
+   "pan": -0.15
+  },
+  {
+   "type": "chime",
+   "frame": 367,
+   "gain": 0.06,
+   "freq": 698.5,
+   "pan": 0.15
+  },
+  {
+   "type": "swoosh",
+   "start": 481,
+   "end": 497,
+   "peak": 0.75,
+   "f": 600,
+   "gain": 0.09
+  },
+  {
+   "type": "thump",
+   "frame": 495,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "frame": 497,
+   "gain": 0.07,
+   "freq": 987.8,
+   "pan": -0.15
+  },
+  {
+   "type": "chime",
+   "frame": 502,
+   "gain": 0.06,
+   "freq": 784.0,
+   "pan": 0.15
+  },
+  {
+   "type": "swoosh",
+   "start": 571,
+   "end": 587,
+   "peak": 0.75,
+   "f": 600,
+   "gain": 0.09
+  },
+  {
+   "type": "thump",
+   "frame": 585,
+   "gain": 0.07
+  },
+  {
+   "type": "chime",
+   "frame": 587,
+   "gain": 0.07,
+   "freq": 1318.5,
+   "pan": -0.15
+  },
+  {
+   "type": "chime",
+   "frame": 592,
+   "gain": 0.06,
+   "freq": 1046.5,
+   "pan": 0.15
+  },
+  {
+   "type": "tick",
+   "frame": 115,
+   "gain": 0.035,
+   "freq": 2637,
+   "pan": 0.3
+  },
+  {
+   "type": "tick",
+   "frame": 126,
+   "gain": 0.035,
+   "freq": 2637,
+   "pan": 0.3
+  },
+  {
+   "type": "tick",
+   "frame": 138,
+   "gain": 0.035,
+   "freq": 2637,
+   "pan": 0.3
+  },
+  {
+   "type": "tick",
+   "frame": 149,
+   "gain": 0.035,
+   "freq": 2637,
+   "pan": 0.3
+  },
+  {
+   "type": "tick",
+   "frame": 160,
+   "gain": 0.035,
+   "freq": 2637,
+   "pan": 0.3
+  },
+  {
+   "type": "swish",
+   "start": 200,
+   "end": 212,
+   "gain": 0.08,
+   "pan": 0.25
+  },
+  {
+   "type": "swish",
+   "start": 223,
+   "end": 235,
+   "gain": 0.08,
+   "pan": 0.25
+  },
+  {
+   "type": "swish",
+   "start": 246,
+   "end": 258,
+   "gain": 0.08,
+   "pan": 0.25
+  },
+  {
+   "type": "swish",
+   "start": 290,
+   "end": 302,
+   "gain": 0.08,
+   "pan": 0.25
+  },
+  {
+   "type": "swish",
+   "start": 313,
+   "end": 325,
+   "gain": 0.08,
+   "pan": 0.25
+  },
+  {
+   "type": "swish",
+   "start": 336,
+   "end": 348,
+   "gain": 0.08,
+   "pan": 0.25
+  },
+  {
+   "type": "click",
+   "frame": 371,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.0
+  },
+  {
+   "type": "click",
+   "frame": 382,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 394,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": -0.2
+  },
+  {
+   "type": "click",
+   "frame": 405,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.0
+  },
+  {
+   "type": "click",
+   "frame": 416,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 428,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": -0.2
+  },
+  {
+   "type": "click",
+   "frame": 439,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.0
+  },
+  {
+   "type": "click",
+   "frame": 450,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 461,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": -0.2
+  },
+  {
+   "type": "click",
+   "frame": 472,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.0
+  },
+  {
+   "type": "click",
+   "frame": 484,
+   "gain": 0.12,
+   "freq": 1800,
+   "pan": 0.2
+  },
+  {
+   "type": "swish",
+   "start": 511,
+   "end": 555,
+   "gain": 0.05
+  },
+  {
+   "type": "reverse_swell",
+   "start": 555,
+   "end": 597,
+   "gain": 0.08,
+   "notes": [
+    "C4",
+    "E4",
+    "G4",
+    "B4"
+   ]
+  },
+  {
+   "type": "glint",
+   "frame": 613,
+   "gain": 0.06,
+   "freq": 1975.5
+  },
+  {
+   "type": "glint",
+   "frame": 662,
+   "gain": 0.05,
+   "freq": 2637
+  }
+ ]
+}

@@ -39,3 +39,5 @@ exports/faq/
 # Admin password for /admin (the Worker secret ADMIN_PASSWORD) — never commit.
 .admin-password.txt
 exports/launch/
+exports/follies/
+appify-follies/public/film.mp4
