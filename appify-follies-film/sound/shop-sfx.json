@@ -1,0 +1,280 @@
+{
+ "fps": 30,
+ "duration": 26.0,
+ "seed": 23,
+ "fade_out": 1.5,
+ "lowpass": 11000,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "impact",
+   "frame": 0,
+   "gain": 0.2
+  },
+  {
+   "type": "click",
+   "frame": 8,
+   "gain": 0.11,
+   "freq": 1700,
+   "pan": 0.0
+  },
+  {
+   "type": "click",
+   "frame": 15,
+   "gain": 0.11,
+   "freq": 1700,
+   "pan": 0.3
+  },
+  {
+   "type": "click",
+   "frame": 22,
+   "gain": 0.11,
+   "freq": 1700,
+   "pan": -0.3
+  },
+  {
+   "type": "click",
+   "frame": 30,
+   "gain": 0.11,
+   "freq": 1700,
+   "pan": 0.0
+  },
+  {
+   "type": "click",
+   "frame": 38,
+   "gain": 0.11,
+   "freq": 1700,
+   "pan": 0.3
+  },
+  {
+   "type": "click",
+   "frame": 45,
+   "gain": 0.11,
+   "freq": 1700,
+   "pan": -0.3
+  },
+  {
+   "type": "click",
+   "frame": 52,
+   "gain": 0.11,
+   "freq": 1700,
+   "pan": 0.0
+  },
+  {
+   "type": "swoosh",
+   "start": 55,
+   "end": 63,
+   "peak": 0.6,
+   "f": 1800,
+   "gain": 0.1
+  },
+  {
+   "type": "thump",
+   "frame": 62,
+   "gain": 0.07
+  },
+  {
+   "type": "swoosh",
+   "start": 70,
+   "end": 78,
+   "peak": 0.6,
+   "f": 1800,
+   "gain": 0.1
+  },
+  {
+   "type": "thump",
+   "frame": 77,
+   "gain": 0.07
+  },
+  {
+   "type": "swoosh",
+   "start": 85,
+   "end": 93,
+   "peak": 0.6,
+   "f": 1800,
+   "gain": 0.1
+  },
+  {
+   "type": "thump",
+   "frame": 92,
+   "gain": 0.07
+  },
+  {
+   "type": "swoosh",
+   "start": 100,
+   "end": 108,
+   "peak": 0.6,
+   "f": 1800,
+   "gain": 0.1
+  },
+  {
+   "type": "thump",
+   "frame": 107,
+   "gain": 0.07
+  },
+  {
+   "type": "click",
+   "frame": 120,
+   "gain": 0.12,
+   "freq": 1700,
+   "pan": -0.25
+  },
+  {
+   "type": "click",
+   "frame": 128,
+   "gain": 0.12,
+   "freq": 1700,
+   "pan": 0.25
+  },
+  {
+   "type": "click",
+   "frame": 135,
+   "gain": 0.12,
+   "freq": 1700,
+   "pan": -0.25
+  },
+  {
+   "type": "click",
+   "frame": 142,
+   "gain": 0.12,
+   "freq": 1700,
+   "pan": 0.25
+  },
+  {
+   "type": "click",
+   "frame": 150,
+   "gain": 0.12,
+   "freq": 1700,
+   "pan": -0.25
+  },
+  {
+   "type": "click",
+   "frame": 158,
+   "gain": 0.12,
+   "freq": 1700,
+   "pan": 0.25
+  },
+  {
+   "type": "riser",
+   "start": 150,
+   "end": 179,
+   "gain": 0.07
+  },
+  {
+   "type": "impact",
+   "frame": 180,
+   "gain": 0.2
+  },
+  {
+   "type": "glint",
+   "frame": 182,
+   "gain": 0.05,
+   "freq": 1760
+  },
+  {
+   "type": "whoosh",
+   "start": 236,
+   "end": 246,
+   "gain": 0.06
+  },
+  {
+   "type": "swish",
+   "start": 244,
+   "end": 270,
+   "gain": 0.06
+  },
+  {
+   "type": "whoosh",
+   "start": 296,
+   "end": 306,
+   "gain": 0.06
+  },
+  {
+   "type": "swish",
+   "start": 304,
+   "end": 330,
+   "gain": 0.06
+  },
+  {
+   "type": "whoosh",
+   "start": 356,
+   "end": 366,
+   "gain": 0.06
+  },
+  {
+   "type": "click",
+   "frame": 380,
+   "gain": 0.06,
+   "freq": 2400
+  },
+  {
+   "type": "whoosh",
+   "start": 386,
+   "end": 396,
+   "gain": 0.06
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/add-to-cart.ogg",
+   "frame": 393,
+   "gain": 0.35
+  },
+  {
+   "type": "whoosh",
+   "start": 416,
+   "end": 426,
+   "gain": 0.06
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/open.ogg",
+   "frame": 423,
+   "gain": 0.3
+  },
+  {
+   "type": "whoosh",
+   "start": 476,
+   "end": 486,
+   "gain": 0.06
+  },
+  {
+   "type": "swish",
+   "start": 484,
+   "end": 510,
+   "gain": 0.06
+  },
+  {
+   "type": "impact",
+   "frame": 540,
+   "gain": 0.14
+  },
+  {
+   "type": "pop",
+   "frame": 552,
+   "gain": 0.12
+  },
+  {
+   "type": "tick",
+   "frame": 566,
+   "gain": 0.035,
+   "freq": 1760
+  },
+  {
+   "type": "impact",
+   "frame": 582,
+   "gain": 0.14
+  },
+  {
+   "type": "chime",
+   "frame": 584,
+   "gain": 0.05,
+   "freq": 1318.5
+  },
+  {
+   "type": "glint",
+   "frame": 670,
+   "gain": 0.04,
+   "freq": 2093
+  }
+ ]
+}
