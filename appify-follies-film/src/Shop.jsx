@@ -52,8 +52,8 @@ function Triptych({ f }) {
           </div>
         );
       }))}
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1460, textAlign: "center", ...G, fontSize: 210, color: C.paper, textShadow: "0 10px 50px rgba(0,0,0,.5)", ...pop(sp(f, TRIPTYCH + b * BEAT, 9, 320), 1.6) }}>{WORDS[look]}</div>
-      <div style={{ position: "absolute", left: 70, top: 1340, ...M, fontSize: 26, color: C.paper, textShadow: "0 2px 10px rgba(0,0,0,.6)" }}>Look {id2(look + 1)} / 04</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1150, textAlign: "center", ...G, fontSize: 190, color: C.paper, textShadow: "0 10px 50px rgba(0,0,0,.5)", ...pop(sp(f, TRIPTYCH + b * BEAT, 9, 320), 1.6) }}>{WORDS[look]}</div>
+      <div style={{ position: "absolute", left: 70, top: 1080, ...M, fontSize: 26, color: C.paper, textShadow: "0 2px 10px rgba(0,0,0,.6)" }}>Look {id2(look + 1)} / 04</div>
     </AbsoluteFill>
   );
 }
@@ -67,7 +67,7 @@ function Punch({ f }) {
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
       <Img src={staticFile(`look/${shot}.jpg`)} style={{ position: "absolute", height: 1920, left: "50%", top: 0, transform: `translateX(-50%) scale(${z})` }} />
       <AbsoluteFill style={{ border: `28px solid ${k % 2 ? C.orange : C.paper}` }} />
-      <div style={{ position: "absolute", left: 70, bottom: 360, ...BO, fontSize: 90, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,.5)" }}>Épicée. Libre.</div>
+      <div style={{ position: "absolute", left: 70, bottom: 480, ...BO, fontSize: 90, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,.5)" }}>Épicée. Libre.</div>
       <AbsoluteFill style={{ background: "#fff", opacity: flash }} />
     </AbsoluteFill>
   );
@@ -78,7 +78,7 @@ function Hook({ f }) {
   const out = interpolate(f, [PUNCH - 8, PUNCH - 2], [1, 0], clamp);
   const box = (bg, fg) => ({ display: "inline-block", padding: "10px 26px 16px", borderRadius: 18, background: bg, color: fg, ...D, fontSize: 80 });
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: 210, textAlign: "center", opacity: out }}>
+    <div style={{ position: "absolute", left: 0, right: 0, top: 290, textAlign: "center", opacity: out }}>
       <div style={{ ...pop(sp(f, -4, 11, 300), 1.3) }}><span style={box(C.ink, "#fff")}><span style={{ color: C.orange }}>POV:</span> FDM launched</span></div>
       <div style={{ marginTop: 10, ...pop(sp(f, 8, 10, 300), 1.5) }}><span style={box(C.ink, C.orange)}>their new website</span></div>
     </div>
@@ -115,15 +115,15 @@ function Site({ f }) {
         <Img src={rec(f)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.1), rgba(0,0,0,.6))" }} />
-      <div style={{ position: "absolute", left: 40, right: 40, top: 330, ...caption }}>
+      <div style={{ position: "absolute", left: 40, right: 40, top: 280, ...caption }}>
         <div style={{ ...D, fontSize: 76, ...pop(sp(t, 2, 11, 300), 1.3) }}>Their new boutique</div>
         <div style={{ ...D, fontSize: 76, color: C.orange, marginTop: 8, textShadow: "0 4px 24px rgba(0,0,0,.5)", ...pop(sp(t, 10, 10, 300), 1.5) }}>built by Appify</div>
       </div>
-      <div style={{ position: "absolute", left: 16, top: 600, transform: `translateY(${(1 - enter) * 500}px) scale(${0.92 + 0.08 * enter})`, opacity: Math.min(1, enter * 2) }}>
+      <div style={{ position: "absolute", left: 16, top: 470, transform: `translateY(${(1 - enter) * 500}px) scale(${0.92 + 0.08 * enter})`, opacity: Math.min(1, enter * 2) }}>
         <Browser f={f} w={1048} />
       </div>
       {chip && (
-        <div key={chip[0]} style={{ position: "absolute", left: 0, right: 0, top: 1380, display: "flex", justifyContent: "center" }}>
+        <div key={chip[0]} style={{ position: "absolute", left: 0, right: 0, top: 1240, display: "flex", justifyContent: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 28px 16px 20px", borderRadius: 99, background: "rgba(12,11,10,.7)", border: "2px solid rgba(242,112,67,.6)", ...UI, fontSize: 38, color: "#fff", ...pop(sp(t, chip[0], 12, 280), 1.25) }}>
             <Spark size={34} />{chip[1]}
           </div>
@@ -143,43 +143,42 @@ function End({ f }) {
   return (
     <AbsoluteFill style={{ background: `linear-gradient(180deg, #08070F, ${C.night} 55%, #1A0F0A)` }}>
       <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(242,112,67,.06) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(242,112,67,.06) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px" }} />
-      <AbsoluteFill style={{ background: `radial-gradient(circle at 75% 62%, rgba(242,112,67,${0.22 + 0.05 * Math.sin(t / 6)}), transparent 55%)` }} />
-      <div style={{ position: "absolute", left: 70, top: 190, display: "flex", alignItems: "center", gap: 22, ...pop(sp(t, 0, 10, 300)) }}>
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 72% 38%, rgba(242,112,67,${0.22 + 0.05 * Math.sin(t / 6)}), transparent 55%)` }} />
+      <div style={{ position: "absolute", left: 70, top: 250, display: "flex", alignItems: "center", gap: 22, ...pop(sp(t, 0, 10, 300)) }}>
         <svg viewBox={WORDMARK.viewBox} width={wm} height={wmh}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.orange} /></svg>
         <span style={{ ...M, fontSize: 22, color: C.orange }}>@appifylb</span>
       </div>
-      <div style={{ position: "absolute", left: 70, top: 330 }}>
-        <div style={{ ...D, fontSize: 82, color: "#fff", ...pop(sp(t, 6, 10, 300)) }}>Everything a</div>
-        <div style={{ ...D, fontSize: 82, color: C.orange, marginTop: 6, ...pop(sp(t, 12, 10, 300), 1.5) }}>boutique needs</div>
+      <div style={{ position: "absolute", left: 70, top: 370 }}>
+        <div style={{ ...D, fontSize: 74, color: "#fff", ...pop(sp(t, 6, 10, 300)) }}>Everything a</div>
+        <div style={{ ...D, fontSize: 74, color: C.orange, marginTop: 6, ...pop(sp(t, 12, 10, 300), 1.5) }}>boutique needs</div>
       </div>
-      <div style={{ position: "absolute", left: 70, top: 560, width: 620 }}>
+      <div style={{ position: "absolute", left: 70, top: 540, width: 540 }}>
         {FEATURES.map((ft, i) => {
           const p = sp(f, FEAT0 + i * EIGHTH, 12, 260);
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 18, height: 64, borderBottom: "1px solid rgba(255,255,255,.1)", ...rise(p, 24) }}>
-              <div style={{ width: 40, height: 40, borderRadius: 99, background: C.orange, display: "grid", placeItems: "center", transform: `scale(${interpolate(p, [0, 1], [0.3, 1])})` }}>
-                <svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6" fill="none" stroke={C.night} strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, height: 54, borderBottom: "1px solid rgba(255,255,255,.1)", ...rise(p, 24) }}>
+              <div style={{ width: 34, height: 34, borderRadius: 99, background: C.orange, display: "grid", placeItems: "center", transform: `scale(${interpolate(p, [0, 1], [0.3, 1])})` }}>
+                <svg width="19" height="19" viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6" fill="none" stroke={C.night} strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </div>
-              <span style={{ ...UI, fontSize: 36, color: "#fff" }}>{ft}</span>
+              <span style={{ ...UI, fontSize: 31, color: "#fff" }}>{ft}</span>
             </div>
           );
         })}
       </div>
-      <div style={{ position: "absolute", left: 70, top: 1170, ...pop(own, 1.25), transformOrigin: "0% 50%" }}>
+      <div style={{ position: "absolute", left: 70, top: 1045, ...pop(own, 1.25), transformOrigin: "0% 50%" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 12, padding: "8px 16px", borderRadius: 99, border: `2px solid ${C.orange}`, ...M, fontSize: 22, color: C.orange }}><Spark size={22} />No subscription</div>
-        <div style={{ ...D, fontSize: 64, color: "#fff", marginTop: 16 }}>Pay once.</div>
-        <div style={{ ...D, fontSize: 64, color: C.orange, marginTop: 6 }}>Own it forever.</div>
+        <div style={{ ...D, fontSize: 56, color: "#fff", marginTop: 14 }}>Pay once. <span style={{ color: C.orange }}>Own it forever.</span></div>
       </div>
-      <div style={{ position: "absolute", left: 70, top: 1400, transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * pulse})`, transformOrigin: "0% 50%", opacity: Math.min(1, cta * 2) }}>
-        <div style={{ padding: "20px 40px", borderRadius: 28, background: C.orange, boxShadow: "0 20px 60px rgba(242,112,67,.35)" }}>
+      <div style={{ position: "absolute", left: 70, top: 1200, transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * pulse})`, transformOrigin: "0% 50%", opacity: Math.min(1, cta * 2) }}>
+        <div style={{ padding: "18px 36px", borderRadius: 26, background: C.orange, boxShadow: "0 20px 60px rgba(242,112,67,.35)" }}>
           <div style={{ ...M, fontSize: 22, color: C.night, letterSpacing: "0.2em" }}>DM</div>
-          <div style={{ ...D, fontSize: 66, color: C.night, marginTop: 4 }}>“ECOMMERCE”</div>
+          <div style={{ ...D, fontSize: 60, color: C.night, marginTop: 4 }}>“ECOMMERCE”</div>
           <div style={{ ...UI, fontSize: 26, color: C.night, marginTop: 6 }}>for a store like this</div>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 70, top: 1605, ...UI, fontWeight: 400, fontFamily: "UIR", fontSize: 24, color: "rgba(255,255,255,.6)", ...rise(sp(t, OWN + 40, 12, 220)) }}>Follies d'Après-Midi · designed & built by Appify</div>
-      <div style={{ position: "absolute", left: 640, top: 760, transform: `translateY(${(1 - Math.min(1, devP)) * 800}px)` }}>
-        <DevBags width={390} t={t} tilt={Math.sin(t / 9) * 2.5} bob={Math.sin(t / 6) * 3} face={{ brow: 16, lid: t % 80 > 76 ? 1 : 0.05, smile: 1, look: -6, happy: t > 30 ? 1 : 0, open: t > 14 && t < 28 ? 0.5 : 0 }} />
+      <div style={{ position: "absolute", left: 70, top: 1400, ...UI, fontWeight: 400, fontFamily: "UIR", fontSize: 24, color: "rgba(255,255,255,.6)", ...rise(sp(t, OWN + 40, 12, 220)) }}>Follies d'Après-Midi · designed & built by Appify</div>
+      <div style={{ position: "absolute", left: 610, top: 470, transform: `translateY(${(1 - Math.min(1, devP)) * 800}px)` }}>
+        <DevBags width={300} t={t} tilt={Math.sin(t / 9) * 2.5} bob={Math.sin(t / 6) * 3} face={{ brow: 16, lid: t % 80 > 76 ? 1 : 0.05, smile: 1, look: -6, happy: t > 30 ? 1 : 0, open: t > 14 && t < 28 ? 0.5 : 0 }} />
       </div>
     </AbsoluteFill>
   );
