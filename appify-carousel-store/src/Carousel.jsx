@@ -364,23 +364,38 @@ function Delivery({ ph }) {
   );
 }
 
-// ── 8 · the DM ────────────────────────────────────────────────────────────────────────────────────────────────────
+// ── 8 · book a call ────────────────────────────────────────────────────────────────────────────────────────────────────
 function Cta({ ph }) {
   const t = ph * TAU * 2;
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 200 }}>
-        <Eyebrow>Your store, live</Eyebrow>
+        <Eyebrow>Let's talk</Eyebrow>
         <div style={{ ...D, fontSize: 96, color: "#fff", marginTop: 26 }}>Ready to<br />sell online?</div>
         <div style={{ ...UI, fontSize: 32, color: "rgba(255,255,255,.75)", marginTop: 28, lineHeight: 1.35 }}>E-commerce website · <span style={{ color: C.yellow }}>$360</span><br />Pay once · hosting included<br />Delivered in under 7 days<br />1 month full support</div>
       </div>
-      <div style={{ position: "absolute", left: 80, top: 850, transform: `scale(${1 + 0.03 * Math.max(0, sin(ph, 2))})`, transformOrigin: "0% 50%" }}>
-        <div style={{ padding: "22px 36px", borderRadius: 26, background: C.yellow, boxShadow: "0 20px 60px rgba(255,210,63,.3)" }}>
-          <div style={{ ...M, fontSize: 22, color: C.ink }}>DM us</div>
-          <div style={{ ...D, fontSize: 60, color: C.ink, marginTop: 6 }}>“ECOMMERCE”</div>
+      {/* a booking card: pick a day, pick a time, book (a picture of the /book page, not real availability) */}
+      <div style={{ position: "absolute", left: 80, top: 680, width: 540, borderRadius: 28, background: C.paper, padding: "28px 28px 26px", boxShadow: "0 40px 90px rgba(0,0,0,.55), 0 0 70px rgba(91,43,255,.3)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <svg width="34" height="34" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke={C.uv} strokeWidth="2" /><path d="M3 10 H21 M8 3 V7 M16 3 V7" stroke={C.uv} strokeWidth="2" strokeLinecap="round" /></svg>
+          <span style={{ ...D, fontSize: 40, color: C.ink, letterSpacing: "-0.03em" }}>Book a call</span>
+        </div>
+        <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
+          {["Mon", "Tue", "Wed", "Thu", "Fri"].map((d, i) => (
+            <div key={d} style={{ flex: 1, padding: "12px 0", borderRadius: 14, textAlign: "center", ...UI, fontSize: 22, background: i === 2 ? C.uv : "#E6E1F5", color: i === 2 ? "#fff" : "#3A3550" }}>{d}</div>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+          {["10:00", "12:30", "16:00"].map((t, i) => (
+            <div key={t} style={{ flex: 1, padding: "12px 0", borderRadius: 14, textAlign: "center", ...UI, fontSize: 22, border: `2px solid ${i === 1 ? C.uv : "#D5CFEA"}`, color: i === 1 ? C.uv : "#3A3550", background: "#fff" }}>{t}</div>
+          ))}
+        </div>
+        <div style={{ marginTop: 20, padding: "18px 0", borderRadius: 18, background: C.yellow, display: "flex", justifyContent: "center", alignItems: "center", gap: 14, ...D, fontSize: 40, color: C.ink, letterSpacing: "-0.03em", transform: `scale(${1 + 0.03 * Math.max(0, sin(ph, 2))})`, boxShadow: "0 14px 34px rgba(255,210,63,.45)" }}>
+          Book your call
+          <svg width="40" height="24" viewBox="0 0 46 24" style={{ transform: `translateX(${6 * Math.max(0, sin(ph, 3))}px)` }}><path d="M2 12 H40 M30 3 L41 12 L30 21" fill="none" stroke={C.ink} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 80, top: 1065, ...M, fontSize: 22, color: "rgba(255,255,255,.7)", lineHeight: 1.8 }}>appify-lb.com<br />@appifylb</div>
+      <div style={{ position: "absolute", left: 80, top: 1105, ...M, fontSize: 24, color: "#fff", lineHeight: 1.7 }}>appify-lb.com/book<br /><span style={{ color: "rgba(255,255,255,.6)" }}>or DM @appifylb</span></div>
       <div style={{ position: "absolute", left: 640, top: 480 }}>
         <DevBags width={360} t={t} tilt={2.5 * sin(ph, 2)} bob={3 * sin(ph, 3)} face={{ brow: 16, lid: fract(ph * 2) > 0.94 ? 1 : 0.05, smile: 1, look: -8, happy: 1 }} />
       </div>
