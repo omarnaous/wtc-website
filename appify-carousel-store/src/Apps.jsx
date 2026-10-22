@@ -1,4 +1,4 @@
-// "Your app idea is still in your Notes app." A 9-slide carousel (4:5 photos) for Appify's mobile app plan
+// "From your Notes to the App Store." A 7-slide carousel (4:5 photos) for Appify's mobile app plan
 // (from $999, iOS + Android). Same canvas, thread and type as the store and inventory carousels.
 // Plan facts are Appify's own: UI/UX design for every screen, one app for iOS and Android, App Store and Google Play
 // publishing, an admin panel, and a free landing page website connected to the app. The proof slide is Darebni AI
@@ -9,7 +9,7 @@ import { Dev } from "./Dev.jsx";
 import { C, D, UI, M, Wordmark, Check, Eyebrow, Title, Sample, Canvas, Chrome, Swipe } from "./Carousel.jsx";
 import { LOOP } from "./timing.js";
 
-export const APP_N = 9;
+export const APP_N = 7;
 const INK = "#0A0913";
 
 // a phone: ink bezel, rounded screen, the island; children (or an image) fill the screen
@@ -71,50 +71,74 @@ const StoreBtn = ({ label, sub }) => (
   </div>
 );
 
-// ── 1 · the hook ─────────────────────────────────────────────────────────────────────────────────────────────────
+// ── 1 · the hook: the outcome and the price, up front ─────────────────────────────────────────────────────────────
 function Hook() {
-  const notes = ["Booking app for my salon", "Clients pay inside the app", "Needs iPhone AND Android", "Ask someone… someday"];
+  const notes = ["Booking app for my salon", "Clients pay inside", "iPhone AND Android", "Someday…"];
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow color={C.pink}>Sound familiar?</Eyebrow>
-        <div style={{ ...D, fontSize: 98, color: "#fff", marginTop: 26 }}>Your app idea is<br />still in your <span style={{ color: C.yellow }}>Notes.</span></div>
+        <Eyebrow color={C.yellow}>Got an app idea?</Eyebrow>
+        <div style={{ ...D, fontSize: 92, color: "#fff", marginTop: 26 }}>From your Notes<br />to the <span style={{ color: C.yellow }}>App Store.</span></div>
       </div>
-      <Phone w={330} rot={-5} style={{ left: 110, top: 480 }}>
-        <div style={{ padding: "54px 22px", height: "100%", background: "#FFFDF5" }}>
-          <div style={{ ...UI, fontSize: 15, color: "#D19A00" }}>‹ Notes</div>
-          <div style={{ ...D, fontSize: 30, color: INK, marginTop: 14, letterSpacing: "-0.03em" }}>App idea 💡</div>
-          <div style={{ fontFamily: "UIR", fontSize: 13, color: C.mute, marginTop: 6 }}>Edited 3 months ago</div>
+      <Phone w={270} rot={-7} style={{ left: 90, top: 500 }}>
+        <div style={{ padding: "48px 18px", height: "100%", background: "#FFFDF5" }}>
+          <div style={{ ...UI, fontSize: 13, color: "#D19A00" }}>‹ Notes</div>
+          <div style={{ ...D, fontSize: 26, color: INK, marginTop: 12, letterSpacing: "-0.03em" }}>App idea 💡</div>
+          <div style={{ fontFamily: "UIR", fontSize: 11, color: C.mute, marginTop: 4 }}>Edited 3 months ago</div>
           {notes.map((n, i) => (
-            <div key={n} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginTop: 18, fontFamily: "UIR", fontSize: 18, color: i === 3 ? C.mute : INK, lineHeight: 1.3 }}>
-              <span style={{ width: 20, height: 20, borderRadius: 99, border: "2px solid #C9C3DD", flex: "none", marginTop: 2 }} />{n}
+            <div key={n} style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 14, fontFamily: "UIR", fontSize: 15, color: i === 3 ? C.mute : INK }}>
+              <span style={{ width: 16, height: 16, borderRadius: 99, border: "2px solid #C9C3DD", flex: "none" }} />{n}
             </div>
           ))}
         </div>
       </Phone>
-      <div style={{ position: "absolute", left: 660, top: 500 }}>
-        <Dev width={340} point={1} smile={0.4} brow={20} lid={0.05} look={-10} tilt={-4} />
+      <svg width="120" height="60" viewBox="0 0 140 60" style={{ position: "absolute", left: 375, top: 760 }}><path d="M6 30 H120 M96 8 L124 30 L96 52" fill="none" stroke={C.yellow} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      <Phone w={300} rot={5} glow style={{ left: 640, top: 470 }}>
+        <div style={{ padding: "60px 18px", height: "100%", background: "#fff" }}>
+          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+            <div style={{ width: 84, height: 84, borderRadius: 20, background: `linear-gradient(135deg, ${C.uv}, #9D7BFF)`, display: "grid", placeItems: "center" }}>
+              <svg width="44" height="44" viewBox="0 0 100 100"><path d="M50 8 C54 34 66 46 92 50 C66 54 54 66 50 92 C46 66 34 54 8 50 C34 46 46 34 50 8 Z" fill="#fff" /></svg>
+            </div>
+            <div><div style={{ ...D, fontSize: 26, color: INK, letterSpacing: "-0.03em" }}>Your App</div><div style={{ fontFamily: "UIR", fontSize: 13, color: C.mute, marginTop: 4 }}>Your brand</div>
+              <div style={{ marginTop: 8, display: "inline-block", padding: "6px 20px", borderRadius: 99, background: C.uv, ...UI, fontSize: 15, color: "#fff" }}>Get</div></div>
+          </div>
+          <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
+            {[0, 1].map((i) => <div key={i} style={{ flex: 1, height: 330, borderRadius: 14, overflow: "hidden", background: "#EEE9FB", position: "relative" }}><div style={{ position: "absolute", left: 8, right: 8, top: 10, bottom: 0, borderRadius: "16px 16px 0 0", overflow: "hidden", background: "#fff" }}><div style={{ width: 300, height: 650, transform: "scale(.4)", transformOrigin: "0 0", position: "relative" }}><SampleScreen w={300} /></div></div></div>)}
+          </div>
+        </div>
+      </Phone>
+      <div style={{ position: "absolute", left: 80, top: 1112, display: "flex", alignItems: "center", gap: 18 }}>
+        <div style={{ padding: "14px 26px", borderRadius: 99, background: C.yellow, ...D, fontSize: 40, color: INK, letterSpacing: "-0.03em" }}>From $999</div>
+        <span style={{ ...UI, fontSize: 28, color: "#fff" }}>iPhone + Android</span>
       </div>
       <Swipe ph={0} />
     </>
   );
 }
 
-// ── 2 · what's stopping you ──────────────────────────────────────────────────────────────────────────────────────
-function Stopping() {
-  const qs = [["Where do I even start?", -3, 0], ["iPhone or Android?", 2, 210], ["How do I get it on the App Store?", -2, 420]];
+// ── 3 · everything that's included, in one price ─────────────────────────────────────────────────────────────────
+function Included() {
+  const items = [
+    ["🎨", "UI/UX design, every screen", "See the whole app before we code"],
+    ["📱", "One app, iPhone + Android", "Built once, runs on both"],
+    ["🚀", "App Store & Google Play", "We publish it for you"],
+    ["🛠️", "Admin panel", "Manage your users and content"],
+    ["🌐", "Free landing page website", "Connected to the app"],
+  ];
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow color={C.pink}>The questions</Eyebrow>
-        <Title a="So what's" b="stopping you?" bColor={C.pink} size={96} />
+        <Eyebrow>What you get</Eyebrow>
+        <Title a="Everything to launch." b="One price." bColor={C.yellow} size={88} />
       </div>
-      {qs.map(([q, rot, dy], i) => (
-        <div key={q} style={{ position: "absolute", left: i === 1 ? 230 : 80, top: 500 + dy, padding: "30px 38px", borderRadius: 30, borderBottomLeftRadius: 8, background: C.paper, ...D, fontSize: 50, color: INK, letterSpacing: "-0.03em", transform: `rotate(${rot}deg)`, boxShadow: "0 30px 70px rgba(0,0,0,.45)" }}>
-          <span style={{ color: C.pink }}>?</span> {q}
+      {items.map(([ic, t, d], i) => (
+        <div key={t} style={{ position: "absolute", left: 80, top: 470 + i * 122, width: 920, height: 106, borderRadius: 22, background: i % 2 ? "rgba(255,255,255,.06)" : "rgba(91,43,255,.18)", border: "1.5px solid rgba(143,114,255,.35)", display: "flex", alignItems: "center", gap: 22, padding: "0 26px" }}>
+          <div style={{ width: 64, height: 64, borderRadius: 18, background: C.paper, display: "grid", placeItems: "center", fontSize: 34, flex: "none" }}>{ic}</div>
+          <div style={{ flex: 1 }}><div style={{ ...UI, fontSize: 32, color: "#fff" }}>{t}</div><div style={{ fontFamily: "UIR", fontSize: 23, color: "rgba(255,255,255,.65)", marginTop: 4 }}>{d}</div></div>
+          <Check size={40} />
         </div>
       ))}
-      <div style={{ position: "absolute", left: 80, top: 1110, ...UI, fontSize: 32, color: "rgba(255,255,255,.85)" }}>Good news: <span style={{ color: C.yellow }}>we handle all of it.</span></div>
+      <div style={{ position: "absolute", right: 80, top: 1096, display: "flex", alignItems: "baseline", gap: 12 }}><span style={{ ...UI, fontSize: 28, color: "rgba(255,255,255,.7)" }}>from</span><span style={{ ...D, fontSize: 84, color: C.yellow, letterSpacing: "-0.05em" }}>$999</span></div>
       <Swipe ph={0} />
     </>
   );
@@ -125,136 +149,83 @@ function Design() {
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow>01 · UI/UX design</Eyebrow>
-        <Title a="Every screen designed" b="before we build." size={80} />
+        <Eyebrow>Step 1 · Design</Eyebrow>
+        <Title a="See every screen" b="before we write code." size={84} />
       </div>
       <Phone w={300} rot={-4} style={{ left: 110, top: 470, opacity: 0.95 }}><Wireframe /></Phone>
       <svg width="140" height="60" viewBox="0 0 140 60" style={{ position: "absolute", left: 470, top: 760 }}><path d="M6 30 H120 M96 8 L124 30 L96 52" fill="none" stroke={C.yellow} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" /></svg>
       <Phone w={300} rot={4} glow style={{ left: 650, top: 470 }}><SampleScreen w={300} /></Phone>
       <div style={{ position: "absolute", left: 120, top: 1140, ...M, fontSize: 20, color: "rgba(255,255,255,.6)" }}>Wireframe</div>
       <div style={{ position: "absolute", left: 690, top: 1140, ...M, fontSize: 20, color: C.yellow }}>Final design</div>
-      <Sample style={{ left: 420, top: 1176 }} />
+      <Sample style={{ left: 80, top: 150 }} />
       <Swipe ph={0} />
     </>
   );
 }
 
-// ── 4 · one app, both platforms ──────────────────────────────────────────────────────────────────────────────────
-function Both() {
+// ── 5 · one app, both stores, published for you ──────────────────────────────────────────────────────────────────
+function Ship() {
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow>02 · iOS + Android</Eyebrow>
-        <Title a="iPhone and Android." b="One app." bColor={C.yellow} size={88} />
+        <Eyebrow>Step 2 · Build & publish</Eyebrow>
+        <Title a="One app. Both stores." b="We publish it." bColor={C.yellow} size={84} />
       </div>
-      <Phone w={310} rot={-6} glow style={{ left: 150, top: 480 }}><SampleScreen w={310} /></Phone>
-      <Phone w={310} rot={6} glow style={{ left: 600, top: 480 }}><SampleScreen w={310} /></Phone>
-      <div style={{ position: "absolute", left: 440, top: 740, width: 200, height: 200, borderRadius: 99, background: C.yellow, display: "grid", placeItems: "center", textAlign: "center", transform: "rotate(-8deg)", border: `6px solid ${INK}`, boxShadow: "0 20px 50px rgba(0,0,0,.5)", zIndex: 2 }}>
+      <div style={{ position: "absolute", left: 80, top: 440, display: "flex", gap: 16 }}>
+        {[["Download on the", "App Store"], ["Get it on", "Google Play"]].map(([a, b]) => (
+          <div key={b} style={{ display: "flex", alignItems: "center", gap: 14 }}><StoreBtn sub={a} label={b} /><Check size={36} bg={C.mint} fg="#063" /></div>
+        ))}
+      </div>
+      <Phone w={280} rot={-6} glow style={{ left: 160, top: 560 }}><SampleScreen w={280} /></Phone>
+      <Phone w={280} rot={6} glow style={{ left: 640, top: 560 }}><SampleScreen w={280} /></Phone>
+      <div style={{ position: "absolute", left: 440, top: 800, width: 200, height: 200, borderRadius: 99, background: C.yellow, display: "grid", placeItems: "center", textAlign: "center", transform: "rotate(-8deg)", border: `6px solid ${INK}`, boxShadow: "0 20px 50px rgba(0,0,0,.5)", zIndex: 2 }}>
         <div><div style={{ ...D, fontSize: 54, color: INK }}>1 app</div><div style={{ ...M, fontSize: 15, color: INK, marginTop: 6 }}>2 stores</div></div>
       </div>
-      <div style={{ position: "absolute", left: 170, top: 440, ...M, fontSize: 22, color: "rgba(255,255,255,.75)" }}>iOS</div>
-      <div style={{ position: "absolute", left: 790, top: 440, ...M, fontSize: 22, color: "rgba(255,255,255,.75)" }}>Android</div>
+      <Sample style={{ left: 80, top: 150 }} />
       <Swipe ph={0} />
     </>
   );
 }
 
-// ── 5 · publishing ───────────────────────────────────────────────────────────────────────────────────────────────
-function Publish() {
-  const steps = ["Store listing", "Screenshots", "Submission to both stores"];
+// ── 6 · you run it: the admin panel and the free landing page ─────────────────────────────────────────────────────
+function Run() {
+  const rows = [["Sara K.", "New booking"], ["Omar H.", "Signed up"], ["Lea M.", "New booking"]];
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow>03 · Store publishing</Eyebrow>
-        <Title a="App Store & Google Play?" b="We publish it for you." size={74} />
+        <Eyebrow>Step 3 · Launch</Eyebrow>
+        <Title a="Run it yourself." b="Plus a free website." size={84} />
       </div>
-      <div style={{ position: "absolute", left: 80, top: 480, width: 920, borderRadius: 28, background: C.paper, padding: 34, boxShadow: "0 50px 110px rgba(0,0,0,.6), 0 0 70px rgba(91,43,255,.3)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-          <div style={{ width: 150, height: 150, borderRadius: 36, background: `linear-gradient(135deg, ${C.uv}, #9D7BFF)`, display: "grid", placeItems: "center", boxShadow: "0 14px 30px rgba(91,43,255,.4)" }}>
-            <svg width="80" height="80" viewBox="0 0 100 100"><path d="M50 8 C54 34 66 46 92 50 C66 54 54 66 50 92 C46 66 34 54 8 50 C34 46 46 34 50 8 Z" fill="#fff" /></svg>
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ ...D, fontSize: 52, color: INK, letterSpacing: "-0.03em" }}>Your App</div>
-            <div style={{ fontFamily: "UIR", fontSize: 24, color: C.mute, marginTop: 6 }}>Your brand · Lifestyle</div>
-          </div>
-          <div style={{ padding: "14px 34px", borderRadius: 99, background: C.uv, ...UI, fontSize: 28, color: "#fff" }}>Get</div>
+      <div style={{ position: "absolute", left: 80, top: 470, width: 600, borderRadius: 24, overflow: "hidden", background: "#13112A", border: "2px solid rgba(143,114,255,.4)", boxShadow: "0 40px 90px rgba(0,0,0,.6)", padding: 24, transform: "rotate(-2deg)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><span style={{ ...D, fontSize: 32, color: "#fff" }}>Admin panel</span><Wordmark width={90} /></div>
+        <div style={{ display: "flex", gap: 12, marginTop: 16 }}>{[["Users", "2,418"], ["Bookings", "164"]].map(([k, v]) => <div key={k} style={{ flex: 1, padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,.05)" }}><div style={{ ...M, fontSize: 12, color: "rgba(255,255,255,.5)" }}>{k}</div><div style={{ ...D, fontSize: 40, color: "#fff", marginTop: 6 }}>{v}</div></div>)}</div>
+        {rows.map(([n, a]) => <div key={n} style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 10, padding: "12px 14px", borderRadius: 12, background: "rgba(255,255,255,.04)", ...UI, fontSize: 19, color: "#fff" }}><span style={{ width: 30, height: 30, borderRadius: 99, background: C.iris, display: "grid", placeItems: "center", fontSize: 13 }}>{n[0]}</span>{n} <span style={{ color: "rgba(255,255,255,.55)", fontFamily: "UIR" }}>· {a}</span></div>)}
+      </div>
+      <div style={{ position: "absolute", left: 380, top: 790, width: 620, borderRadius: 22, overflow: "hidden", background: "#17142B", boxShadow: "0 40px 90px rgba(0,0,0,.6), 0 0 0 2px rgba(143,114,255,.4)", transform: "rotate(2deg)" }}>
+        <div style={{ height: 38, display: "flex", alignItems: "center", gap: 8, padding: "0 16px" }}>
+          {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => <i key={c} style={{ width: 11, height: 11, borderRadius: 99, background: c }} />)}
+          <div style={{ marginLeft: 120, padding: "4px 30px", borderRadius: 8, background: "rgba(255,255,255,.08)", fontFamily: "UIR", fontSize: 15, color: "rgba(255,255,255,.8)" }}>yourapp.com</div>
         </div>
-        <div style={{ display: "flex", gap: 14, marginTop: 28 }}>
-          {[0, 1, 2].map((i) => <div key={i} style={{ flex: 1, height: 260, borderRadius: 20, overflow: "hidden", background: "#E9E4FA", position: "relative" }}><div style={{ position: "absolute", inset: "14px 18px 0", borderRadius: "22px 22px 0 0", background: "#fff", overflow: "hidden" }}><div style={{ transform: "scale(.82)", transformOrigin: "50% 0" }}><div style={{ width: 300, height: 650, position: "relative" }}><SampleScreen w={300} /></div></div></div></div>)}
+        <div style={{ height: 300, background: "linear-gradient(135deg, #F3F0FF, #FFFFFF 60%)", padding: "34px 34px", position: "relative", overflow: "hidden" }}>
+          <div style={{ ...M, fontSize: 13, color: C.uv }}>Free with your app</div>
+          <div style={{ ...D, fontSize: 46, color: INK, marginTop: 10, letterSpacing: "-0.04em" }}>Book in<br />two taps.</div>
+          <div style={{ display: "flex", gap: 10, marginTop: 22, transform: "scale(.8)", transformOrigin: "0 0" }}><StoreBtn sub="Download on the" label="App Store" /><StoreBtn sub="Get it on" label="Google Play" /></div>
+          <Phone w={170} rot={8} style={{ right: 40, top: 26 }}><SampleScreen w={170} /></Phone>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 80, top: 1000, display: "flex", gap: 14, flexWrap: "wrap", width: 920 }}>
-        {steps.map((s) => <div key={s} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 22px 14px 14px", borderRadius: 99, background: "rgba(255,255,255,.07)", border: "1.5px solid rgba(143,114,255,.45)", ...UI, fontSize: 26, color: "#fff" }}><Check size={32} />{s}</div>)}
-      </div>
-      <Sample style={{ left: 80, top: 1176 }} />
+      <Sample style={{ left: 80, top: 150 }} />
       <Swipe ph={0} />
     </>
   );
 }
 
-// ── 6 · the admin panel ──────────────────────────────────────────────────────────────────────────────────────────
-function Admin() {
-  const rows = [["Sara K.", "New booking", "2 min ago"], ["Omar H.", "Signed up", "14 min ago"], ["Lea M.", "New booking", "1 h ago"], ["Rami T.", "Left a review", "3 h ago"]];
-  return (
-    <>
-      <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow>04 · Admin panel</Eyebrow>
-        <Title a="Run your app" b="from one dashboard." size={84} />
-      </div>
-      <div style={{ position: "absolute", left: 80, top: 480, width: 760, height: 620, borderRadius: 24, overflow: "hidden", background: "#13112A", border: "2px solid rgba(143,114,255,.35)", boxShadow: "0 50px 110px rgba(0,0,0,.6)", display: "flex" }}>
-        <div style={{ width: 180, background: "#0E0C20", padding: "26px 18px" }}>
-          <Wordmark width={100} />
-          {["Overview", "Users", "Bookings", "Content", "Notifications"].map((s, i) => <div key={s} style={{ marginTop: i ? 8 : 24, padding: "11px 12px", borderRadius: 12, background: i === 1 ? "rgba(91,43,255,.35)" : "transparent", ...UI, fontSize: 18, color: i === 1 ? "#fff" : "rgba(255,255,255,.55)" }}>{s}</div>)}
-        </div>
-        <div style={{ flex: 1, padding: 24 }}>
-          <div style={{ display: "flex", gap: 14 }}>
-            {[["Users", "2,418"], ["Bookings", "164"]].map(([k, v]) => <div key={k} style={{ flex: 1, padding: "16px 18px", borderRadius: 16, background: "rgba(255,255,255,.05)" }}><div style={{ ...M, fontSize: 13, color: "rgba(255,255,255,.5)" }}>{k}</div><div style={{ ...D, fontSize: 46, color: "#fff", marginTop: 8 }}>{v}</div></div>)}
-          </div>
-          <div style={{ ...M, fontSize: 14, color: "rgba(255,255,255,.5)", marginTop: 24 }}>Activity</div>
-          {rows.map(([n, a, t]) => <div key={n} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 12, padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,.04)", ...UI, fontSize: 20, color: "#fff" }}><span style={{ width: 34, height: 34, borderRadius: 99, background: C.iris, display: "grid", placeItems: "center", fontSize: 14 }}>{n[0]}</span><span style={{ flex: 1 }}>{n} <span style={{ color: "rgba(255,255,255,.55)", fontFamily: "UIR" }}>· {a}</span></span><span style={{ ...M, fontSize: 12, color: "rgba(255,255,255,.45)" }}>{t}</span></div>)}
-        </div>
-      </div>
-      <Phone w={230} rot={6} glow style={{ left: 790, top: 640 }}><SampleScreen w={230} /></Phone>
-      <Sample style={{ left: 80, top: 1118 }} />
-      <Swipe ph={0} />
-    </>
-  );
-}
-
-// ── 7 · the free landing page ─────────────────────────────────────────────────────────────────────────────────────
-function Landing() {
-  return (
-    <>
-      <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow>05 · Free landing page</Eyebrow>
-        <Title a="Plus a free website" b="for your app." bColor={C.yellow} size={88} />
-      </div>
-      <div style={{ position: "absolute", left: 80, top: 480, width: 920, borderRadius: 24, overflow: "hidden", background: "#17142B", boxShadow: "0 50px 110px rgba(0,0,0,.6), 0 0 0 2px rgba(143,114,255,.4)" }}>
-        <div style={{ height: 46, display: "flex", alignItems: "center", gap: 9, padding: "0 18px" }}>
-          {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => <i key={c} style={{ width: 13, height: 13, borderRadius: 99, background: c }} />)}
-          <div style={{ marginLeft: 220, padding: "5px 40px", borderRadius: 9, background: "rgba(255,255,255,.08)", fontFamily: "UIR", fontSize: 18, color: "rgba(255,255,255,.8)" }}>yourapp.com</div>
-        </div>
-        <div style={{ position: "relative", height: 560, background: "linear-gradient(135deg, #F3F0FF, #FFFFFF 60%)", padding: "60px 54px", overflow: "hidden" }}>
-          <div style={{ ...M, fontSize: 16, color: C.uv }}>Now on iOS & Android</div>
-          <div style={{ ...D, fontSize: 64, color: INK, marginTop: 16, letterSpacing: "-0.04em" }}>Book in<br />two taps.</div>
-          <div style={{ fontFamily: "UIR", fontSize: 22, color: "#5B5575", marginTop: 18, width: 420, lineHeight: 1.4 }}>Your app's home on the web: what it does, and where to download it.</div>
-          <div style={{ display: "flex", gap: 14, marginTop: 30 }}><StoreBtn sub="Download on the" label="App Store" /><StoreBtn sub="Get it on" label="Google Play" /></div>
-          <Phone w={250} rot={8} style={{ right: 60, top: 40 }}><SampleScreen w={250} /></Phone>
-        </div>
-      </div>
-      <div style={{ position: "absolute", left: 80, top: 1112, ...UI, fontSize: 28, color: "rgba(255,255,255,.8)" }}>Connected to the app. <span style={{ color: C.yellow }}>Included free.</span></div>
-      <Swipe ph={0} />
-    </>
-  );
-}
-
-// ── 8 · proof: Darebni AI ─────────────────────────────────────────────────────────────────────────────────────────
+// ── 2 · proof: Darebni AI ─────────────────────────────────────────────────────────────────────────────────────────
 function Proof() {
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow>Built by Appify</Eyebrow>
-        <Title a="We've shipped" b="our own." size={96} />
+        <Eyebrow>Proof, not promises</Eyebrow>
+        <Title a="We build apps" b="that go live." size={96} />
       </div>
       <Phone w={240} rot={-9} src="darebni/analytics.jpg" style={{ left: 90, top: 660 }} />
       <Phone w={240} rot={9} src="darebni/builder.jpg" style={{ left: 750, top: 660 }} />
@@ -263,38 +234,39 @@ function Proof() {
         <Img src={staticFile("darebni/icon.png")} style={{ width: 88, height: 88, borderRadius: 20 }} />
         <div><div style={{ ...D, fontSize: 40, color: INK, letterSpacing: "-0.03em" }}>Darebni AI</div><div style={{ ...UI, fontSize: 20, color: "#3A3550", marginTop: 6 }}>An AI workout coach for iPhone · <span style={{ color: C.uv }}>Live on the App Store</span></div></div>
       </div>
+      <Swipe ph={0} label="Yours is next" />
     </>
   );
 }
 
-// ── 9 · price + the DM ────────────────────────────────────────────────────────────────────────────────────────────
+// ── 7 · the DM, and exactly what happens next ─────────────────────────────────────────────────────────────────────
 function Cta() {
-  const lines = ["UI/UX design, every screen", "One app, iOS + Android", "App Store & Google Play publishing", "Admin panel for your team", "Free landing page website"];
+  const steps = [["1", "DM us “APP”", "Tell us your idea in one line"], ["2", "We book a call", "We go through your app together"], ["3", "Your exact price", "Confirmed on the call · from $999"]];
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
-        <Eyebrow>Let's build it</Eyebrow>
-        <div style={{ ...D, fontSize: 96, color: "#fff", marginTop: 26 }}>Got an<br /><span style={{ color: C.yellow }}>app idea?</span></div>
+        <Eyebrow>Here's how it starts</Eyebrow>
+        <div style={{ ...D, fontSize: 96, color: "#fff", marginTop: 26 }}>Your app,<br /><span style={{ color: C.yellow }}>in 3 steps.</span></div>
       </div>
-      <div style={{ position: "absolute", left: 80, top: 500, width: 560 }}>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}><span style={{ ...UI, fontSize: 32, color: "rgba(255,255,255,.7)" }}>from</span><span style={{ ...D, fontSize: 150, color: "#fff", letterSpacing: "-0.06em" }}>$999</span></div>
-        {lines.map((l) => <div key={l} style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 14, ...UI, fontSize: 27, color: "#fff" }}><Check size={32} />{l}</div>)}
-      </div>
-      <div style={{ position: "absolute", left: 80, top: 980 }}>
-        <div style={{ padding: "22px 34px", borderRadius: 26, background: C.yellow, boxShadow: "0 20px 60px rgba(255,210,63,.3)" }}>
-          <div style={{ ...M, fontSize: 21, color: INK }}>DM us to book a call</div>
-          <div style={{ ...D, fontSize: 70, color: INK, marginTop: 6 }}>“APP”</div>
+      {steps.map(([n, t, d], i) => (
+        <div key={n} style={{ position: "absolute", left: 80, top: 480 + i * 160, width: 580, display: "flex", alignItems: "center", gap: 22 }}>
+          <div style={{ width: 84, height: 84, borderRadius: 99, background: i === 0 ? C.yellow : C.uv, color: i === 0 ? INK : "#fff", display: "grid", placeItems: "center", ...D, fontSize: 44, flex: "none" }}>{n}</div>
+          <div><div style={{ ...D, fontSize: 44, color: "#fff", letterSpacing: "-0.03em" }}>{t}</div><div style={{ fontFamily: "UIR", fontSize: 25, color: "rgba(255,255,255,.65)", marginTop: 6 }}>{d}</div></div>
         </div>
+      ))}
+      <div style={{ position: "absolute", left: 80, top: 980, padding: "22px 34px", borderRadius: 26, background: C.yellow, boxShadow: "0 20px 60px rgba(255,210,63,.3)" }}>
+        <div style={{ ...M, fontSize: 21, color: INK }}>Start now · DM us</div>
+        <div style={{ ...D, fontSize: 70, color: INK, marginTop: 6 }}>“APP”</div>
       </div>
       <div style={{ position: "absolute", left: 80, top: 1150, ...M, fontSize: 22, color: "rgba(255,255,255,.7)" }}>@appifylb</div>
-      <div style={{ position: "absolute", left: 680, top: 470 }}>
-        <Dev width={330} thumbs={1} smile={1} happy={1} brow={16} lid={0.05} look={-8} tilt={-3} />
+      <div style={{ position: "absolute", left: 690, top: 520 }}>
+        <Dev width={320} thumbs={1} smile={1} happy={1} brow={16} lid={0.05} look={-8} tilt={-3} />
       </div>
     </>
   );
 }
 
-const SLIDES = [Hook, Stopping, Design, Both, Publish, Admin, Landing, Proof, Cta];
+const SLIDES = [Hook, Proof, Included, Design, Ship, Run, Cta];
 export const AppSlide = ({ slide = 0 }) => {
   const f = useCurrentFrame(), ph = (f % LOOP) / LOOP;
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["UI", "Geist-600.ttf", { weight: "600" }], ["UIR", "Geist-400.ttf"], ["Mono", "GeistMono-500.ttf"]]);
