@@ -40,5 +40,6 @@ exports/faq/
 .admin-password.txt
 exports/launch/
 exports/follies/
+exports/carousel-store360/
 appify-follies/public/film.mp4
 appify-follies/public/hero-*.mp4
