@@ -1,7 +1,8 @@
 // "A full online store. $360. Once." A 7-slide motion carousel (4:5) for Appify's e-commerce website plan.
 // Every slide is a seamless 6 s loop (frame 0 is a finished still, every motion is periodic), and all seven share one
 // wide canvas: the grid and a glowing UV thread run straight through the slide edges, so a swipe feels continuous.
-// Facts are Appify's own (pricing page): premium template, admin panel, hosting included, pay once, no monthly fees.
+// Facts are Appify's own (pricing page): premium template, admin panel, hosting included, pay once, no monthly fees;
+// plus delivery in under 7 days and 1 month of full support (as stated by Appify).
 // Store pages, products and orders shown on the screens are illustrations, labelled "sample".
 import { AbsoluteFill, interpolate, spring, useCurrentFrame } from "remotion";
 import { useFonts, clamp, TAU } from "./fx.jsx";
@@ -69,7 +70,7 @@ const Swipe = ({ ph, label = "Swipe" }) => (
 
 // ── 1 · the hook ─────────────────────────────────────────────────────────────────────────────────────────────────
 function Hook({ ph }) {
-  const chips = ["Premium template", "Admin panel", "Hosting included"];
+  const chips = ["Premium template", "Admin panel", "Hosting included", "Delivered in under 7 days", "1 month full support"];
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
@@ -83,7 +84,7 @@ function Hook({ ph }) {
       <div style={{ position: "absolute", left: 80, top: 832, ...D, fontSize: 70 }}>
         <span style={{ color: C.yellow }}>Once.</span> <span style={{ color: "rgba(255,255,255,.75)" }}>Not every month.</span>
       </div>
-      <div style={{ position: "absolute", left: 80, top: 978, display: "flex", gap: 16 }}>
+      <div style={{ position: "absolute", left: 80, top: 960, width: 940, display: "flex", flexWrap: "wrap", gap: 14 }}>
         {chips.map((c, i) => (
           <div key={c} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 22px 14px 14px", borderRadius: 99, background: "rgba(255,255,255,.07)", border: "1.5px solid rgba(143,114,255,.45)", ...UI, fontSize: 26, color: "#fff", transform: `translateY(${7 * sin(ph, 1, i * 2.1)}px)` }}>
             <Check size={32} />{c}
@@ -297,20 +298,20 @@ function PayOnce({ ph, f }) {
   const up = interpolate(ph, [0.7, 0.78, 0.84], [0, 1, 0], clamp);
   const slam = spring({ frame: f - Math.round(0.84 * LOOP), fps: 30, config: { damping: 9, stiffness: 300 } });
   const hit = ph >= 0.84 ? 1 + 0.25 * (1 - Math.min(1, slam)) : 1;
-  const lines = [["Premium template", "✓"], ["Admin panel", "✓"], ["Hosting", "✓"], ["Monthly fees", "$0"]];
+  const lines = [["Premium template", "✓"], ["Admin panel", "✓"], ["Hosting", "✓"], ["Delivery", "Under 7 days"], ["Full support", "1 month"], ["Monthly fees", "$0"]];
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 190 }}>
         <Eyebrow>04 · Pay once</Eyebrow>
         <Title a="$360. Once." b="No monthly fees." bColor={C.yellow} size={86} />
       </div>
-      <div style={{ position: "absolute", left: 190, top: 500, width: 700, transform: `rotate(${-1.5 + 0.6 * sin(ph)}deg) translateY(${6 * sin(ph, 1, 1)}px)` }}>
+      <div style={{ position: "absolute", left: 190, top: 450, width: 700, transform: `rotate(${-1.5 + 0.6 * sin(ph)}deg) translateY(${6 * sin(ph, 1, 1)}px)` }}>
         <div style={{ background: C.paper, borderRadius: "22px 22px 0 0", padding: "40px 48px 34px", boxShadow: "0 50px 110px rgba(0,0,0,.6)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}><Wordmark width={140} fill={C.ink} spark={C.uv} /><span style={{ ...M, fontSize: 16, color: C.mute }}>Receipt</span></div>
           <div style={{ ...UI, fontSize: 30, color: C.ink, marginTop: 30 }}>E-commerce website · Standard</div>
           <div style={{ borderTop: "2px dashed #CFCAE0", marginTop: 22 }} />
           {lines.map(([a, b]) => (
-            <div key={a} style={{ display: "flex", justifyContent: "space-between", marginTop: 18, ...UIR, fontSize: 28, color: "#3A3550" }}><span>{a}</span><span style={{ ...UI, color: b === "$0" ? C.uv : C.ink }}>{b}</span></div>
+            <div key={a} style={{ display: "flex", justifyContent: "space-between", marginTop: 13, ...UIR, fontSize: 27, color: "#3A3550" }}><span>{a}</span><span style={{ ...UI, color: b === "$0" ? C.uv : C.ink }}>{b}</span></div>
           ))}
           <div style={{ borderTop: "2px dashed #CFCAE0", marginTop: 26 }} />
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", marginTop: 20 }}>
@@ -333,15 +334,15 @@ function Cta({ ph }) {
       <div style={{ position: "absolute", left: 80, top: 200 }}>
         <Eyebrow>Your store, live</Eyebrow>
         <div style={{ ...D, fontSize: 96, color: "#fff", marginTop: 26 }}>Ready to<br />sell online?</div>
-        <div style={{ ...UI, fontSize: 32, color: "rgba(255,255,255,.75)", marginTop: 28, lineHeight: 1.35 }}>E-commerce website · <span style={{ color: C.yellow }}>$360</span><br />Pay once · hosting included</div>
+        <div style={{ ...UI, fontSize: 32, color: "rgba(255,255,255,.75)", marginTop: 28, lineHeight: 1.35 }}>E-commerce website · <span style={{ color: C.yellow }}>$360</span><br />Pay once · hosting included<br />Delivered in under 7 days<br />1 month full support</div>
       </div>
-      <div style={{ position: "absolute", left: 80, top: 760, transform: `scale(${1 + 0.03 * Math.max(0, sin(ph, 2))})`, transformOrigin: "0% 50%" }}>
+      <div style={{ position: "absolute", left: 80, top: 850, transform: `scale(${1 + 0.03 * Math.max(0, sin(ph, 2))})`, transformOrigin: "0% 50%" }}>
         <div style={{ padding: "22px 36px", borderRadius: 26, background: C.yellow, boxShadow: "0 20px 60px rgba(255,210,63,.3)" }}>
           <div style={{ ...M, fontSize: 22, color: C.ink }}>DM us</div>
-          <div style={{ ...D, fontSize: 70, color: C.ink, marginTop: 6 }}>“ECOMMERCE”</div>
+          <div style={{ ...D, fontSize: 60, color: C.ink, marginTop: 6 }}>“ECOMMERCE”</div>
         </div>
       </div>
-      <div style={{ position: "absolute", left: 80, top: 990, ...M, fontSize: 22, color: "rgba(255,255,255,.7)", lineHeight: 1.8 }}>appify-lb.com<br />@appifylb</div>
+      <div style={{ position: "absolute", left: 80, top: 1065, ...M, fontSize: 22, color: "rgba(255,255,255,.7)", lineHeight: 1.8 }}>appify-lb.com<br />@appifylb</div>
       <div style={{ position: "absolute", left: 640, top: 480 }}>
         <DevBags width={360} t={t} tilt={2.5 * sin(ph, 2)} bob={3 * sin(ph, 3)} face={{ brow: 16, lid: fract(ph * 2) > 0.94 ? 1 : 0.05, smile: 1, look: -8, happy: 1 }} />
       </div>
