@@ -10,30 +10,30 @@ import { WORDMARK, sparkPath } from "./brand.js";
 import { DevBags } from "./DevBags.jsx";
 import { W, H, N, LOOP } from "./timing.js";
 
-const C = { ink: "#0A0913", ink2: "#15122A", line: "rgba(143,114,255,.22)", uv: "#5B2BFF", iris: "#8F72FF", paper: "#F3F1FA", yellow: "#FFD23F", pink: "#FF2D6F", mint: "#3DDC97", mute: "#8A84A3" };
-const D = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.045em", lineHeight: 0.98 };
-const UI = { fontFamily: "UI", fontWeight: 600 };
-const UIR = { fontFamily: "UIR" };
-const M = { fontFamily: "Mono", letterSpacing: "0.16em", textTransform: "uppercase" };
-const sin = (ph, k = 1, o = 0) => Math.sin(ph * TAU * k + o);
-const fract = (x) => x - Math.floor(x);
-const Spark = ({ size, color = C.yellow, style }) => <svg width={size} height={size} viewBox="0 0 100 100" style={style}><path d={sparkPath(50, 50, 48, 0.22)} fill={color} /></svg>;
-const Wordmark = ({ width, fill = "#fff", spark = C.yellow }) => <svg viewBox={WORDMARK.viewBox} width={width} height={(width * 1167) / 3224}><path d={WORDMARK.letters} fill={fill} /><path d={WORDMARK.spark} fill={spark} /></svg>;
-const Check = ({ size = 34, bg = C.uv, fg = "#fff" }) => (
+export const C = { ink: "#0A0913", ink2: "#15122A", line: "rgba(143,114,255,.22)", uv: "#5B2BFF", iris: "#8F72FF", paper: "#F3F1FA", yellow: "#FFD23F", pink: "#FF2D6F", mint: "#3DDC97", mute: "#8A84A3" };
+export const D = { fontFamily: "Display", fontWeight: 600, letterSpacing: "-0.045em", lineHeight: 0.98 };
+export const UI = { fontFamily: "UI", fontWeight: 600 };
+export const UIR = { fontFamily: "UIR" };
+export const M = { fontFamily: "Mono", letterSpacing: "0.16em", textTransform: "uppercase" };
+export const sin = (ph, k = 1, o = 0) => Math.sin(ph * TAU * k + o);
+export const fract = (x) => x - Math.floor(x);
+export const Spark = ({ size, color = C.yellow, style }) => <svg width={size} height={size} viewBox="0 0 100 100" style={style}><path d={sparkPath(50, 50, 48, 0.22)} fill={color} /></svg>;
+export const Wordmark = ({ width, fill = "#fff", spark = C.yellow }) => <svg viewBox={WORDMARK.viewBox} width={width} height={(width * 1167) / 3224}><path d={WORDMARK.letters} fill={fill} /><path d={WORDMARK.spark} fill={spark} /></svg>;
+export const Check = ({ size = 34, bg = C.uv, fg = "#fff" }) => (
   <div style={{ width: size, height: size, borderRadius: 99, background: bg, display: "grid", placeItems: "center", flex: "none" }}>
     <svg width={size * 0.56} height={size * 0.56} viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6" fill="none" stroke={fg} strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
   </div>
 );
-const Eyebrow = ({ children, color = C.iris }) => <div style={{ ...M, fontSize: 26, color, display: "flex", alignItems: "center", gap: 14 }}><Spark size={24} color={color} />{children}</div>;
-const Title = ({ a, b, bColor = C.iris, size = 86 }) => (
+export const Eyebrow = ({ children, color = C.iris }) => <div style={{ ...M, fontSize: 26, color, display: "flex", alignItems: "center", gap: 14 }}><Spark size={24} color={color} />{children}</div>;
+export const Title = ({ a, b, bColor = C.iris, size = 86 }) => (
   <div style={{ ...D, fontSize: size, color: "#fff", marginTop: 26 }}>{a}<br /><span style={{ color: bColor }}>{b}</span></div>
 );
-const Sample = ({ style }) => <div style={{ position: "absolute", ...M, fontSize: 16, color: "rgba(255,255,255,.4)", ...style }}>Sample screens</div>;
+export const Sample = ({ style }) => <div style={{ position: "absolute", ...M, fontSize: 16, color: "rgba(255,255,255,.4)", ...style }}>Sample screens</div>;
 
 // ── the shared canvas: grid + thread + boundary nodes, drawn in carousel coordinates ──────────────────────────────
 const TY = (x) => 1215 + 34 * Math.sin((x / W) * Math.PI * 1.0 + 0.6);           // the thread's height along the carousel
-function Canvas({ slide, ph }) {
-  const pts = []; for (let x = 0; x <= W * N; x += 20) pts.push(`${x},${TY(x).toFixed(1)}`);
+export function Canvas({ slide, ph, n = N }) {
+  const pts = []; for (let x = 0; x <= W * n; x += 20) pts.push(`${x},${TY(x).toFixed(1)}`);
   return (
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
       <AbsoluteFill style={{ backgroundImage: `linear-gradient(${C.line} 1.5px, transparent 1.5px), linear-gradient(90deg, ${C.line} 1.5px, transparent 1.5px)`, backgroundSize: "60px 60px", backgroundPosition: `${-slide * W}px 0`, opacity: 0.3 }} />
@@ -43,7 +43,7 @@ function Canvas({ slide, ph }) {
         <polyline points={pts.join(" ")} fill="none" stroke={C.uv} strokeWidth="10" opacity=".55" filter="url(#glow)" />
         <polyline points={pts.join(" ")} fill="none" stroke={C.iris} strokeWidth="3" />
         <polyline points={pts.join(" ")} fill="none" stroke="#fff" strokeWidth="3" strokeDasharray="4 36" strokeDashoffset={-ph * 40 * 6} strokeLinecap="round" opacity=".9" />
-        {Array.from({ length: N + 1 }, (_, k) => k * W).map((x) => (
+        {Array.from({ length: n + 1 }, (_, k) => k * W).map((x) => (
           <g key={x}>
             <circle cx={x} cy={TY(x)} r={26 + 6 * sin(ph, 2)} fill={C.uv} opacity=".35" filter="url(#glow)" />
             <circle cx={x} cy={TY(x)} r="11" fill={C.yellow} />
@@ -53,15 +53,15 @@ function Canvas({ slide, ph }) {
     </AbsoluteFill>
   );
 }
-function Chrome({ slide }) {
+export function Chrome({ slide, n = N }) {
   return (
     <>
       <div style={{ position: "absolute", left: 80, top: 70 }}><Wordmark width={150} /></div>
-      <div style={{ position: "absolute", right: 80, top: 78, ...M, fontSize: 22, color: "rgba(255,255,255,.6)" }}>{String(slide + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}</div>
+      <div style={{ position: "absolute", right: 80, top: 78, ...M, fontSize: 22, color: "rgba(255,255,255,.6)" }}>{String(slide + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</div>
     </>
   );
 }
-const Swipe = ({ ph, label = "Swipe" }) => (
+export const Swipe = ({ ph, label = "Swipe" }) => (
   <div style={{ position: "absolute", right: 80, top: 1258, display: "flex", alignItems: "center", gap: 12, ...UI, fontSize: 28, color: "#fff" }}>
     {label}
     <svg width="46" height="24" viewBox="0 0 46 24" style={{ transform: `translateX(${8 * Math.max(0, sin(ph, 3))}px)` }}><path d="M2 12 H40 M30 3 L41 12 L30 21" fill="none" stroke={C.yellow} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" /></svg>

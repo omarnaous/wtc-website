@@ -41,6 +41,7 @@ exports/faq/
 exports/launch/
 exports/follies/
 exports/carousel-store360/
+exports/carousel-inventory/
 appify-follies/public/film.mp4
 appify-follies/public/hero-*.mp4
 exports/*.zip
