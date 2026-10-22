@@ -43,3 +43,4 @@ exports/follies/
 exports/carousel-store360/
 appify-follies/public/film.mp4
 appify-follies/public/hero-*.mp4
+exports/*.zip
