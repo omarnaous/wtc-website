@@ -1,5 +1,5 @@
-// "A full online store. $360. Once." A 7-slide motion carousel (4:5) for Appify's e-commerce website plan.
-// Every slide is a seamless 6 s loop (frame 0 is a finished still, every motion is periodic), and all seven share one
+// "A full online store. $360. Once." An 8-slide motion carousel (4:5) for Appify's e-commerce website plan.
+// Every slide is a seamless 6 s loop (frame 0 is a finished still, every motion is periodic), and all eight share one
 // wide canvas: the grid and a glowing UV thread run straight through the slide edges, so a swipe feels continuous.
 // Facts are Appify's own (pricing page): premium template, admin panel, hosting included, pay once, no monthly fees;
 // plus delivery in under 7 days and 1 month of full support (as stated by Appify).
@@ -326,7 +326,45 @@ function PayOnce({ ph, f }) {
   );
 }
 
-// ── 7 · the DM ────────────────────────────────────────────────────────────────────────────────────────────────────
+// ── 7 · delivered in under 7 days ─────────────────────────────────────────────────────────────────────────────────
+function Delivery({ ph }) {
+  // frame 0 is the finished week (every day ticked, "Live"); the bar refills through the loop and lands back on it
+  const fill = ph < 0.62 ? 1 : interpolate(ph, [0.62, 0.68, 1], [1, 0, 1], { ...clamp, easing: (x) => 1 - Math.pow(1 - x, 2) });
+  const cell = 118, gap = 14, x0 = 80;
+  return (
+    <>
+      <div style={{ position: "absolute", left: 80, top: 190 }}>
+        <Eyebrow>05 · Fast delivery</Eyebrow>
+        <Title a="Your store, live" b="in under 7 days." bColor={C.yellow} size={86} />
+      </div>
+      <div style={{ position: "absolute", left: 66, top: 455, display: "flex", alignItems: "flex-end", gap: 18 }}>
+        <span style={{ ...D, fontSize: 300, color: C.yellow, lineHeight: 0.86, filter: "drop-shadow(0 20px 60px rgba(255,210,63,.35))" }}>{"<"}7</span>
+        <span style={{ ...D, fontSize: 110, color: "#fff", lineHeight: 1, marginBottom: 14 }}>days</span>
+      </div>
+      <div style={{ position: "absolute", left: x0, top: 790, display: "flex", gap }}>
+        {Array.from({ length: 7 }, (_, d) => {
+          const on = fill * 7 >= d + 0.6;
+          return (
+            <div key={d} style={{ width: cell, height: 150, borderRadius: 20, background: on ? "rgba(91,43,255,.32)" : "rgba(255,255,255,.05)", border: `2px solid ${on ? C.iris : "rgba(255,255,255,.12)"}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14 }}>
+              <span style={{ ...M, fontSize: 18, color: "rgba(255,255,255,.65)" }}>Day</span>
+              <span style={{ ...D, fontSize: 46, color: "#fff" }}>{d + 1}</span>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ position: "absolute", left: x0, top: 966, width: 7 * cell + 6 * gap, height: 14, borderRadius: 99, background: "rgba(255,255,255,.1)", overflow: "hidden" }}>
+        <div style={{ width: `${fill * 92}%`, height: "100%", borderRadius: 99, background: `linear-gradient(90deg, ${C.uv}, ${C.iris}, ${C.yellow})` }} />
+      </div>
+      <div style={{ position: "absolute", left: x0 + (7 * cell + 6 * gap) * 0.92 - 70, top: 1000, display: "flex", alignItems: "center", gap: 10, padding: "12px 20px", borderRadius: 99, background: C.mint, ...UI, fontSize: 26, color: "#063", transform: `scale(${fill > 0.99 ? 1 + 0.05 * Math.max(0, sin(ph, 3)) : 0.85})`, opacity: fill > 0.99 ? 1 : 0.35 }}>
+        <Check size={28} bg="#063" fg={C.mint} />Live
+      </div>
+      <div style={{ position: "absolute", left: 80, top: 1012, ...UI, fontSize: 30, color: "rgba(255,255,255,.8)", lineHeight: 1.35 }}>Then <span style={{ color: C.yellow }}>1 month of full support</span><br />after launch.</div>
+      <Swipe ph={ph} />
+    </>
+  );
+}
+
+// ── 8 · the DM ────────────────────────────────────────────────────────────────────────────────────────────────────
 function Cta({ ph }) {
   const t = ph * TAU * 2;
   return (
@@ -350,7 +388,7 @@ function Cta({ ph }) {
   );
 }
 
-const SLIDES = [Hook, Trap, Template, Admin, Hosting, PayOnce, Cta];
+const SLIDES = [Hook, Trap, Template, Admin, Hosting, PayOnce, Delivery, Cta];
 export const Slide = ({ slide = 0 }) => {
   const f = useCurrentFrame(), ph = (f % LOOP) / LOOP;
   useFonts([["Display", "Sora-600.ttf", { weight: "600" }], ["UI", "Geist-600.ttf", { weight: "600" }], ["UIR", "Geist-400.ttf"], ["Mono", "GeistMono-500.ttf"]]);
