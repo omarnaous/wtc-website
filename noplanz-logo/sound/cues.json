@@ -13,9 +13,50 @@
   },
   {
    "type": "pop",
+   "frame": 7,
+   "gain": 0.13
+  },
+  {
+   "type": "pop",
    "frame": 10,
    "gain": 0.16,
    "pan": 0.3
+  },
+  {
+   "type": "pop",
+   "frame": 2,
+   "gain": 0.07,
+   "pan": -0.6
+  },
+  {
+   "type": "pop",
+   "frame": 6,
+   "gain": 0.07,
+   "pan": 0.6
+  },
+  {
+   "type": "pop",
+   "frame": 8,
+   "gain": 0.07,
+   "pan": 0
+  },
+  {
+   "type": "pop",
+   "frame": 12,
+   "gain": 0.07,
+   "pan": -0.4
+  },
+  {
+   "type": "pop",
+   "frame": 14,
+   "gain": 0.07,
+   "pan": 0.7
+  },
+  {
+   "type": "pop",
+   "frame": 16,
+   "gain": 0.07,
+   "pan": -0.7
   },
   {
    "type": "blip",

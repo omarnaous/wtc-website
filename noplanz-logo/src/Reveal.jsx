@@ -1,5 +1,5 @@
-// No Planz logo reveal. The one idea: two dots wander with no plan, find each other, and the route between them
-// becomes the Z, which then slides into place as the last letter of the word.
+// No Planz logo reveal. The one idea: a crowd of people (dots) wander with no plan and keep connecting; three of them
+// find each other, the route through them becomes the Z, and it slides into place as the last letter of the word.
 import { AbsoluteFill, Audio, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { T } from "./timing.js";
 import { useFonts, clamp, easeOut, easeIn, shake, Grain } from "./fx.jsx";
@@ -31,28 +31,38 @@ export const Reveal = ({ tagline = "meet people. no plans needed." }) => {
   const m = f < T.morph ? 0 : interpolate(sp(f, T.morph, fps, 15, 140), [0, 1], [0, 1]);
   const R = Object.fromEntries(Object.keys(big).map((k) => [k, lerp(big[k], fin[k], m)]));
 
-  // the two dots before the route exists: pop in, wander, freeze, dash to the ends
+  // the crowd before the route exists: pop in, wander, connect, freeze; the three who meet dash onto the route
   const dash = f < T.dash ? 0 : interpolate(f, [T.dash, T.draw + 4], [0, 1], { ...clamp, easing: easeIn });
-  const homeA = [W * 0.3, H * 0.4], homeB = [W * 0.7, H * 0.58];
-  const pos = (seed, home, end, at) => {
-    const tw = Math.min(f, T.spot);                               // freeze at the spot
-    const [wx, wy] = wanderAt(tw, seed, 150 * u, 120 * u);
-    const p = [home[0] + wx, home[1] + wy];
-    return [lerp(p[0], end[0], dash), lerp(p[1], end[1], dash)];
-  };
-  const A = pos("a", homeA, [R.x0, R.y0]), B = pos("b", homeB, [R.x1, R.y1]);
-  const popA = sp(f, T.popA, fps, 9, 260), popB = sp(f, T.popB, fps, 9, 260);
+  const away = f < T.dash ? 0 : interpolate(f, [T.dash, T.hit], [0, 1], { ...clamp, easing: easeIn });
+  const ends = { a: [R.x0, R.y0], m: [(R.x0 + R.x1) / 2, (R.y0 + R.y1) / 2], b: [R.x1, R.y1] };
+  const PEOPLE = [
+    { id: "a", home: [0.3, 0.38], c: C.coral, at: T.popA, k: 1 }, { id: "m", home: [0.52, 0.52], c: C.violet, at: T.popA + 3, k: 0.88 },
+    { id: "b", home: [0.7, 0.6], c: C.lime, at: T.popB, k: 1 },
+    { id: "e1", home: [0.2, 0.62], c: C.paper, at: 2, k: 0.6 }, { id: "e2", home: [0.78, 0.33], c: C.coral, at: 6, k: 0.62 },
+    { id: "e3", home: [0.48, 0.24], c: C.lime, at: 8, k: 0.55 }, { id: "e4", home: [0.36, 0.76], c: C.violet, at: 12, k: 0.58 },
+    { id: "e5", home: [0.82, 0.74], c: C.paper, at: 14, k: 0.5 }, { id: "e6", home: [0.14, 0.4], c: C.lime, at: 16, k: 0.5 },
+  ];
+  const dots = PEOPLE.map((p) => {
+    const [wx, wy] = wanderAt(Math.min(f, T.spot), p.id, 130 * u, 100 * u);
+    const w = [W * p.home[0] + wx, H * p.home[1] + wy];
+    const key = p.id.length === 1;
+    const at = key ? [lerp(w[0], ends[p.id][0], dash), lerp(w[1], ends[p.id][1], dash)]
+                   : [lerp(w[0], W / 2 + (w[0] - W / 2) * 1.8, away), lerp(w[1], H / 2 + (w[1] - H / 2) * 1.8, away)];
+    const pop = sp(f, p.at, fps, 9, 260) * (key ? 1 : 1 - away);
+    return { ...p, x: at[0], y: at[1], pop, key };
+  });
+  const D = Object.fromEntries(dots.map((d) => [d.id, d]));
   const spot = f >= T.spot && f < T.dash ? 1 + 0.18 * Math.exp(-(f - T.spot) / 3) * Math.cos((f - T.spot) * 1.4) : 1;
   const hitPop = f < T.hit ? 1 : 1 + 0.35 * Math.exp(-(f - T.hit) / 4);
-  // the unplanned trails behind the wandering dots
-  const trail = (seed, home) => {
-    const pts = [];
-    for (let k = Math.max(T.wander, Math.min(f, T.spot) - 26); k <= Math.min(f, T.spot); k++) {
-      const [wx, wy] = wanderAt(k, seed, 150 * u, 120 * u); pts.push(`${home[0] + wx},${home[1] + wy}`);
-    }
-    return pts.join(" ");
-  };
-  const trailO = interpolate(f, [T.wander, T.wander + 8, T.dash, T.dash + 8], [0, 0.45, 0.45, 0], clamp);
+  // the network: a line between any two people who wander close, brighter the closer they are
+  const net = [];
+  if (f >= T.wander && f < T.dash + 6) for (let i = 0; i < dots.length; i++) for (let j = i + 1; j < dots.length; j++) {
+    const p = dots[i], q = dots[j], d = Math.hypot(p.x - q.x, p.y - q.y), lim = 430 * u;
+    const trio = p.key && q.key;
+    const o = Math.max(0, 1 - d / lim) * Math.min(p.pop, q.pop) * interpolate(f, [T.wander, T.wander + 8], [0, 1], clamp)
+      * (f < T.spot ? 1 : trio ? 1.6 : interpolate(f, [T.spot, T.spot + 6], [1, 0.25], clamp)) * (f < T.dash ? 1 : interpolate(f, [T.dash, T.dash + 6], [1, 0], clamp));
+    if (o > 0.02) net.push({ x1: p.x, y1: p.y, x2: q.x, y2: q.y, o: Math.min(0.9, o), trio });
+  }
 
   // the route draws between the dots, then the hit
   const draw = interpolate(f, [T.draw, T.hit], [0, 1], { ...clamp, easing: easeOut });
@@ -77,14 +87,7 @@ export const Reveal = ({ tagline = "meet people. no plans needed." }) => {
       <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 47%, rgba(123,92,255,${0.18 + 0.35 * flash}), transparent 60%)` }} />
       <AbsoluteFill style={{ transform: `translate(${sx}px, ${sy}px) scale(${push})` }}>
         <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
-          {f < T.dash + 8 && (
-            <g opacity={trailO} fill="none" strokeWidth={5 * u} strokeLinecap="round" strokeDasharray={`${2 * u} ${14 * u}`}>
-              <polyline points={trail("a", homeA)} stroke={C.coral} />
-              <polyline points={trail("b", homeB)} stroke={C.lime} />
-            </g>
-          )}
-          {/* they notice each other: a dashed line flickers between them */}
-          {f >= T.spot && f < T.dash + 2 && <line x1={A[0]} y1={A[1]} x2={B[0]} y2={B[1]} stroke={C.paper} strokeWidth={4 * u} strokeLinecap="round" strokeDasharray={`${4 * u} ${16 * u}`} strokeDashoffset={-(f - T.spot) * 4 * u} opacity={interpolate(f, [T.spot, T.spot + 3, T.dash - 2, T.dash + 2], [0, 0.7, 0.7, 0], clamp) * (f % 4 < 2 && f < T.spot + 6 ? 0.4 : 1)} />}
+          {net.map((l, i) => <line key={i} {...l} o={undefined} stroke={l.trio ? C.paper : C.violet} strokeWidth={(l.trio ? 4 : 3) * u} strokeLinecap="round" strokeDasharray={l.trio && f >= T.spot ? `${4 * u} ${14 * u}` : "none"} strokeDashoffset={-(f - T.spot) * 4 * u} opacity={l.o} />)}
           {f >= T.hit && ring < 1 && <circle cx={cx} cy={cy} r={(230 + 460 * ring) * u} fill="none" stroke={C.paper} strokeWidth={(10 * (1 - ring)) * u} opacity={0.5 * (1 - ring)} />}
           {crowd.map((p, i) => p.r > 0 && <circle key={i} cx={p.x} cy={p.y} r={p.r} fill={p.c} />)}
           {/* "no plan" */}
@@ -97,8 +100,7 @@ export const Reveal = ({ tagline = "meet people. no plans needed." }) => {
           {/* the route, then the two dots on top */}
           <g transform={`translate(0 ${m > 0 ? breathe : 0})`}>
             {f >= T.draw && <path d={route(R.x0, R.y0, R.x1, R.y1, WAVE)} fill="none" stroke={C.paper} strokeWidth={R.sw} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={len} strokeDashoffset={len * (1 - draw)} />}
-            {f >= T.popA && <circle cx={A[0]} cy={A[1]} r={R.r * popA * spot * hitPop} fill={C.coral} />}
-            {f >= T.popB && <circle cx={B[0]} cy={B[1]} r={R.r * popB * spot * hitPop} fill={C.lime} />}
+            {dots.map((d) => d.pop > 0.01 && <circle key={d.id} cx={d.x} cy={d.y} r={(d.id === "m" ? R.r * 0.86 : R.r) * (d.key ? 1 : d.k) * d.pop * (d.key ? spot * hitPop : 1)} fill={d.c} stroke={d.id === "m" && f >= T.draw ? C.night : "none"} strokeWidth={R.r * 0.26} />)}
           </g>
         </svg>
         <div style={{ position: "absolute", left: 0, right: 0, top: by + 90 * u, textAlign: "center", fontFamily: "Mono", fontSize: 30 * u, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,246,234,.75)", opacity: tag, transform: `translateY(${(1 - tag) * 20 * u}px)` }}>{tagline}</div>

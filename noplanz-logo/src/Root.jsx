@@ -1,6 +1,7 @@
 import { Composition } from "remotion";
 import { Reveal } from "./Reveal.jsx";
 import { Board } from "./Board.jsx";
+import { Options } from "./Options.jsx";
 import { FPS, DURATION } from "./timing.js";
 
 // The reveal in every format, plus the static brand board.
@@ -15,6 +16,7 @@ export const Root = () => (
     {FORMATS.map((f) => (
       <Composition key={f.id} id={f.id} component={Reveal} durationInFrames={DURATION} fps={FPS} width={f.width} height={f.height} />
     ))}
+    <Composition id="Options" component={Options} durationInFrames={1} fps={FPS} width={1920} height={700} />
     <Composition id="Board" component={Board} durationInFrames={1} fps={FPS} width={1920} height={1080} />
   </>
 );

@@ -1,5 +1,5 @@
-"""Sound for the No Planz reveal, from src/timing.js. Two pops as the dots appear, soft blips while they wander, two
-quick blips when they notice each other, a whoosh as they dash, a zip while the route draws, the hit (impact + chime)
+"""Sound for the No Planz reveal, from src/timing.js. A pop for every person in the crowd, soft blips while they wander
+and connect, two quick ticks when the three notice each other, a whoosh as they dash, a zip while the route draws, the hit (impact + chime)
 with a sparkle of pops for the crowd, a whoosh into the word, a rising pop per letter, a glint on the tagline, and a
 warm pad under the end frame. Tonal cues sit in A major (A, C#, E).
   python3 sound/build_cues.py && python3 <motion-graphics>/scripts/sound.py sound/cues.json public/sound.wav"""
@@ -8,7 +8,8 @@ src = open("src/timing.js").read()
 T = {k: int(v) for k, v in re.findall(r"(\w+): (\d+)", src.split("export const T")[1])}
 DUR = int(re.search(r"DURATION = (\d+)", src).group(1))
 A = [440.0, 554.37, 659.25, 880.0, 1108.73, 1318.51, 1760.0]
-cues = [{"type": "pop", "frame": T["popA"], "gain": 0.16, "pan": -0.3}, {"type": "pop", "frame": T["popB"], "gain": 0.16, "pan": 0.3}]
+cues = [{"type": "pop", "frame": T["popA"], "gain": 0.16, "pan": -0.3}, {"type": "pop", "frame": T["popA"] + 3, "gain": 0.13}, {"type": "pop", "frame": T["popB"], "gain": 0.16, "pan": 0.3}]
+cues += [{"type": "pop", "frame": fr, "gain": 0.07, "pan": p} for fr, p in [(2, -0.6), (6, 0.6), (8, 0), (12, -0.4), (14, 0.7), (16, -0.7)]]   # the crowd
 cues += [{"type": "blip", "frame": fr, "gain": 0.03, "freq": A[i % 3], "pan": (-0.35, 0.35)[i % 2]} for i, fr in enumerate(range(T["wander"] + 2, T["spot"], 5))]
 cues += [{"type": "tick", "frame": T["spot"] + 1, "gain": 0.08, "freq": 1760}, {"type": "tick", "frame": T["spot"] + 4, "gain": 0.08, "freq": 2217.5}]
 cues += [{"type": "whoosh", "start": T["dash"] - 2, "end": T["draw"] + 6, "gain": 0.12},
