@@ -1,0 +1,157 @@
+{
+  "id": "push-01",
+  "title": "Push \u00b7 Chest, Shoulders, Triceps",
+  "focus": "Chest, shoulders, triceps",
+  "split": "Push",
+  "level": "Intermediate",
+  "environment": "gym",
+  "estimatedMinutes": 58,
+  "totalSets": 22,
+  "warmup": "5 min easy cardio, then 2 light bench sets at 40% and 60%.",
+  "finisher": "Push-ups to failure, one set.",
+  "exercises": [
+    {
+      "exerciseId": "0025",
+      "name": "Barbell Bench Press",
+      "libraryName": "barbell bench press",
+      "intent": "main",
+      "target": "pectorals",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "6-8",
+      "rest": "150s",
+      "rpe": "RPE 8",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0025.gif",
+      "instructions": [
+        "Press the weight upward over your eyes or slightly higher, with elbows extended to 45 degrees.",
+        "Inhale and lower dumbbells or barbell slowly and with control until they touch or reach just above the chest, elbows and wrists staying out to the sides.",
+        "Repeat the press and perform around 5 reps or more."
+      ]
+    },
+    {
+      "exerciseId": "0047",
+      "name": "Barbell Incline Bench Press",
+      "libraryName": "barbell incline bench press",
+      "intent": "main",
+      "target": "pectorals",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "sets": 3,
+      "reps": "8-10",
+      "rest": "120s",
+      "rpe": "RPE 8",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0047.gif",
+      "instructions": [
+        "Lie back on a bench set to an incline angle and lift a barbell to shoulder height, palms facing away from you.",
+        "Breathe out as you press up with both arms. Lock out your arms and squeeze your chest before returning slowly to the start position."
+      ]
+    },
+    {
+      "exerciseId": "0405",
+      "name": "Seated Dumbbell Shoulder Press",
+      "libraryName": "dumbbell seated shoulder press",
+      "intent": "accessory",
+      "target": "delts",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "8-10",
+      "rest": "120s",
+      "rpe": "RPE 8",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0405.gif",
+      "instructions": [
+        "Once you're seated, rest one dumbbell on each thigh",
+        "Sit with your lower back firmly against the back of the bench",
+        "Keep your  and back as straight as possible.",
+        "Raise the dumbbells from your thighs and bring them to shoulder height",
+        "If you have heavy dumbbells, raise your thighs one at a time to help lift the dumbbells",
+        "Raising a heavy dumbbell with only your arm could cause injury.",
+        "With the dumbbells at shoulder height, rotate your palms so that they face forward",
+        "If you prefer, you can also complete a dumbbell press with your palms facing your body",
+        "Make sure your forearms are perpendicular to the ground.",
+        "Begin to press the dumbbells above your head until your arms fully extend",
+        "Hold the weight above your head for a moment, and then lower the dumbbells back to shoulder height."
+      ]
+    },
+    {
+      "exerciseId": "0314",
+      "name": "Incline Dumbbell Bench Press",
+      "libraryName": "dumbbell incline bench press",
+      "intent": "accessory",
+      "target": "pectorals",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "90s",
+      "rpe": "RPE 9",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0314.gif",
+      "instructions": [
+        "Sit on the bench and lean back.",
+        "Brace your core and press both dumbbells straight over your chest as you exhale.",
+        "Reverse the movement and slowly lower the dumbbells to the top of your chest as you inhale"
+      ]
+    },
+    {
+      "exerciseId": "0334",
+      "name": "Dumbbell Lateral Raise",
+      "libraryName": "dumbbell lateral raise",
+      "intent": "isolation",
+      "target": "delts",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "12-15",
+      "rest": "60s",
+      "rpe": "RPE 9-10",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0334.gif",
+      "instructions": [
+        "Grab a set of dumbbells and stand straight.",
+        "With your palms facing down, lift the dumbbells and raise your arms out to the sides.",
+        "Once your elbows are at shoulder height, pause, and then slowly lower the arms back to the initial position.",
+        "Repeat."
+      ]
+    },
+    {
+      "exerciseId": "0241",
+      "name": "Cable Triceps Pushdown (V-Bar)",
+      "libraryName": "cable triceps pushdown (v-bar)",
+      "intent": "isolation",
+      "target": "triceps",
+      "bodyPart": "upper arms",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "12-15",
+      "rest": "60s",
+      "rpe": "RPE 9-10",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0241.gif",
+      "instructions": [
+        "Using the triceps, bring the bar down until it touches the front of your thighs and the arms are fully extended perpendicular to the floor.",
+        "The upper arms should always remain stationary next to your torso and only the forearms should move.",
+        "Exhale as you perform this movement."
+      ]
+    },
+    {
+      "exerciseId": "0061",
+      "name": "Barbell Lying Triceps Extension",
+      "libraryName": "barbell lying triceps extension",
+      "intent": "isolation",
+      "target": "triceps",
+      "bodyPart": "upper arms",
+      "equipment": "barbell",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "75s",
+      "rpe": "RPE 9",
+      "gifUrl": "http://d205bpvrqc9yn1.cloudfront.net/0061.gif",
+      "instructions": [
+        "Ensure your  are even with the edge of the bench.",
+        " Start with the bar locked out over your .",
+        "Feet pass flat on the floor.",
+        "Bend elbows first. Then flex . Aim for a BIG stretch on your triceps.",
+        "Extend your  first. Then extend your elbows."
+      ]
+    }
+  ]
+}
