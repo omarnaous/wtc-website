@@ -3,268 +3,598 @@
  "duration": 38.0,
  "seed": 4,
  "fade_out": 1.2,
- "lowpass": 11000,
+ "lowpass": 12000,
  "peak_db": -3,
  "cues": [
   {
-   "type": "pop",
-   "frame": 6,
-   "gain": 0.12
-  },
-  {
    "type": "riser",
-   "start": 40,
-   "end": 103,
-   "gain": 0.08
+   "start": 30,
+   "end": 102,
+   "gain": 0.1
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 22,
-   "gain": 0.04,
-   "freq": 1760
+   "gain": 0.05
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 26,
-   "gain": 0.04,
-   "freq": 1880
+   "gain": 0.05
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 30,
-   "gain": 0.04,
-   "freq": 2000
+   "gain": 0.05
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 34,
-   "gain": 0.04,
-   "freq": 2120
+   "gain": 0.05
   },
   {
-   "type": "whoosh",
-   "start": 99,
-   "end": 111,
-   "gain": 0.09
+   "type": "pop",
+   "frame": 25,
+   "gain": 0.07
+  },
+  {
+   "type": "pop",
+   "frame": 55,
+   "gain": 0.07
+  },
+  {
+   "type": "pop",
+   "frame": 85,
+   "gain": 0.07
+  },
+  {
+   "type": "bass_drop",
+   "frame": 105,
+   "gain": 0.35
   },
   {
    "type": "impact",
    "frame": 105,
-   "gain": 0.2
+   "gain": 0.18
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 111,
-   "gain": 0.035,
-   "freq": 1318.5
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 115,
-   "gain": 0.035,
-   "freq": 1568
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 119,
-   "gain": 0.035,
-   "freq": 1760
-  },
-  {
-   "type": "whoosh",
-   "start": 219,
-   "end": 231,
-   "gain": 0.09
+   "gain": 0.045
   },
   {
    "type": "thump",
+   "frame": 120,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 120,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 150,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 150,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 180,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 180,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 210,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 210,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 218,
+   "end": 228,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.12
+  },
+  {
+   "type": "slap",
    "frame": 225,
-   "gain": 0.1
+   "gain": 0.12
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 231,
-   "gain": 0.035,
-   "freq": 1318.5
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 235,
-   "gain": 0.035,
-   "freq": 1568
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 239,
-   "gain": 0.035,
-   "freq": 1760
-  },
-  {
-   "type": "whoosh",
-   "start": 339,
-   "end": 351,
-   "gain": 0.09
+   "gain": 0.045
   },
   {
    "type": "thump",
+   "frame": 240,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 240,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 270,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 270,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 300,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 300,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 330,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 330,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 338,
+   "end": 348,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.12
+  },
+  {
+   "type": "slap",
    "frame": 345,
-   "gain": 0.1
+   "gain": 0.12
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 351,
-   "gain": 0.035,
-   "freq": 1318.5
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 355,
-   "gain": 0.035,
-   "freq": 1568
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 359,
-   "gain": 0.035,
-   "freq": 1760
-  },
-  {
-   "type": "whoosh",
-   "start": 459,
-   "end": 471,
-   "gain": 0.09
+   "gain": 0.045
   },
   {
    "type": "thump",
+   "frame": 360,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 360,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 390,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 390,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 420,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 420,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 450,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 450,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 458,
+   "end": 468,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.12
+  },
+  {
+   "type": "slap",
    "frame": 465,
-   "gain": 0.1
+   "gain": 0.12
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 471,
-   "gain": 0.035,
-   "freq": 1318.5
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 475,
-   "gain": 0.035,
-   "freq": 1568
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 479,
-   "gain": 0.035,
-   "freq": 1760
-  },
-  {
-   "type": "whoosh",
-   "start": 579,
-   "end": 591,
-   "gain": 0.09
+   "gain": 0.045
   },
   {
    "type": "thump",
+   "frame": 480,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 480,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 510,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 510,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 540,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 540,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 570,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 570,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 578,
+   "end": 588,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.12
+  },
+  {
+   "type": "slap",
    "frame": 585,
-   "gain": 0.1
+   "gain": 0.12
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 591,
-   "gain": 0.035,
-   "freq": 1318.5
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 595,
-   "gain": 0.035,
-   "freq": 1568
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 599,
-   "gain": 0.035,
-   "freq": 1760
-  },
-  {
-   "type": "whoosh",
-   "start": 699,
-   "end": 711,
-   "gain": 0.09
+   "gain": 0.045
   },
   {
    "type": "thump",
+   "frame": 600,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 600,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 630,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 630,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 660,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 660,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 690,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 690,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 698,
+   "end": 708,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.12
+  },
+  {
+   "type": "slap",
    "frame": 705,
-   "gain": 0.1
+   "gain": 0.12
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 711,
-   "gain": 0.035,
-   "freq": 1318.5
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 715,
-   "gain": 0.035,
-   "freq": 1568
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 719,
-   "gain": 0.035,
-   "freq": 1760
-  },
-  {
-   "type": "whoosh",
-   "start": 819,
-   "end": 831,
-   "gain": 0.09
+   "gain": 0.045
   },
   {
    "type": "thump",
+   "frame": 720,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 720,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 750,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 750,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 780,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 780,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 810,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 810,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 818,
+   "end": 828,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.12
+  },
+  {
+   "type": "slap",
    "frame": 825,
-   "gain": 0.1
+   "gain": 0.12
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 831,
-   "gain": 0.035,
-   "freq": 1318.5
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 835,
-   "gain": 0.035,
-   "freq": 1568
+   "gain": 0.045
   },
   {
-   "type": "tick",
+   "type": "stamp",
    "frame": 839,
-   "gain": 0.035,
-   "freq": 1760
+   "gain": 0.045
   },
   {
-   "type": "whoosh",
-   "start": 939,
-   "end": 951,
-   "gain": 0.1
+   "type": "thump",
+   "frame": 840,
+   "gain": 0.16
   },
   {
-   "type": "impact",
+   "type": "clink",
+   "frame": 840,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 870,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 870,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 900,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 900,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 930,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 930,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 938,
+   "end": 948,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.12
+  },
+  {
+   "type": "sting",
    "frame": 945,
    "gain": 0.16
   },
   {
-   "type": "whoosh",
-   "start": 1014,
-   "end": 1028,
-   "gain": 0.08
+   "type": "thump",
+   "frame": 960,
+   "gain": 0.16
   },
   {
-   "type": "pop",
+   "type": "clink",
+   "frame": 960,
+   "gain": 0.05,
+   "pan": -0.25
+  },
+  {
+   "type": "thump",
+   "frame": 990,
+   "gain": 0.16
+  },
+  {
+   "type": "clink",
+   "frame": 990,
+   "gain": 0.05,
+   "pan": 0.25
+  },
+  {
+   "type": "swoosh",
+   "start": 1013,
+   "end": 1024,
+   "peak": 0.6,
+   "f": 1400,
+   "gain": 0.1
+  },
+  {
+   "type": "impact",
    "frame": 1046,
-   "gain": 0.12
+   "gain": 0.14
   },
   {
    "type": "chime",
@@ -273,8 +603,13 @@
    "freq": 1318.5
   },
   {
+   "type": "pop",
+   "frame": 1069,
+   "gain": 0.07
+  },
+  {
    "type": "glint",
-   "frame": 1062,
+   "frame": 1064,
    "gain": 0.04,
    "freq": 2093
   }

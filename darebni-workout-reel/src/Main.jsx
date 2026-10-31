@@ -1,13 +1,15 @@
-// Darebni AI "Push day" reel, built from push_workout.json (the app's own plan format). Rep, the Darebni robot
-// coach, flexes in the intro; each of the 7 exercises plays the app's own demo GIF (the GIFURLSOM repo the app
-// resolves ids to, frames in public/gifs/<id>/) while the card shows the real sets, reps, rest and RPE; a push-up
-// finisher; and Rep waves in the outro asking people to comment PLAN for a free 4-week plan.
+// Darebni AI "Push day" reel, built from push_workout.json (the app's own plan format). The Darebni coach (an
+// original cartoon bodybuilder, Coach.jsx) flexes in the intro; each of the 7 exercises plays the app's own demo
+// (the GIFURLSOM repo the app resolves ids to; its two clean poses in public/gifs/<id>/a.png, b.png) as one rep per
+// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and the coach flexes
+// again in the outro asking people to comment PLAN for a free 4-week plan.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import W from "./push_workout.json";
 import { FPS, EX0, EX_LEN, N_EX, FIN, OUTRO } from "./timing.js";
 import { useFonts, clamp, Grain } from "./fx.jsx";
-import { B } from "./Bot.jsx";
-import { Flex, Wave } from "./Poses.jsx";
+import { Coach } from "./Coach.jsx";
+
+export const B = { primary: "#5B4EE5", lo: "#8B80FF", xlo: "#B8B0FF", deep: "#4338CA", ink: "#07071A", surface: "#11112B", cream: "#F2F0EA", success: "#6EE7B7", danger: "#FB7185" };
 
 const D = { fontFamily: "Cond", fontWeight: 800, textTransform: "uppercase", letterSpacing: "-0.01em", lineHeight: 0.92 };
 const UI = { fontFamily: "Barlow", fontWeight: 600 };
@@ -21,15 +23,27 @@ const CUES = ["Lower to the chest, press up over your eyes", "Press up, lock out
   "Brace your core, lower to the top of the chest", "Raise to shoulder height, pause, lower slowly", "Upper arms still, only the forearms move",
   "Bend the elbows first, big stretch on the triceps"];
 const TARGET = { pectorals: "Chest", delts: "Shoulders", triceps: "Triceps" };
-// the GIFs are 12 frames at 250 ms (a 3 s loop): show the frame for this moment
-const GIF_FRAMES = 12, GIF_MS = 250;
-function GifCard({ id, t, top = 640 }) {
-  const k = Math.floor(((Math.max(0, t) * 1000) / FPS) / GIF_MS) % GIF_FRAMES;
-  const p = Math.min(1, sp(t, 2, 13, 220));
+// Each demo GIF is two clean poses (start, top) joined by crossfades. We keep only those two and play one crisp rep
+// per second, landing the top on the beat: hold the start, snap up in 5 frames, hold the top, snap back.
+// Rep k peaks at t = 15 + 30k (on the 120 BPM grid, since every card starts on a beat).
+export const repTop = (t) => { const c = ((t % 30) + 30) % 30; return c < 10 ? 0 : c < 15 ? (c - 10) / 5 : c < 25 ? 1 : 1 - (c - 25) / 5; };
+const ease = (x) => x * x * (3 - 2 * x);
+function GifCard({ id, t, top = 640, reps = true }) {
+  const p = Math.min(1, sp(t, 2, 13, 220)), k = ease(repTop(Math.max(0, t)));
+  const hit = Math.max(0, 1 - Math.abs((((t % 30) + 30) % 30) - 15) / 4);   // a little punch as the top lands
+  const n = t < 15 ? 0 : Math.min(4, Math.floor((t - 15) / 30) + 1);
   return (
     <div style={{ position: "absolute", left: 140, top, width: 800, height: 620, borderRadius: 40, background: "#fff", overflow: "hidden",
-      boxShadow: "0 40px 100px rgba(0,0,0,.55), 0 0 0 4px rgba(139,128,255,.55), 0 0 90px rgba(91,78,229,.35)", ...pop(p, 0.9) }}>
-      <Img src={staticFile(`gifs/${id}/${String(k).padStart(2, "0")}.png`)} style={{ position: "absolute", left: 100, top: 10, width: 600, height: 600 }} />
+      boxShadow: `0 40px 100px rgba(0,0,0,.55), 0 0 0 4px rgba(139,128,255,${0.55 + 0.4 * hit}), 0 0 ${90 + 50 * hit}px rgba(91,78,229,.4)`, ...pop(p, 0.9) }}>
+      <div style={{ position: "absolute", left: 100, top: 10, width: 600, height: 600, transform: `scale(${1 + 0.025 * hit})` }}>
+        <Img src={staticFile(`gifs/${id}/a.png`)} style={{ position: "absolute", inset: 0, width: 600, height: 600 }} />
+        <Img src={staticFile(`gifs/${id}/b.png`)} style={{ position: "absolute", inset: 0, width: 600, height: 600, opacity: k }} />
+      </div>
+      {reps && n > 0 && (
+        <div style={{ position: "absolute", right: 22, top: 22, padding: "10px 18px", borderRadius: 14, background: B.ink, ...D, fontSize: 34, color: B.cream, letterSpacing: "0.04em", transform: `scale(${1 + 0.12 * hit})` }}>
+          Rep <span style={{ color: B.lo }}>{n}</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -47,14 +61,16 @@ function Header({ f, right }) {
 const Chip = ({ children, hot, style }) => (
   <div style={{ padding: "12px 22px", borderRadius: 16, background: hot ? B.primary : "rgba(139,128,255,.14)", border: `2px solid ${hot ? B.lo : "rgba(139,128,255,.35)"}`, ...D, fontSize: 40, color: B.cream, letterSpacing: "0.02em", ...style }}>{children}</div>
 );
-function Stage({ children, glow = 0.35, dx = 0 }) {
+// the coach on stage: half-body, cut at the bottom by his own fade, with a floor glow
+function CoachStage({ f, x = 540, w = 520, top = 760, flexAt = 10 }) {
+  const flex = f < flexAt ? 0 : Math.max(0, Math.sin(((f - flexAt) / 30) * Math.PI)) ** 2;
+  const enter = sp(f, flexAt - 8, 13, 160);
   return (
     <>
-      <div style={{ position: "absolute", left: 90, right: 90, top: 1236, height: 50, borderRadius: "50%", background: `radial-gradient(ellipse, rgba(91,78,229,${glow}), transparent 70%)` }} />
-      <svg width="1080" height="1920" style={{ position: "absolute", inset: 0, overflow: "visible" }}>
-        <line x1="110" y1="1258" x2="970" y2="1258" stroke="rgba(184,176,255,.25)" strokeWidth="4" strokeLinecap="round" />
-        <g transform={`translate(${dx} 0) translate(540 1258) scale(1.32) translate(-540 -1258)`}>{children}</g>
-      </svg>
+      <div style={{ position: "absolute", left: x - w * 0.75, top: top + w * 0.55, width: w * 1.5, height: w * 0.9, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,78,229,.45), transparent 65%)" }} />
+      <div style={{ position: "absolute", left: x - w / 2, top, transform: `translateY(${(1 - Math.min(1, enter)) * 300}px)`, opacity: Math.min(1, enter * 2) }}>
+        <Coach width={w} flex={flex} t={f} />
+      </div>
     </>
   );
 }
@@ -72,8 +88,8 @@ function Intro({ f }) {
           {stats.map((s, i) => <div key={s} style={rise(sp(f, 22 + i * 4))}><Chip hot={i === 0}>{s}</Chip></div>)}
         </div>
       </div>
-      <Stage><Flex t={f} k={Math.min(1, sp(f, 10))} /></Stage>
-      <div style={{ position: "absolute", left: 70, right: 70, top: 1310, ...UIR, fontSize: 32, color: "rgba(242,240,234,.75)", ...rise(sp(f, 40)) }}>
+      <CoachStage f={f} top={700} w={540} />
+      <div style={{ position: "absolute", left: 70, right: 70, top: 1500, ...UIR, fontSize: 32, color: "rgba(242,240,234,.8)", ...rise(sp(f, 40)) }}>
         <span style={{ ...D, fontSize: 32, color: B.success, letterSpacing: "0.06em" }}>Warm-up · </span>{W.warmup}
       </div>
     </div>
@@ -117,7 +133,7 @@ function Finisher({ f }) {
         <div style={{ ...D, fontSize: 140, color: B.danger, ...pop(sp(t, 0, 10, 260), 1.4), transformOrigin: "0% 50%" }}>Push-ups</div>
         <div style={{ ...D, fontSize: 80, color: B.cream, marginTop: 6, ...rise(sp(t, 8)) }}>to failure · 1 set</div>
       </div>
-      <GifCard id="0662" t={t} />
+      <GifCard id="0662" t={t} reps={false} />
     </div>
   );
 }
@@ -137,8 +153,8 @@ function Outro({ f }) {
           <div style={{ ...D, fontSize: 104, color: B.ink }}>“PLAN”</div>
         </div>
       </div>
-      <Stage glow={0.5} dx={230}><Wave t={f} /></Stage>
-      <div style={{ position: "absolute", left: 70, right: 70, top: 1300, ...UI, fontSize: 38, color: "rgba(242,240,234,.85)", ...rise(sp(t, 40)) }}>Free 4-week plan · Darebni AI on the App Store</div>
+      <CoachStage f={t} x={760} w={460} top={820} flexAt={34} />
+      <div style={{ position: "absolute", left: 70, right: 70, top: 1480, ...UI, fontSize: 38, color: "rgba(242,240,234,.85)", ...rise(sp(t, 40)) }}>Free 4-week plan · Darebni AI on the App Store</div>
     </>
   );
 }
