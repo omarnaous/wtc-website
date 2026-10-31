@@ -1,13 +1,12 @@
-// Darebni AI "Push day" reel, built from push_workout.json (the app's own plan format). The Darebni coach (an
-// original cartoon bodybuilder, Coach.jsx) flexes in the intro; each of the 7 exercises plays the app's own demo
+// Darebni AI "Push day" reel, built from push_workout.json (the app's own plan format). The ambassador's real photo
+// opens the reel; each of the 7 exercises plays the app's own demo
 // (the GIFURLSOM repo the app resolves ids to; its two clean poses in public/gifs/<id>/a.png, b.png) as one rep per
-// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and the coach flexes
-// again in the outro asking people to comment PLAN for a free 4-week plan.
+// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and the ambassador
+// returns in the outro asking people to comment PLAN for a free 4-week plan.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import W from "./push_workout.json";
 import { FPS, EX0, EX_LEN, N_EX, FIN, OUTRO } from "./timing.js";
 import { useFonts, clamp, Grain } from "./fx.jsx";
-import { Coach } from "./Coach.jsx";
 
 export const B = { primary: "#5B4EE5", lo: "#8B80FF", xlo: "#B8B0FF", deep: "#4338CA", ink: "#07071A", surface: "#11112B", cream: "#F2F0EA", success: "#6EE7B7", danger: "#FB7185" };
 
@@ -61,16 +60,18 @@ function Header({ f, right }) {
 const Chip = ({ children, hot, style }) => (
   <div style={{ padding: "12px 22px", borderRadius: 16, background: hot ? B.primary : "rgba(139,128,255,.14)", border: `2px solid ${hot ? B.lo : "rgba(139,128,255,.35)"}`, ...D, fontSize: 40, color: B.cream, letterSpacing: "0.02em", ...style }}>{children}</div>
 );
-// the coach on stage: half-body, cut at the bottom by his own fade, with a floor glow
-function CoachStage({ f, x = 540, w = 520, top = 760, flexAt = 10 }) {
-  const flex = f < flexAt ? 0 : Math.max(0, Math.sin(((f - flexAt) / 30) * Math.PI)) ** 2;
-  const enter = sp(f, flexAt - 8, 13, 160);
+// the ambassador on stage: his real photo (public/ambassador.png, a cut-out kept out of git), rising in, breathing,
+// with a purple rim light and a punch on the beat
+function Ambassador({ f, x = 540, w = 700, top = 640, at = 6 }) {
+  const enter = Math.min(1, sp(f, at, 14, 140)), t = Math.max(0, f - at);
+  const beat = Math.max(0, 1 - ((t % 30) / 6)) * (t > 15 ? 1 : 0);
+  const h = (w * 1170) / 985;
   return (
     <>
-      <div style={{ position: "absolute", left: x - w * 0.75, top: top + w * 0.55, width: w * 1.5, height: w * 0.9, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,78,229,.45), transparent 65%)" }} />
-      <div style={{ position: "absolute", left: x - w / 2, top, transform: `translateY(${(1 - Math.min(1, enter)) * 300}px)`, opacity: Math.min(1, enter * 2) }}>
-        <Coach width={w} flex={flex} t={f} />
-      </div>
+      <div style={{ position: "absolute", left: x - w * 0.7, top: top + h * 0.15, width: w * 1.4, height: h * 0.8, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,78,229,.55), transparent 62%)" }} />
+      <Img src={staticFile("ambassador.png")} style={{ position: "absolute", left: x - w / 2, top, width: w, height: h,
+        transform: `translateY(${(1 - enter) * 260}px) scale(${1 + 0.012 * Math.sin(t / 12) + 0.015 * beat})`, transformOrigin: "50% 100%", opacity: enter,
+        filter: "drop-shadow(0 0 2px rgba(184,176,255,.9)) drop-shadow(0 0 26px rgba(91,78,229,.7)) contrast(1.06)" }} />
     </>
   );
 }
@@ -88,7 +89,7 @@ function Intro({ f }) {
           {stats.map((s, i) => <div key={s} style={rise(sp(f, 22 + i * 4))}><Chip hot={i === 0}>{s}</Chip></div>)}
         </div>
       </div>
-      <CoachStage f={f} top={700} w={540} />
+      <Ambassador f={f} top={650} w={740} />
       <div style={{ position: "absolute", left: 70, right: 70, top: 1500, ...UIR, fontSize: 32, color: "rgba(242,240,234,.8)", ...rise(sp(f, 40)) }}>
         <span style={{ ...D, fontSize: 32, color: B.success, letterSpacing: "0.06em" }}>Warm-up · </span>{W.warmup}
       </div>
@@ -153,7 +154,7 @@ function Outro({ f }) {
           <div style={{ ...D, fontSize: 104, color: B.ink }}>“PLAN”</div>
         </div>
       </div>
-      <CoachStage f={t} x={760} w={460} top={820} flexAt={34} />
+      <Ambassador f={t} x={790} w={560} top={780} at={30} />
       <div style={{ position: "absolute", left: 70, right: 70, top: 1480, ...UI, fontSize: 38, color: "rgba(242,240,234,.85)", ...rise(sp(t, 40)) }}>Free 4-week plan · Darebni AI on the App Store</div>
     </>
   );
