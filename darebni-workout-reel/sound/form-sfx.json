@@ -1,0 +1,242 @@
+{
+ "fps": 30,
+ "duration": 25.5,
+ "seed": 6,
+ "fade_out": 1.2,
+ "lowpass": 12000,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "impact",
+   "frame": 2,
+   "gain": 0.18
+  },
+  {
+   "type": "slap",
+   "frame": 14,
+   "gain": 0.1
+  },
+  {
+   "type": "swoosh",
+   "start": 68,
+   "end": 78,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.1
+  },
+  {
+   "type": "buzz",
+   "frame": 85,
+   "gain": 0.12
+  },
+  {
+   "type": "riser",
+   "start": 129,
+   "end": 146,
+   "gain": 0.05
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/success.ogg",
+   "frame": 148,
+   "gain": 0.4
+  },
+  {
+   "type": "thump",
+   "frame": 98,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 128,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 158,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 188,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 218,
+   "gain": 0.08
+  },
+  {
+   "type": "swoosh",
+   "start": 218,
+   "end": 228,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.1
+  },
+  {
+   "type": "buzz",
+   "frame": 235,
+   "gain": 0.12
+  },
+  {
+   "type": "riser",
+   "start": 279,
+   "end": 296,
+   "gain": 0.05
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/success.ogg",
+   "frame": 298,
+   "gain": 0.4
+  },
+  {
+   "type": "thump",
+   "frame": 248,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 278,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 308,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 338,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 368,
+   "gain": 0.08
+  },
+  {
+   "type": "swoosh",
+   "start": 368,
+   "end": 378,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.1
+  },
+  {
+   "type": "buzz",
+   "frame": 385,
+   "gain": 0.12
+  },
+  {
+   "type": "riser",
+   "start": 429,
+   "end": 446,
+   "gain": 0.05
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/success.ogg",
+   "frame": 448,
+   "gain": 0.4
+  },
+  {
+   "type": "thump",
+   "frame": 398,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 428,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 458,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 488,
+   "gain": 0.08
+  },
+  {
+   "type": "thump",
+   "frame": 518,
+   "gain": 0.08
+  },
+  {
+   "type": "swoosh",
+   "start": 518,
+   "end": 528,
+   "peak": 0.6,
+   "f": 1600,
+   "gain": 0.1
+  },
+  {
+   "type": "slap",
+   "frame": 525,
+   "gain": 0.1
+  },
+  {
+   "type": "thump",
+   "frame": 540,
+   "gain": 0.15
+  },
+  {
+   "type": "clink",
+   "frame": 540,
+   "gain": 0.04
+  },
+  {
+   "type": "thump",
+   "frame": 570,
+   "gain": 0.15
+  },
+  {
+   "type": "clink",
+   "frame": 570,
+   "gain": 0.04
+  },
+  {
+   "type": "thump",
+   "frame": 600,
+   "gain": 0.15
+  },
+  {
+   "type": "clink",
+   "frame": 600,
+   "gain": 0.04
+  },
+  {
+   "type": "thump",
+   "frame": 630,
+   "gain": 0.15
+  },
+  {
+   "type": "clink",
+   "frame": 630,
+   "gain": 0.04
+  },
+  {
+   "type": "swoosh",
+   "start": 638,
+   "end": 649,
+   "peak": 0.6,
+   "f": 1400,
+   "gain": 0.1
+  },
+  {
+   "type": "impact",
+   "frame": 665,
+   "gain": 0.13
+  },
+  {
+   "type": "chime",
+   "frame": 666,
+   "gain": 0.05,
+   "freq": 1318.5
+  }
+ ]
+}
