@@ -1,0 +1,164 @@
+{
+ "fps": 30,
+ "duration": 30.3,
+ "seed": 8,
+ "fade_out": 1.2,
+ "lowpass": 12000,
+ "peak_db": -3,
+ "cues": [
+  {
+   "type": "house",
+   "start": 0,
+   "end": 909,
+   "bpm": 120,
+   "gain": 0.4,
+   "sections": [
+    [
+     0,
+     "drop"
+    ],
+    [
+     789,
+     "break"
+    ],
+    [
+     849,
+     "outro"
+    ]
+   ],
+   "lp_auto": [
+    [
+     0,
+     11000
+    ],
+    [
+     787,
+     11000
+    ],
+    [
+     793,
+     2600
+    ],
+    [
+     847,
+     2600
+    ],
+    [
+     851,
+     11000
+    ]
+   ]
+  },
+  {
+   "type": "impact",
+   "frame": 1,
+   "gain": 0.16
+  },
+  {
+   "type": "buzz",
+   "frame": 3,
+   "gain": 0.13
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/success.ogg",
+   "frame": 57,
+   "gain": 0.4
+  },
+  {
+   "type": "chime",
+   "frame": 58,
+   "gain": 0.035,
+   "freq": 1318.5
+  },
+  {
+   "type": "buzz",
+   "frame": 138,
+   "gain": 0.13
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/success.ogg",
+   "frame": 228,
+   "gain": 0.4
+  },
+  {
+   "type": "chime",
+   "frame": 229,
+   "gain": 0.035,
+   "freq": 1318.5
+  },
+  {
+   "type": "buzz",
+   "frame": 327,
+   "gain": 0.13
+  },
+  {
+   "type": "sample",
+   "file": "/root/.claude/skills/motion-graphics/assets/sfx/success.ogg",
+   "frame": 417,
+   "gain": 0.4
+  },
+  {
+   "type": "chime",
+   "frame": 418,
+   "gain": 0.035,
+   "freq": 1318.5
+  },
+  {
+   "type": "whoosh",
+   "start": 126,
+   "end": 138,
+   "gain": 0.08
+  },
+  {
+   "type": "whoosh",
+   "start": 315,
+   "end": 327,
+   "gain": 0.08
+  },
+  {
+   "type": "whoosh",
+   "start": 489,
+   "end": 501,
+   "gain": 0.08
+  },
+  {
+   "type": "tick",
+   "frame": 555,
+   "gain": 0.05,
+   "freq": 1760
+  },
+  {
+   "type": "tick",
+   "frame": 600,
+   "gain": 0.05,
+   "freq": 1920
+  },
+  {
+   "type": "tick",
+   "frame": 645,
+   "gain": 0.05,
+   "freq": 2080
+  },
+  {
+   "type": "swoosh",
+   "start": 782,
+   "end": 793,
+   "peak": 0.6,
+   "f": 1400,
+   "gain": 0.1
+  },
+  {
+   "type": "impact",
+   "frame": 805,
+   "gain": 0.13
+  },
+  {
+   "type": "chime",
+   "frame": 806,
+   "gain": 0.05,
+   "freq": 1318.5
+  }
+ ]
+}
