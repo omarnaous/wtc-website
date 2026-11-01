@@ -51,16 +51,22 @@ end card over the landed shot. Three.js via @remotion/three; preload textures be
 - Hold ~2.5 s on the hero, then ease one scroll to the footer; save `scroll.json` (y per frame, section tops) to
   time the chips.
 
-## Sound
-- `sound.py` cues: shutter `click` on every cut, `swoosh`/`thump` on strips, `riser` → `impact` + `glint` on hits,
-  real UI samples (`add-to-cart.ogg`, `open.ogg`) on store actions, a `pop`/`tick` per checklist item, a `chime`
-  on the CTA.
-- Default bed: `house` 120 BPM. When he asks for **"professional"**: `assets/tools/runway.py` (minimal runway deep
-  house, Am9/Fmaj9, side-chained, ping-pong stabs, FM bells) mixed with the effects track. Tune tonal cues to the
-  key (A, C, E).
-- Trending audio: research the current week (Buffer, Later, SocialBee, CreatorDB); recommend 2–4 with how each
-  trend is used; warn that Business accounts only get commercially cleared tracks; give placement tips
-  (song ~70 %, original ~30 %, align the first cuts).
+## Sound (real audio, always varied)
+- **Library:** `assets/tools/sound_library.py` downloads Mixkit music (about 130 tracks across 33 genres, grouped into
+  moods: gym-energy, premium-fashion, tech-corporate, pop-upbeat, cinematic, chill-lofi) and about 1,500 Mixkit sound
+  effects in about 80 categories into `<repo>/sound-library/` (audio gitignored; `catalog.json` and `used.json`
+  committed). Run `build` at the start of a session if `sound-library/music/` is empty.
+- **Every video:** `pick-music --mood <fits the subject> --project <id>` (never repeats a track another project
+  used) → `bed <id> public/music.wav --dur <s>` (starts on a downbeat, fades) → mix it plus effects as `sample` cues in
+  `sound.py`; render the NoMusic version from the effects only.
+- **Cut to the track:** frames per beat = 1800 / BPM (`beats <id>`); put the big hits on downbeats.
+- **Effects:** pull 4-6 per role with `sfx <tag> --n 6 --project <id>` (whoosh/transition, impact/hit, click/pop,
+  notification/ding, correct/wrong, camera, typing, money/coin, metal for gyms…) and rotate them so no repeated event
+  uses the same file twice in a row. At least 4 different files per video.
+- **Licence:** Mixkit free licences allow commercial videos without credit; don't share the raw files on their own.
+- Synthesized `house` / `runway.py` beds are a fallback only (the user dislikes them as a default).
+- Trending audio: research the current week (Buffer, Later, SocialBee, CreatorDB); recommend 2-4 with how each trend
+  is used; Business accounts only get commercially cleared tracks; song ~70 %, original ~30 %.
 
 ## Thumbnails / covers (1080×1920, checked against the 3:4 grid crop)
 Hook on bold label boxes at the top, the product/site in a tilted browser or phone, a cut-out stepping out of it,

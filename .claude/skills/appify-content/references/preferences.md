@@ -35,6 +35,7 @@ answer, not commentary.
 - Text placed over faces / bad hook positioning.
 - Content added that he didn't ask for (SEO points in an outreach DM).
 - Robotic mascot voice or choppy delivery.
+- **The same sound in every video.** He hates the synthesized house bed and the same whooshes/hits repeating. Always use real music and real effects from the sound library (`assets/tools/sound_library.py`), a different track per video picked for the mood, and a variety of effect files (see reels.md, "Sound").
 
 ## Delivery habits
 - Send finished files with SendUserFile; for photos send each image (not a zip) when he says "photos only".
