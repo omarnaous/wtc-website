@@ -1,0 +1,40 @@
+{
+ "music": {
+  "id": "m777",
+  "title": "A Game",
+  "artist": "Michael Ramir C",
+  "genre": "EDM",
+  "bpm": 129.2,
+  "first_beat": 0.07,
+  "duration": 113,
+  "file": "music/m777.mp3"
+ },
+ "wrong": [
+  "/home/user/wtc-website/sound-library/sfx/s954.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2964.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s571.mp3"
+ ],
+ "correct": [
+  "/home/user/wtc-website/sound-library/sfx/s2870.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s947.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s949.mp3"
+ ],
+ "whoosh": [
+  "/home/user/wtc-website/sound-library/sfx/s1491.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2903.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2596.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s169.mp3"
+ ],
+ "click": [
+  "/home/user/wtc-website/sound-library/sfx/s900.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1119.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1113.mp3"
+ ],
+ "impact": [
+  "/home/user/wtc-website/sound-library/sfx/s498.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2177.mp3"
+ ],
+ "ding": [
+  "/home/user/wtc-website/sound-library/sfx/s951.mp3"
+ ]
+}

@@ -12,14 +12,18 @@ s = lambda sec: round(sec * 30)
 END, DUR = s(26.3), s(26.3) + 120
 SEG = [[0, s(1.9), s(4.3)], [s(4.5), s(7.6), s(10.6)], [s(10.8), s(13.9), s(16.5)]]   # keep in step with FL in FormClip.jsx
 lib = lambda *a: subprocess.run([sys.executable, LIBTOOL, *a], capture_output=True, text=True, check=True).stdout
-def files(tag, n): return [l.split("\t")[0] for l in lib("sfx", tag, "--n", str(n), "--project", PROJECT, "--max-dur", "3").strip().splitlines()]
+NOPE = "game,arcade,video-game,cartoon,toy,8-bit,funny,animals,water,error"   # keep it a premium gym reel
+def files(tag, n, ex=NOPE, title=None):
+    args = ["sfx", tag, "--n", str(n), "--project", PROJECT, "--max-dur", "3", "--exclude", ex] + (["--title", title] if title else [])
+    return [l.split("\t")[0] for l in lib(*args).strip().splitlines()]
 
 if os.path.exists("sound/picks.json"):
     P = json.load(open("sound/picks.json"))
 else:
     track = json.loads(lib("pick-music", "--mood", "gym-energy", "--min-bpm", "85", "--max-bpm", "150", "--project", PROJECT))
-    P = {"music": track, "wrong": files("wrong", 3), "correct": files("correct", 3), "whoosh": files("whoosh", 3) + files("swoosh", 1),
-         "click": files("click", 3), "impact": files("impact", 2), "ding": files("ding", 1)}
+    P = {"music": track, "wrong": files("wrong", 3, NOPE.replace(",error", "")), "correct": files("correct", 3),
+         "whoosh": files("whoosh", 3) + files("swoosh", 1), "click": files("click", 3, title="click|tap|select|switch"),
+         "impact": files("impact", 2, title="impact|hit|punch|boom|thud"), "ding": files("notification", 1, title="ding|chime|bell|success|positive")}
     json.dump(P, open("sound/picks.json", "w"), indent=1)
 bed = json.loads(lib("bed", P["music"]["id"], "public/formclip-bed.wav", "--dur", f"{DUR / 30:.3f}", "--gain", "0.9"))
 print("bed:", bed["title"], "by", P["music"]["artist"], f"({bed['bpm']} bpm, from {bed['start']} s)")

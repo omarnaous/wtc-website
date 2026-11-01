@@ -10,7 +10,7 @@ files on their own, so the audio stays out of git (only catalog.json and used.js
   bed ID OUT.wav --dur S [--start S] [--fade 1.2] [--gain 0.8]
                              cut a music bed: ID from `start` (default: the first downbeat after 20% of the track),
                              `dur` seconds, fades, 48 kHz stereo WAV
-  sfx TAG [--n 5] [--project P] [--max-dur 3]
+  sfx TAG [--n 5] [--project P] [--max-dur 3] [--exclude game,arcade,cartoon] [--title REGEX]
                              print N effect files for a tag, rotating so a project never reuses one
   beats ID                   print the track's BPM and the time of its first beat (to lock cuts to the music)
 
@@ -165,7 +165,9 @@ def bed(a):
 def sfx(a):
     cat = load("catalog.json", {"sfx": []}); used = load("used.json", {})
     pu = set(used.get(a.project, {}).get("sfx", [])) if a.project else set()
-    ss = [s for s in cat["sfx"] if a.tag in s["tags"] and (s["duration"] or 0) <= a.max_dur]
+    ex = set(filter(None, (a.exclude or "").split(",")))
+    ss = [s for s in cat["sfx"] if a.tag in s["tags"] and (s["duration"] or 0) <= a.max_dur and not ex & set(s["tags"])
+          and not any(w in s["title"].lower() for w in ex) and (not a.title or re.search(a.title, s["title"], re.I))]
     random.Random(a.seed).shuffle(ss)
     ss = sorted(ss, key=lambda s: s["id"] in pu)[: a.n]
     if a.project:
@@ -181,6 +183,7 @@ if __name__ == "__main__":
     sub.add_parser("build").set_defaults(fn=build); sub.add_parser("moods").set_defaults(fn=moods)
     q = sub.add_parser("pick-music"); q.add_argument("--mood", required=True); q.add_argument("--min-bpm", type=float); q.add_argument("--max-bpm", type=float); q.add_argument("--project"); q.add_argument("--seed", type=int); q.set_defaults(fn=pick_music)
     q = sub.add_parser("bed"); q.add_argument("id"); q.add_argument("out"); q.add_argument("--dur", type=float, required=True); q.add_argument("--start", type=float); q.add_argument("--fade", type=float, default=1.2); q.add_argument("--gain", type=float, default=0.8); q.set_defaults(fn=bed)
-    q = sub.add_parser("sfx"); q.add_argument("tag"); q.add_argument("--n", type=int, default=5); q.add_argument("--project"); q.add_argument("--max-dur", type=float, default=3); q.add_argument("--seed", type=int); q.set_defaults(fn=sfx)
+    q = sub.add_parser("sfx"); q.add_argument("tag"); q.add_argument("--n", type=int, default=5); q.add_argument("--project"); q.add_argument("--max-dur", type=float, default=3); q.add_argument("--seed", type=int)
+    q.add_argument("--exclude", help="comma list of tags/title words to skip, e.g. game,arcade,cartoon,toy,8-bit"); q.add_argument("--title", help="regex the title must match"); q.set_defaults(fn=sfx)
     q = sub.add_parser("beats"); q.add_argument("id"); q.set_defaults(fn=beats)
     a = p.parse_args(); a.fn(a)
