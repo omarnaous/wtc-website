@@ -2,8 +2,8 @@
 // own line: "دربني — train me"), so the spot is a wish answered. It knocks down the excuses, says "Stop guessing.",
 // goes silent on the word دربني, and lands DAREBNI on the track's re-entry; the payoff is "Start training."
 // Picture is cut to "Epical Drums 02" (Grigoriy Nuzhny, 120.02 BPM = 15 frames a beat) started at 43.0 s, so its
-// near-silent gap falls at 13.3-15.0 s and its slam on frame 450. B-roll: the supplied 3D form clips (public/,
-// kept out of git), graded to monochrome violet, with their ✓/✕ badges and the source's shorts branding pushed out of frame.
+// near-silent gap falls at 13.3-15.0 s and its slam on frame 450. B-roll: twelve exercises from the supplied library
+// (public/lib/, kept out of git), graded to monochrome violet, with their badges and chips pushed out of frame.
 import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, random } from "remotion";
 import { useFonts, clamp, Grain, shake } from "./fx.jsx";
 import { B, D, UI } from "./Main.jsx";
@@ -49,6 +49,21 @@ function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row
     </AbsoluteFill>
   );
 }
+const LIB = { zoom: 1.3, origin: "50% 95%" };
+const SHOTS = [
+  { at: 0, dur: 120, n: 295, s: 0, dim: 0.45, ...LIB },                   // hook: hands taking the bar
+  { at: 120, dur: 60, n: 666, s: 8.2, dim: 0.38, ...LIB },                // excuse 1: squat, side close-up
+  { at: 180, dur: 60, n: 293, s: 3.2, dim: 0.4, ...LIB },                 // excuse 2: dumbbell shoulder press, close
+  { at: 240, dur: 60, n: 667, s: 0.3, dim: 0.4, ...LIB },                 // excuse 3: seated cable row
+  { at: 300, dur: 80, n: 305, s: 5.5, dim: 0.36, rate: 0.5, ...LIB },     // stop guessing: chest press machine, half speed
+  { at: T.LINES[0], dur: 30, n: 293, s: 13, ...LIB },                     // a plan built for you: incline dumbbell press
+  { at: T.LINES[1], dur: 30, n: 389, s: 0.3, ...LIB },                    // weights, sets, reps: a hand takes the dumbbell
+  { at: T.LINES[2], dur: 30, n: 305, s: 1.2, ...LIB },                    // every set, tracked: chest press machine
+  { at: T.LINES[3], dur: 30, n: 470, s: 17, zoom: 2, origin: "50% 55%" },   // followed up weekly: pull-up (chips above, shorts below the crop)
+  { at: T.LINES[4], dur: 30, n: 538, s: 21.6, ...LIB },                   // every PR, saved: deadlift lockout
+  { at: T.COACH, dur: 90, n: 295, s: 24, dim: 0.5, rate: 0.6, ...LIB },   // your AI coach is here: incline barbell press, slow
+  { at: T.AMB, dur: 90, n: 389, s: 45.2, dim: 0.55, rate: 0.7, zoom: 1.45, origin: "50% 95%" }, // built for the ones who show up: dumbbell press
+];
 const Vignette = ({ k = 0.85 }) => <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(7,7,26,${k}) 100%)` }} />;
 
 function Hook({ f }) {
@@ -139,18 +154,20 @@ function Coach({ f }) {
   );
 }
 
-// the ambassador (his real photo, public/ambassador.png, kept out of git) rising out of the dark
+// the ambassador slot. PERSON = a cut-out PNG in public/ (the new face, once supplied) rises out of the dark; while it is
+// null the push-up shot under it carries the line.
+const PERSON = null;
 function Ambassador({ f }) {
   if (f < T.AMB - 2 || f > T.LOGO + 2) return null;
   const t = f - T.AMB, up = sp(f, T.AMB, 16, 120), o = win(f, T.AMB, T.LOGO, 4, 8);
   const w = 900, h = w * 1170 / 985;
   return (
     <AbsoluteFill style={{ opacity: o }}>
-      <div style={{ position: "absolute", left: 90, top: 700, width: 900, height: 900, borderRadius: "50%", background: "radial-gradient(circle, rgba(91,78,229,.6), transparent 65%)" }} />
-      <Img src={staticFile("ambassador.png")} style={{ position: "absolute", left: 540 - w / 2, top: 560, width: w, height: h, transform: `translateY(${(1 - Math.min(1, up)) * 300}px) scale(${1.02 + 0.03 * t / 90})`, transformOrigin: "50% 100%",
-        filter: "drop-shadow(0 0 3px rgba(184,176,255,.9)) drop-shadow(0 0 40px rgba(91,78,229,.8)) contrast(1.1) brightness(.95)" }} />
-      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(7,7,26,0) 60%, rgba(7,7,26,.95) 92%)" }} />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 300 }}>
+      {PERSON && <div style={{ position: "absolute", left: 90, top: 700, width: 900, height: 900, borderRadius: "50%", background: "radial-gradient(circle, rgba(91,78,229,.6), transparent 65%)" }} />}
+      {PERSON && <Img src={staticFile(PERSON)} style={{ position: "absolute", left: 540 - w / 2, top: 560, width: w, height: h, transform: `translateY(${(1 - Math.min(1, up)) * 300}px) scale(${1.02 + 0.03 * t / 90})`, transformOrigin: "50% 100%",
+        filter: "drop-shadow(0 0 3px rgba(184,176,255,.9)) drop-shadow(0 0 40px rgba(91,78,229,.8)) contrast(1.1) brightness(.95)" }} />}
+      {PERSON && <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(7,7,26,0) 60%, rgba(7,7,26,.95) 92%)" }} />}
+      <div style={{ position: "absolute", left: 70, right: 70, top: PERSON ? 300 : 1120 }}>
         <div style={{ ...W, fontSize: 120, ...rise(sp(f, T.AMB + 8, 12, 220), 60) }}>Built for the ones</div>
         <div style={{ ...W, fontSize: 120, color: B.lo, ...rise(sp(f, T.AMB + 16, 12, 220), 60) }}>who show up.</div>
       </div>
@@ -159,7 +176,7 @@ function Ambassador({ f }) {
 }
 
 function Logo({ f }) {
-  if (f < T.LOGO - 2) return null;
+  if (f < T.LOGO) return null;
   const t = f - T.LOGO, ic = sp(f, T.LOGO + 4, 11, 200), word = sp(f, T.LOGO + 16, 13, 200);
   const glow = 0.5 + 0.2 * Math.sin(t / 10);
   return (
@@ -185,19 +202,11 @@ export const Commercial = ({ music = true }) => {
   const flash = interpolate(f, [T.HIT - 1, T.HIT, T.HIT + 10], [0, 0.9, 0], clamp) + interpolate(f, [T.LOGO - 1, T.LOGO, T.LOGO + 8], [0, 0.4, 0], clamp);
   return (
     <AbsoluteFill style={{ background: B.ink, overflow: "hidden" }}>
-      {/* b-roll, low and dark under the opening */}
-      <Shot f={f} at={0} dur={120} src="form-clip.mp4" from={0} dim={0.42} />
-      <Shot f={f} at={120} dur={60} src="form-clip.mp4" from={150} dim={0.36} zoom={1.6} origin="50% 90%" />
-      <Shot f={f} at={180} dur={60} src="bench-clip.mp4" from={20} band row={1} dim={0.45} />
-      <Shot f={f} at={240} dur={60} src="form-clip.mp4" from={600} dim={0.36} />
-      <Shot f={f} at={300} dur={80} src="form-clip.mp4" from={300} dim={0.3} rate={0.5} />
-      {/* after the slam: one shot per line, every two beats */}
-      <Shot f={f} at={T.LINES[0]} dur={30} src="form-clip.mp4" from={500} />
-      <Shot f={f} at={T.LINES[1]} dur={30} src="bench-clip.mp4" from={60} band row={1} dim={0.7} />
-      <Shot f={f} at={T.LINES[2]} dur={30} src="form-clip.mp4" from={150} zoom={1.6} origin="50% 90%" />
-      <Shot f={f} at={T.LINES[3]} dur={30} src="bench-clip.mp4" from={318} band row={1} dim={0.7} />
-      <Shot f={f} at={T.LINES[4]} dur={30} src="form-clip.mp4" from={20} />
-      <Shot f={f} at={T.COACH} dur={90} src="form-clip.mp4" from={640} dim={0.5} rate={0.6} origin="40% 70%" />
+      {/* b-roll from the exercise library (public/lib/t<n>.mp4 = "Treinos (n).mp4", kept out of git). Each shot is
+          zoomed from the bottom (origin 50% 95%) so the clip's top 22 %, where its ✓/✕ badges and muscle chips sit,
+          is off frame; segments stop before the clips' closing cards, and avoid the shorts/mats that carry the source's
+          branding. */}
+      {SHOTS.map((x, k) => <Shot key={k} f={f} {...x} src={`lib/t${x.n}.mp4`} from={Math.round(x.s * 30)} />)}
       <Vignette />
       <Hook f={f} />
       {EXCUSES.map((_, i) => <Excuse key={i} f={f} i={i} />)}
