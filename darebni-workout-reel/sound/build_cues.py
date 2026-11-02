@@ -12,7 +12,7 @@ n = lambda k: int(re.search(rf"\b{k} = (\d+)", src).group(1))
 EX0, EX_LEN, N_EX = n("EX0"), n("EX_LEN"), n("N_EX")
 FIN = EX0 + EX_LEN * N_EX; OUTRO = FIN + 75; DUR = OUTRO + n("END_LEN")
 main = open("src/Main.jsx").read()
-TICKS = [int(x) for x in re.findall(r"\{ at: (\d+), big:", main)]; CTA = int(re.search(r"OUTRO_CTA = (\d+)", main).group(1))
+SWAP = int(re.search(r"OUTRO_SWAP = (\d+)", main).group(1))   # the end card's page turn
 lib = lambda *a: subprocess.run([sys.executable, LIBTOOL, *a], capture_output=True, text=True, check=True).stdout
 NOPE = "game,arcade,video-game,cartoon,toy,8-bit,funny,animals,water,error"
 def files(tag, k, title=None, ex=NOPE):
@@ -57,7 +57,7 @@ music = [smp("public/pushday-bed.wav", 0, 0.85)]
 # intro -> first exercise, every card change, into the finisher, and a bigger whoosh into the end card
 cuts = [EX0 + i * EX_LEN for i in range(N_EX)] + [FIN]
 fx = [smp(P["transition"][j % len(P["transition"])], c - 7, 0.3, (-0.25, 0.25)[j % 2]) for j, c in enumerate(cuts)]
-fx += [smp(P["transition_big"], OUTRO - 9, 0.34)]
+fx += [smp(P["transition_big"], OUTRO - 9, 0.34), smp(P["transition"][len(cuts) % len(P["transition"])], OUTRO + SWAP - 7, 0.3)]
 outs = ((True, f"sound/cues-{ALT}.json"),) if ALT else ((True, "sound/cues.json"), (False, "sound/cues-sfx.json"))
 for mus, out in outs:
     spec = {"fps": 30, "duration": DUR / 30, "seed": 4, "fade_out": 1.2, "peak_db": -2, "cues": (music if mus else []) + fx}

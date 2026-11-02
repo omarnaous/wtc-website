@@ -10,9 +10,9 @@ import { useFonts, clamp, Grain } from "./fx.jsx";
 
 export const B = { primary: "#5B4EE5", lo: "#8B80FF", xlo: "#B8B0FF", deep: "#4338CA", ink: "#07071A", surface: "#11112B", cream: "#F2F0EA", success: "#6EE7B7", danger: "#FB7185" };
 
-const D = { fontFamily: "Cond", fontWeight: 800, textTransform: "uppercase", letterSpacing: "-0.01em", lineHeight: 0.92 };
-const UI = { fontFamily: "Barlow", fontWeight: 600 };
-const UIR = { fontFamily: "BarlowR", fontWeight: 500 };
+export const D = { fontFamily: "Cond", fontWeight: 800, textTransform: "uppercase", letterSpacing: "-0.01em", lineHeight: 0.92 };
+export const UI = { fontFamily: "Barlow", fontWeight: 600 };
+export const UIR = { fontFamily: "BarlowR", fontWeight: 500 };
 const sp = (f, at, d = 12, s = 220) => spring({ frame: f - at, fps: FPS, config: { damping: d, stiffness: s } });
 const rise = (p, d = 40) => ({ opacity: Math.min(1, p * 2), transform: `translateY(${(1 - Math.min(1, p)) * d}px)` });
 const pop = (p, k = 1.3) => ({ opacity: Math.min(1, p * 3), transform: `scale(${interpolate(p, [0, 1], [k, 1])})` });
@@ -48,7 +48,7 @@ function GifCard({ id, t, top = 640, reps = true }) {
 }
 const secs = (s) => s.replace("s", " s");
 
-function Header({ f, right }) {
+export function Header({ f, right }) {
   return (
     <div style={{ position: "absolute", left: 70, right: 70, top: 236, display: "flex", alignItems: "center", gap: 16 }}>
       <Img src={staticFile("darebni-icon.png")} style={{ width: 64, height: 64, borderRadius: 16 }} />
@@ -57,12 +57,12 @@ function Header({ f, right }) {
     </div>
   );
 }
-const Chip = ({ children, hot, style }) => (
+export const Chip = ({ children, hot, style }) => (
   <div style={{ padding: "12px 22px", borderRadius: 16, background: hot ? B.primary : "rgba(139,128,255,.14)", border: `2px solid ${hot ? B.lo : "rgba(139,128,255,.35)"}`, ...D, fontSize: 40, color: B.cream, letterSpacing: "0.02em", ...style }}>{children}</div>
 );
 // the ambassador on stage: his real photo (public/ambassador.png, a cut-out kept out of git), rising in, breathing,
 // with a purple rim light and a punch on the beat
-function Ambassador({ f, x = 540, w = 700, top = 640, at = 6, src = "ambassador.png", aspect = 1170 / 985, label }) {
+export function Ambassador({ f, x = 540, w = 700, top = 640, at = 6, src = "ambassador.png", aspect = 1170 / 985, label }) {
   const enter = Math.min(1, sp(f, at, 14, 140)), t = Math.max(0, f - at);
   const beat = Math.max(0, 1 - ((t % 30) / 6)) * (t > 15 ? 1 : 0);
   const h = w * aspect;
@@ -144,7 +144,7 @@ function Finisher({ f }) {
 
 // a phone showing a real Darebni screen (public/app/home.jpg, a 780x1694 App Store screenshot); `hl` outlines a
 // region of the screen, given as fractions of the screenshot [top, bottom, left, right]
-function Phone({ src, w, x, y, rot = 0, hl, hlOn = 0, style }) {
+export function Phone({ src, w, x, y, rot = 0, hl, hlOn = 0, style }) {
   const h = w * 2.17, r = w * 0.15, b = w * 0.035;
   return (
     <div style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, background: "#16142A", padding: b, transform: `rotate(${rot}deg)`,
@@ -158,45 +158,127 @@ function Phone({ src, w, x, y, rot = 0, hl, hlOn = 0, style }) {
   );
 }
 
-// the end card (5 s): the question, three real things the app does (each lit up on its screen), then the download
-const POINTS = [
-  { at: 24, big: "Weights, sets & reps", small: "for every exercise", hl: [0.415, 0.548, 0.035, 0.965] },
+// The end card, two pages with the download button held under both.
+// Page 1 (the plan): three things the plan does, each lit up on the real home screen.
+// Page 2 (the tracker): the Live Activity (drawn from the app's own ios/WorkoutActivity widget: working state with
+// Prev · Log set · Next), the weekly AI follow-up lit up on the real Analytics screen, and a pinned-lift 1RM card
+// cropped from the real home screen for the PR tracker.
+const PLAN = [
+  { at: 24, big: "Weights, sets & reps", small: "for every exercise", hl: [0.148, 0.372, 0.04, 0.96] },
   { at: 44, big: "A weekly planner", small: "your whole week, day by day", hl: [0.588, 0.697, 0.035, 0.965] },
   { at: 64, big: "Tailored to you", small: "by your AI coach", hl: [0.065, 0.14, 0.004, 0.72] },
 ];
-export const OUTRO_TICKS = POINTS.map((p) => p.at);
+export const OUTRO_SWAP = 110;
+const TRACK = [
+  { at: OUTRO_SWAP + 22, big: "Smart workout tracker", small: "Live Activity on your lock screen" },
+  { at: OUTRO_SWAP + 44, big: "Weekly follow-up", small: "your AI coach reviews your week", hl: [0.345, 0.556, 0.05, 0.95] },
+  { at: OUTRO_SWAP + 66, big: "PR tracker", small: "your best lifts, saved" },
+];
 export const OUTRO_CTA = 84;
+
+function Points({ t, items, cur, size = 50 }) {
+  return (
+    <div style={{ position: "absolute", left: 70, width: 500, top: 650, display: "flex", flexDirection: "column", gap: 70 }}>
+      {items.map((p, i) => {
+        const q = sp(t, p.at, 12, 240), on = i === cur;
+        return (
+          <div key={p.big} style={{ display: "flex", gap: 18, alignItems: "flex-start", ...rise(q, 30) }}>
+            <div style={{ flex: "none", width: 52, height: 52, borderRadius: 16, marginTop: 2, background: B.success, display: "flex", alignItems: "center", justifyContent: "center", ...pop(q, 1.6) }}>
+              <svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke={B.ink} strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </div>
+            <div>
+              <div style={{ ...D, fontSize: size, color: on ? B.cream : "rgba(242,240,234,.82)", whiteSpace: "nowrap" }}>{p.big}</div>
+              <div style={{ ...UIR, fontSize: 32, color: on ? B.xlo : "rgba(184,176,255,.7)", marginTop: 6 }}>{p.small}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+const current = (t, items) => items.reduce((k, p, i) => (t >= p.at ? i : k), -1);
+
+// the app's lock-screen Live Activity, working state (sample set: the plan's bench press, set 2 of 4)
+function LiveActivity({ style }) {
+  const acc = "#A78BFA";
+  const btn = (label, hot) => (
+    <div style={{ flex: 1, height: 46, borderRadius: 13, background: hot ? "rgba(167,139,250,.9)" : "rgba(255,255,255,.10)", display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "Barlow", fontWeight: 600, fontSize: 19, color: "#fff" }}>{label}</div>
+  );
+  return (
+    <div style={{ position: "absolute", width: 440, padding: "20px 22px", borderRadius: 30, background: "rgba(28,28,30,.96)", border: "1.5px solid rgba(255,255,255,.12)",
+      boxShadow: "0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(91,78,229,.45)", ...style }}>
+      <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+        <div style={{ width: 62, height: 62, borderRadius: 15, background: "rgba(255,255,255,.10)", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }}>
+          <Img src={staticFile("darebni-icon.png")} style={{ width: 52, height: 52, borderRadius: 11 }} />
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 15, letterSpacing: "0.08em", color: "rgba(255,255,255,.55)" }}>PUSH</div>
+          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 25, color: "#fff", marginTop: 2 }}>Barbell Bench Press</div>
+          <div style={{ fontFamily: "BarlowR", fontWeight: 500, fontSize: 20, color: "rgba(255,255,255,.75)", marginTop: 2 }}>80 kg × 8 reps</div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 14, letterSpacing: "0.1em", color: "rgba(255,255,255,.55)" }}>SET</div>
+          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 40, color: acc, lineHeight: 1 }}>2<span style={{ fontSize: 28, color: "rgba(255,255,255,.55)" }}>/4</span></div>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 10, marginTop: 16 }}>{btn("‹  Prev")}{btn("✓  Log set", true)}{btn("Next  ›")}</div>
+    </div>
+  );
+}
+// a crop of the real home screen: the pinned Barbell Incline Bench Press card with its 1RM
+function PRCard({ style }) {
+  const w = 330, iw = 780, box = [0.045, 0.493, 0.423, 0.542];   // left, right, top, bottom as fractions of the screenshot
+  const sc = w / ((box[1] - box[0]) * iw), h = (box[3] - box[2]) * 1694 * sc;
+  return (
+    <div style={{ position: "absolute", width: w, height: h, borderRadius: 26, overflow: "hidden", border: `3px solid ${B.lo}`,
+      boxShadow: "0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(91,78,229,.55)", background: "#EEEBFB", ...style }}>
+      <Img src={staticFile("app/home.jpg")} style={{ position: "absolute", width: iw * sc, height: 1694 * sc, left: -box[0] * iw * sc, top: -box[2] * 1694 * sc, maxWidth: "none" }} />
+    </div>
+  );
+}
+
 function Outro({ f }) {
   const t = f - OUTRO;
   if (t < -2) return null;
-  const cta = sp(t, OUTRO_CTA, 9, 260), phone = sp(t, 6, 14, 150);
-  const cur = POINTS.reduce((k, p, i) => (t >= p.at ? i : k), -1);
-  const hlOn = cur < 0 ? 0 : Math.min(1, sp(t, POINTS[cur].at, 14, 220) * 1.5);
+  const cta = sp(t, OUTRO_CTA, 9, 260);
+  const out1 = interpolate(t, [OUTRO_SWAP - 4, OUTRO_SWAP + 4], [1, 0], clamp);
+  const t2 = t - OUTRO_SWAP;
+  // page 1
+  const phone1 = sp(t, 6, 14, 150), c1 = current(t, PLAN);
+  const hl1 = c1 < 0 ? 0 : Math.min(1, sp(t, PLAN[c1].at, 14, 220) * 1.5);
+  // page 2
+  const phone2 = sp(t2, 4, 14, 150), c2 = current(t, TRACK);
+  const hl2 = c2 === 1 ? Math.min(1, sp(t, TRACK[1].at, 14, 220) * 1.5) : 0;
+  // the floating cards share one spot over the phone's lower half: the Live Activity for point 1, the PR card for 3
+  const la = sp(t, TRACK[0].at - 4, 14, 200), laOut = sp(t, TRACK[1].at - 6, 14, 200), pr = sp(t, TRACK[2].at - 4, 12, 200);
   return (
     <>
       <Header f={f} right="Your plan" />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 330 }}>
-        <div style={{ ...D, fontSize: 104, color: B.cream, ...rise(sp(t, 0, 12, 240), 60) }}>Want a customized</div>
-        <div style={{ ...D, fontSize: 104, color: B.lo, ...rise(sp(t, 5, 12, 240), 60) }}>weekly plan?</div>
-      </div>
-      <Phone src="app/home.jpg" w={340} x={585} y={560 + (1 - phone) * 320 + Math.sin(t / 16) * 6} rot={4} hl={cur >= 0 ? POINTS[cur].hl : null} hlOn={hlOn}
-        style={{ opacity: Math.min(1, phone * 2) }} />
-      <div style={{ position: "absolute", left: 70, width: 500, top: 650, display: "flex", flexDirection: "column", gap: 78 }}>
-        {POINTS.map((p, i) => {
-          const q = sp(t, p.at, 12, 240), on = i === cur;
-          return (
-            <div key={p.big} style={{ display: "flex", gap: 18, alignItems: "flex-start", ...rise(q, 30) }}>
-              <div style={{ flex: "none", width: 52, height: 52, borderRadius: 16, marginTop: 2, background: B.success, display: "flex", alignItems: "center", justifyContent: "center", ...pop(q, 1.6) }}>
-                <svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke={B.ink} strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </div>
-              <div>
-                <div style={{ ...D, fontSize: 50, color: on ? B.cream : "rgba(242,240,234,.82)" }}>{p.big}</div>
-                <div style={{ ...UIR, fontSize: 32, color: on ? B.xlo : "rgba(184,176,255,.7)", marginTop: 6 }}>{p.small}</div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {out1 > 0 && (
+        <div style={{ opacity: out1, transform: `translateX(${(1 - out1) * -80}px)` }}>
+          <div style={{ position: "absolute", left: 70, right: 70, top: 330 }}>
+            <div style={{ ...D, fontSize: 104, color: B.cream, ...rise(sp(t, 0, 12, 240), 60) }}>Want a customized</div>
+            <div style={{ ...D, fontSize: 104, color: B.lo, ...rise(sp(t, 5, 12, 240), 60) }}>weekly plan?</div>
+          </div>
+          <Phone src="app/home.jpg" w={340} x={585} y={560 + (1 - phone1) * 320 + Math.sin(t / 16) * 6} rot={4} hl={c1 >= 0 ? PLAN[c1].hl : null} hlOn={hl1}
+            style={{ opacity: Math.min(1, phone1 * 2) }} />
+          <Points t={t} items={PLAN} cur={c1} />
+        </div>
+      )}
+      {t2 > -2 && (
+        <div style={{ opacity: interpolate(t2, [-2, 6], [0, 1], clamp), transform: `translateX(${interpolate(t2, [-2, 10], [80, 0], clamp)}px)` }}>
+          <div style={{ position: "absolute", left: 70, right: 70, top: 330 }}>
+            <div style={{ ...D, fontSize: 104, color: B.cream, ...rise(sp(t2, 0, 12, 240), 60) }}>Then it tracks</div>
+            <div style={{ ...D, fontSize: 104, color: B.lo, ...rise(sp(t2, 5, 12, 240), 60) }}>every rep.</div>
+          </div>
+          <Phone src="app/analytics.jpg" w={340} x={585} y={560 + (1 - phone2) * 320 + Math.sin(t / 16) * 6} rot={4} hl={TRACK[1].hl} hlOn={hl2}
+            style={{ opacity: Math.min(1, phone2 * 2) }} />
+          <Points t={t} items={TRACK} cur={c2} size={42} />
+          <LiveActivity style={{ left: 500, top: 1080, opacity: Math.min(1, la * 2) * (1 - Math.min(1, laOut)), transform: `translateY(${(1 - Math.min(1, la)) * 140 + Math.min(1, laOut) * 60}px) scale(${0.9 + 0.1 * Math.min(1, la)})` }} />
+          <PRCard style={{ left: 590, top: 1070, opacity: Math.min(1, pr * 2), transform: `translateY(${(1 - Math.min(1, pr)) * 120}px) rotate(-3deg)` }} />
+        </div>
+      )}
       <div style={{ position: "absolute", left: 70, top: 1340, display: "flex", alignItems: "center", gap: 28 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 18, padding: "14px 34px 14px 16px", borderRadius: 26, background: B.cream, boxShadow: "0 24px 60px rgba(91,78,229,.45)",
           transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * (1 + 0.03 * Math.max(0, Math.sin(Math.max(0, t - OUTRO_CTA - 20) / 5)))})`, transformOrigin: "0% 50%", opacity: Math.min(1, cta * 2) }}>
