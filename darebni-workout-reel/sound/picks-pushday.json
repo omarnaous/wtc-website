@@ -1,13 +1,12 @@
 {
  "music": {
-  "id": "m51",
-  "title": "Sports Highlights",
-  "artist": "Ahjay Stelino",
-  "genre": "Rock",
-  "bpm": 123.0,
-  "first_beat": 0.163,
-  "duration": 96,
-  "file": "music/m51.mp3"
+  "id": "m567",
+  "title": "Anthem #01",
+  "artist": "Eugenio Mininni",
+  "genre": "EDM",
+  "bpm": 129.2,
+  "duration": 177,
+  "file": "music/m567.mp3"
  },
  "whoosh": [
   "/home/user/wtc-website/sound-library/sfx/s2596.mp3",
@@ -18,10 +17,10 @@
   "/home/user/wtc-website/sound-library/sfx/s3120.mp3"
  ],
  "rep": [
-  "/home/user/wtc-website/sound-library/sfx/s2116.mp3",
-  "/home/user/wtc-website/sound-library/sfx/s2102.mp3",
-  "/home/user/wtc-website/sound-library/sfx/s2115.mp3",
-  "/home/user/wtc-website/sound-library/sfx/s2153.mp3"
+  "/home/user/wtc-website/sound-library/sfx/s2299.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2303.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2294.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2655.mp3"
  ],
  "click": [
   "/home/user/wtc-website/sound-library/sfx/s901.mp3",
@@ -34,5 +33,15 @@
  ],
  "ding": [
   "/home/user/wtc-website/sound-library/sfx/s937.mp3"
+ ],
+ "metal": [
+  "/home/user/wtc-website/sound-library/sfx/s2116.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2102.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s3158.mp3"
+ ],
+ "tick": [
+  "/home/user/wtc-website/sound-library/sfx/s2997.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s275.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s901.mp3"
  ]
 }

@@ -1,8 +1,8 @@
 // Darebni AI "Push day" reel, built from push_workout.json (the app's own plan format). The ambassador's real photo
 // opens the reel; each of the 7 exercises plays the app's own demo
 // (the GIFURLSOM repo the app resolves ids to; its two clean poses in public/gifs/<id>/a.png, b.png) as one rep per
-// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and a download card with
-// the real app screens (public/app/) in a phone mockup.
+// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and a 5 s end card asking
+// "Want a customized weekly plan?" with the real app (public/app/home.jpg) in a phone and a download button.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import W from "./push_workout.json";
 import { FPS, EX0, EX_LEN, N_EX, FIN, OUTRO } from "./timing.js";
@@ -32,9 +32,9 @@ function GifCard({ id, t, top = 640, reps = true }) {
   const hit = Math.max(0, 1 - Math.abs((((t % 30) + 30) % 30) - 15) / 4);   // a little punch as the top lands
   const n = t < 15 ? 0 : Math.min(2, Math.floor((t - 15) / 30) + 1);
   return (
-    <div style={{ position: "absolute", left: 140, top, width: 800, height: 620, borderRadius: 40, background: "#fff", overflow: "hidden",
+    <div style={{ position: "absolute", left: 70, top, width: 870, height: 620, borderRadius: 40, background: "#fff", overflow: "hidden",
       boxShadow: `0 40px 100px rgba(0,0,0,.55), 0 0 0 4px rgba(139,128,255,${0.55 + 0.4 * hit}), 0 0 ${90 + 50 * hit}px rgba(91,78,229,.4)`, ...pop(p, 0.9) }}>
-      <div style={{ position: "absolute", left: 100, top: 10, width: 600, height: 600, transform: `scale(${1 + 0.025 * hit})` }}>
+      <div style={{ position: "absolute", left: 135, top: 10, width: 600, height: 600, transform: `scale(${1 + 0.025 * hit})` }}>
         <Img src={staticFile(`gifs/${id}/a.png`)} style={{ position: "absolute", inset: 0, width: 600, height: 600 }} />
         <Img src={staticFile(`gifs/${id}/b.png`)} style={{ position: "absolute", inset: 0, width: 600, height: 600, opacity: k }} />
       </div>
@@ -92,8 +92,8 @@ function Intro({ f }) {
           {stats.map((s, i) => <div key={s} style={rise(sp(f, 22 + i * 4))}><Chip hot={i === 0}>{s}</Chip></div>)}
         </div>
       </div>
-      <Ambassador f={f} top={650} w={740} />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 1500, ...UIR, fontSize: 32, color: "rgba(242,240,234,.8)", ...rise(sp(f, 40)) }}>
+      <Ambassador f={f} top={640} w={640} />
+      <div style={{ position: "absolute", left: 70, right: 70, top: 1410, ...UIR, fontSize: 32, color: "rgba(242,240,234,.8)", ...rise(sp(f, 40)) }}>
         <span style={{ ...D, fontSize: 32, color: B.success, letterSpacing: "0.06em" }}>Warm-up · </span>{W.warmup}
       </div>
     </div>
@@ -108,8 +108,8 @@ function Exercise({ f, i }) {
   return (
     <div style={{ opacity: out }}>
       <Header f={f} right={`Push day · ${i + 1}/${N_EX}`} />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 330 }}>
-        <div style={{ ...D, fontSize: e.name.length > 22 ? 96 : 116, color: B.cream, ...rise(inP, 60) }}>{e.name}</div>
+      <div style={{ position: "absolute", left: 70, right: 70, bottom: 1920 - 604 }}>
+        <div style={{ ...D, fontSize: 96, color: B.cream, ...rise(inP, 60) }}>{e.name}</div>
         <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
           {[`${e.sets} × ${e.reps}`, `Rest ${secs(e.rest)}`, e.rpe].map((c, k) => <div key={c} style={rise(sp(t, 6 + k * 4))}><Chip hot={k === 0}>{c}</Chip></div>)}
         </div>
@@ -133,7 +133,7 @@ function Finisher({ f }) {
   return (
     <div style={{ opacity: out }}>
       <Header f={f} right="Finisher" />
-      <div style={{ position: "absolute", left: 70, top: 330 }}>
+      <div style={{ position: "absolute", left: 70, bottom: 1920 - 604 }}>
         <div style={{ ...D, fontSize: 140, color: B.danger, ...pop(sp(t, 0, 10, 260), 1.4), transformOrigin: "0% 50%" }}>Push-ups</div>
         <div style={{ ...D, fontSize: 80, color: B.cream, marginTop: 6, ...rise(sp(t, 8)) }}>to failure · 1 set</div>
       </div>
@@ -142,45 +142,71 @@ function Finisher({ f }) {
   );
 }
 
-// a phone showing a real Darebni screen (public/app/*.jpg, 780x1694 App Store screenshots)
-function Phone({ src, w, x, y, rot = 0, glow, style }) {
+// a phone showing a real Darebni screen (public/app/home.jpg, a 780x1694 App Store screenshot); `hl` outlines a
+// region of the screen, given as fractions of the screenshot [top, bottom, left, right]
+function Phone({ src, w, x, y, rot = 0, hl, hlOn = 0, style }) {
   const h = w * 2.17, r = w * 0.15, b = w * 0.035;
   return (
     <div style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, background: "#16142A", padding: b, transform: `rotate(${rot}deg)`,
-      border: "2px solid rgba(255,255,255,.14)", boxShadow: `0 50px 110px rgba(0,0,0,.6)${glow ? ", 0 0 90px rgba(91,78,229,.55)" : ""}`, ...style }}>
+      border: "2px solid rgba(255,255,255,.14)", boxShadow: "0 50px 110px rgba(0,0,0,.6), 0 0 90px rgba(91,78,229,.55)", ...style }}>
       <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: r - b, overflow: "hidden", background: "#fff" }}>
         <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+        {hl && <div style={{ position: "absolute", top: `${hl[0] * 100}%`, height: `${(hl[1] - hl[0]) * 100}%`, left: `${hl[2] * 100}%`, width: `${(hl[3] - hl[2]) * 100}%`,
+          borderRadius: 14, border: `4px solid ${B.primary}`, boxShadow: `0 0 0 9999px rgba(7,7,26,${0.38 * hlOn}), 0 0 30px rgba(91,78,229,.8)`, opacity: hlOn }} />}
       </div>
     </div>
   );
 }
 
+// the end card (5 s): the question, three real things the app does (each lit up on its screen), then the download
+const POINTS = [
+  { at: 24, big: "Weights, sets & reps", small: "for every exercise", hl: [0.415, 0.548, 0.035, 0.965] },
+  { at: 44, big: "A weekly planner", small: "your whole week, day by day", hl: [0.588, 0.697, 0.035, 0.965] },
+  { at: 64, big: "Tailored to you", small: "by your AI coach", hl: [0.065, 0.14, 0.004, 0.72] },
+];
+export const OUTRO_TICKS = POINTS.map((p) => p.at);
+export const OUTRO_CTA = 84;
 function Outro({ f }) {
   const t = f - OUTRO;
   if (t < -2) return null;
-  const cta = sp(t, 30, 9, 260), front = sp(t, 8, 14, 150), back = sp(t, 16, 14, 150);
-  const float = Math.sin(t / 14) * 8;
+  const cta = sp(t, OUTRO_CTA, 9, 260), phone = sp(t, 6, 14, 150);
+  const cur = POINTS.reduce((k, p, i) => (t >= p.at ? i : k), -1);
+  const hlOn = cur < 0 ? 0 : Math.min(1, sp(t, POINTS[cur].at, 14, 220) * 1.5);
   return (
     <>
-      <Header f={f} right="" />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 300 }}>
-        <div style={{ ...D, fontSize: 96, color: B.cream, ...rise(sp(t, 0, 12, 240), 60) }}>Detailed, customized</div>
-        <div style={{ ...D, fontSize: 96, color: B.cream, ...rise(sp(t, 4, 12, 240), 60) }}>workouts</div>
-        <div style={{ ...D, fontSize: 96, color: B.lo, ...rise(sp(t, 8, 12, 240), 60) }}>with sets & reps</div>
+      <Header f={f} right="Your plan" />
+      <div style={{ position: "absolute", left: 70, right: 70, top: 330 }}>
+        <div style={{ ...D, fontSize: 104, color: B.cream, ...rise(sp(t, 0, 12, 240), 60) }}>Want a customized</div>
+        <div style={{ ...D, fontSize: 104, color: B.lo, ...rise(sp(t, 5, 12, 240), 60) }}>weekly plan?</div>
       </div>
-      {/* the app: today's session in front, the exercise builder behind */}
-      <Phone src="app/builder.jpg" w={270} x={600} y={660 + (1 - back) * 300} rot={8} style={{ opacity: Math.min(1, back * 2) }} />
-      <Phone src="app/home.jpg" w={300} x={330} y={630 + (1 - front) * 300 + float} rot={-5} glow style={{ opacity: Math.min(1, front * 2) }} />
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1318, display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 18, padding: "14px 34px 14px 18px", borderRadius: 26, background: B.cream, boxShadow: "0 24px 60px rgba(91,78,229,.45)",
-          transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * (1 + 0.03 * Math.max(0, Math.sin(Math.max(0, t - 60) / 5)))})`, opacity: Math.min(1, cta * 2) }}>
+      <Phone src="app/home.jpg" w={340} x={585} y={560 + (1 - phone) * 320 + Math.sin(t / 16) * 6} rot={4} hl={cur >= 0 ? POINTS[cur].hl : null} hlOn={hlOn}
+        style={{ opacity: Math.min(1, phone * 2) }} />
+      <div style={{ position: "absolute", left: 70, width: 500, top: 650, display: "flex", flexDirection: "column", gap: 78 }}>
+        {POINTS.map((p, i) => {
+          const q = sp(t, p.at, 12, 240), on = i === cur;
+          return (
+            <div key={p.big} style={{ display: "flex", gap: 18, alignItems: "flex-start", ...rise(q, 30) }}>
+              <div style={{ flex: "none", width: 52, height: 52, borderRadius: 16, marginTop: 2, background: B.success, display: "flex", alignItems: "center", justifyContent: "center", ...pop(q, 1.6) }}>
+                <svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke={B.ink} strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </div>
+              <div>
+                <div style={{ ...D, fontSize: 50, color: on ? B.cream : "rgba(242,240,234,.82)" }}>{p.big}</div>
+                <div style={{ ...UIR, fontSize: 32, color: on ? B.xlo : "rgba(184,176,255,.7)", marginTop: 6 }}>{p.small}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ position: "absolute", left: 70, top: 1340, display: "flex", alignItems: "center", gap: 28 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18, padding: "14px 34px 14px 16px", borderRadius: 26, background: B.cream, boxShadow: "0 24px 60px rgba(91,78,229,.45)",
+          transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * (1 + 0.03 * Math.max(0, Math.sin(Math.max(0, t - OUTRO_CTA - 20) / 5)))})`, transformOrigin: "0% 50%", opacity: Math.min(1, cta * 2) }}>
           <Img src={staticFile("darebni-icon.png")} style={{ width: 88, height: 88, borderRadius: 20 }} />
           <div>
             <div style={{ ...D, fontSize: 30, color: B.primary, letterSpacing: "0.06em" }}>Download now</div>
             <div style={{ ...D, fontSize: 68, color: B.ink }}>Darebni AI</div>
           </div>
         </div>
-        <div style={{ ...UI, fontSize: 34, color: "rgba(242,240,234,.85)", ...rise(sp(t, 44)) }}>On the App Store · iPhone</div>
+        <div style={{ ...UI, fontSize: 32, lineHeight: 1.25, color: "rgba(242,240,234,.85)", ...rise(sp(t, OUTRO_CTA + 12)) }}>On the<br />App Store</div>
       </div>
     </>
   );
