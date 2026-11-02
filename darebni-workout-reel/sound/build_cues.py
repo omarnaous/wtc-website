@@ -1,32 +1,46 @@
-"""Sound for the Darebni push-day reel, from src/timing.js. A 120 BPM gym house bed: filtered under the intro,
-a bass drop on the first exercise, a break under the CTA. Every exercise card lands with a swoosh + slap and a stamp
-per stat chip; every rep has a weight hit at the top (a sub thump plus a metal clink), exactly on the beat the demo
-snaps to the top (t = 15 + 30k into each card, see GifCard in Main.jsx); the finisher gets a sting; the coach's
-flexes get a pop; the PLAN button a hit + chime. Writes sound/cues.json (music) and sound/cues-sfx.json.
+"""Sound for the Darebni push-day reel (Main.jsx, timing.js), from the real-audio library
+(.claude/skills/appify-content/assets/tools/sound_library.py). An unused gym-energy track near 120 BPM is cut on a
+downbeat as the bed, so the cards (every 8 beats) and the rep snaps (once a second) sit on its grid. Effects rotate
+so nothing repeats back to back: whooshes on card changes, metal/weight hits on the rep tops (4 variants), clicks on
+the stat chips, an impact on the first exercise and the finisher, a notification on the PLAN button. Picks are saved
+in sound/picks-pushday.json (delete to re-pick). Writes public/pushday-bed.wav, sound/cues.json, sound/cues-sfx.json.
   python3 sound/build_cues.py && python3 <motion-graphics>/scripts/sound.py sound/cues.json public/sound.wav"""
-import json, re
+import json, os, re, subprocess, sys
+LIBTOOL = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.claude/skills/appify-content/assets/tools/sound_library.py"))
+PROJECT = "darebni-pushday"
 src = open("src/timing.js").read()
 n = lambda k: int(re.search(rf"\b{k} = (\d+)", src).group(1))
 EX0, EX_LEN, N_EX = n("EX0"), n("EX_LEN"), n("N_EX")
 FIN = EX0 + EX_LEN * N_EX; OUTRO = FIN + 75; DUR = OUTRO + 120
-music = [{"type": "house", "start": 0, "end": DUR, "bpm": 120, "gain": 0.5,
-          "sections": [[0, "intro"], [EX0 - 15, "gap"], [EX0, "drop"], [OUTRO, "break"], [OUTRO + 60, "outro"]],
-          "lp_auto": [[0, 700], [EX0 - 16, 1800], [EX0 + 1, 11000], [OUTRO - 2, 11000], [OUTRO + 4, 2600], [OUTRO + 58, 2600], [OUTRO + 62, 11000]]}]
-fx = [{"type": "riser", "start": 30, "end": EX0 - 3, "gain": 0.1}]
-fx += [{"type": "stamp", "frame": 22 + i * 4, "gain": 0.05} for i in range(4)]                       # intro chips
-fx += [{"type": "pop", "frame": f, "gain": 0.07} for f in (25, 55, 85)]                               # coach flexes
-fx += [{"type": "bass_drop", "frame": EX0, "gain": 0.35}, {"type": "impact", "frame": EX0, "gain": 0.18}]
-rep = lambda a, k: [{"type": "thump", "frame": a + 15 + 30 * k, "gain": 0.16}, {"type": "clink", "frame": a + 15 + 30 * k, "gain": 0.05, "pan": (-0.25, 0.25)[k % 2]}]
+lib = lambda *a: subprocess.run([sys.executable, LIBTOOL, *a], capture_output=True, text=True, check=True).stdout
+NOPE = "game,arcade,video-game,cartoon,toy,8-bit,funny,animals,water,error"
+def files(tag, k, title=None, ex=NOPE):
+    args = ["sfx", tag, "--n", str(k), "--project", PROJECT, "--max-dur", "3", "--exclude", ex] + (["--title", title] if title else [])
+    return [l.split("\t")[0] for l in lib(*args).strip().splitlines()]
+if os.path.exists("sound/picks-pushday.json"):
+    P = json.load(open("sound/picks-pushday.json"))
+else:
+    P = {"music": json.loads(lib("pick-music", "--mood", "gym-energy", "--min-bpm", "110", "--max-bpm", "135", "--project", PROJECT)),
+         "whoosh": files("whoosh", 4) + files("transition", 2), "rep": files("metal", 4, title="hit|clank|impact|metal|drop|bang"),
+         "click": files("click", 3, title="click|tap|select|switch"), "impact": files("impact", 2, title="impact|hit|boom|punch|thud"),
+         "ding": files("notification", 1, title="ding|chime|bell|positive|success")}
+    json.dump(P, open("sound/picks-pushday.json", "w"), indent=1)
+bed = json.loads(lib("bed", P["music"]["id"], "public/pushday-bed.wav", "--dur", f"{DUR / 30:.3f}", "--gain", "0.9"))
+print("bed:", bed["title"], "by", P["music"]["artist"], f"({bed['bpm']} bpm, from {bed['start']} s)")
+smp = lambda f, frame, g, pan=0.0: {"type": "sample", "file": os.path.abspath(f), "frame": round(frame), "gain": g, "pan": pan}
+music = [smp("public/pushday-bed.wav", 0, 0.55)]
+fx = [smp(P["click"][k % len(P["click"])], 22 + k * 4, 0.3) for k in range(4)]
+fx += [smp(P["impact"][0], EX0, 0.6)]
+r = 0
 for i in range(N_EX):
     a = EX0 + i * EX_LEN
-    if i: fx += [{"type": "swoosh", "start": a - 7, "end": a + 3, "peak": 0.6, "f": 1600, "gain": 0.12}, {"type": "slap", "frame": a, "gain": 0.12}]
-    fx += [{"type": "stamp", "frame": a + 6 + k * 4, "gain": 0.045} for k in range(3)]
-    for k in range(4): fx += rep(a, k)
-fx += [{"type": "swoosh", "start": FIN - 7, "end": FIN + 3, "peak": 0.6, "f": 1600, "gain": 0.12}, {"type": "sting", "frame": FIN, "gain": 0.16}]
-for k in range(2): fx += rep(FIN, k)
-fx += [{"type": "swoosh", "start": OUTRO - 7, "end": OUTRO + 4, "peak": 0.6, "f": 1400, "gain": 0.1},
-       {"type": "impact", "frame": OUTRO + 26, "gain": 0.14}, {"type": "chime", "frame": OUTRO + 27, "gain": 0.05, "freq": 1318.5},
-       {"type": "pop", "frame": OUTRO + 34 + 15, "gain": 0.07}, {"type": "glint", "frame": OUTRO + 44, "gain": 0.04, "freq": 2093}]
+    if i: fx += [smp(P["whoosh"][i % len(P["whoosh"])], a - 8, 0.4, (-0.3, 0.3)[i % 2])]
+    fx += [smp(P["click"][(i + k) % len(P["click"])], a + 6 + k * 4, 0.22) for k in range(3)]
+    for k in range(4):
+        fx += [smp(P["rep"][r % len(P["rep"])], a + 15 + 30 * k, 0.32, (-0.15, 0.15)[r % 2])]; r += 1
+fx += [smp(P["whoosh"][-1], FIN - 8, 0.45), smp(P["impact"][1], FIN, 0.6)]
+fx += [smp(P["rep"][k % len(P["rep"])], FIN + 15 + 30 * k, 0.3) for k in range(2)]
+fx += [smp(P["whoosh"][-2], OUTRO - 8, 0.4), smp(P["ding"][0], OUTRO + 26, 0.5)]
 for mus, out in ((True, "sound/cues.json"), (False, "sound/cues-sfx.json")):
-    spec = {"fps": 30, "duration": DUR / 30, "seed": 4, "fade_out": 1.2, "lowpass": 12000, "peak_db": -3, "cues": (music if mus else []) + fx}
-    json.dump(spec, open(out, "w"), indent=1); print(out, len(spec["cues"]), "cues")
+    spec = {"fps": 30, "duration": DUR / 30, "seed": 4, "fade_out": 1.2, "peak_db": -2, "cues": (music if mus else []) + fx}
+    json.dump(spec, open(out, "w"), indent=1); print(out, len(spec["cues"]), "cues,", len({c["file"] for c in fx}), "different effect files")

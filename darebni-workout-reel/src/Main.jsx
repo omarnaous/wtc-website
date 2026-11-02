@@ -1,8 +1,8 @@
 // Darebni AI "Push day" reel, built from push_workout.json (the app's own plan format). The ambassador's real photo
 // opens the reel; each of the 7 exercises plays the app's own demo
 // (the GIFURLSOM repo the app resolves ids to; its two clean poses in public/gifs/<id>/a.png, b.png) as one rep per
-// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and the ambassador
-// returns in the outro asking people to comment PLAN for a free 4-week plan.
+// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and the Darebni coach
+// mascot (public/darebni-mascot.png) in the outro asking people to comment PLAN for a free 4-week plan.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import W from "./push_workout.json";
 import { FPS, EX0, EX_LEN, N_EX, FIN, OUTRO } from "./timing.js";
@@ -62,16 +62,19 @@ const Chip = ({ children, hot, style }) => (
 );
 // the ambassador on stage: his real photo (public/ambassador.png, a cut-out kept out of git), rising in, breathing,
 // with a purple rim light and a punch on the beat
-function Ambassador({ f, x = 540, w = 700, top = 640, at = 6 }) {
+function Ambassador({ f, x = 540, w = 700, top = 640, at = 6, src = "ambassador.png", aspect = 1170 / 985, label }) {
   const enter = Math.min(1, sp(f, at, 14, 140)), t = Math.max(0, f - at);
   const beat = Math.max(0, 1 - ((t % 30) / 6)) * (t > 15 ? 1 : 0);
-  const h = (w * 1170) / 985;
+  const h = w * aspect;
   return (
     <>
       <div style={{ position: "absolute", left: x - w * 0.7, top: top + h * 0.15, width: w * 1.4, height: h * 0.8, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,78,229,.55), transparent 62%)" }} />
-      <Img src={staticFile("ambassador.png")} style={{ position: "absolute", left: x - w / 2, top, width: w, height: h,
+      <Img src={staticFile(src)} style={{ position: "absolute", left: x - w / 2, top, width: w, height: h,
         transform: `translateY(${(1 - enter) * 260}px) scale(${1 + 0.012 * Math.sin(t / 12) + 0.015 * beat})`, transformOrigin: "50% 100%", opacity: enter,
         filter: "drop-shadow(0 0 2px rgba(184,176,255,.9)) drop-shadow(0 0 26px rgba(91,78,229,.7)) contrast(1.06)" }} />
+      {label && <div style={{ position: "absolute", left: x - 150, width: 300, top: top - 56, textAlign: "center", opacity: Math.min(1, sp(f, at + 14) * 2) }}>
+        <span style={{ ...D, fontSize: 28, color: B.ink, background: B.cream, padding: "8px 18px", borderRadius: 12, letterSpacing: "0.05em" }}>{label}</span>
+      </div>}
     </>
   );
 }
@@ -154,8 +157,8 @@ function Outro({ f }) {
           <div style={{ ...D, fontSize: 104, color: B.ink }}>“PLAN”</div>
         </div>
       </div>
-      <Ambassador f={t} x={790} w={560} top={780} at={30} />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 1480, ...UI, fontSize: 38, color: "rgba(242,240,234,.85)", ...rise(sp(t, 40)) }}>Free 4-week plan · Darebni AI on the App Store</div>
+      <Ambassador f={t} x={790} w={380} top={720} at={30} src="darebni-mascot.png" aspect={1483 / 709} label="Your Darebni coach" />
+      <div style={{ position: "absolute", left: 70, width: 500, top: 820, lineHeight: 1.3, ...UI, fontSize: 40, color: "rgba(242,240,234,.88)", ...rise(sp(t, 40)) }}>Free 4-week plan<br />Darebni AI on the App Store</div>
     </>
   );
 }

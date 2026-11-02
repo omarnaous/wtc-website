@@ -1,0 +1,38 @@
+{
+ "music": {
+  "id": "m51",
+  "title": "Sports Highlights",
+  "artist": "Ahjay Stelino",
+  "genre": "Rock",
+  "bpm": 123.0,
+  "first_beat": 0.163,
+  "duration": 96,
+  "file": "music/m51.mp3"
+ },
+ "whoosh": [
+  "/home/user/wtc-website/sound-library/sfx/s2596.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1489.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s787.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2903.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s3115.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s3120.mp3"
+ ],
+ "rep": [
+  "/home/user/wtc-website/sound-library/sfx/s2116.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2102.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2115.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2153.mp3"
+ ],
+ "click": [
+  "/home/user/wtc-website/sound-library/sfx/s901.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2997.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s275.mp3"
+ ],
+ "impact": [
+  "/home/user/wtc-website/sound-library/sfx/s2155.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2150.mp3"
+ ],
+ "ding": [
+  "/home/user/wtc-website/sound-library/sfx/s937.mp3"
+ ]
+}
