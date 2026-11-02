@@ -239,8 +239,9 @@ function PRCard({ style }) {
   );
 }
 
-function Outro({ f }) {
-  const t = f - OUTRO;
+// `start` lets other reels reuse this end card (BenchElbows.jsx mounts it after its clip)
+export function Outro({ f, start = OUTRO }) {
+  const t = f - start;
   if (t < -2) return null;
   const cta = sp(t, OUTRO_CTA, 9, 260);
   const out1 = interpolate(t, [OUTRO_SWAP - 4, OUTRO_SWAP + 4], [1, 0], clamp);
