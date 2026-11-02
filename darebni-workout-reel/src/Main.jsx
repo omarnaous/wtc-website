@@ -1,8 +1,8 @@
 // Darebni AI "Push day" reel, built from push_workout.json (the app's own plan format). The ambassador's real photo
 // opens the reel; each of the 7 exercises plays the app's own demo
 // (the GIFURLSOM repo the app resolves ids to; its two clean poses in public/gifs/<id>/a.png, b.png) as one rep per
-// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and the Darebni coach
-// mascot (public/darebni-mascot.png) in the outro asking people to comment PLAN for a free 4-week plan.
+// second with a rep counter, beside the real sets, reps, rest and RPE; a push-up finisher; and a download card with
+// the real app screens (public/app/) in a phone mockup.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import W from "./push_workout.json";
 import { FPS, EX0, EX_LEN, N_EX, FIN, OUTRO } from "./timing.js";
@@ -30,7 +30,7 @@ const ease = (x) => x * x * (3 - 2 * x);
 function GifCard({ id, t, top = 640, reps = true }) {
   const p = Math.min(1, sp(t, 2, 13, 220)), k = ease(repTop(Math.max(0, t)));
   const hit = Math.max(0, 1 - Math.abs((((t % 30) + 30) % 30) - 15) / 4);   // a little punch as the top lands
-  const n = t < 15 ? 0 : Math.min(4, Math.floor((t - 15) / 30) + 1);
+  const n = t < 15 ? 0 : Math.min(2, Math.floor((t - 15) / 30) + 1);
   return (
     <div style={{ position: "absolute", left: 140, top, width: 800, height: 620, borderRadius: 40, background: "#fff", overflow: "hidden",
       boxShadow: `0 40px 100px rgba(0,0,0,.55), 0 0 0 4px rgba(139,128,255,${0.55 + 0.4 * hit}), 0 0 ${90 + 50 * hit}px rgba(91,78,229,.4)`, ...pop(p, 0.9) }}>
@@ -142,23 +142,46 @@ function Finisher({ f }) {
   );
 }
 
+// a phone showing a real Darebni screen (public/app/*.jpg, 780x1694 App Store screenshots)
+function Phone({ src, w, x, y, rot = 0, glow, style }) {
+  const h = w * 2.17, r = w * 0.15, b = w * 0.035;
+  return (
+    <div style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, background: "#16142A", padding: b, transform: `rotate(${rot}deg)`,
+      border: "2px solid rgba(255,255,255,.14)", boxShadow: `0 50px 110px rgba(0,0,0,.6)${glow ? ", 0 0 90px rgba(91,78,229,.55)" : ""}`, ...style }}>
+      <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: r - b, overflow: "hidden", background: "#fff" }}>
+        <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+      </div>
+    </div>
+  );
+}
+
 function Outro({ f }) {
   const t = f - OUTRO;
   if (t < -2) return null;
-  const cta = sp(t, 26, 9, 260);
+  const cta = sp(t, 30, 9, 260), front = sp(t, 8, 14, 150), back = sp(t, 16, 14, 150);
+  const float = Math.sin(t / 14) * 8;
   return (
     <>
       <Header f={f} right="" />
-      <div style={{ position: "absolute", left: 70, right: 70, top: 330 }}>
-        <div style={{ ...D, fontSize: 120, color: B.cream, ...rise(sp(t, 0, 12, 240), 60) }}>Want a plan</div>
-        <div style={{ ...D, fontSize: 120, color: B.lo, ...rise(sp(t, 6, 12, 240), 60) }}>built for you?</div>
-        <div style={{ marginTop: 34, display: "inline-block", padding: "20px 34px", borderRadius: 22, background: B.cream, transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * (1 + 0.03 * Math.max(0, Math.sin(Math.max(0, t - 50) / 5)))})`, transformOrigin: "0% 50%", opacity: Math.min(1, cta * 2) }}>
-          <div style={{ ...D, fontSize: 30, color: B.primary, letterSpacing: "0.06em" }}>Comment 👇</div>
-          <div style={{ ...D, fontSize: 104, color: B.ink }}>“PLAN”</div>
-        </div>
+      <div style={{ position: "absolute", left: 70, right: 70, top: 300 }}>
+        <div style={{ ...D, fontSize: 96, color: B.cream, ...rise(sp(t, 0, 12, 240), 60) }}>Detailed, customized</div>
+        <div style={{ ...D, fontSize: 96, color: B.cream, ...rise(sp(t, 4, 12, 240), 60) }}>workouts</div>
+        <div style={{ ...D, fontSize: 96, color: B.lo, ...rise(sp(t, 8, 12, 240), 60) }}>with sets & reps</div>
       </div>
-      <Ambassador f={t} x={790} w={380} top={720} at={30} src="darebni-mascot.png" aspect={1483 / 709} label="Your Darebni coach" />
-      <div style={{ position: "absolute", left: 70, width: 500, top: 820, lineHeight: 1.3, ...UI, fontSize: 40, color: "rgba(242,240,234,.88)", ...rise(sp(t, 40)) }}>Free 4-week plan<br />Darebni AI on the App Store</div>
+      {/* the app: today's session in front, the exercise builder behind */}
+      <Phone src="app/builder.jpg" w={270} x={600} y={660 + (1 - back) * 300} rot={8} style={{ opacity: Math.min(1, back * 2) }} />
+      <Phone src="app/home.jpg" w={300} x={330} y={630 + (1 - front) * 300 + float} rot={-5} glow style={{ opacity: Math.min(1, front * 2) }} />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1318, display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18, padding: "14px 34px 14px 18px", borderRadius: 26, background: B.cream, boxShadow: "0 24px 60px rgba(91,78,229,.45)",
+          transform: `scale(${interpolate(cta, [0, 1], [1.4, 1]) * (1 + 0.03 * Math.max(0, Math.sin(Math.max(0, t - 60) / 5)))})`, opacity: Math.min(1, cta * 2) }}>
+          <Img src={staticFile("darebni-icon.png")} style={{ width: 88, height: 88, borderRadius: 20 }} />
+          <div>
+            <div style={{ ...D, fontSize: 30, color: B.primary, letterSpacing: "0.06em" }}>Download now</div>
+            <div style={{ ...D, fontSize: 68, color: B.ink }}>Darebni AI</div>
+          </div>
+        </div>
+        <div style={{ ...UI, fontSize: 34, color: "rgba(242,240,234,.85)", ...rise(sp(t, 44)) }}>On the App Store · iPhone</div>
+      </div>
     </>
   );
 }

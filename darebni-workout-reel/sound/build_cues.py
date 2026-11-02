@@ -1,8 +1,8 @@
 """Sound for the Darebni push-day reel (Main.jsx, timing.js), from the real-audio library
 (.claude/skills/appify-content/assets/tools/sound_library.py). An unused gym-energy track near 120 BPM is cut on a
 downbeat as the bed, so the cards (every 8 beats) and the rep snaps (once a second) sit on its grid. Effects rotate
-so nothing repeats back to back: whooshes on card changes, metal/weight hits on the rep tops (4 variants), clicks on
-the stat chips, an impact on the first exercise and the finisher, a notification on the PLAN button. Picks are saved
+so nothing repeats back to back: whooshes on card changes, metal/weight hits on the 2 rep tops per card (4 variants), clicks on
+the stat chips, an impact on the first exercise and the finisher, a whoosh as the phones rise and a notification on the download button. Picks are saved
 in sound/picks-pushday.json (delete to re-pick). Writes public/pushday-bed.wav, sound/cues.json, sound/cues-sfx.json.
   python3 sound/build_cues.py && python3 <motion-graphics>/scripts/sound.py sound/cues.json public/sound.wav"""
 import json, os, re, subprocess, sys
@@ -36,11 +36,11 @@ for i in range(N_EX):
     a = EX0 + i * EX_LEN
     if i: fx += [smp(P["whoosh"][i % len(P["whoosh"])], a - 8, 0.4, (-0.3, 0.3)[i % 2])]
     fx += [smp(P["click"][(i + k) % len(P["click"])], a + 6 + k * 4, 0.22) for k in range(3)]
-    for k in range(4):
+    for k in range(2):
         fx += [smp(P["rep"][r % len(P["rep"])], a + 15 + 30 * k, 0.32, (-0.15, 0.15)[r % 2])]; r += 1
 fx += [smp(P["whoosh"][-1], FIN - 8, 0.45), smp(P["impact"][1], FIN, 0.6)]
 fx += [smp(P["rep"][k % len(P["rep"])], FIN + 15 + 30 * k, 0.3) for k in range(2)]
-fx += [smp(P["whoosh"][-2], OUTRO - 8, 0.4), smp(P["ding"][0], OUTRO + 26, 0.5)]
+fx += [smp(P["whoosh"][-2], OUTRO - 8, 0.4), smp(P["whoosh"][0], OUTRO + 6, 0.3), smp(P["ding"][0], OUTRO + 30, 0.5)]
 for mus, out in ((True, "sound/cues.json"), (False, "sound/cues-sfx.json")):
     spec = {"fps": 30, "duration": DUR / 30, "seed": 4, "fade_out": 1.2, "peak_db": -2, "cues": (music if mus else []) + fx}
     json.dump(spec, open(out, "w"), indent=1); print(out, len(spec["cues"]), "cues,", len({c["file"] for c in fx}), "different effect files")
