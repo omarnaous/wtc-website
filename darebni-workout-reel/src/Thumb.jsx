@@ -1,5 +1,5 @@
 // The reel's cover (1080x1920, checked against the profile grid's 3:4 crop, y 240-1680): the hook on top, the
-// ambassador stepping in front of the real app in a tilted phone, a sticker for the AI weekly plan.
+// ambassador stepping in front of the real app in a tilted phone.
 import { AbsoluteFill } from "remotion";
 import W from "./push_workout.json";
 import { B, D, Header, Ambassador, Phone, Chip } from "./Main.jsx";
@@ -20,11 +20,6 @@ export const Thumb = () => {
       </div>
       <Phone src="app/home.jpg" w={340} x={120} y={790} rot={-8} />
       <Ambassador f={200} x={660} w={720} top={700} />
-      <div style={{ position: "absolute", left: 760, top: 660, width: 230, height: 230, borderRadius: "50%", background: B.success, transform: "rotate(10deg)",
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", boxShadow: "0 24px 60px rgba(0,0,0,.45)" }}>
-        <div style={{ ...D, fontSize: 96, color: B.ink, lineHeight: 0.86 }}>AI</div>
-        <div style={{ ...D, fontSize: 38, color: B.ink, letterSpacing: "0.02em", textAlign: "center", lineHeight: 0.95, marginTop: 6 }}>weekly<br />plan</div>
-      </div>
       <div style={{ position: "absolute", left: 70, right: 70, top: 1590, display: "flex", alignItems: "center", gap: 18 }}>
         <div style={{ padding: "14px 24px", borderRadius: 18, background: B.cream, ...D, fontSize: 44, color: B.ink }}>Full plan in Darebni AI</div>
       </div>
