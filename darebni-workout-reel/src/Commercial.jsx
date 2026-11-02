@@ -15,14 +15,15 @@ const T = CM;
 const sp = (f, at, d = 12, st = 220) => spring({ frame: f - at, fps: FPS, config: { damping: d, stiffness: st } });
 const win = (f, a, b, fi = 4, fo = 4) => interpolate(f, [a - Math.max(fi, 0.01), a, b - Math.max(fo, 0.01), b], [0, 1, 1, 0], clamp);
 const rise = (p, d = 50) => ({ opacity: Math.min(1, p * 2), transform: `translateY(${(1 - Math.min(1, p)) * d}px)` });
-const W = { ...D, color: B.cream, textShadow: "0 10px 50px rgba(0,0,0,.7)" };
+const W = { ...D, color: B.cream, textShadow: "0 4px 14px rgba(0,0,0,.85), 0 10px 50px rgba(0,0,0,.7)" };
 
 // one graded shot: the clip as monochrome violet with a slow push-in. full = 9:16 full bleed (zoomed so the clip's
 // badge in the top-right corner is off frame); band = a 1080x640 letterbox of one row of the bench clip.
-function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row = 1, dim = 0.62, rate = 1, topMask = 0 }) {
+function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row = 1, dim = 0.62, rate = 1, topMask = 0, raw = false }) {
   if (f < at - 1 || f > at + dur + 1) return null;
-  const k = (f - at) / dur, push = 1 + 0.06 * k;
-  const grade = { filter: `grayscale(1) contrast(1.3) brightness(${dim})` };
+  const k = (f - at) / dur, push = 1 + (raw ? 0.03 : 0.06) * k;
+  // raw: the clip as it is (original colours and its own correction animations), only a light scrim for the type
+  const grade = raw ? {} : { filter: `grayscale(1) contrast(1.3) brightness(${dim})` };
   const video = (
     <Sequence from={at} durationInFrames={dur} layout="none">
       <OffthreadVideo src={staticFile(src)} startFrom={from} playbackRate={rate} muted
@@ -45,7 +46,8 @@ function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row
   return (
     <AbsoluteFill style={{ transform: `scale(${zoom * push})`, transformOrigin: origin }}>
       {video}
-      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(91,78,229,.6), rgba(67,56,202,.35))", mixBlendMode: "color" }} />
+      {raw ? <AbsoluteFill style={{ background: "rgba(7,7,26,.28)" }} />
+        : <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(91,78,229,.6), rgba(67,56,202,.35))", mixBlendMode: "color" }} />}
       {/* topMask (px of the output): ink over the clip's on-screen chips, fading into the shot */}
       {topMask > 0 && <AbsoluteFill style={{ transform: `scale(${1 / (zoom * push)})`, transformOrigin: origin }}>
         <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: topMask + 120, background: `linear-gradient(180deg, ${B.ink} ${Math.round(topMask / (topMask + 120) * 100)}%, rgba(7,7,26,0))` }} />
@@ -54,7 +56,7 @@ function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row
   );
 }
 // shots: src/commercial-shots.json, cut and logo-cleaned by tools/clean_shots.py into public/lib/clean/<slot>.mp4 (gitignored)
-const SHOTS = SHOT_LIST.map((x) => ({ zoom: 1.3, origin: "50% 95%", ...x }));
+const SHOTS = SHOT_LIST.map((x) => ({ zoom: x.raw ? 1.0 : 1.3, origin: "50% 50%", ...x }));
 const Vignette = ({ k = 0.85 }) => <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(7,7,26,${k}) 100%)` }} />;
 
 function Hook({ f }) {
@@ -195,7 +197,7 @@ export const Commercial = ({ music = true }) => {
           zoomed from the bottom (origin 50% 95%) so the clip's top 22 %, where its ✓/✕ badges and muscle chips sit,
           is off frame; segments stop before the clips' closing cards, and avoid the shorts/mats that carry the source's
           branding. */}
-      {SHOTS.map((x, k) => <Shot key={k} f={f} {...x} src={`lib/clean/${x.slot}.mp4`} from={0} />)}
+      {SHOTS.map((x, k) => <Shot key={k} f={f} {...x} src={x.raw ? `lib/t${x.n}.mp4` : `lib/clean/${x.slot}.mp4`} from={x.raw ? Math.round(x.s * 30) : 0} />)}
       <Vignette />
       <Hook f={f} />
       {EXCUSES.map((_, i) => <Excuse key={i} f={f} i={i} />)}

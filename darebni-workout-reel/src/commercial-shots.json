@@ -3,58 +3,55 @@
   "slot": "hook",
   "at": 0,
   "dur": 120,
-  "n": 467,
-  "s": 9.5,
-  "dim": 0.45,
-  "what": "barbell row, back view"
+  "n": 465,
+  "s": 0.0,
+  "what": "lat pulldown, wrong (red) to right (green)",
+  "raw": true
  },
  {
   "slot": "exc1",
   "at": 120,
   "dur": 60,
-  "n": 424,
-  "s": 4.0,
-  "dim": 0.4,
-  "what": "Smith machine squat"
+  "n": 666,
+  "s": 1.0,
+  "what": "squat, wrong to right",
+  "raw": true
  },
  {
   "slot": "exc2",
   "at": 180,
   "dur": 60,
-  "n": 283,
-  "s": 19.0,
-  "dim": 0.4,
-  "what": "dumbbell lateral raise"
+  "n": 400,
+  "s": 5.0,
+  "what": "seated dumbbell press, right vs wrong split",
+  "raw": true
  },
  {
   "slot": "exc3",
   "at": 240,
   "dur": 60,
   "n": 311,
-  "s": 16.0,
-  "dim": 0.4,
-  "what": "cable crossover"
+  "s": 0.3,
+  "what": "cable fly, red arms to green",
+  "raw": true
  },
  {
   "slot": "stop",
   "at": 300,
   "dur": 80,
-  "n": 558,
-  "s": 7.0,
-  "dim": 0.38,
-  "rate": 0.5,
-  "what": "pull-up, one continuous rep, half speed",
-  "zoom": 1.2,
-  "origin": "50% 92%",
-  "topMask": 330
+  "n": 584,
+  "s": 0.2,
+  "what": "push-up, wrong to right",
+  "raw": true
  },
  {
   "slot": "line1",
   "at": 510,
   "dur": 30,
   "n": 295,
-  "s": 19.0,
-  "what": "barbell bench press"
+  "s": 19.6,
+  "what": "bench press, red bar line turns green",
+  "raw": true
  },
  {
   "slot": "line2",
@@ -62,52 +59,52 @@
   "dur": 30,
   "n": 666,
   "s": 16.3,
-  "what": "barbell back squat"
+  "what": "squat, green check",
+  "raw": true
  },
  {
   "slot": "line3",
   "at": 570,
   "dur": 30,
   "n": 408,
-  "s": 21.5,
-  "what": "dumbbell lunge"
+  "s": 21.0,
+  "what": "dumbbell lunge",
+  "raw": true
  },
  {
   "slot": "line4",
   "at": 600,
   "dur": 30,
-  "n": 389,
-  "s": 45.2,
-  "what": "dumbbell press on the bench",
-  "zoom": 1.4,
-  "origin": "50% 100%"
+  "n": 558,
+  "s": 8.0,
+  "what": "pull-up, back lit",
+  "raw": true
  },
  {
   "slot": "line5",
   "at": 630,
   "dur": 30,
   "n": 538,
-  "s": 21.6,
-  "what": "deadlift lockout"
+  "s": 1.5,
+  "what": "deadlift stance, red to green",
+  "raw": true
  },
  {
   "slot": "coach",
   "at": 660,
   "dur": 90,
-  "n": 361,
-  "s": 21.5,
-  "dim": 0.5,
-  "rate": 0.6,
-  "what": "bent-over barbell row, slow"
+  "n": 467,
+  "s": 5.2,
+  "what": "barbell row, traps red to green",
+  "raw": true
  },
  {
   "slot": "amb",
   "at": 750,
   "dur": 90,
-  "n": 295,
-  "s": 24.0,
-  "dim": 0.55,
-  "rate": 0.7,
-  "what": "incline barbell press in the rack, slow"
+  "n": 361,
+  "s": 9.2,
+  "what": "bent-over row, red to green",
+  "raw": true
  }
 ]
