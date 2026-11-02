@@ -1,5 +1,4 @@
-// Darebni AI brand commercial (9:16, 33 s). No app UI. The one idea: "Darebni" is Arabic for "train me" (the brand's
-// own line: "دربني — train me"), so the spot is a wish answered. It knocks down the excuses, says "Stop guessing.",
+// Darebni AI brand commercial (9:16, 33 s). No app UI. The one idea: the brand name as the answer to every excuse. It knocks down the excuses, says "Stop guessing.",
 // goes silent on the word دربني, and lands DAREBNI on the track's re-entry; the payoff is "Start training."
 // Picture is cut to "Epical Drums 02" (Grigoriy Nuzhny, 120.02 BPM = 15 frames a beat) started at 43.0 s, so its
 // near-silent gap falls at 13.3-15.0 s and its slam on frame 450. B-roll: twelve exercises from the supplied library
@@ -20,7 +19,7 @@ const W = { ...D, color: B.cream, textShadow: "0 10px 50px rgba(0,0,0,.7)" };
 
 // one graded shot: the clip as monochrome violet with a slow push-in. full = 9:16 full bleed (zoomed so the clip's
 // badge in the top-right corner is off frame); band = a 1080x640 letterbox of one row of the bench clip.
-function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row = 1, dim = 0.62, rate = 1 }) {
+function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row = 1, dim = 0.62, rate = 1, topMask = 0 }) {
   if (f < at - 1 || f > at + dur + 1) return null;
   const k = (f - at) / dur, push = 1 + 0.06 * k;
   const grade = { filter: `grayscale(1) contrast(1.3) brightness(${dim})` };
@@ -47,6 +46,10 @@ function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row
     <AbsoluteFill style={{ transform: `scale(${zoom * push})`, transformOrigin: origin }}>
       {video}
       <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(91,78,229,.6), rgba(67,56,202,.35))", mixBlendMode: "color" }} />
+      {/* topMask (px of the output): ink over the clip's on-screen chips, fading into the shot */}
+      {topMask > 0 && <AbsoluteFill style={{ transform: `scale(${1 / (zoom * push)})`, transformOrigin: origin }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: topMask + 120, background: `linear-gradient(180deg, ${B.ink} ${Math.round(topMask / (topMask + 120) * 100)}%, rgba(7,7,26,0))` }} />
+      </AbsoluteFill>}
     </AbsoluteFill>
   );
 }
@@ -107,11 +110,9 @@ function Word({ f }) {
       <div style={{ position: "absolute", left: 0, right: 0, top: hit ? 560 : 700, textAlign: "center", direction: "rtl",
         fontFamily: "Tajawal", fontWeight: 800, fontSize: hit ? 150 : 280, color: hit ? B.lo : B.cream, lineHeight: 1.2,
         opacity: inn, filter: `blur(${(1 - inn) * 18}px)`, textShadow: "0 0 60px rgba(139,128,255,.6)" }}>دربني</div>
-      {!hit && <div style={{ position: "absolute", left: 0, right: 0, top: 1060, textAlign: "center", ...UI, fontSize: 44, color: B.xlo, ...rise(sp(f, T.WORD + 18)) }}>“train me”</div>}
       {hit && (
         <div style={{ position: "absolute", left: 0, right: 0, top: 790, textAlign: "center" }}>
           <div style={{ ...W, fontSize: 250, letterSpacing: "0.02em", transform: `scale(${interpolate(h, [0, 1], [1.8, 1])})`, opacity: Math.min(1, h * 3) }}>Darebni</div>
-          <div style={{ ...UI, fontSize: 44, color: B.xlo, marginTop: 18, ...rise(sp(f, T.HIT + 10)) }}>Arabic for “train me”.</div>
         </div>
       )}
     </AbsoluteFill>

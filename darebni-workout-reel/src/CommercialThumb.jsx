@@ -1,6 +1,6 @@
 // Cover for the Darebni AI commercial (1080x1920, checked against the 3:4 grid crop, y 240-1680): the hook lifter
 // (public/lib/clean/thumb.png, a frame of the cleaned hook shot, gitignored) graded violet like the spot, the Arabic
-// word دربني with its meaning, and the line "Stop guessing. Start training."
+// word دربني, and the line "Stop guessing. Start training."
 import { AbsoluteFill, Img, staticFile } from "remotion";
 import { B, D, UI } from "./Main.jsx";
 import { useFonts } from "./fx.jsx";
@@ -26,7 +26,6 @@ export const CommercialThumb = () => {
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 1240, textAlign: "center" }}>
         <div style={{ fontFamily: "Tajawal", fontWeight: 800, fontSize: 170, color: B.lo, direction: "rtl", lineHeight: 1.1, textShadow: "0 0 60px rgba(139,128,255,.6)" }}>دربني</div>
-        <div style={{ ...UI, fontSize: 44, color: B.cream, marginTop: 6 }}>“train me”</div>
         <div style={{ ...W, fontSize: 64, marginTop: 30, letterSpacing: "0.02em" }}>Start training.</div>
       </div>
     </AbsoluteFill>

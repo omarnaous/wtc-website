@@ -39,11 +39,14 @@
   "slot": "stop",
   "at": 300,
   "dur": 80,
-  "n": 470,
-  "s": 15.5,
+  "n": 558,
+  "s": 7.0,
   "dim": 0.38,
   "rate": 0.5,
-  "what": "pull-up, back view, half speed"
+  "what": "pull-up, one continuous rep, half speed",
+  "zoom": 1.2,
+  "origin": "50% 92%",
+  "topMask": 330
  },
  {
   "slot": "line1",
