@@ -34,3 +34,6 @@ for (const id of ids) {
   });
   console.log(`\n${id}: out/${id}.mp4`);
 }
+
+// each bundle() writes ~120 MB to the temp dir; remove it so repeated renders do not fill the disk
+fs.rmSync(serveUrl, { recursive: true, force: true });
