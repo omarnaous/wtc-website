@@ -1,4 +1,4 @@
-// Cover for the BenchElbows reel (1080x1920, checked against the 3:4 profile-grid crop, y 240-1680): the question on
+// Cover for the BenchElbows reel (1080x1920, checked against the 3:4 profile-grid crop, y 240-1680): the hook ("Still making these bench press mistakes?") on
 // top, the clip's own angle-lines frame (public/bench-thumb.png, taken at 5.8 s, kept out of git) tilted in a card
 // with Darebni's three row labels on it, and a sticker saying only one is right (true: the clip marks one ✓).
 import { AbsoluteFill, Img, staticFile } from "remotion";
@@ -17,8 +17,8 @@ export const BenchThumb = () => {
       <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(139,128,255,.08) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(139,128,255,.08) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px" }} />
       <Header f={0} right="Form check" />
       <div style={{ position: "absolute", left: 70, right: 70, top: 320 }}>
-        <div style={{ ...D, fontSize: 176, color: B.cream }}>Bench press</div>
-        <div style={{ ...D, fontSize: 78, color: B.lo, marginTop: 10, whiteSpace: "nowrap" }}>Where do your elbows go?</div>
+        <div style={{ ...D, fontSize: 95, color: B.cream, whiteSpace: "nowrap" }}>Still making these</div>
+        <div style={{ ...D, fontSize: 95, color: B.lo, marginTop: 6, whiteSpace: "nowrap" }}>bench press mistakes?</div>
       </div>
       <div style={{ position: "absolute", left: 230, top: 650, width: w, height: h, borderRadius: 40, overflow: "hidden", transform: "rotate(-3deg)",
         boxShadow: "0 50px 120px rgba(0,0,0,.6), 0 0 0 4px rgba(139,128,255,.6), 0 0 90px rgba(91,78,229,.45)" }}>

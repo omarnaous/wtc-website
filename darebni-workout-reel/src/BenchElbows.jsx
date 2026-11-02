@@ -49,12 +49,12 @@ function Label({ f, i }) {
 
 function Title({ f }) {
   return (
-    <div style={{ position: "absolute", left: 70, right: 70, top: 228, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
+    <div style={{ position: "absolute", left: 70, right: 70, top: 232, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
       <div>
-        <div style={{ ...D, fontSize: 104, color: B.cream, ...pop(sp(f, 0, 10, 260), 1.3) }}>Bench press</div>
-        <div style={{ ...UI, fontSize: 38, color: B.xlo, marginTop: 8, ...rise(sp(f, 8)) }}>Where do your elbows go?</div>
+        <div style={{ ...D, fontSize: 80, color: B.cream, whiteSpace: "nowrap", ...pop(sp(f, 0, 10, 260), 1.3) }}>Still making these</div>
+        <div style={{ ...D, fontSize: 80, color: B.lo, whiteSpace: "nowrap", marginTop: 4, ...pop(sp(f, 6, 10, 260), 1.3) }}>bench press mistakes?</div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8, ...rise(sp(f, 4)) }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 6, ...rise(sp(f, 4)) }}>
         <Img src={staticFile("darebni-icon.png")} style={{ width: 56, height: 56, borderRadius: 14 }} />
         <span style={{ ...D, fontSize: 34, color: B.cream, letterSpacing: "0.04em" }}>Darebni AI</span>
       </div>
