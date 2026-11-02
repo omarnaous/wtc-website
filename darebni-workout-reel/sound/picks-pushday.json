@@ -48,5 +48,14 @@
   "/home/user/wtc-website/sound-library/sfx/s2997.mp3",
   "/home/user/wtc-website/sound-library/sfx/s275.mp3",
   "/home/user/wtc-website/sound-library/sfx/s901.mp3"
- ]
+ ],
+ "transition": [
+  "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2637.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1490.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2604.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s174.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1471.mp3"
+ ],
+ "transition_big": "/home/user/wtc-website/sound-library/sfx/s2903.mp3"
 }
