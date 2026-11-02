@@ -7,6 +7,7 @@
 import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, random } from "remotion";
 import { useFonts, clamp, Grain, shake } from "./fx.jsx";
 import { B, D, UI } from "./Main.jsx";
+import SHOT_LIST from "./commercial-shots.json";
 
 const FPS = 30;
 export const CM = { FPS, DURATION: 990, HOOK2: 66, EXC: [120, 180, 240], STOP: 300, BLACK: 390, WORD: 400, HIT: 450,
@@ -49,21 +50,8 @@ function Shot({ f, at, dur, src, from, zoom = 1.4, origin = "30% 76%", band, row
     </AbsoluteFill>
   );
 }
-const LIB = { zoom: 1.3, origin: "50% 95%" };
-const SHOTS = [
-  { at: 0, dur: 120, n: 295, s: 0, dim: 0.45, ...LIB },                   // hook: hands taking the bar
-  { at: 120, dur: 60, n: 666, s: 8.2, dim: 0.38, ...LIB },                // excuse 1: squat, side close-up
-  { at: 180, dur: 60, n: 293, s: 3.2, dim: 0.4, ...LIB },                 // excuse 2: dumbbell shoulder press, close
-  { at: 240, dur: 60, n: 667, s: 0.3, dim: 0.4, ...LIB },                 // excuse 3: seated cable row
-  { at: 300, dur: 80, n: 305, s: 5.5, dim: 0.36, rate: 0.5, ...LIB },     // stop guessing: chest press machine, half speed
-  { at: T.LINES[0], dur: 30, n: 293, s: 13, ...LIB },                     // a plan built for you: incline dumbbell press
-  { at: T.LINES[1], dur: 30, n: 389, s: 0.3, ...LIB },                    // weights, sets, reps: a hand takes the dumbbell
-  { at: T.LINES[2], dur: 30, n: 305, s: 1.2, ...LIB },                    // every set, tracked: chest press machine
-  { at: T.LINES[3], dur: 30, n: 470, s: 17, zoom: 2, origin: "50% 55%" },   // followed up weekly: pull-up (chips above, shorts below the crop)
-  { at: T.LINES[4], dur: 30, n: 538, s: 21.6, ...LIB },                   // every PR, saved: deadlift lockout
-  { at: T.COACH, dur: 90, n: 295, s: 24, dim: 0.5, rate: 0.6, ...LIB },   // your AI coach is here: incline barbell press, slow
-  { at: T.AMB, dur: 90, n: 389, s: 45.2, dim: 0.55, rate: 0.7, zoom: 1.45, origin: "50% 95%" }, // built for the ones who show up: dumbbell press
-];
+// shots: src/commercial-shots.json, cut and logo-cleaned by tools/clean_shots.py into public/lib/clean/<slot>.mp4 (gitignored)
+const SHOTS = SHOT_LIST.map((x) => ({ zoom: 1.3, origin: "50% 95%", ...x }));
 const Vignette = ({ k = 0.85 }) => <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(7,7,26,${k}) 100%)` }} />;
 
 function Hook({ f }) {
@@ -206,7 +194,7 @@ export const Commercial = ({ music = true }) => {
           zoomed from the bottom (origin 50% 95%) so the clip's top 22 %, where its ✓/✕ badges and muscle chips sit,
           is off frame; segments stop before the clips' closing cards, and avoid the shorts/mats that carry the source's
           branding. */}
-      {SHOTS.map((x, k) => <Shot key={k} f={f} {...x} src={`lib/t${x.n}.mp4`} from={Math.round(x.s * 30)} />)}
+      {SHOTS.map((x, k) => <Shot key={k} f={f} {...x} src={`lib/clean/${x.slot}.mp4`} from={0} />)}
       <Vignette />
       <Hook f={f} />
       {EXCUSES.map((_, i) => <Excuse key={i} f={f} i={i} />)}

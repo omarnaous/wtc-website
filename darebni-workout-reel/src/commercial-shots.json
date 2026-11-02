@@ -1,0 +1,110 @@
+[
+ {
+  "slot": "hook",
+  "at": 0,
+  "dur": 120,
+  "n": 467,
+  "s": 9.5,
+  "dim": 0.45,
+  "what": "barbell row, back view"
+ },
+ {
+  "slot": "exc1",
+  "at": 120,
+  "dur": 60,
+  "n": 424,
+  "s": 4.0,
+  "dim": 0.4,
+  "what": "Smith machine squat"
+ },
+ {
+  "slot": "exc2",
+  "at": 180,
+  "dur": 60,
+  "n": 283,
+  "s": 19.0,
+  "dim": 0.4,
+  "what": "dumbbell lateral raise"
+ },
+ {
+  "slot": "exc3",
+  "at": 240,
+  "dur": 60,
+  "n": 311,
+  "s": 16.0,
+  "dim": 0.4,
+  "what": "cable crossover"
+ },
+ {
+  "slot": "stop",
+  "at": 300,
+  "dur": 80,
+  "n": 470,
+  "s": 15.5,
+  "dim": 0.38,
+  "rate": 0.5,
+  "what": "pull-up, back view, half speed"
+ },
+ {
+  "slot": "line1",
+  "at": 510,
+  "dur": 30,
+  "n": 295,
+  "s": 19.0,
+  "what": "barbell bench press"
+ },
+ {
+  "slot": "line2",
+  "at": 540,
+  "dur": 30,
+  "n": 666,
+  "s": 16.3,
+  "what": "barbell back squat"
+ },
+ {
+  "slot": "line3",
+  "at": 570,
+  "dur": 30,
+  "n": 408,
+  "s": 21.5,
+  "what": "dumbbell lunge"
+ },
+ {
+  "slot": "line4",
+  "at": 600,
+  "dur": 30,
+  "n": 389,
+  "s": 45.2,
+  "what": "dumbbell press on the bench",
+  "zoom": 1.4,
+  "origin": "50% 100%"
+ },
+ {
+  "slot": "line5",
+  "at": 630,
+  "dur": 30,
+  "n": 538,
+  "s": 21.6,
+  "what": "deadlift lockout"
+ },
+ {
+  "slot": "coach",
+  "at": 660,
+  "dur": 90,
+  "n": 361,
+  "s": 21.5,
+  "dim": 0.5,
+  "rate": 0.6,
+  "what": "bent-over barbell row, slow"
+ },
+ {
+  "slot": "amb",
+  "at": 750,
+  "dur": 90,
+  "n": 295,
+  "s": 24.0,
+  "dim": 0.55,
+  "rate": 0.7,
+  "what": "incline barbell press in the rack, slow"
+ }
+]
