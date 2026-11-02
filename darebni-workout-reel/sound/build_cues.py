@@ -27,9 +27,28 @@ else:
          "click": files("click", 3, title="click|tap|select|switch"), "impact": files("impact", 2, title="impact|hit|boom|punch|thud"),
          "ding": files("notification", 1, title="ding|chime|bell|positive|success")}
     json.dump(P, open("sound/picks-pushday.json", "w"), indent=1)
+# MUSIC=<catalog id> swaps the bed for an alternative cut (sound-<id>.wav); START=<s> overrides where it starts
+ALT = os.environ.get("MUSIC")
+if ALT:
+    cat = json.load(open(os.path.join(os.path.dirname(LIBTOOL), "../../../../../sound-library/catalog.json")))
+    P = dict(P, music=next(m for m in cat["music"] if m["id"] == ALT))
 # the reel is cut on a 120 BPM grid (a rep per second); a track at another tempo is time-stretched to 120 (pitch kept)
 k = 120 / P["music"]["bpm"]
-bed = json.loads(lib("bed", P["music"]["id"], "public/pushday-raw.wav", "--dur", f"{DUR / 30 / k + 0.05:.3f}", "--gain", "0.9"))
+def loudest_start(m, need):
+    """the start (on a bar line) of the loudest stretch of the track, so the reel sits on the drop, not the intro"""
+    import numpy as np
+    sr = 2000
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(os.path.dirname(LIBTOOL), "../../../../../sound-library", m["file"]), "-ac", "1", "-ar", str(sr), "-f", "f32le", "-"], capture_output=True).stdout
+    x = np.frombuffer(raw, np.float32) ** 2
+    bar = 4 * 60 / m["bpm"]; best, at = -1, None
+    t = m["first_beat"]
+    while t + need < len(x) / sr - 2:
+        e = x[int(t * sr):int((t + need) * sr)].mean()
+        if e > best: best, at = e, t
+        t += bar
+    return at
+start = os.environ.get("START") or f"{loudest_start(P['music'], DUR / 30 / k):.3f}"
+bed = json.loads(lib("bed", P["music"]["id"], "public/pushday-raw.wav", "--dur", f"{DUR / 30 / k + 0.05:.3f}", "--gain", "0.9", "--start", start))
 subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", "public/pushday-raw.wav", "-af", f"atempo={k:.5f}", "-t", f"{DUR / 30:.3f}", "public/pushday-bed.wav"], check=True)
 os.remove("public/pushday-raw.wav")
 print("bed:", bed["title"], "by", P["music"]["artist"], f"({bed['bpm']} bpm stretched to 120, from {bed['start']} s)")
@@ -52,6 +71,7 @@ fx += [smp(P["rep"][(r + k) % len(P["rep"])], FIN + 15 + 30 * k, 0.45) for k in 
 fx += [smp(P["whoosh"][-2], OUTRO - 8, 0.4), smp(P["whoosh"][0], OUTRO + 6, 0.3)]
 fx += [smp(P["tick"][j % len(P["tick"])], OUTRO + a, 0.4) for j, a in enumerate(TICKS)]
 fx += [smp(P["impact"][0], OUTRO + CTA, 0.35), smp(P["ding"][0], OUTRO + CTA + 2, 0.5)]
-for mus, out in ((True, "sound/cues.json"), (False, "sound/cues-sfx.json")):
+outs = ((True, f"sound/cues-{ALT}.json"),) if ALT else ((True, "sound/cues.json"), (False, "sound/cues-sfx.json"))
+for mus, out in outs:
     spec = {"fps": 30, "duration": DUR / 30, "seed": 4, "fade_out": 1.2, "peak_db": -2, "cues": (music if mus else []) + fx}
     json.dump(spec, open(out, "w"), indent=1); print(out, len(spec["cues"]), "cues,", len({c["file"] for c in fx}), "different effect files")

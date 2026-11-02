@@ -12,6 +12,7 @@ files on their own, so the audio stays out of git (only catalog.json and used.js
                              `dur` seconds, fades, 48 kHz stereo WAV
   sfx TAG [--n 5] [--project P] [--max-dur 3] [--exclude game,arcade,cartoon] [--title REGEX]
                              print N effect files for a tag, rotating so a project never reuses one
+  retempo                    re-measure every track's BPM and first beat with the refined detector
   beats ID                   print the track's BPM and the time of its first beat (to lock cuts to the music)
 
 LIB defaults to <wtc-website>/sound-library (else ~/sound-library; env SOUND_LIB overrides). Rules for every video: never reuse a music track another project used
@@ -54,14 +55,16 @@ def save(name, obj):
     json.dump(obj, open(os.path.join(LIB, name), "w"), indent=1, ensure_ascii=False)
 
 def tempo(path):
-    """BPM and first-beat time from an onset envelope (numpy autocorrelation; good to ~1 BPM on steady tracks)."""
+    """BPM and first-beat time from an onset envelope. A coarse autocorrelation finds the beat (hop 23 ms quantises
+    it to steps like 117.5 / 123 / 129.2), then a phase-histogram search +-4 BPM in 0.02 steps on a 6 ms envelope
+    pins it to about 0.05 BPM (also trying 2:3 and 1:2 relatives). The coarse value alone drifts a 25 s reel by a few frames, so always refine."""
     import numpy as np
     sr = 11025
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-t", "60", "-ac", "1", "-ar", str(sr), "-f", "f32le", "-"], capture_output=True).stdout
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-t", "80", "-ac", "1", "-ar", str(sr), "-f", "f32le", "-"], capture_output=True).stdout
     x = np.frombuffer(raw, np.float32)
     if len(x) < sr * 8: return None, None
     hop = 256; n = len(x) // hop
-    e = np.array([np.sqrt(np.mean(x[i * hop:(i + 1) * hop] ** 2)) for i in range(n)])
+    e = np.sqrt(np.add.reduceat(x[:n * hop] ** 2, np.arange(0, n * hop, hop)) / hop)
     on = np.maximum(0, np.diff(np.log1p(e * 100), prepend=0))
     on -= on.mean()
     ac = np.correlate(on, on, "full")[len(on) - 1:]
@@ -69,11 +72,29 @@ def tempo(path):
     lags = np.arange(len(ac)) / fps
     ok = (lags >= 60 / 180) & (lags <= 60 / 70)
     lag = np.argmax(np.where(ok, ac, -1e9))
-    bpm = 60 / (lag / fps)
-    period = lag
-    phases = [on[p::period][: int(len(on) / period)].sum() for p in range(period)]
-    first = int(np.argmax(phases)) / fps
-    return round(float(bpm), 1), round(float(first), 3)
+    coarse = 60 / (lag / fps)
+    # refine: fold a fine onset envelope at each candidate period; the true tempo gives the sharpest peak
+    h2 = 64; n2 = len(x) // h2
+    e2 = np.add.reduceat(x[:n2 * h2] ** 2, np.arange(0, n2 * h2, h2))
+    o = np.maximum(0, np.diff(np.log(e2 + 1e-9))); o -= o.mean()
+    t = np.arange(len(o)) * h2 / sr
+    def search(c):
+        top = (-1, c, 0.0)
+        for b in np.arange(c - 4, c + 4, 0.02):
+            per = 60 / b
+            hist, _ = np.histogram((t % per) / per, bins=48, weights=o)
+            sc = hist.max() / (np.abs(hist).mean() + 1e-9)
+            if sc > top[0]: top = (sc, b, (np.argmax(hist) + 0.5) / 48 * per)
+        return top
+    # the coarse pick can land on a 2:3 or 1:2 relative of the beat (trap hats, half-time drums): a relative wins
+    # only if it folds clearly sharper (x1.25), since every relative of a steady beat also folds well
+    best = search(coarse)
+    for c in (coarse * 1.5, coarse / 1.5, coarse * 2, coarse / 2):
+        if 70 <= c <= 180:
+            r = search(c)
+            if r[0] > best[0] * 1.25: best = r
+    _, bpm, first = best
+    return round(float(bpm), 2), round(float(first), 3)
 
 def build(a):
     os.makedirs(f"{LIB}/music", exist_ok=True); os.makedirs(f"{LIB}/sfx", exist_ok=True)
@@ -174,6 +195,14 @@ def sfx(a):
         used.setdefault(a.project, {}).setdefault("sfx", []).extend(s["id"] for s in ss if s["id"] not in pu); save("used.json", used)
     for s in ss: print(f"{LIB}/{s['file']}\t{s['title']}\t{s['duration']}s\t{','.join(s['tags'])}")
 
+def retempo(a):
+    cat = load("catalog.json", {"music": [], "sfx": []})
+    for m in cat["music"]:
+        f = f"{LIB}/{m['file']}"
+        if os.path.exists(f):
+            old = m.get("bpm"); m["bpm"], m["first_beat"] = tempo(f); print(f"{m['id']:6s} {old} -> {m['bpm']}  {m['title']}")
+    json.dump(cat, open(f"{LIB}/catalog.json", "w"), indent=1)
+
 def beats(a):
     m = next(x for x in load("catalog.json", {"music": []})["music"] if x["id"] == a.id)
     print(json.dumps({"bpm": m["bpm"], "first_beat": m["first_beat"], "frames_per_beat_30fps": round(1800 / m["bpm"], 2)}))
@@ -186,4 +215,5 @@ if __name__ == "__main__":
     q = sub.add_parser("sfx"); q.add_argument("tag"); q.add_argument("--n", type=int, default=5); q.add_argument("--project"); q.add_argument("--max-dur", type=float, default=3); q.add_argument("--seed", type=int)
     q.add_argument("--exclude", help="comma list of tags/title words to skip, e.g. game,arcade,cartoon,toy,8-bit"); q.add_argument("--title", help="regex the title must match"); q.set_defaults(fn=sfx)
     q = sub.add_parser("beats"); q.add_argument("id"); q.set_defaults(fn=beats)
+    sub.add_parser("retempo").set_defaults(fn=retempo)
     a = p.parse_args(); a.fn(a)

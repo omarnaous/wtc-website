@@ -1,12 +1,17 @@
 {
  "music": {
-  "id": "m567",
-  "title": "Anthem #01",
-  "artist": "Eugenio Mininni",
-  "genre": "EDM",
-  "bpm": 129.2,
-  "duration": 177,
-  "file": "music/m567.mp3"
+  "id": "m370",
+  "title": "Sparta",
+  "artist": "Arulo",
+  "genre": "Trap",
+  "page": "workout",
+  "mood": "gym-energy",
+  "duration": 104,
+  "url": "https://assets.mixkit.co/music/370/370.mp3",
+  "bpm": 120.03,
+  "first_beat": 0.005,
+  "file": "music/m370.mp3",
+  "license": "Mixkit Stock Music Free License"
  },
  "whoosh": [
   "/home/user/wtc-website/sound-library/sfx/s2596.mp3",

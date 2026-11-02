@@ -59,7 +59,10 @@ end card over the landed shot. Three.js via @remotion/three; preload textures be
 - **Every video:** `pick-music --mood <fits the subject> --project <id>` (never repeats a track another project
   used) → `bed <id> public/music.wav --dur <s>` (starts on a downbeat, fades) → mix it plus effects as `sample` cues in
   `sound.py`; render the NoMusic version from the effects only.
-- **Cut to the track:** frames per beat = 1800 / BPM (`beats <id>`); put the big hits on downbeats.
+- **Cut to the track:** frames per beat = 1800 / BPM (`beats <id>`); put the big hits on downbeats. Catalog BPMs are
+  refined to ~0.05 BPM (`retempo`); a coarse value (e.g. 129.2 for a 130 track) drifts the cuts off the music within
+  20 s. Prefer a track whose real tempo already matches the reel's grid (120 BPM = 15 frames a beat) over stretching,
+  start the bed on the loudest bar (the drop, not the intro), and check the beat phase of the final bed against the grid.
 - **Effects:** pull 4-6 per role with `sfx <tag> --n 6 --project <id>` (whoosh/transition, impact/hit, click/pop,
   notification/ding, correct/wrong, camera, typing, money/coin, metal for gyms…) and rotate them so no repeated event
   uses the same file twice in a row. At least 4 different files per video.
