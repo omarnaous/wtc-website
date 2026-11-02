@@ -1,0 +1,62 @@
+{
+ "FPS": 30,
+ "lines": [
+  {
+   "key": "HOOK",
+   "at": 6,
+   "file": "vo/hook.mp3",
+   "dur": 4.85,
+   "text": "Karim and Sami. Same gym, same plan. Only Karim takes creatine."
+  },
+  {
+   "key": "W1",
+   "at": 167,
+   "file": "vo/w1.mp3",
+   "dur": 5.64,
+   "text": "Week one, Karim is up a kilo and a half. Not fat. Water, pulled into his muscles."
+  },
+  {
+   "key": "STR",
+   "at": 352,
+   "file": "vo/str.mp3",
+   "dur": 7.49,
+   "text": "Weeks later? Across twenty-two studies, creatine lifters gained twenty percent strength. Without it, twelve. Plus more reps."
+  },
+  {
+   "key": "HAIR",
+   "at": 593,
+   "file": "vo/hair.mp3",
+   "dur": 5.09,
+   "text": "Sami's excuse: it makes you bald. That's one small study. It never even measured hair."
+  },
+  {
+   "key": "BRAIN",
+   "at": 762,
+   "file": "vo/brain.mp3",
+   "dur": 5.57,
+   "text": "Exam night, no sleep? In a 2024 study, one dose helped memory and thinking."
+  },
+  {
+   "key": "FIN",
+   "at": 945,
+   "file": "vo/fin.mp3",
+   "dur": 2.33,
+   "text": "Three to five grams a day. Every day."
+  },
+  {
+   "key": "END",
+   "at": 1055,
+   "file": "vo/end.mp3",
+   "dur": 3.58,
+   "text": "Creatine helps. Your plan does the work. Darebni AI."
+  }
+ ],
+ "HOOK": 0,
+ "W1": 161,
+ "STR": 346,
+ "HAIR": 587,
+ "BRAIN": 756,
+ "FIN": 939,
+ "END": 1049,
+ "DURATION": 1172
+}

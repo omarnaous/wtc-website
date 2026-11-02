@@ -8,6 +8,7 @@ import { CommercialThumb } from "./CommercialThumb.jsx";
 import { StoryCreatine, SC } from "./StoryCreatine.jsx";
 import { CreatineStory, CS } from "./CreatineStory.jsx";
 import { CreatineThumb } from "./CreatineThumb.jsx";
+import { CreatineVO, CV } from "./CreatineVO.jsx";
 import { FormCheck, FC } from "./FormCheck.jsx";
 import { FormClip, FL } from "./FormClip.jsx";
 import { FPS, DURATION } from "./timing.js";
@@ -17,6 +18,8 @@ export const Root = () => (
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="PushDay-Thumb" component={Thumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
+    <Composition id="CreatineVO" component={CreatineVO} durationInFrames={CV.DURATION} fps={CV.FPS} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="CreatineVO-NoMusic" component={CreatineVO} durationInFrames={CV.DURATION} fps={CV.FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="CreatineStory-Thumb" component={CreatineThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="CreatineStory" component={CreatineStory} durationInFrames={CS.DURATION} fps={CS.FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="CreatineStory-NoMusic" component={CreatineStory} durationInFrames={CS.DURATION} fps={CS.FPS} width={1080} height={1920} defaultProps={{ music: false }} />
