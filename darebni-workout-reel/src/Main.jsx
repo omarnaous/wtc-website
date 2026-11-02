@@ -160,8 +160,9 @@ export function Phone({ src, w, x, y, rot = 0, hl, hlOn = 0, style }) {
 
 // The end card, two pages with the download button held under both.
 // Page 1 (the plan): three things the plan does, each lit up on the real home screen.
-// Page 2 (the tracker): the Live Activity (drawn from the app's own ios/WorkoutActivity widget: working state with
-// Prev · Log set · Next), the weekly AI follow-up lit up on the real Analytics screen, and a pinned-lift 1RM card
+// Page 2 (the tracker): the real workout-tracker screen (public/app/tracker.jpg, sets lit up) with the Live Activity
+// sliding in under it (drawn from the app's own ios/WorkoutActivity widget: working state with Prev · Log set · Next),
+// the weekly AI follow-up lit up on the real Analytics screen, and a pinned-lift 1RM card
 // cropped from the real home screen for the PR tracker.
 const PLAN = [
   { at: 24, big: "Weights, sets & reps", small: "for every exercise", hl: [0.148, 0.372, 0.04, 0.96] },
@@ -170,9 +171,9 @@ const PLAN = [
 ];
 export const OUTRO_SWAP = 110;
 const TRACK = [
-  { at: OUTRO_SWAP + 22, big: "Smart workout tracker", small: "Live Activity on your lock screen" },
-  { at: OUTRO_SWAP + 44, big: "Weekly follow-up", small: "your AI coach reviews your week", hl: [0.345, 0.556, 0.05, 0.95] },
-  { at: OUTRO_SWAP + 66, big: "PR tracker", small: "your best lifts, saved" },
+  { at: OUTRO_SWAP + 16, big: "Smart workout tracker", small: "log every set, kg & rep live", hl: [0.375, 0.697, 0.06, 0.94] },
+  { at: OUTRO_SWAP + 62, big: "Weekly follow-up", small: "your AI coach reviews your week", hl: [0.345, 0.556, 0.05, 0.95] },
+  { at: OUTRO_SWAP + 86, big: "PR tracker", small: "your best lifts, saved" },
 ];
 export const OUTRO_CTA = 84;
 
@@ -198,7 +199,7 @@ function Points({ t, items, cur, size = 50 }) {
 }
 const current = (t, items) => items.reduce((k, p, i) => (t >= p.at ? i : k), -1);
 
-// the app's lock-screen Live Activity, working state (sample set: the plan's bench press, set 2 of 4)
+// the app's lock-screen Live Activity, working state, showing the same set as the tracker screenshot (set 1 of 4)
 function LiveActivity({ style }) {
   const acc = "#A78BFA";
   const btn = (label, hot) => (
@@ -206,20 +207,20 @@ function LiveActivity({ style }) {
       fontFamily: "Barlow", fontWeight: 600, fontSize: 19, color: "#fff" }}>{label}</div>
   );
   return (
-    <div style={{ position: "absolute", width: 440, padding: "20px 22px", borderRadius: 30, background: "rgba(28,28,30,.96)", border: "1.5px solid rgba(255,255,255,.12)",
+    <div style={{ position: "absolute", width: 460, padding: "20px 22px", borderRadius: 30, background: "#1C1C1E", border: "1.5px solid rgba(255,255,255,.12)",
       boxShadow: "0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(91,78,229,.45)", ...style }}>
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
         <div style={{ width: 62, height: 62, borderRadius: 15, background: "rgba(255,255,255,.10)", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }}>
           <Img src={staticFile("darebni-icon.png")} style={{ width: 52, height: 52, borderRadius: 11 }} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 15, letterSpacing: "0.08em", color: "rgba(255,255,255,.55)" }}>PUSH</div>
-          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 25, color: "#fff", marginTop: 2 }}>Barbell Bench Press</div>
-          <div style={{ fontFamily: "BarlowR", fontWeight: 500, fontSize: 20, color: "rgba(255,255,255,.75)", marginTop: 2 }}>80 kg × 8 reps</div>
+          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 15, letterSpacing: "0.08em", color: "rgba(255,255,255,.55)" }}>PUSH A</div>
+          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 23, color: "#fff", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Barbell Flat Bench Press</div>
+          <div style={{ fontFamily: "BarlowR", fontWeight: 500, fontSize: 20, color: "rgba(255,255,255,.75)", marginTop: 2 }}>112.5 kg × 6 reps</div>
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 14, letterSpacing: "0.1em", color: "rgba(255,255,255,.55)" }}>SET</div>
-          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 40, color: acc, lineHeight: 1 }}>2<span style={{ fontSize: 28, color: "rgba(255,255,255,.55)" }}>/4</span></div>
+          <div style={{ fontFamily: "Barlow", fontWeight: 600, fontSize: 40, color: acc, lineHeight: 1 }}>1<span style={{ fontSize: 28, color: "rgba(255,255,255,.55)" }}>/4</span></div>
         </div>
       </div>
       <div style={{ display: "flex", gap: 10, marginTop: 16 }}>{btn("‹  Prev")}{btn("✓  Log set", true)}{btn("Next  ›")}</div>
@@ -249,9 +250,10 @@ function Outro({ f }) {
   const hl1 = c1 < 0 ? 0 : Math.min(1, sp(t, PLAN[c1].at, 14, 220) * 1.5);
   // page 2
   const phone2 = sp(t2, 4, 14, 150), c2 = current(t, TRACK);
-  const hl2 = c2 === 1 ? Math.min(1, sp(t, TRACK[1].at, 14, 220) * 1.5) : 0;
+  const hl2 = c2 >= 0 && c2 < 2 ? Math.min(1, sp(t, TRACK[c2].at, 14, 220) * 1.5) : 0;
+  const toAnalytics = interpolate(t, [TRACK[1].at - 10, TRACK[1].at - 2], [0, 1], clamp);   // the tracker screen, then Analytics
   // the floating cards share one spot over the phone's lower half: the Live Activity for point 1, the PR card for 3
-  const la = sp(t, TRACK[0].at - 4, 14, 200), laOut = sp(t, TRACK[1].at - 6, 14, 200), pr = sp(t, TRACK[2].at - 4, 12, 200);
+  const la = sp(t, TRACK[0].at + 20, 14, 200), laOut = sp(t, TRACK[1].at - 10, 14, 200), pr = sp(t, TRACK[2].at - 4, 12, 200);
   return (
     <>
       <Header f={f} right="Your plan" />
@@ -272,10 +274,12 @@ function Outro({ f }) {
             <div style={{ ...D, fontSize: 104, color: B.cream, ...rise(sp(t2, 0, 12, 240), 60) }}>Then it tracks</div>
             <div style={{ ...D, fontSize: 104, color: B.lo, ...rise(sp(t2, 5, 12, 240), 60) }}>every rep.</div>
           </div>
-          <Phone src="app/analytics.jpg" w={340} x={585} y={560 + (1 - phone2) * 320 + Math.sin(t / 16) * 6} rot={4} hl={TRACK[1].hl} hlOn={hl2}
-            style={{ opacity: Math.min(1, phone2 * 2) }} />
+          <Phone src="app/tracker.jpg" w={340} x={585} y={560 + (1 - phone2) * 320 + Math.sin(t / 16) * 6} rot={4} hl={TRACK[0].hl} hlOn={c2 === 0 ? hl2 : 0}
+            style={{ opacity: Math.min(1, phone2 * 2) * (1 - toAnalytics) }} />
+          {toAnalytics > 0 && <Phone src="app/analytics.jpg" w={340} x={585} y={560 + Math.sin(t / 16) * 6} rot={4} hl={TRACK[1].hl} hlOn={c2 === 1 ? hl2 : 0}
+            style={{ opacity: toAnalytics }} />}
           <Points t={t} items={TRACK} cur={c2} size={42} />
-          <LiveActivity style={{ left: 500, top: 1080, opacity: Math.min(1, la * 2) * (1 - Math.min(1, laOut)), transform: `translateY(${(1 - Math.min(1, la)) * 140 + Math.min(1, laOut) * 60}px) scale(${0.9 + 0.1 * Math.min(1, la)})` }} />
+          <LiveActivity style={{ left: 480, top: 1080, opacity: Math.min(1, la * 2) * (1 - Math.min(1, laOut)), transform: `translateY(${(1 - Math.min(1, la)) * 140 + Math.min(1, laOut) * 60}px) scale(${0.9 + 0.1 * Math.min(1, la)})` }} />
           <PRCard style={{ left: 590, top: 1070, opacity: Math.min(1, pr * 2), transform: `translateY(${(1 - Math.min(1, pr)) * 120}px) rotate(-3deg)` }} />
         </div>
       )}
