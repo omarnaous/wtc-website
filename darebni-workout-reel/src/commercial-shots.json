@@ -2,7 +2,7 @@
  {
   "slot": "hook",
   "at": 0,
-  "dur": 120,
+  "dur": 75,
   "n": 465,
   "s": 0.0,
   "what": "lat pulldown, wrong (red) to right (green)",
@@ -10,8 +10,8 @@
  },
  {
   "slot": "exc1",
-  "at": 120,
-  "dur": 60,
+  "at": 75,
+  "dur": 30,
   "n": 666,
   "s": 1.0,
   "what": "squat, wrong to right",
@@ -19,8 +19,8 @@
  },
  {
   "slot": "exc2",
-  "at": 180,
-  "dur": 60,
+  "at": 105,
+  "dur": 30,
   "n": 400,
   "s": 5.0,
   "what": "seated dumbbell press, right vs wrong split",
@@ -28,8 +28,8 @@
  },
  {
   "slot": "exc3",
-  "at": 240,
-  "dur": 60,
+  "at": 135,
+  "dur": 30,
   "n": 311,
   "s": 0.3,
   "what": "cable fly, red arms to green",
@@ -37,8 +37,8 @@
  },
  {
   "slot": "stop",
-  "at": 300,
-  "dur": 80,
+  "at": 165,
+  "dur": 62,
   "n": 584,
   "s": 0.2,
   "what": "push-up, wrong to right",
@@ -46,8 +46,8 @@
  },
  {
   "slot": "line1",
-  "at": 510,
-  "dur": 30,
+  "at": 300,
+  "dur": 27,
   "n": 295,
   "s": 19.6,
   "what": "bench press, red bar line turns green",
@@ -55,8 +55,8 @@
  },
  {
   "slot": "line2",
-  "at": 540,
-  "dur": 30,
+  "at": 327,
+  "dur": 27,
   "n": 666,
   "s": 16.3,
   "what": "squat, green check",
@@ -64,8 +64,8 @@
  },
  {
   "slot": "line3",
-  "at": 570,
-  "dur": 30,
+  "at": 354,
+  "dur": 27,
   "n": 408,
   "s": 21.0,
   "what": "dumbbell lunge",
@@ -73,8 +73,8 @@
  },
  {
   "slot": "line4",
-  "at": 600,
-  "dur": 30,
+  "at": 381,
+  "dur": 27,
   "n": 558,
   "s": 8.0,
   "what": "pull-up, back lit",
@@ -82,8 +82,8 @@
  },
  {
   "slot": "line5",
-  "at": 630,
-  "dur": 30,
+  "at": 408,
+  "dur": 27,
   "n": 538,
   "s": 1.5,
   "what": "deadlift stance, red to green",
@@ -91,20 +91,11 @@
  },
  {
   "slot": "coach",
-  "at": 660,
-  "dur": 90,
+  "at": 435,
+  "dur": 60,
   "n": 467,
   "s": 5.2,
   "what": "barbell row, traps red to green",
-  "raw": true
- },
- {
-  "slot": "amb",
-  "at": 750,
-  "dur": 90,
-  "n": 361,
-  "s": 9.2,
-  "what": "bent-over row, red to green",
   "raw": true
  }
 ]

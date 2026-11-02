@@ -9,8 +9,9 @@ import { B, D, UI } from "./Main.jsx";
 import SHOT_LIST from "./commercial-shots.json";
 
 const FPS = 30;
-export const CM = { FPS, DURATION: 990, HOOK2: 66, EXC: [120, 180, 240], STOP: 300, BLACK: 390, WORD: 400, HIT: 450,
-  LINES: [510, 540, 570, 600, 630], COACH: 660, AMB: 750, LOGO: 840 };
+// 20 s cut (600 frames). The track's silence lands under the Arabic word and its slam on HIT (9.0 s).
+export const CM = { FPS, DURATION: 600, HOOK2: 38, EXC: [75, 105, 135], EXC_LEN: 30, STOP: 165, BLACK: 222, WORD: 228, HIT: 270,
+  LINES: [300, 327, 354, 381, 408], LINE_LEN: 27, COACH: 435, AMB: 495, LOGO: 495 };
 const T = CM;
 const sp = (f, at, d = 12, st = 220) => spring({ frame: f - at, fps: FPS, config: { damping: d, stiffness: st } });
 const win = (f, a, b, fi = 4, fo = 4) => interpolate(f, [a - Math.max(fi, 0.01), a, b - Math.max(fo, 0.01), b], [0, 1, 1, 0], clamp);
@@ -75,9 +76,9 @@ function Hook({ f }) {
 
 const EXCUSES = ["“I’ll start Monday.”", "“I don’t know what to do.”", "“I’m not seeing results.”"];
 function Excuse({ f, i }) {
-  const a = T.EXC[i], b = a + 60;
+  const a = T.EXC[i], b = a + T.EXC_LEN;
   if (f < a - 4 || f > b + 2) return null;
-  const strike = interpolate(f, [a + 28, a + 36], [0, 1], { ...clamp, easing: (x) => 1 - (1 - x) ** 3 });
+  const strike = interpolate(f, [a + 14, a + 20], [0, 1], { ...clamp, easing: (x) => 1 - (1 - x) ** 3 });
   return (
     <div style={{ position: "absolute", left: 70, right: 70, top: 760, opacity: win(f, a, b, 2, 6) }}>
       <div style={{ ...D, fontSize: 30, color: B.xlo, letterSpacing: "0.14em", ...rise(sp(f, a)) }}>Excuse {i + 1}</div>
@@ -123,7 +124,7 @@ function Word({ f }) {
 
 const LINES = ["A plan built for you.", "Weights. Sets. Reps.", "Every set, tracked.", "Followed up weekly.", "Every PR, saved."];
 function Line({ f, i }) {
-  const a = T.LINES[i], b = a + 30;
+  const a = T.LINES[i], b = a + T.LINE_LEN;
   if (f < a - 1 || f > b + 1) return null;
   const p = sp(f, a, 11, 320);
   const top = i % 2 ? 1250 : 400;   // letterbox shots (odd) keep the type under the band, full shots above
@@ -149,6 +150,7 @@ function Coach({ f }) {
 // null the push-up shot under it carries the line.
 const PERSON = null;
 function Ambassador({ f }) {
+  if (T.AMB >= T.LOGO) return null;   // not in the 20 s cut
   if (f < T.AMB - 2 || f > T.LOGO + 2) return null;
   const t = f - T.AMB, up = sp(f, T.AMB, 16, 120), o = win(f, T.AMB, T.LOGO, 4, 8);
   const w = 900, h = w * 1170 / 985;
