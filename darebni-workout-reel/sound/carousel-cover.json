@@ -1,0 +1,7 @@
+{"fps": 30, "duration": 6.0, "seed": 61, "fade_out": 0.8, "peak_db": -3, "cues": [
+ {"type": "sample", "file": "/home/user/wtc-website/sound-library/sfx/s1490.mp3", "frame": 4, "gain": 0.35},
+ {"type": "sample", "file": "/home/user/wtc-website/sound-library/sfx/s3057.mp3", "frame": 33, "gain": 0.45},
+ {"type": "sample", "file": "/home/user/wtc-website/sound-library/sfx/s2364.mp3", "frame": 62, "gain": 0.4},
+ {"type": "sample", "file": "/home/user/wtc-website/sound-library/sfx/s3060.mp3", "frame": 64, "gain": 0.3},
+ {"type": "sample", "file": "/home/user/wtc-website/sound-library/sfx/s2605.mp3", "frame": 94, "gain": 0.25}
+]}

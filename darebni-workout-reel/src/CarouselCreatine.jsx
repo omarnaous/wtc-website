@@ -1,6 +1,6 @@
 // Instagram carousel (1080x1350, 9 slides): "Creatine: myths vs truth", in Darebni's theme. One still per frame:
 // frame k = slide k+1. The 3D tub is Jar3D.jsx; every number is from the sources cited on its slide.
-import { AbsoluteFill, Img, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import { ThreeCanvas } from "@remotion/three";
 import { useFonts } from "./fx.jsx";
 import { B, D, UI, UIR, Phone } from "./Main.jsx";
@@ -224,6 +224,43 @@ const SLIDES = [
     </Frame>
   ),
 ];
+
+// slide 1 as a 6 s motion piece (CarouselCover): the jar drops in spinning, lands, the lid pops and the powder bursts,
+// the title punches in word by word, then a slow hold with the swipe arrow nudging right. Pure function of the frame.
+export const CCV = { DURATION: 180, DROP: 6, LAND: 34, POP: 62, T1: 18, T2: 30, T3: 42, SUB: 80, ARROW: 96 };
+export const CarouselCover = ({ sound = true }) => {
+  const f = useCurrentFrame();
+  useFonts([["Cond", "barlow-condensed-latin-800-normal.woff2", { weight: "800" }], ["Barlow", "barlow-latin-600-normal.woff2", { weight: "600" }], ["BarlowR", "barlow-latin-500-normal.woff2", { weight: "500" }]]);
+  const sp = (at, d = 12, st = 220) => spring({ frame: f - at, fps: 30, config: { damping: d, stiffness: st } });
+  const drop = sp(CCV.DROP, 11, 110), lid = sp(CCV.POP, 10, 150);
+  const y = interpolate(drop, [0, 1], [-420, 900]), spin = (1 - Math.min(1, drop)) * 7 + 0.25 + 0.06 * Math.sin(f / 30);
+  const land = Math.max(0, 1 - Math.abs(f - CCV.LAND) / 6), squash = 1 - 0.05 * land;
+  const word = (at, k = 1.7) => { const p = sp(at, 9, 300); return { display: "inline-block", opacity: Math.min(1, p * 3), transform: `scale(${interpolate(p, [0, 1], [k, 1])})`, transformOrigin: "0% 60%" }; };
+  const sub = sp(CCV.SUB), arrow = sp(CCV.ARROW, 9, 260), nudge = f > CCV.ARROW + 20 ? 10 * Math.max(0, Math.sin((f - CCV.ARROW - 20) / 6)) : 0;
+  const flash = interpolate(f, [CCV.POP - 1, CCV.POP, CCV.POP + 8], [0, 0.18, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const glow = interpolate(drop, [0, 1], [0, 1]);
+  return (
+    <Frame k={0}>
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 70%, rgba(184,176,255,${0.35 * glow}), transparent 45%)` }} />
+      <div style={{ position: "absolute", left: 64, right: 64, top: 170 }}>
+        <div style={{ ...H, fontSize: 150 }}><span style={word(CCV.T1)}>Creatine</span></div>
+        <div style={{ ...H, fontSize: 112, marginTop: 6 }}>
+          <span style={{ ...word(CCV.T2), color: RED }}>Myths</span> <span style={{ ...word(CCV.T2 + 6), color: "rgba(242,240,234,.7)" }}>vs</span> <span style={{ ...word(CCV.T3), color: GRN }}>truth</span>
+        </div>
+        <div style={{ ...UI, fontSize: 40, color: "rgba(242,240,234,.85)", marginTop: 26, opacity: Math.min(1, sub * 2), transform: `translateY(${(1 - Math.min(1, sub)) * 30}px)` }}>What the science actually says</div>
+      </div>
+      <AbsoluteFill style={{ transform: `scale(1, ${squash})`, transformOrigin: "50% 1130px" }}>
+        <JarScene x={540} y={y} h={470} spin={spin} lid={f < CCV.POP ? 0 : Math.min(0.06, lid * 0.06)} burst={f < CCV.POP ? -1 : (f - CCV.POP) / 30 * 0.55} />
+      </AbsoluteFill>
+      <div style={{ position: "absolute", right: 64, bottom: 110, width: 96, height: 96, borderRadius: 48, background: PAPER, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 40px rgba(0,0,0,.35)",
+        opacity: Math.min(1, arrow * 2), transform: `scale(${interpolate(arrow, [0, 1], [0.3, 1])}) translateX(${nudge}px)` }}>
+        <svg width="46" height="46" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke={INK} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </div>
+      <AbsoluteFill style={{ background: "#fff", opacity: flash, mixBlendMode: "screen" }} />
+      {sound && <Audio src={staticFile("carousel-cover.wav")} />}
+    </Frame>
+  );
+};
 
 export const CarouselCreatine = () => {
   const f = useCurrentFrame();
