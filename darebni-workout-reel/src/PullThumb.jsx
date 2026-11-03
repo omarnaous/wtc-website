@@ -19,7 +19,7 @@ export const PullThumb = () => {
         </div>
       </div>
       <Phone src="app/home.jpg" w={340} x={120} y={790} rot={-8} />
-      <Ambassador f={200} x={690} w={470} top={640} src="ambassador-pull.png" aspect={1314 / 678} />
+      <Ambassador f={200} x={680} w={480} top={660} src="ambassador-pull.png" aspect={1804 / 972} />
       <div style={{ position: "absolute", left: 70, right: 70, top: 1590, display: "flex", alignItems: "center", gap: 18 }}>
         <div style={{ padding: "14px 24px", borderRadius: 18, background: B.cream, ...D, fontSize: 44, color: B.ink }}>Full plan in Darebni AI</div>
       </div>

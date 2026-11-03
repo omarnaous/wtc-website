@@ -1,5 +1,5 @@
 // Darebni AI "Pull day" reel, the push-day format (Main.jsx) with the pull plan in src/pull_workout.json (the app's plan
-// format: sets, reps, rest, RPE). The hook is the ambassador's front lat spread (public/ambassador-pull.png, a cut-out
+// format: sets, reps, rest, RPE). The hook is the ambassador's back double-biceps (B&W studio shot, sock logos retouched out) (public/ambassador-pull.png, a cut-out
 // kept out of git); each of the 7 exercises plays its demo from the app's GIF repo (GIFURLSOM, frames 0 and 6 as the two
 // poses in public/gifs/<id>/) for two reps beside the real numbers; an inverted-row finisher; the shared end card.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
@@ -54,7 +54,7 @@ function Intro({ f }) {
           {stats.map((s, i) => <div key={s} style={rise(sp(f, 22 + i * 4))}><Chip hot={i === 0}>{s}</Chip></div>)}
         </div>
       </div>
-      <Ambassador f={f} top={640} w={392} src="ambassador-pull.png" aspect={1314 / 678} />
+      <Ambassador f={f} x={560} top={630} w={420} src="ambassador-pull.png" aspect={1804 / 972} />
       <div style={{ position: "absolute", left: 70, right: 70, top: 1410, ...UIR, fontSize: 32, color: "rgba(242,240,234,.8)", ...rise(sp(f, 40)) }}>
         <span style={{ ...D, fontSize: 32, color: B.success, letterSpacing: "0.06em" }}>Warm-up · </span>{W.warmup}
       </div>
