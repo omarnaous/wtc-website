@@ -1,0 +1,143 @@
+{
+  "id": "pull-01",
+  "title": "Pull · Back, Biceps, Rear Delts",
+  "focus": "Back, biceps, rear delts",
+  "split": "Pull",
+  "level": "Intermediate",
+  "environment": "gym",
+  "estimatedMinutes": 60,
+  "totalSets": 23,
+  "warmup": "5 min rowing machine, then 2 light pulldown sets and 10 band pull-aparts.",
+  "finisher": "Inverted rows to failure, one set.",
+  "exercises": [
+    {
+      "exerciseId": "0652",
+      "name": "Pull-Up",
+      "libraryName": "pull-up",
+      "intent": "main",
+      "target": "lats",
+      "bodyPart": "back",
+      "equipment": "body weight",
+      "sets": 4,
+      "reps": "6-8",
+      "rest": "150s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0652.gif",
+      "instructions": [
+        "Start by standing directly below a pull-up bar.",
+        "Inhale, then exhale.",
+        "Engaging the muscles in your arms and back, bend your elbows and raise your upper body up toward the bar until your chin is over the bar"
+      ]
+    },
+    {
+      "exerciseId": "0027",
+      "name": "Barbell Bent Over Row",
+      "libraryName": "barbell bent over row",
+      "intent": "main",
+      "target": "upper back",
+      "bodyPart": "back",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "6-8",
+      "rest": "150s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0027.gif",
+      "instructions": [
+        "Hold onto a barbell with your palms facing down.",
+        "While keeping your torso stationary, lift the barbell toward you.",
+        "Slowly lower the barbell back to the starting position."
+      ]
+    },
+    {
+      "exerciseId": "0818",
+      "name": "Parallel-Grip Lat Pulldown",
+      "libraryName": "twin handle parallel grip lat pulldown",
+      "intent": "main",
+      "target": "lats",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "8-10",
+      "rest": "120s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0818.gif",
+      "instructions": []
+    },
+    {
+      "exerciseId": "0861",
+      "name": "Cable Seated Row",
+      "libraryName": "cable seated row",
+      "intent": "accessory",
+      "target": "upper back",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "90s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0861.gif",
+      "instructions": [
+        "Sit on a seated cable row machine with one foot on the floor and one foot on the plate.",
+        "With one arm, pull the cable along the side of your body.",
+        "Extend the pause."
+      ]
+    },
+    {
+      "exerciseId": "0203",
+      "name": "Cable Rope Rear Delt Row",
+      "libraryName": "cable rear delt row (with rope)",
+      "intent": "accessory",
+      "target": "delts",
+      "bodyPart": "shoulders",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "12-15",
+      "rest": "60s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0203.gif",
+      "instructions": [
+        "Grip the ropes with an overhand grip, and take a step or two back.",
+        "With elbows held high, pull the rope towards you by letting your upper arms move straight out towards your sides.",
+        "Pull your scapulas together in the end position. Return with control to the starting position, by letting your arms move forward again."
+      ]
+    },
+    {
+      "exerciseId": "0031",
+      "name": "Barbell Curl",
+      "libraryName": "barbell curl",
+      "intent": "accessory",
+      "target": "biceps",
+      "bodyPart": "upper arms",
+      "equipment": "barbell",
+      "sets": 3,
+      "reps": "8-10",
+      "rest": "75s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0031.gif",
+      "instructions": [
+        "Stand Up Tall. ",
+        "Stand erect with the shoulder blades down the back, chest up, and shoulder pulled back.",
+        "Squeeze the Bar."
+      ]
+    },
+    {
+      "exerciseId": "0313",
+      "name": "Dumbbell Hammer Curl",
+      "libraryName": "dumbbell hammer curl",
+      "intent": "accessory",
+      "target": "biceps",
+      "bodyPart": "upper arms",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "60s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0313.gif",
+      "instructions": [
+        "Stand up straight with a dumbbell in each hand, holding them alongside you. Your palms should face your body. ...",
+        "Keep your biceps stationary and start bending at your elbows, lifting both dumbbells.",
+        "Lift until the dumbbells reach shoulder-level, but don't actually touch your ."
+      ]
+    }
+  ]
+}

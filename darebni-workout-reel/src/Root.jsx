@@ -1,6 +1,8 @@
 import { Composition } from "remotion";
 import { Main } from "./Main.jsx";
 import { Thumb } from "./Thumb.jsx";
+import { PullDay } from "./PullDay.jsx";
+import { PullThumb } from "./PullThumb.jsx";
 import { BenchElbows, BE } from "./BenchElbows.jsx";
 import { BenchThumb } from "./BenchThumb.jsx";
 import { Commercial, CM } from "./Commercial.jsx";
@@ -24,6 +26,9 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="PullDay" component={PullDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="PullDay-NoMusic" component={PullDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="PullDay-Thumb" component={PullThumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
     <Composition id="PushDay-Thumb" component={Thumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
     <Composition id="MythsMascot60" component={MythsMascot60} durationInFrames={MM60.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="MythsMascot60-NoMusic" component={MythsMascot60} durationInFrames={MM60.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />

@@ -1,0 +1,86 @@
+{
+ "fps": 30,
+ "duration": 28.5,
+ "seed": 4,
+ "fade_out": 1.2,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/pullday-bed.wav",
+   "frame": 0,
+   "gain": 0.85,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1468.mp3",
+   "frame": 98,
+   "gain": 0.3,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2639.mp3",
+   "frame": 158,
+   "gain": 0.3,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1465.mp3",
+   "frame": 218,
+   "gain": 0.3,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2607.mp3",
+   "frame": 278,
+   "gain": 0.3,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1474.mp3",
+   "frame": 338,
+   "gain": 0.3,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s166.mp3",
+   "frame": 398,
+   "gain": 0.3,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1468.mp3",
+   "frame": 458,
+   "gain": 0.3,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2639.mp3",
+   "frame": 518,
+   "gain": 0.3,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2615.mp3",
+   "frame": 591,
+   "gain": 0.34,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1465.mp3",
+   "frame": 703,
+   "gain": 0.3,
+   "pan": 0.0
+  }
+ ]
+}
