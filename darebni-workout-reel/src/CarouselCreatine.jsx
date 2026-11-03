@@ -15,9 +15,9 @@ const jarAt = (x, y, hPx) => ({ pos: [540 + (x - 540) * (398 / 280), 960 - (675 
 function Frame({ k, children }) {
   return (
     <AbsoluteFill style={{ background: INK, overflow: "hidden" }}>
-      <AbsoluteFill style={{ background: "linear-gradient(160deg, #171447 0%, #2B2390 55%, #4B3FD6 100%)" }} />
-      <AbsoluteFill style={{ background: "radial-gradient(circle at 80% 85%, rgba(139,128,255,.45), transparent 55%)" }} />
-      <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(184,176,255,.06) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(184,176,255,.06) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px" }} />
+      {/* the reels' background: ink #07071A, a soft violet glow and the 60 px grid (Main.jsx), for one look across the profile */}
+      <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 62%, rgba(91,78,229,.35), transparent 60%)" }} />
+      <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(139,128,255,.08) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(139,128,255,.08) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px" }} />
       <div style={{ position: "absolute", left: 64, top: 56, display: "flex", alignItems: "center", gap: 14 }}>
         <Img src={staticFile("darebni-icon.png")} style={{ width: 60, height: 60, borderRadius: 15 }} />
         <span style={{ ...D, fontSize: 40, color: PAPER, letterSpacing: "0.04em" }}>Darebni AI</span>
@@ -241,7 +241,7 @@ export const CarouselCover = ({ sound = true }) => {
   const glow = interpolate(drop, [0, 1], [0, 1]);
   return (
     <Frame k={0}>
-      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 70%, rgba(184,176,255,${0.35 * glow}), transparent 45%)` }} />
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 70%, rgba(91,78,229,${0.3 * glow}), transparent 45%)` }} />
       <div style={{ position: "absolute", left: 64, right: 64, top: 170 }}>
         <div style={{ ...H, fontSize: 150 }}><span style={word(CCV.T1)}>Creatine</span></div>
         <div style={{ ...H, fontSize: 112, marginTop: 6 }}>
