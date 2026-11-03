@@ -1,0 +1,289 @@
+{
+ "fps": 30,
+ "duration": 45.5,
+ "seed": 51,
+ "fade_out": 1.0,
+ "peak_db": -1.5,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l00K.wav",
+   "frame": 12,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l01S.wav",
+   "frame": 181,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l02S.wav",
+   "frame": 265,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l03K.wav",
+   "frame": 450,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l04S.wav",
+   "frame": 552,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l05K.wav",
+   "frame": 731,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l06S.wav",
+   "frame": 785,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l07S.wav",
+   "frame": 896,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l08K.wav",
+   "frame": 1092,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l09S.wav",
+   "frame": 1155,
+   "gain": 1.0,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l10K.wav",
+   "frame": 1226,
+   "gain": 0.75,
+   "pan": -0.12
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/myths45/l10S.wav",
+   "frame": 1226,
+   "gain": 0.75,
+   "pan": 0.12
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1468.mp3",
+   "frame": 235,
+   "gain": 0.34,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3005.mp3",
+   "frame": 243,
+   "gain": 0.5,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1471.mp3",
+   "frame": 522,
+   "gain": 0.34,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3005.mp3",
+   "frame": 530,
+   "gain": 0.5,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2632.mp3",
+   "frame": 701,
+   "gain": 0.34,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3005.mp3",
+   "frame": 709,
+   "gain": 0.5,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1461.mp3",
+   "frame": 866,
+   "gain": 0.34,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3005.mp3",
+   "frame": 874,
+   "gain": 0.5,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2354.mp3",
+   "frame": 92,
+   "gain": 0.35,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2357.mp3",
+   "frame": 126,
+   "gain": 0.35,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2356.mp3",
+   "frame": 169,
+   "gain": 0.35,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2624.mp3",
+   "frame": 12,
+   "gain": 0.3,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2364.mp3",
+   "frame": 225,
+   "gain": 0.4,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s424.mp3",
+   "frame": 233,
+   "gain": 0.32,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1106.mp3",
+   "frame": 348,
+   "gain": 0.4,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1430.mp3",
+   "frame": 408,
+   "gain": 0.5,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2378.mp3",
+   "frame": 456,
+   "gain": 0.45,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s954.mp3",
+   "frame": 500,
+   "gain": 0.3,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s952.mp3",
+   "frame": 630,
+   "gain": 0.35,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2894.mp3",
+   "frame": 743,
+   "gain": 0.4,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3000.mp3",
+   "frame": 799,
+   "gain": 0.4,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2876.mp3",
+   "frame": 860,
+   "gain": 0.35,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1107.mp3",
+   "frame": 945,
+   "gain": 0.4,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s947.mp3",
+   "frame": 1042,
+   "gain": 0.35,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2050.mp3",
+   "frame": 1092,
+   "gain": 0.3,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1124.mp3",
+   "frame": 1155,
+   "gain": 0.4,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s459.mp3",
+   "frame": 1283,
+   "gain": 0.3,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2018.mp3",
+   "frame": 1309,
+   "gain": 0.35,
+   "pan": 0.0
+  }
+ ]
+}

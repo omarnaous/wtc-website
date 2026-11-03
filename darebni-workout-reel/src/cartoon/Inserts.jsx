@@ -298,7 +298,7 @@ function Scale({ t, f }) {
 }
 
 function Cell({ t, f, m, L }) {
-  const p = sp(t, 0, 12, 220), water = sp(f, m.water ?? 0, 14, 120), fat = sp(f, m.fat ?? 99999, 10, 260), yes = sp(t, L.i === 23 ? 0 : 99999, 9, 300);
+  const p = sp(t, 0, 12, 220), water = sp(f, m.water ?? 0, 14, 120), fat = sp(f, m.fat ?? 99999, 10, 260), yes = sp(t, L.text === "Exactly." ? 0 : 99999, 9, 300);
   return (
     <div style={{ position: "absolute", left: 0, top: 0, width: 940, height: 500, ...pop(p, 0.6) }}>
       <svg width="560" height="440" viewBox="0 0 560 440" style={{ position: "absolute", left: 10, top: 20 }}>
