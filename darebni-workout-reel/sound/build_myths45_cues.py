@@ -40,7 +40,9 @@ for j, h in enumerate(holds): fx += [smp(X(["s704", "s709"][j % 2]), h["at"], 0.
 at = {l["i"]: l for l in L}
 def mk(i, name): return at[i]["at"] + at[i]["marks"][name]
 fx += [smp(X("s2354"), mk(0, "bald"), 0.35, -0.3), smp(X("s2357"), mk(0, "kidney"), 0.35), smp(X("s2356"), mk(0, "weight"), 0.35, 0.3), smp(X("s2624"), at[0]["at"], 0.3)]
-fx += [smp(X("s2364"), mk(1, "degree"), 0.4), smp(X("s424"), at[1]["at"] + at[1]["dur"] - 4, 0.32)]
+# the crowd laugh, cut to 1.3 s with a fade and kept low under the dialogue
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", X("s424"), "-t", "1.3", "-af", "afade=t=in:d=0.05,afade=t=out:st=0.7:d=0.6", "public/myths45/laugh-short.wav"], check=True)
+fx += [smp(X("s2364"), mk(1, "degree"), 0.4), smp(os.path.abspath("public/myths45/laugh-short.wav"), at[1]["at"] + at[1]["dur"] - 4, 0.13)]
 fx += [smp(X("s1106"), mk(2, "paper"), 0.4), smp(X("s1430"), mk(2, "stamp"), 0.5)]
 fx += [smp(X("s2378"), at[3]["at"] + 6, 0.45), smp(X("s954"), at[3]["at"] + 50, 0.3)]
 fx += [smp(X("s952"), mk(4, "issn"), 0.35), smp(X("s2894"), at[5]["at"] + 12, 0.4)]
