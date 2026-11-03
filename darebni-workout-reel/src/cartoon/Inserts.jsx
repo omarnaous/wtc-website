@@ -346,5 +346,35 @@ function Scoop({ t, f, m }) {
   );
 }
 
-export const INSERTS = { claims: Claims, degree: Degree, strength: Strength, reps: Reps, shaker: Shaker, kidneys: Kidneys, beach: Beach, doctor: Doctor,
+// pros vs cons tick list: each row ticks in on its spoken mark (p1-p3 on the pros line, c1-c3 on the cons line)
+function Verdict({ t, f, m }) {
+  const pros = [["p1", "Stronger lifts", "+20% vs +12% (22 studies)"], ["p2", "More reps", "at the same weight"], ["p3", "Safe for healthy people", "even long term (ISSN)"]];
+  const cons = [["c1", "Water weight", "the scale goes up, not fat"], ["c2", "Can flag a blood test", "creatinine: tell your doctor"], ["c3", "Results vary", "person to person"]];
+  const col = (items, good, x) => (
+    <div style={{ position: "absolute", left: x, top: 92, width: 430 }}>
+      <div style={{ ...D, fontSize: 52, color: good ? GRN : RED, WebkitTextStroke: `1.5px ${INK}` }}>{good ? "Pros" : "Cons"}</div>
+      {items.map(([k, a, b]) => {
+        const p = sp(f, m[k] ?? 99999, 10, 300);
+        return (
+          <div key={k} style={{ display: "flex", gap: 14, alignItems: "flex-start", marginTop: 16, opacity: Math.min(1, p * 2), transform: `translateX(${(1 - Math.min(1, p)) * (good ? -40 : 40)}px)` }}>
+            <div style={{ transform: `scale(${0.4 + 0.6 * Math.min(1.1, p)})` }}><Check size={50} color={good ? GRN : RED} x={!good} /></div>
+            <div><div style={{ ...D, fontSize: 40, color: INK }}>{a}</div><div style={{ ...UI, fontSize: 24, color: "rgba(7,7,26,.65)", marginTop: 2 }}>{b}</div></div>
+          </div>
+        );
+      })}
+    </div>
+  );
+  return (
+    <div style={{ ...card(-1), left: 0, top: -10, width: 920, height: 520, ...pop(sp(t, 0, 12, 220), 0.7) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: -34, textAlign: "center" }}>
+        <span style={{ display: "inline-block", padding: "8px 30px", background: GOLD, border: `6px solid ${INK}`, borderRadius: 14, ...D, fontSize: 48, color: INK, transform: "rotate(-2deg)" }}>The verdict</span>
+      </div>
+      {col(pros, true, 30)}
+      <div style={{ position: "absolute", left: 458, top: 96, bottom: 30, width: 5, background: "rgba(7,7,26,.15)", borderRadius: 3 }} />
+      {col(cons, false, 486)}
+    </div>
+  );
+}
+
+export const INSERTS = { verdict: Verdict, claims: Claims, degree: Degree, strength: Strength, reps: Reps, shaker: Shaker, kidneys: Kidneys, beach: Beach, doctor: Doctor,
   paper: Paper, barber: Barber, brain: Brain, brainwarn: BrainWarn, scale: Scale, cell: Cell, scoop: Scoop };
