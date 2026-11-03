@@ -1,0 +1,51 @@
+{
+ "fps": 30,
+ "duration": 26.1,
+ "seed": 11,
+ "fade_out": 1.2,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/latpull-bed.wav",
+   "frame": 0,
+   "gain": 0.85,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+   "frame": 119,
+   "gain": 0.32,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2605.mp3",
+   "frame": 272,
+   "gain": 0.32,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1488.mp3",
+   "frame": 422,
+   "gain": 0.32,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3220.mp3",
+   "frame": 521,
+   "gain": 0.32,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1471.mp3",
+   "frame": 631,
+   "gain": 0.3,
+   "pan": 0.0
+  }
+ ]
+}
