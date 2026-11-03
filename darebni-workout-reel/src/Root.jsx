@@ -12,6 +12,8 @@ import { CreatineVO, CV } from "./CreatineVO.jsx";
 import { ToonTest } from "./ToonTest.jsx";
 import { MythsCartoon, MC } from "./MythsCartoon.jsx";
 import { MythsThumb } from "./MythsThumb.jsx";
+import { MythsMascot, MM } from "./MythsMascot.jsx";
+import { MythsMascotThumb } from "./MythsMascotThumb.jsx";
 import { FormCheck, FC } from "./FormCheck.jsx";
 import { FormClip, FL } from "./FormClip.jsx";
 import { FPS, DURATION } from "./timing.js";
@@ -21,6 +23,9 @@ export const Root = () => (
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="PushDay-Thumb" component={Thumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
+    <Composition id="MythsMascot-Thumb" component={MythsMascotThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="MythsMascot" component={MythsMascot} durationInFrames={MM.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="MythsMascot-NoMusic" component={MythsMascot} durationInFrames={MM.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="Myths-Thumb" component={MythsThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="Myths" component={MythsCartoon} durationInFrames={MC.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="Myths-NoMusic" component={MythsCartoon} durationInFrames={MC.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
