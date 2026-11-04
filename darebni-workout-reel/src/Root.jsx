@@ -3,6 +3,8 @@ import { Main } from "./Main.jsx";
 import { Thumb } from "./Thumb.jsx";
 import { PullDay } from "./PullDay.jsx";
 import { PullThumb } from "./PullThumb.jsx";
+import { LegDay } from "./LegDay.jsx";
+import { LegThumb } from "./LegThumb.jsx";
 import { LatPulldown, LP } from "./LatPulldown.jsx";
 import { LatThumb } from "./LatThumb.jsx";
 import { CarouselCreatine, CarouselCover, CC, CCV } from "./CarouselCreatine.jsx";
@@ -29,6 +31,9 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="LegDay" component={LegDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="LegDay-NoMusic" component={LegDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="LegDay-Thumb" component={LegThumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
     <Composition id="PullDay" component={PullDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PullDay-NoMusic" component={PullDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="PullDay-Thumb" component={PullThumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />

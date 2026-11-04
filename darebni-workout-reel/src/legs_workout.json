@@ -1,0 +1,147 @@
+{
+  "id": "legs-01",
+  "title": "Legs · Quads, Hamstrings, Calves",
+  "focus": "Quads, hamstrings, glutes, calves",
+  "split": "Legs",
+  "level": "Intermediate",
+  "environment": "gym",
+  "estimatedMinutes": 65,
+  "totalSets": 23,
+  "warmup": "5 min bike, then 2 light leg-extension sets and 2 ramp-up squat sets.",
+  "finisher": "Walking lunges, 1 set of 20 steps.",
+  "exercises": [
+    {
+      "exerciseId": "0585",
+      "name": "Leg Extension",
+      "libraryName": "lever leg extension",
+      "intent": "pre-exhaust",
+      "target": "quads",
+      "bodyPart": "upper legs",
+      "equipment": "leverage machine",
+      "sets": 3,
+      "reps": "15-20",
+      "rest": "60s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0585.gif",
+      "instructions": [
+        "Exhale as you lift the lever forwards and upwards by straightening your legs until they are fully extended.",
+        "Hold for a count of two.",
+        "Inhale as you return the lever to the starting position by bending your knees."
+      ]
+    },
+    {
+      "exerciseId": "0043",
+      "name": "Barbell Back Squat",
+      "libraryName": "barbell full squat",
+      "intent": "main",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "6-8",
+      "rest": "180s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0043.gif",
+      "instructions": [
+        "Safely load the barbell onto your traps and .",
+        "Stand with your feet shoulder-width apart, toes slightly out, core braced, and chest up.",
+        "Initiate a basic squat movement hips back, knees bent, ensuring they fall out, not in."
+      ]
+    },
+    {
+      "exerciseId": "0743",
+      "name": "Hack Squat",
+      "libraryName": "sled hack squat",
+      "intent": "main",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "sled machine",
+      "sets": 3,
+      "reps": "8-10",
+      "rest": "150s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0743.gif",
+      "instructions": [
+        "Place feet on platform slightly higher than base of sled",
+        "Extend hips and knees",
+        "Release dock levers"
+      ]
+    },
+    {
+      "exerciseId": "0739",
+      "name": "45° Leg Press",
+      "libraryName": "sled 45 leg press",
+      "intent": "accessory",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "sled machine",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "120s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0739.gif",
+      "instructions": [
+        "Take a deep breath, extend your legs, and unlock the safeties",
+        "Lower the weight under control until the legs are roughly 45 degrees or slightly below",
+        "Drive the weight back to the starting position by extending the knees but don't forcefully lockout"
+      ]
+    },
+    {
+      "exerciseId": "0085",
+      "name": "Barbell Romanian Deadlift",
+      "libraryName": "barbell romanian deadlift",
+      "intent": "main",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "barbell",
+      "sets": 3,
+      "reps": "8-10",
+      "rest": "120s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0085.gif",
+      "instructions": [
+        "Stand up tall with your feet shoulder-width apart and hold a dumbbell in each hand.",
+        "Push your hips back and lower the dumbbells, while keeping your legs straight or only slightly bent.",
+        "Return to the starting position and repeat."
+      ]
+    },
+    {
+      "exerciseId": "0586",
+      "name": "Lying Leg Curl",
+      "libraryName": "lever lying leg curl",
+      "intent": "accessory",
+      "target": "hamstrings",
+      "bodyPart": "upper legs",
+      "equipment": "leverage machine",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "75s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0586.gif",
+      "instructions": [
+        "Lie face down on the lying leg curls machine, stretching your legs out fully",
+        "The roller pad should rest just above the heels, a few inches over your calves",
+        "Grasp the support handles on each side of the machine"
+      ]
+    },
+    {
+      "exerciseId": "0605",
+      "name": "Standing Calf Raise",
+      "libraryName": "lever standing calf raise",
+      "intent": "accessory",
+      "target": "calves",
+      "bodyPart": "lower legs",
+      "equipment": "leverage machine",
+      "sets": 4,
+      "reps": "12-15",
+      "rest": "60s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0605.gif",
+      "instructions": [
+        "Stand erect by extending hips and knees",
+        "Raise heels by extending ankles as high as possible",
+        "Lower heels by bending ankles until calves are stretched"
+      ]
+    }
+  ]
+}
