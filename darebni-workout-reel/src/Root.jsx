@@ -10,6 +10,7 @@ import { LegPress, LPR } from "./LegPress.jsx";
 import { LegPressThumb } from "./LegPressThumb.jsx";
 import { LatThumb } from "./LatThumb.jsx";
 import { CarouselCreatine, CarouselCover, CC, CCV } from "./CarouselCreatine.jsx";
+import { CarouselOverload, OverloadCover, CO, COV } from "./CarouselOverload.jsx";
 import { BenchElbows, BE } from "./BenchElbows.jsx";
 import { BenchThumb } from "./BenchThumb.jsx";
 import { Commercial, CM } from "./Commercial.jsx";
@@ -39,6 +40,9 @@ export const Root = () => (
     <Composition id="PullDay" component={PullDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PullDay-NoMusic" component={PullDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="PullDay-Thumb" component={PullThumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
+    <Composition id="OverloadCover" component={OverloadCover} durationInFrames={COV.DURATION} fps={30} width={CO.W} height={CO.H} defaultProps={{ sound: true }} />
+    <Composition id="OverloadCover-Silent" component={OverloadCover} durationInFrames={COV.DURATION} fps={30} width={CO.W} height={CO.H} defaultProps={{ sound: false }} />
+    <Composition id="CarouselOverload" component={CarouselOverload} durationInFrames={CO.N} fps={30} width={CO.W} height={CO.H} />
     <Composition id="CarouselCover" component={CarouselCover} durationInFrames={CCV.DURATION} fps={30} width={CC.W} height={CC.H} defaultProps={{ sound: true }} />
     <Composition id="CarouselCover-Silent" component={CarouselCover} durationInFrames={CCV.DURATION} fps={30} width={CC.W} height={CC.H} defaultProps={{ sound: false }} />
     <Composition id="CarouselCreatine" component={CarouselCreatine} durationInFrames={CC.N} fps={30} width={CC.W} height={CC.H} />
