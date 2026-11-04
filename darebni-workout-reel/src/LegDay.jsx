@@ -1,6 +1,6 @@
 // Darebni AI "Leg day" reel, the push/pull format (Main.jsx, PullDay.jsx) with the leg plan in src/legs_workout.json (the app's plan
 // format: sets, reps, rest, RPE), built the way the ambassador trains legs: leg extensions first to pre-exhaust the quads,
-// then the heavy squat patterns. Hook: his quads photo (public/ambassador-legs.png, a cut-out kept out of git, hoodie
+// then the heavy squat patterns. Hook: his quads photo in B&W like the pull reel (public/ambassador-legs.png, a cut-out kept out of git, hoodie
 // logo retouched out); each of the 7 exercises plays its demo from the app's GIF repo (GIFURLSOM, frames 0 and 6 as the two
 // poses in public/gifs/<id>/) for two reps beside the real numbers; a walking-lunge finisher; the shared end card.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
