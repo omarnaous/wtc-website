@@ -1,0 +1,58 @@
+{
+ "fps": 30,
+ "duration": 28.833333333333332,
+ "seed": 11,
+ "fade_out": 1.2,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/legpress-bed.wav",
+   "frame": 0,
+   "gain": 0.85,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2639.mp3",
+   "frame": 128,
+   "gain": 0.32,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1465.mp3",
+   "frame": 298,
+   "gain": 0.32,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s166.mp3",
+   "frame": 387,
+   "gain": 0.32,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2607.mp3",
+   "frame": 522,
+   "gain": 0.32,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2615.mp3",
+   "frame": 603,
+   "gain": 0.32,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1474.mp3",
+   "frame": 713,
+   "gain": 0.3,
+   "pan": 0.0
+  }
+ ]
+}
