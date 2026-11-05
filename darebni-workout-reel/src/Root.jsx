@@ -10,6 +10,7 @@ import { LegThumb } from "./LegThumb.jsx";
 import { LatPulldown, LP } from "./LatPulldown.jsx";
 import { LegPress, LPR } from "./LegPress.jsx";
 import { DbRow, DR } from "./DbRow.jsx";
+import { HowItWorks, HowItWorksThumb, HW } from "./HowItWorks.jsx";
 import { DbRowThumb } from "./DbRowThumb.jsx";
 import { LegPressThumb } from "./LegPressThumb.jsx";
 import { LatThumb } from "./LatThumb.jsx";
@@ -53,6 +54,9 @@ export const Root = () => (
     <Composition id="CarouselCover" component={CarouselCover} durationInFrames={CCV.DURATION} fps={30} width={CC.W} height={CC.H} defaultProps={{ sound: true }} />
     <Composition id="CarouselCover-Silent" component={CarouselCover} durationInFrames={CCV.DURATION} fps={30} width={CC.W} height={CC.H} defaultProps={{ sound: false }} />
     <Composition id="CarouselCreatine" component={CarouselCreatine} durationInFrames={CC.N} fps={30} width={CC.W} height={CC.H} />
+    <Composition id="HowItWorks-Thumb" component={HowItWorksThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="HowItWorks" component={HowItWorks} durationInFrames={HW.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="HowItWorks-NoMusic" component={HowItWorks} durationInFrames={HW.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="DbRow-Thumb" component={DbRowThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="DbRow" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="DbRow-NoMusic" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
