@@ -230,26 +230,31 @@ export const Panna = ({ music = true }) => {
   );
 };
 
-// cover (1080x1920, inside the 3:4 grid crop): the hook on label boxes over his photo with Messi... the site tilted
+// cover (1080x1920, inside the 3:4 grid crop): the hook on label boxes over his photo with Messi (the line names Messi, so the photo is his), the site tilted
 export const PannaThumb = () => {
   useFonts([["Bebas", "fonts/BebasNeue.woff2"], ["Sora", "Sora-600.ttf", { weight: "600" }], ["Geist", "Geist-600.ttf", { weight: "600" }], ["GeistR", "Geist-400.ttf"], ["Mono", "GeistMono-500.ttf"]]);
   const box = (bg, fg, size) => ({ display: "inline-block", padding: "12px 26px 4px", borderRadius: 16, background: bg, color: fg, ...BB, fontSize: size });
   const wm = 210, wmh = (wm * 1167) / 3224;
   return (
     <AbsoluteFill style={{ background: C.ink, overflow: "hidden" }}>
-      <Cover src="photos/with-dembele.jpg" pos="50% 30%" />
+      <Cover src="photos/with-messi.jpg" pos="40% 50%" />
       <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 32%, rgba(0,0,0,.1) 55%, rgba(0,0,0,.85) 100%)" }} />
-      <div style={{ position: "absolute", left: 60, right: 60, top: 300 }}>
+      <div style={{ position: "absolute", left: 70, top: 236, display: "flex", alignItems: "center", gap: 18 }}>
+        <svg viewBox={WORDMARK.viewBox} width={wm} height={wmh}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.yellow} /></svg>
+        <span style={{ ...M, fontSize: 20, color: "rgba(255,255,255,.85)" }}>@appifylb</span>
+      </div>
+      <div style={{ position: "absolute", left: 60, right: 60, top: 340 }}>
         <div><span style={box(C.ink, "#fff", 112)}>He trained with <span style={{ color: C.lime }}>Messi</span></span></div>
         <div style={{ marginTop: 10 }}><span style={box(C.lime, C.ink, 112)}>We built his website</span></div>
       </div>
-      <div style={{ position: "absolute", left: 200, top: 930, width: 800, transform: "rotate(-4deg)", borderRadius: 20, overflow: "hidden", boxShadow: "0 40px 100px rgba(0,0,0,.7), 0 0 0 3px rgba(127,211,1,.7)" }}>
-        <div style={{ height: 36, background: "#1A1B20", display: "flex", alignItems: "center", gap: 8, padding: "0 14px" }}>{["#FF5F57", "#FEBC2E", "#28C840"].map((c) => <i key={c} style={{ width: 11, height: 11, borderRadius: 99, background: c }} />)}</div>
-        <Img src={staticFile("rec/0040.jpg")} style={{ width: 800, height: 500, display: "block" }} />
+      {/* point Messi out: he is the one in pink, seen in profile */}
+      <div style={{ position: "absolute", left: 540, top: 618, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ padding: "8px 20px 2px", borderRadius: 12, background: C.lime, ...BB, fontSize: 52, color: C.ink, boxShadow: "0 10px 30px rgba(0,0,0,.5)" }}>Messi</div>
+        <svg width="34" height="22" viewBox="0 0 34 22"><path d="M0 0 H34 L17 22 Z" fill={C.lime} /></svg>
       </div>
-      <div style={{ position: "absolute", left: 70, top: 1540, display: "flex", alignItems: "center", gap: 18 }}>
-        <svg viewBox={WORDMARK.viewBox} width={wm} height={wmh}><path d={WORDMARK.letters} fill="#fff" /><path d={WORDMARK.spark} fill={C.yellow} /></svg>
-        <span style={{ ...M, fontSize: 20, color: "rgba(255,255,255,.8)" }}>@appifylb</span>
+      <div style={{ position: "absolute", left: 250, top: 1110, width: 780, transform: "rotate(-4deg)", borderRadius: 20, overflow: "hidden", boxShadow: "0 40px 100px rgba(0,0,0,.7), 0 0 0 3px rgba(127,211,1,.7)" }}>
+        <div style={{ height: 36, background: "#1A1B20", display: "flex", alignItems: "center", gap: 8, padding: "0 14px" }}>{["#FF5F57", "#FEBC2E", "#28C840"].map((c) => <i key={c} style={{ width: 11, height: 11, borderRadius: 99, background: c }} />)}</div>
+        <Img src={staticFile("rec/0040.jpg")} style={{ width: 780, height: 488, display: "block" }} />
       </div>
     </AbsoluteFill>
   );
