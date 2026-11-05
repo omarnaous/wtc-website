@@ -1,0 +1,147 @@
+{
+  "id": "deltsarms-01",
+  "title": "Delts & Arms · Golden Era",
+  "focus": "Shoulders, biceps and triceps, Golden Era style",
+  "split": "Shoulders & arms",
+  "level": "Intermediate",
+  "environment": "gym",
+  "estimatedMinutes": 60,
+  "totalSets": 25,
+  "warmup": "5 min rowing machine, then band pull-aparts and 2 light Arnold press sets.",
+  "finisher": "Concentration curls, 1 set to failure each arm.",
+  "exercises": [
+    {
+      "exerciseId": "0287",
+      "name": "Arnold Press",
+      "libraryName": "dumbbell arnold press v. 2",
+      "superset": "",
+      "target": "delts",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "Rest 90 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0287.gif",
+      "instructions": [
+        "Raise the dumbbells to shoulder height with your palms facing your body.",
+        "Keep your back straight and bend your knees slightly.",
+        "Slowly push the dumbbells above your head while rotating your wrists 180 degrees (so your palms face away from your body)."
+      ]
+    },
+    {
+      "exerciseId": "0334",
+      "name": "Dumbbell Lateral Raise",
+      "libraryName": "dumbbell lateral raise",
+      "superset": "",
+      "target": "delts",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "sets": 4,
+      "reps": "12-15",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0334.gif",
+      "instructions": [
+        "Grab a set of dumbbells and stand straight.",
+        "With your palms facing down, lift the dumbbells and raise your arms out to the sides.",
+        "Once your elbows are at shoulder height, pause, and then slowly lower the arms back to the initial position."
+      ]
+    },
+    {
+      "exerciseId": "0380",
+      "name": "Rear Delt Raise",
+      "libraryName": "dumbbell rear lateral raise",
+      "superset": "",
+      "target": "delts",
+      "bodyPart": "shoulders",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "12-15",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0380.gif",
+      "instructions": [
+        "Stand or sit with your arms at your sides and a dumbbell in each hand",
+        "With your palms facing in toward your body and your elbows slightly bent, raise the dumbbells so your arms are parallel to the floor",
+        "You should be making a T-shape"
+      ]
+    },
+    {
+      "exerciseId": "0031",
+      "name": "Barbell Curl",
+      "libraryName": "barbell curl",
+      "superset": "A1",
+      "target": "biceps",
+      "bodyPart": "upper arms",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "No rest → A2",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0031.gif",
+      "instructions": [
+        "Stand Up Tall. ",
+        "Stand erect with the shoulder blades down the back, chest up, and shoulder pulled back.",
+        "Squeeze the Bar."
+      ]
+    },
+    {
+      "exerciseId": "0060",
+      "name": "Skull Crusher",
+      "libraryName": "barbell lying triceps extension skull crusher",
+      "superset": "A2",
+      "target": "triceps",
+      "bodyPart": "upper arms",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "Rest 90 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0060.gif",
+      "instructions": [
+        "Flex your elbows and lower the weight down toward the top of your head.",
+        "Continue lowering the weight behind the head. ",
+        "Reverse the movement until the weight is above the chest in the original starting position."
+      ]
+    },
+    {
+      "exerciseId": "0318",
+      "name": "Incline Dumbbell Curl",
+      "libraryName": "dumbbell incline curl",
+      "superset": "B1",
+      "target": "biceps",
+      "bodyPart": "upper arms",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "No rest → B2",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0318.gif",
+      "instructions": [
+        "Perform incline dumbbell curls by sitting on an incline bench set to a 45- or 60-degree angle.",
+        "Hold a pair of dumbbells at your side.",
+        "Squeeze your biceps and bend your elbows to lift the dumbbells to shoulder level, then lower them again."
+      ]
+    },
+    {
+      "exerciseId": "0200",
+      "name": "Rope Pushdown",
+      "libraryName": "cable pushdown (with rope attachment)",
+      "superset": "B2",
+      "target": "triceps",
+      "bodyPart": "upper arms",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "12",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0200.gif",
+      "instructions": [
+        "Stand with your feet hip-width apart, or place one in front of the other if it helps you balance.",
+        "Pull the cable down until the bar touches your thighs and pause to squeeze your triceps at the bottom of the move.",
+        "Then slowly raise the bar back to the starting position."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+ "music": {
+  "id": "m1155",
+  "title": "Siren Song",
+  "artist": "Michael Ramir C.",
+  "genre": "Rock",
+  "page": "workout",
+  "mood": "gym-energy",
+  "duration": 110,
+  "url": "https://assets.mixkit.co/music/1155/1155.mp3",
+  "bpm": 115.99,
+  "first_beat": 0.512,
+  "file": "music/m1155.mp3",
+  "license": "Mixkit Stock Music Free License"
+ },
+ "transition": [
+  "/home/user/wtc-website/sound-library/sfx/s2639.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1461.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s174.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1474.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s168.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2615.mp3"
+ ],
+ "transition_big": "/home/user/wtc-website/sound-library/sfx/s1492.mp3"
+}
