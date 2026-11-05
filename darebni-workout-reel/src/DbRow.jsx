@@ -1,5 +1,5 @@
 // Darebni form reel for chest + back day, the lat-pulldown / leg-press correction format over the library's one-arm dumbbell
-// row clip (public/lib/t329.mp4 = "Treinos (329).mp4", 0-21 s used, kept out of git). Four mistakes, timings read from the
+// row clip with its opening voice-over (public/lib/t329.mp4 = "Treinos (329).mp4", 0-21 s used, kept out of git). Four mistakes, timings read from the
 // clip's own badge: curling the weight up (split screen, ✓ on top and ✕ below, 0-5.7 s), the row ending at the chest
 // instead of the hip (✕ 6-7.8 s, ✓ to 9 s), twisting the torso (✕ 10.9-12.8 s, ✓ to 14 s) and the shoulder sagging at the
 // bottom (✕ 15-16.9 s, ✓ to 18.2 s), then correct reps. Darebni's labels follow each phase; "Do it right" over the
@@ -15,6 +15,9 @@ export const DR = { FPS: 30, CLIP: 630, END_LEN,
   DEMO: 552 };
 DR.DURATION = DR.CLIP + DR.END_LEN;
 const { FPS, CLIP, SEG, SPLIT, DEMO } = DR;
+// the clip's own voice-over ("Your dumbbell rows aren't wrong, but they could be much better.", 0-4.5 s) stays audible;
+// the clip's audio then fades out and the music (ducked under the voice in sound/build_dbrow_cues.py) comes back up
+const VO_END = 138;
 const RED = "#FF4D5E", GRN = "#3DDC97";
 const sp = (f, at, d = 12, st = 220) => spring({ frame: f - at, fps: FPS, config: { damping: d, stiffness: st } });
 const rise = (p, d = 40) => ({ opacity: Math.min(1, p * 2), transform: `translateY(${(1 - Math.min(1, p)) * d}px)` });
@@ -137,7 +140,7 @@ export const DbRow = ({ music = true }) => {
         <div style={{ position: "absolute", left: CARD.x, top: CARD.y, width: CARD.w, height: CARD.h, borderRadius: 36, overflow: "hidden",
           boxShadow: "0 40px 100px rgba(0,0,0,.55), 0 0 0 3px rgba(139,128,255,.55), 0 0 80px rgba(91,78,229,.35)",
           opacity: Math.min(1, card * 2), transform: `translateY(${(1 - Math.min(1, card)) * 80}px)` }}>
-          <OffthreadVideo src={staticFile("lib/t329.mp4")} muted style={{ width: CARD.w, height: CARD.h }} />
+          <OffthreadVideo src={staticFile("lib/t329.mp4")} volume={(t) => interpolate(t, [VO_END, VO_END + 12], [1, 0], clamp)} style={{ width: CARD.w, height: CARD.h }} />
         </div>
         <Title f={f} />
         <SplitLabel f={f} />

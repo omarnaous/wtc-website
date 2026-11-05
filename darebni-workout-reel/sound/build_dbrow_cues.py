@@ -1,6 +1,6 @@
 """Sound for DbRow.jsx (built from build_legpress_cues.py), from the real-audio library: music plus transition whooshes only (the user finds hits,
 clicks and dings childish). Bed: "No Warning" (Michael Ramir C., Breakbeat, 110 BPM, unused by other projects) from
-its loudest bar. Whooshes: one on each of the clip's camera changes (cut at 6 s, moves at 9 s, 14 s and 18.2 s), one into
+its loudest bar, ducked to 18% under the clip's opening voice-over. Whooshes: one on each of the clip's camera changes (cut at 6 s, moves at 9 s, 14 s and 18.2 s), one into
 the end card and one on its page turn. Writes public/dbrow-bed.wav (gitignored), sound/dbrow.json, sound/dbrow-sfx.json.
   python3 sound/build_dbrow_cues.py && python3 <motion-graphics>/scripts/sound.py sound/dbrow.json public/dbrow.wav"""
 import json, os, subprocess, sys
@@ -29,6 +29,10 @@ def loudest_start(m, need):
     return at
 start = loudest_start(m, DUR / 30)
 out = subprocess.run([sys.executable, LIBTOOL, "bed", MUSIC, "public/dbrow-bed.wav", "--dur", f"{DUR / 30:.3f}", "--gain", "0.9", "--start", f"{start:.3f}"], capture_output=True, text=True, check=True).stdout
+# duck the bed under the clip's own voice-over (0-4.5 s, played from the clip in DbRow.jsx), then bring it back up
+subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", "public/dbrow-bed.wav", "-af",
+  "volume='if(lt(t,4.6),0.18,if(lt(t,5.4),0.18+0.82*(t-4.6)/0.8,1))':eval=frame", "public/dbrow-bed-duck.wav"], check=True)
+os.replace("public/dbrow-bed-duck.wav", "public/dbrow-bed.wav")
 print("bed:", m["title"], "by", m["artist"], f"({m['bpm']} bpm, from {start:.2f} s)")
 smp = lambda f, frame, g, pan=0.0: {"type": "sample", "file": f, "frame": round(frame), "gain": g, "pan": pan}
 sfx = lambda i: f"{LIB}/sfx/{i}.mp3"
