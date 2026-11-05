@@ -1,0 +1,143 @@
+{
+  "id": "chestback-01",
+  "title": "Chest & Back · Golden Era supersets",
+  "focus": "Chest and back, trained together in supersets",
+  "split": "Chest & back",
+  "level": "Intermediate",
+  "environment": "gym",
+  "estimatedMinutes": 60,
+  "totalSets": 25,
+  "warmup": "5 min rowing machine, then 2 light bench sets and 2 sets of band pull-aparts.",
+  "finisher": "Chest dips, 1 set to failure.",
+  "exercises": [
+    {
+      "exerciseId": "0025",
+      "name": "Barbell Bench Press",
+      "libraryName": "barbell bench press",
+      "superset": "A1",
+      "target": "pectorals",
+      "bodyPart": "chest",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "No rest → A2",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0025.gif",
+      "instructions": [
+        "Press the weight upward over your eyes or slightly higher, with elbows extended to 45 degrees.",
+        "Inhale and lower dumbbells or barbell slowly and with control until they touch or reach just above the chest, elbows and wrists staying out to the sides.",
+        "Repeat the press and perform around 5 reps or more."
+      ]
+    },
+    {
+      "exerciseId": "1429",
+      "name": "Wide-Grip Pull-Up",
+      "libraryName": "wide grip pull-up",
+      "superset": "A2",
+      "target": "lats",
+      "bodyPart": "back",
+      "equipment": "body weight",
+      "sets": 4,
+      "reps": "max",
+      "rest": "Rest 90 s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/1429.gif",
+      "instructions": []
+    },
+    {
+      "exerciseId": "0314",
+      "name": "Incline Dumbbell Press",
+      "libraryName": "dumbbell incline bench press",
+      "superset": "B1",
+      "target": "pectorals",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "No rest → B2",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0314.gif",
+      "instructions": [
+        "Sit on the bench and lean back.",
+        "Brace your core and press both dumbbells straight over your chest as you exhale.",
+        "Reverse the movement and slowly lower the dumbbells to the top of your chest as you inhale"
+      ]
+    },
+    {
+      "exerciseId": "0027",
+      "name": "Barbell Bent-Over Row",
+      "libraryName": "barbell bent over row",
+      "superset": "B2",
+      "target": "upper back",
+      "bodyPart": "back",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "Rest 90 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0027.gif",
+      "instructions": [
+        "Hold onto a barbell with your palms facing down.",
+        "While keeping your torso stationary, lift the barbell toward you.",
+        "Slowly lower the barbell back to the starting position."
+      ]
+    },
+    {
+      "exerciseId": "0308",
+      "name": "Dumbbell Fly",
+      "libraryName": "dumbbell fly",
+      "superset": "C1",
+      "target": "pectorals",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "No rest → C2",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0308.gif",
+      "instructions": [
+        "Hold 1 dumbbell in each hand.",
+        "Start with your arms at chest level at your sides, elbows bent and pointing out.",
+        "Slowly exhale and lift your arms above your chest."
+      ]
+    },
+    {
+      "exerciseId": "0861",
+      "name": "Seated Cable Row",
+      "libraryName": "cable seated row",
+      "superset": "C2",
+      "target": "upper back",
+      "bodyPart": "back",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "Rest 75 s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0861.gif",
+      "instructions": [
+        "Sit on a seated cable row machine with one foot on the floor and one foot on the plate.",
+        "With one arm, pull the cable along the side of your body.",
+        "Extend the pause."
+      ]
+    },
+    {
+      "exerciseId": "0375",
+      "name": "Dumbbell Pullover",
+      "libraryName": "dumbbell pullover",
+      "superset": "",
+      "target": "pectorals",
+      "bodyPart": "chest",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "12",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0375.gif",
+      "instructions": [
+        "Extend your arms toward the ceiling, over your chest",
+        "Your palms should be facing each other, and your elbows slightly bent.",
+        "Inhale and extend the weights back and over your head, keeping a strong back and core."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+ "music": {
+  "id": "m371",
+  "title": "Cat Walk",
+  "artist": "Arulo",
+  "genre": "House",
+  "page": "edm",
+  "mood": "gym-energy",
+  "duration": 124,
+  "url": "https://assets.mixkit.co/music/371/371.mp3",
+  "bpm": 130.0,
+  "first_beat": 0.226,
+  "file": "music/m371.mp3",
+  "license": "Mixkit Stock Music Free License"
+ },
+ "transition": [
+  "/home/user/wtc-website/sound-library/sfx/s1468.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1465.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2607.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s166.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+  "/home/user/wtc-website/sound-library/sfx/s2632.mp3"
+ ],
+ "transition_big": "/home/user/wtc-website/sound-library/sfx/s3220.mp3"
+}

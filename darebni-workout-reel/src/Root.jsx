@@ -4,6 +4,8 @@ import { Thumb } from "./Thumb.jsx";
 import { PullDay } from "./PullDay.jsx";
 import { PullThumb } from "./PullThumb.jsx";
 import { LegDay } from "./LegDay.jsx";
+import { ChestBack } from "./ChestBack.jsx";
+import { ChestBackThumb } from "./ChestBackThumb.jsx";
 import { LegThumb } from "./LegThumb.jsx";
 import { LatPulldown, LP } from "./LatPulldown.jsx";
 import { LegPress, LPR } from "./LegPress.jsx";
@@ -34,6 +36,9 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="ChestBack" component={ChestBack} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="ChestBack-NoMusic" component={ChestBack} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="ChestBack-Thumb" component={ChestBackThumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
     <Composition id="LegDay" component={LegDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="LegDay-NoMusic" component={LegDay} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="LegDay-Thumb" component={LegThumb} durationInFrames={1} fps={FPS} width={1080} height={1920} />
