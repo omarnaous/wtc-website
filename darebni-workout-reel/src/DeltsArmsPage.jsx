@@ -21,33 +21,33 @@ const GOLD = "#FFC94A";
 const sp = (t, at = 0, d = 12, s = 220) => spring({ frame: t - at, fps: 30, config: { damping: d, stiffness: s } });
 const lerp = (a, b, p) => a + (b - a) * p;
 
-// the grid: 3 x 3 square tiles under the header, ending at y 1498 (inside the safe zone)
-const TS = 290, TG = 14, GX = (1080 - (3 * TS + 2 * TG)) / 2, GY = 604;
+// the grid: 3 x 3 tiles spread over the rest of the page, from under the header to y 1678 (the profile-grid crop's edge)
+const TS = 300, TH = 336, TG = 24, GX = (1080 - (3 * TS + 2 * TG)) / 2, GY = 610, GIF = 236;
 function Tile({ f, i, e }) {
   const at = ROW0 + i * BEAT, t = f - at, p = sp(t, 0, 11, 260);
   if (t < 0) return null;
-  const x = GX + (i % 3) * (TS + TG), y = GY + Math.floor(i / 3) * (TS + TG);
+  const x = GX + (i % 3) * (TS + TG), y = GY + Math.floor(i / 3) * (TH + TG);
   const glow = Math.max(0, 1 - t / 14), pose = Math.floor(Math.max(0, t) / 15) % 2;   // the demo flips pose on every beat
-  const box = { position: "absolute", left: x, top: y, width: TS, height: TS, borderRadius: 26, overflow: "hidden",
+  const box = { position: "absolute", left: x, top: y, width: TS, height: TH, borderRadius: 26, overflow: "hidden",
     opacity: Math.min(1, p * 2.5), transform: `scale(${0.55 + 0.45 * Math.min(1.05, p)}) rotate(${(1 - Math.min(1, p)) * (i % 2 ? 6 : -6)}deg)`,
     boxShadow: `0 18px 44px rgba(0,0,0,.45), 0 0 ${46 * glow}px rgba(139,128,255,.8)` };
   if (e.save) return (
     <div style={{ ...box, background: GOLD, display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 26px", border: `4px solid ${B.ink}` }}>
       <svg width="54" height="64" viewBox="0 0 24 28"><path d="M3 2h18v24l-9-6-9 6z" fill={B.ink} /></svg>
-      <div style={{ ...D, fontSize: 58, color: B.ink, marginTop: 14 }}>Save it</div>
+      <div style={{ ...D, fontSize: 64, color: B.ink, marginTop: 16 }}>Save it</div>
       <div style={{ ...D, fontSize: 40, color: B.ink, opacity: 0.75 }}>for arm day</div>
     </div>
   );
   const meta = e.fin ? "To failure · each arm" : `${e.sets} × ${e.reps} · ${e.rest.startsWith("No rest") ? "no rest" : e.rest.replace("Rest ", "")} · ${e.rpe}`;
   return (
     <div style={{ ...box, background: "rgba(17,17,43,.95)", border: `2px solid ${e.fin ? "rgba(251,113,133,.7)" : `rgba(139,128,255,${0.35 + 0.6 * glow})`}` }}>
-      <div style={{ position: "absolute", left: 0, top: 0, width: TS, height: 192, background: "#fff" }}>
-        <Img src={staticFile(`gifs/${e.exerciseId}/${pose ? "b" : "a"}.png`)} style={{ position: "absolute", left: (TS - 192) / 2, top: 0, width: 192, height: 192 }} />
+      <div style={{ position: "absolute", left: 0, top: 0, width: TS, height: GIF, background: "#fff" }}>
+        <Img src={staticFile(`gifs/${e.exerciseId}/${pose ? "b" : "a"}.png`)} style={{ position: "absolute", left: (TS - GIF) / 2, top: 0, width: GIF, height: GIF }} />
       </div>
       <div style={{ position: "absolute", left: 12, top: 12, padding: "3px 10px", borderRadius: 9, background: e.superset ? GOLD : e.fin ? B.danger : B.ink, ...D, fontSize: 24, color: e.superset || e.fin ? B.ink : B.cream }}>
         {e.superset ? `${e.superset} · superset` : e.fin ? "Finisher" : String(i + 1).padStart(2, "0")}
       </div>
-      <div style={{ position: "absolute", left: 16, right: 12, top: 202 }}>
+      <div style={{ position: "absolute", left: 16, right: 12, top: GIF + 14 }}>
         <div style={{ ...D, fontSize: e.name.length > 14 ? 31 : 38, color: e.fin ? B.danger : B.cream, whiteSpace: "nowrap", lineHeight: e.name.length > 14 ? 1.2 : 0.92 }}>{e.name}</div>
         <div style={{ ...D, fontSize: 25, color: B.xlo, marginTop: 8, whiteSpace: "nowrap", letterSpacing: "0.02em", opacity: Math.min(1, sp(t, 6) * 2) }}>{meta}</div>
       </div>
