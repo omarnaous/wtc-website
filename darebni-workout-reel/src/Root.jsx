@@ -15,6 +15,8 @@ import { LegPress, LPR } from "./LegPress.jsx";
 import { DbRow, DR } from "./DbRow.jsx";
 import { HowItWorks, HowItWorksThumb, HW } from "./HowItWorks.jsx";
 import { DbRowThumb } from "./DbRowThumb.jsx";
+import { BicepsCurl, BC } from "./BicepsCurl.jsx";
+import { BicepsCurlThumb } from "./BicepsCurlThumb.jsx";
 import { LegPressThumb } from "./LegPressThumb.jsx";
 import { LatThumb } from "./LatThumb.jsx";
 import { CarouselCreatine, CarouselCover, CC, CCV } from "./CarouselCreatine.jsx";
@@ -65,6 +67,9 @@ export const Root = () => (
     <Composition id="HowItWorks-Thumb" component={HowItWorksThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="HowItWorks" component={HowItWorks} durationInFrames={HW.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="HowItWorks-NoMusic" component={HowItWorks} durationInFrames={HW.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="BicepsCurl-Thumb" component={BicepsCurlThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="BicepsCurl" component={BicepsCurl} durationInFrames={BC.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="BicepsCurl-NoMusic" component={BicepsCurl} durationInFrames={BC.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="DbRow-Thumb" component={DbRowThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="DbRow" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="DbRow-NoMusic" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
