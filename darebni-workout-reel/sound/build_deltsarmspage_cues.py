@@ -12,7 +12,7 @@ END_LEN = int(re.search(r"\bEND_LEN = (\d+)", open("src/timing.js").read()).grou
 SWAP = int(re.search(r"OUTRO_SWAP = (\d+)", open("src/Main.jsx").read()).group(1))
 src = open("src/DeltsArmsPage.jsx").read()
 DP = {k: int(v) for k, v in re.findall(r"(\w+): (\d+)", re.search(r"export const DP = \{([^}]+)\}", src).group(1))}
-N_ROWS = 8
+N_ROWS = 9
 BUILT = DP["ROW0"] + N_ROWS * DP["BEAT"]; OUTRO = BUILT + DP["HOLD"]; DUR = OUTRO + END_LEN
 MUSIC = "m1155"
 SFX = {"shrink": "s2632", "row": ["s168", "s1461", "s174", "s1482"], "end": "s3220", "swap": "s1465"}
