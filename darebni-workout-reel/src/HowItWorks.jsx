@@ -9,7 +9,7 @@ import { AbsoluteFill, Audio, Img, interpolate, random, spring, staticFile, useC
 import { useFonts, clamp, Grain } from "./fx.jsx";
 import { B, D, UI, UIR, Header } from "./Main.jsx";
 
-export const HW = { FPS: 30, CUTS: [0, 90, 135, 225, 345, 435, 555, 630], DURATION: 750 };
+export const HW = { FPS: 30, CUTS: [0, 90, 180, 270, 390, 480, 600, 675], DURATION: 795 };
 const [H0, LOGO, S1, S2, S3, S4, S5, END] = HW.CUTS;
 const GRN = "#3DDC97", RED = "#FF4D6A", GOLD = "#FFC94A";
 const sp = (t, at = 0, d = 12, s = 220) => spring({ frame: t - at, fps: 30, config: { damping: d, stiffness: s } });
@@ -65,17 +65,43 @@ function Hook({ t }) {
   );
 }
 
+// the logo reveal, built from the real mark (darebni-ai/website/public/logo.svg, 1024 grid): the bar draws in, the plates
+// load onto it lightest to heaviest (progressive overload, in the logo itself), the frame locks with a glow ring, then the
+// wordmark rises off the bar and the "How it works" pill lands.
+const PLATES = [  // [x, y, w, h, rx, fill, inner shade [x, y, w, h, rx, opacity] | null]
+  [92, 440, 41, 195, 10, "#F2F0EA", null], [174, 420, 92, 236, 15, "#B8B0FF", null], [297, 348, 113, 379, 15, "#8B80FF", null],
+  [440, 266, 133, 543, 20, "#5B4EE5", [461, 287, 92, 502, 10, 0.3]], [604, 174, 164, 727, 26, "#4338CA", [625, 195, 123, 686, 15, 0.32]],
+  [799, 450, 31, 174, 5, "#8B80FF", null]];
 function Logo({ t }) {
-  const ic = sp(t, 0, 10, 200), word = "Darebni AI".split("");
+  const bar = interpolate(t, [2, 14], [0, 1], { ...clamp, easing: (x) => 1 - Math.pow(1 - x, 3) });
+  const LOCK = 38, lock = sp(t, LOCK, 12, 200);
+  const ring = interpolate(t, [LOCK, LOCK + 22], [0, 1], clamp);
+  const shake = t >= LOCK && t < LOCK + 8 ? (random(`l${t}`) - 0.5) * 10 * (1 - (t - LOCK) / 8) : 0;
+  const word = "Darebni AI".split(""), S = 560, breathe = 1 + 0.012 * Math.sin(t / 8);
   return (
     <>
-      <div style={{ position: "absolute", left: 540 - 130, top: 600, width: 260, height: 260, borderRadius: 64, overflow: "hidden", boxShadow: `0 0 ${120 * Math.min(1, ic)}px rgba(139,128,255,.8)`, ...pop(ic, 0.3) }}>
-        <Img src={staticFile("darebni-icon.png")} style={{ width: 260, height: 260 }} />
+      <div style={{ position: "absolute", left: 540 - S / 2, top: 470, width: S, height: S, transform: `translate(${shake}px, ${shake * 0.6}px) scale(${breathe * (1 + 0.04 * Math.max(0, 1 - Math.abs(t - LOCK) / 5))})` }}>
+        {/* the app-icon tile and its glow ring lock in once the last plate lands */}
+        <div style={{ position: "absolute", inset: 0, borderRadius: S * 0.22, background: "#07071A", border: "3px solid rgba(139,128,255,.5)", opacity: Math.min(1, lock * 1.5), boxShadow: `0 0 ${140 * Math.min(1, lock)}px rgba(91,78,229,.75)` }} />
+        <svg width={S} height={S} viewBox="0 0 1024 1024" style={{ position: "absolute", inset: 0 }}>
+          <rect x="92" y="502" width="972" height="72" rx="10" fill="#F2F0EA" style={{ transform: `scaleX(${bar})`, transformOrigin: "92px 538px" }} />
+          {bar > 0 && bar < 1 && <rect x={92 + 932 * bar - 120} y="490" width="140" height="96" rx="40" fill="#B8B0FF" opacity={0.6 * (1 - bar)} style={{ filter: "blur(18px)" }} />}
+          {PLATES.map(([x, y, w, h, rx, fill, inner], i) => {
+            const p = sp(t, 12 + i * 4.5, 11, 260), fall = (1 - Math.min(1, p)) * -520, sq = 1 + 0.08 * Math.max(0, 1 - Math.abs(t - (12 + i * 4.5) - 7) / 4);
+            return (
+              <g key={i} opacity={Math.min(1, p * 4)} style={{ transform: `translateY(${fall}px) scale(${1 / sq}, ${sq})`, transformOrigin: `${x + w / 2}px 538px` }}>
+                <rect x={x} y={y} width={w} height={h} rx={rx} fill={fill} />
+                {inner && <rect x={inner[0]} y={inner[1]} width={inner[2]} height={inner[3]} rx={inner[4]} fill="#07071A" opacity={inner[5]} />}
+              </g>
+            );
+          })}
+        </svg>
+        {ring > 0 && ring < 1 && <div style={{ position: "absolute", left: S / 2 - 300 * (0.6 + ring), top: S / 2 - 300 * (0.6 + ring), width: 600 * (0.6 + ring), height: 600 * (0.6 + ring), borderRadius: "50%", border: `${6 * (1 - ring)}px solid rgba(184,176,255,${0.8 * (1 - ring)})` }} />}
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 930, textAlign: "center", ...D, fontSize: 150, color: B.cream, whiteSpace: "pre" }}>
-        {word.map((c, i) => <span key={i} style={{ display: "inline-block", color: i > 7 ? B.lo : B.cream, ...rise(sp(t, 6 + i * 1.5, 12, 300), 60) }}>{c}</span>)}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1090, textAlign: "center", ...D, fontSize: 150, whiteSpace: "pre", overflow: "hidden", paddingBottom: 10 }}>
+        {word.map((c, i) => <span key={i} style={{ display: "inline-block", color: i > 7 ? B.lo : B.cream, ...rise(sp(t, LOCK + 6 + i * 1.6, 12, 300), 150) }}>{c}</span>)}
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1110, display: "flex", justifyContent: "center", ...rise(sp(t, 22)) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1280, display: "flex", justifyContent: "center", ...pop(sp(t, LOCK + 24, 10, 280), 0.5) }}>
         <div style={{ padding: "12px 30px", borderRadius: 999, background: B.cream, ...D, fontSize: 44, color: B.ink, letterSpacing: "0.06em" }}>How it works</div>
       </div>
     </>

@@ -30,11 +30,11 @@ print("bed:", m["title"], "by", m["artist"], f"({m['bpm']} bpm stretched to 120,
 smp = lambda f, frame, g, pan=0.0: {"type": "sample", "file": f, "frame": round(frame), "gain": g, "pan": pan}
 music = [smp(os.path.abspath(f"public/howitworks{TAG}-bed.wav"), 0, 0.85)]
 fx = [smp(f"{LIB}/sfx/{SFX['cut'][j % 6]}.mp3", c - 7, 0.3, (-0.25, 0.25)[j % 2]) for j, c in enumerate(CUTS[1:-1])]
-fx += [smp(f"{LIB}/sfx/{SFX['end']}.mp3", CUTS[-1] - 9, 0.34)]
+fx += [smp(f"{LIB}/sfx/{SFX['end']}.mp3", CUTS[-1] - 9, 0.34), smp(f"{LIB}/sfx/s3220.mp3", CUTS[1] + 38 - 8, 0.3)]   # + the logo locking in
 for mus, path in ((True, f"sound/howitworks{TAG}.json"), (False, f"sound/howitworks{TAG}-sfx.json")):
     spec = {"fps": 30, "duration": DUR / 30, "seed": 21, "fade_out": 1.2, "peak_db": -2, "cues": (music if mus else []) + fx}
     json.dump(spec, open(path, "w"), indent=1); print(path, len(spec["cues"]), "cues")
 if TAG: sys.exit(0)   # alternatives are logged once one is chosen
 used = json.load(open(f"{LIB}/used.json"))
-used["darebni-howitworks"] = {"music": [MUSIC], "sfx": sorted(SFX["cut"] + [SFX["end"]])}
+used["darebni-howitworks"] = {"music": [MUSIC], "sfx": sorted(SFX["cut"] + [SFX["end"], "s3220"])}
 json.dump(used, open(f"{LIB}/used.json", "w"), indent=1)
