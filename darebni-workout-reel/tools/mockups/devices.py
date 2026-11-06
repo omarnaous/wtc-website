@@ -30,6 +30,8 @@ def statusbar(im):
 for p in SCR:
     s = Image.open(p).convert("RGB").resize((W, H), Image.LANCZOS)
     s = statusbar(s)
+    import os
+    if os.environ.get("SCREENS"): s.save(f"{os.environ['SCREENS']}/{p.split('/')[-1].rsplit('.', 1)[0]}.jpg", quality=94)
     canvas = Image.new("RGBA", bez.size, (0, 0, 0, 0))
     mask = Image.new("L", (W, H), 0); ImageDraw.Draw(mask).rounded_rectangle([0, 0, W - 1, H - 1], 170, fill=255)
     canvas.paste(s, (X, Y), mask)

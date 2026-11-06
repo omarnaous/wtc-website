@@ -363,5 +363,11 @@
    "s168",
    "s2632"
   ]
+ },
+ "darebni-app-preview": {
+  "music": [
+   "m440"
+  ],
+  "sfx": []
  }
 }

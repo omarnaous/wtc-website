@@ -20,6 +20,7 @@ import { BicepsCurlThumb } from "./BicepsCurlThumb.jsx";
 import { StepsToon, StepsThumb, ST } from "./StepsToon.jsx";
 import { ChartStory, ChartProof, CHS } from "./ChartStory.jsx";
 import { ChartTop3, CT3 } from "./ChartTop3.jsx";
+import { AppPreview, AP } from "./AppPreview.jsx";
 import { LegPressThumb } from "./LegPressThumb.jsx";
 import { LatThumb } from "./LatThumb.jsx";
 import { CarouselCreatine, CarouselCover, CC, CCV } from "./CarouselCreatine.jsx";
@@ -70,6 +71,9 @@ export const Root = () => (
     <Composition id="HowItWorks-Thumb" component={HowItWorksThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="HowItWorks" component={HowItWorks} durationInFrames={HW.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="HowItWorks-NoMusic" component={HowItWorks} durationInFrames={HW.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="AppPreview" component={AppPreview} durationInFrames={AP.DURATION} fps={30} width={886} height={1920} defaultProps={{ music: true }} />
+    <Composition id="AppPreview-Silent" component={AppPreview} durationInFrames={AP.DURATION} fps={30} width={886} height={1920} defaultProps={{ music: false }} />
+    <Composition id="AppPreview-Social" component={AppPreview} durationInFrames={AP.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="ChartTop3" component={ChartTop3} durationInFrames={CT3.DURATION} fps={30} width={1080} height={1920} defaultProps={{ sound: true }} />
     <Composition id="ChartTop3-Silent" component={ChartTop3} durationInFrames={CT3.DURATION} fps={30} width={1080} height={1920} defaultProps={{ sound: false }} />
     <Composition id="ChartProof" component={ChartProof} durationInFrames={CHS.DURATION} fps={30} width={1080} height={1920} defaultProps={{ sound: true }} />

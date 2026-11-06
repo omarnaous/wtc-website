@@ -1,0 +1,15 @@
+{
+ "fps": 30,
+ "duration": 26.0,
+ "seed": 7,
+ "fade_out": 2.0,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/apppreview-bed.wav",
+   "frame": 0,
+   "gain": 0.85
+  }
+ ]
+}
