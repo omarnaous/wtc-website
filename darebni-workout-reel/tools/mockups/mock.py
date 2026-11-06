@@ -73,3 +73,31 @@ for i, (n, t, s) in enumerate(AS):
 </div>{dev(n, (1320 - ww) / 2, 720, hh)}""")
 for k, v in P.items(): open(f"{D}/{k}.html", "w").write(v)
 print(len(P), "pages")
+# ── Instagram stories 1080x1920 (story safe zone: content between y 250 and 1700) ──
+Q = {}
+Q["st-1-hero"] = page(1080, 1920, brand(64, 250) + f"""
+<div style="position:absolute;left:64px;right:64px;top:350px">
+  <div class="D" style="font-size:124px">Your AI<br>workout <span class="lo">coach</span></div>
+  <div style="font-family:BarR;font-size:36px;line-height:1.25;color:rgba(242,240,234,.85);margin-top:20px">Weekly plans with your sets, reps &amp; weights.<br>Built for you. Tracked every set.</div>
+</div>
+{dev("home", (1080 - 960 / AR) / 2, 730, 960)}""")
+h2 = 700; w2 = h2 / AR; gap = (1080 - 3 * w2) / 4
+Q["st-2-how"] = page(1080, 1920, brand(64, 250) + """
+<div style="position:absolute;left:64px;right:64px;top:350px"><div class="D" style="font-size:124px">How it <span class="lo">works</span></div>
+<div style="font-family:BarR;font-size:38px;color:rgba(242,240,234,.85);margin-top:20px">From your goal to every set, in three steps.</div></div>""" +
+  "".join(dev(n, gap + i * (w2 + gap), 640, h2) + f'<div style="position:absolute;left:{gap + i * (w2 + gap)}px;width:{w2:.0f}px;top:1370px;text-align:center"><span class="num">{k}</span><div class="D" style="font-size:42px;margin-top:14px">{t}</div></div>' for i, (n, k, t) in enumerate(labels)) + badge(415, 1560, 84))
+Q["st-3-tracker"] = page(1080, 1920, brand(64, 250) + f"""
+<div style="position:absolute;left:64px;right:64px;top:350px"><div class="pill">Smart tracker</div>
+  <div class="D" style="font-size:118px;margin-top:20px">Log every set, <span class="grn">live</span></div></div>
+{dev("logging", 50, 640, 1040)}
+<div style="position:absolute;left:600px;right:50px;top:820px;border-top:2px solid rgba(242,240,234,.16)">
+  <div class="tick">{TICK}<span style="font-size:36px">kg &amp; reps,<br>set by set</span></div>
+  <div class="tick">{TICK}<span style="font-size:36px">Built-in<br>rest timer</span></div>
+  <div class="tick">{TICK}<span style="font-size:36px">Your plan's<br>numbers, ready</span></div>
+</div>{badge(600, 1440, 84)}""")
+h4 = 1000; w4 = h4 / AR; g4 = (1080 - 2 * w4) / 3
+Q["st-4-progress"] = page(1080, 1920, brand(64, 250) + """
+<div style="position:absolute;left:64px;right:64px;top:350px"><div class="D" style="font-size:124px">See your <span class="grn">progress</span></div></div>""" +
+  "".join(dev(n, g4 + i * (w4 + g4), 540, h4) + f'<div class="D" style="position:absolute;left:{g4 + i * (w4 + g4)}px;width:{w4:.0f}px;top:1575px;text-align:center;font-size:44px">{t}</div>' for i, (n, t) in enumerate([("analytics", "Weekly AI analysis"), ("pinned", "Every PR, tracked")])))
+for k, v in Q.items(): open(f"{D}/{k}.html", "w").write(v)
+print(len(Q), "story pages")
