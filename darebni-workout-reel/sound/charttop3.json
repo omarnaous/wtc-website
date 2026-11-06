@@ -1,0 +1,45 @@
+{
+ "fps": 30,
+ "duration": 8.0,
+ "seed": 44,
+ "fade_out": 0.6,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/charttop3-bed.wav",
+   "frame": 0,
+   "gain": 0.8
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1489.mp3",
+   "frame": 0,
+   "gain": 0.28
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2632.mp3",
+   "frame": 38,
+   "gain": 0.26
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s2039.mp3",
+   "frame": 60,
+   "gain": 0.36
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3005.mp3",
+   "frame": 61,
+   "gain": 0.28
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s168.mp3",
+   "frame": 127,
+   "gain": 0.22
+  }
+ ]
+}
