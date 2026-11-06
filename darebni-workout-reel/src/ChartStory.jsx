@@ -7,7 +7,7 @@ import { AbsoluteFill, Audio, Img, interpolate, random, spring, staticFile, useC
 import { useFonts, clamp, Grain } from "./fx.jsx";
 import { B, D, UI } from "./Main.jsx";
 
-export const CS = { DURATION: 240, ICON: 4, ROLL: [34, 84], LOCK: 84, CHIPS: 100, RATE: 122, THANKS: 146, NEXT: 160, CTA: 188 };
+export const CHS = { DURATION: 240, ICON: 4, ROLL: [34, 84], LOCK: 84, CHIPS: 100, RATE: 122, THANKS: 146, NEXT: 160, CTA: 188 };
 const GOLD = "#FFC94A", GRN = "#3DDC97";
 const sp = (f, at, d = 12, s = 220) => spring({ frame: f - at, fps: 30, config: { damping: d, stiffness: s } });
 const pop = (p, k = 1.5) => ({ opacity: Math.min(1, p * 3), transform: `scale(${interpolate(p, [0, 1], [k, 1])})` });
@@ -51,20 +51,20 @@ function Confetti({ f, at }) {
 export const ChartStory = ({ sound = true }) => {
   const f = useCurrentFrame();
   useFonts([["Cond", "barlow-condensed-latin-800-normal.woff2", { weight: "800" }], ["Barlow", "barlow-latin-600-normal.woff2", { weight: "600" }], ["BarlowR", "barlow-latin-500-normal.woff2", { weight: "500" }]]);
-  const [r0, r1] = CS.ROLL;
+  const [r0, r1] = CHS.ROLL;
   const u = interpolate(f, [r0, r1], [0, 1], { ...clamp, easing: Easing.bezier(0.2, 0.7, 0.2, 1) });
   const rank = f < r0 ? 50 : Math.max(4, Math.round(50 - 46 * u));
-  const lock = sp(f, CS.LOCK, 8, 320), locked = f >= CS.LOCK;
-  const punch = locked ? 1 + 0.18 * Math.max(0, 1 - (f - CS.LOCK) / 10) : 1 + 0.04 * Math.sin(f * 1.3) * (f > r0 ? 1 : 0);
-  const flash = interpolate(f, [CS.LOCK - 1, CS.LOCK, CS.LOCK + 8], [0, 0.55, 0], clamp);
-  const icon = sp(f, CS.ICON, 11, 200), glow = 0.35 + 0.12 * Math.sin(f / 12) + 0.3 * Math.max(0, 1 - Math.abs(f - CS.LOCK - 6) / 20);
-  const cta = sp(f, CS.CTA, 10, 240), bob = f > CS.CTA + 20 ? Math.sin((f - CS.CTA) / 5) * 10 : 0;
+  const lock = sp(f, CHS.LOCK, 8, 320), locked = f >= CHS.LOCK;
+  const punch = locked ? 1 + 0.18 * Math.max(0, 1 - (f - CHS.LOCK) / 10) : 1 + 0.04 * Math.sin(f * 1.3) * (f > r0 ? 1 : 0);
+  const flash = interpolate(f, [CHS.LOCK - 1, CHS.LOCK, CHS.LOCK + 8], [0, 0.55, 0], clamp);
+  const icon = sp(f, CHS.ICON, 11, 200), glow = 0.35 + 0.12 * Math.sin(f / 12) + 0.3 * Math.max(0, 1 - Math.abs(f - CHS.LOCK - 6) / 20);
+  const cta = sp(f, CHS.CTA, 10, 240), bob = f > CHS.CTA + 20 ? Math.sin((f - CHS.CTA) / 5) * 10 : 0;
   return (
     <AbsoluteFill style={{ background: B.ink, overflow: "hidden" }}>
       <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 46%, rgba(91,78,229,${glow}), transparent 62%)` }} />
       <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(139,128,255,.08) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(139,128,255,.08) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px", backgroundPosition: `0 ${-f * 0.5}px` }} />
       {/* rays behind the rank once it locks */}
-      {locked && <svg width="1080" height="1920" style={{ position: "absolute", inset: 0, opacity: 0.18 * Math.min(1, (f - CS.LOCK) / 10) }}>
+      {locked && <svg width="1080" height="1920" style={{ position: "absolute", inset: 0, opacity: 0.18 * Math.min(1, (f - CHS.LOCK) / 10) }}>
         {Array.from({ length: 24 }, (_, i) => { const a = (i / 24) * Math.PI * 2 + f / 120; return <path key={i} d={`M540,860 L${540 + Math.cos(a) * 1400},${860 + Math.sin(a) * 1400} L${540 + Math.cos(a + 0.09) * 1400},${860 + Math.sin(a + 0.09) * 1400} Z`} fill={GOLD} />; })}
       </svg>}
       {/* icon + name */}
@@ -78,8 +78,8 @@ export const ChartStory = ({ sound = true }) => {
       <div style={{ position: "absolute", left: 0, right: 0, top: 500, textAlign: "center", ...D, fontSize: 64, color: B.xlo, letterSpacing: "0.12em", ...rise(sp(f, 20)) }}>We just hit</div>
       {/* the rank */}
       <div style={{ position: "absolute", left: 540 - 320, top: 835 - 320, width: 640, height: 640, opacity: lock, transform: `scale(${0.6 + 0.4 * Math.min(1, lock)})` }}>
-        <Laurel p={locked ? interpolate(f, [CS.LOCK, CS.LOCK + 22], [0, 1], clamp) : 0} />
-        <Laurel p={locked ? interpolate(f, [CS.LOCK, CS.LOCK + 22], [0, 1], clamp) : 0} flip />
+        <Laurel p={locked ? interpolate(f, [CHS.LOCK, CHS.LOCK + 22], [0, 1], clamp) : 0} />
+        <Laurel p={locked ? interpolate(f, [CHS.LOCK, CHS.LOCK + 22], [0, 1], clamp) : 0} flip />
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: 640, textAlign: "center", ...D, fontSize: 380, lineHeight: 1, color: locked ? GOLD : B.cream, textShadow: locked ? "0 0 60px rgba(255,201,74,.55), 0 14px 0 rgba(0,0,0,.35)" : "0 14px 0 rgba(0,0,0,.35)",
         transform: `scale(${punch})`, opacity: Math.min(1, sp(f, r0 - 6, 12, 240) * 2), filter: !locked && f > r0 ? `blur(${2 * (1 - u)}px)` : "none" }}>
@@ -88,10 +88,10 @@ export const ChartStory = ({ sound = true }) => {
       {/* category + country */}
       <div style={{ position: "absolute", left: 0, right: 0, top: 1125, display: "flex", justifyContent: "center", gap: 14 }}>
         {["Health & Fitness", "App Store · Lebanon"].map((c, i) => (
-          <div key={c} style={{ padding: "12px 26px", borderRadius: 18, background: i ? "rgba(139,128,255,.16)" : B.primary, border: `2px solid ${i ? "rgba(139,128,255,.45)" : B.lo}`, ...D, fontSize: 46, color: B.cream, ...pop(sp(f, CS.CHIPS + i * 6, 10, 280), 1.4) }}>{c}</div>
+          <div key={c} style={{ padding: "12px 26px", borderRadius: 18, background: i ? "rgba(139,128,255,.16)" : B.primary, border: `2px solid ${i ? "rgba(139,128,255,.45)" : B.lo}`, ...D, fontSize: 46, color: B.cream, ...pop(sp(f, CHS.CHIPS + i * 6, 10, 280), 1.4) }}>{c}</div>
         ))}
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 1225, display: "flex", justifyContent: "center", ...pop(sp(f, CS.RATE, 10, 280), 1.4) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1225, display: "flex", justifyContent: "center", ...pop(sp(f, CHS.RATE, 10, 280), 1.4) }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 24px", borderRadius: 999, background: "rgba(7,7,26,.6)", border: `2px solid ${GOLD}` }}>
           <span style={{ ...D, fontSize: 46, color: GOLD }}>5.0</span>
           <span style={{ fontSize: 40, color: GOLD, letterSpacing: 4 }}>★★★★★</span>
@@ -99,15 +99,15 @@ export const ChartStory = ({ sound = true }) => {
         </div>
       </div>
       <div style={{ position: "absolute", left: 60, right: 60, top: 1330, textAlign: "center" }}>
-        <div style={{ ...UI, fontSize: 44, color: B.cream, ...rise(sp(f, CS.THANKS)) }}>Thank you for getting us here</div>
-        <div style={{ ...D, fontSize: 86, color: GRN, marginTop: 8, ...pop(sp(f, CS.NEXT, 9, 300), 1.6) }}>Next stop: #1</div>
+        <div style={{ ...UI, fontSize: 44, color: B.cream, ...rise(sp(f, CHS.THANKS)) }}>Thank you for getting us here</div>
+        <div style={{ ...D, fontSize: 86, color: GRN, marginTop: 8, ...pop(sp(f, CHS.NEXT, 9, 300), 1.6) }}>Next stop: #1</div>
       </div>
       {/* the pointer to the Link sticker the user places below */}
       <div style={{ position: "absolute", left: 0, right: 0, top: 1500, display: "flex", flexDirection: "column", alignItems: "center", opacity: Math.min(1, cta * 2), transform: `translateY(${(1 - Math.min(1, cta)) * 30 + bob}px)` }}>
         <div style={{ ...D, fontSize: 40, color: B.xlo, letterSpacing: "0.1em" }}>Start your free week</div>
         <svg width="60" height="70" viewBox="0 0 60 70" style={{ marginTop: 6 }}><path d="M30 4 V58 M10 40 L30 62 L50 40" fill="none" stroke={B.xlo} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" /></svg>
       </div>
-      <Confetti f={f} at={CS.LOCK} />
+      <Confetti f={f} at={CHS.LOCK} />
       <AbsoluteFill style={{ background: "#fff", opacity: flash, pointerEvents: "none" }} />
       <Grain f={f} opacity={0.035} />
       {sound && <Audio src={staticFile("chartstory.wav")} />}

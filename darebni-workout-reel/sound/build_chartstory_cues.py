@@ -7,7 +7,7 @@ import numpy as np
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 LIBTOOL, LIB = f"{ROOT}/.claude/skills/appify-content/assets/tools/sound_library.py", f"{ROOT}/sound-library"
 src = open("src/ChartStory.jsx").read()
-CS = {k: int(v) for k, v in re.findall(r"(\w+): (\d+)", re.search(r"export const CS = \{([^}]+)\}", src).group(1))}
+CS = {k: int(v) for k, v in re.findall(r"(\w+): (\d+)", re.search(r"export const CHS = \{([^}]+)\}", src).group(1))}
 r0 = int(re.search(r"ROLL: \[(\d+)", src).group(1))
 DUR, MUSIC = CS["DURATION"] / 30, "m158"
 m = {x["id"]: x for x in json.load(open(f"{LIB}/catalog.json"))["music"]}[MUSIC]
