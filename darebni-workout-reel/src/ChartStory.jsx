@@ -114,3 +114,73 @@ export const ChartStory = ({ sound = true }) => {
     </AbsoluteFill>
   );
 };
+
+// ── the proof version: the real App Store page (cropped from the user's screenshot; the TestFlight bar left out) as the
+// evidence. A gold box draws round the "Chart · No. 4 · Health & Fitness" cell, that exact patch of the screenshot flies
+// out and zooms into a gold frame with laurels and confetti, then thanks / next stop #1 / the Link-sticker pointer. Same
+// beats as ChartStory (lock at frame 84), so it shares public/chartstory.wav. Crops: public/proof/ (gitignored).
+const CARD = { x: 36, y: 340, pad: 24, w: 960 }, SC = 960 / 1277;     // store-top 1277x394, store-stats 1277x287
+const CELL = { x: CARD.x + CARD.pad + 656 * SC, y: CARD.y + CARD.pad + 300 + 26 * SC, w: 336 * SC, h: 238 * SC };   // the chart cell on screen
+const ZOOM = { cx: 540, cy: 1160, w: 400 };
+export const ChartProof = ({ sound = true }) => {
+  const f = useCurrentFrame();
+  useFonts([["Cond", "barlow-condensed-latin-800-normal.woff2", { weight: "800" }], ["Barlow", "barlow-latin-600-normal.woff2", { weight: "600" }], ["BarlowR", "barlow-latin-500-normal.woff2", { weight: "500" }]]);
+  const LOCK = CHS.LOCK, BOX = 32, FLY = 56;
+  const card = sp(f, 2, 14, 160), box = interpolate(f, [BOX, BOX + 16], [0, 1], clamp), boxPulse = f > BOX + 16 ? 0.5 + 0.5 * Math.sin((f - BOX) / 4) : 0;
+  const fly = Math.min(1.02, sp(f, FLY, 13, 140)), locked = f >= LOCK, lockP = sp(f, LOCK, 8, 320);
+  const zw = CELL.w + (ZOOM.w - CELL.w) * fly, zh = zw * (238 / 336);
+  const zx = CELL.x + CELL.w / 2 + (ZOOM.cx - CELL.x - CELL.w / 2) * fly, zy = CELL.y + CELL.h / 2 + (ZOOM.cy - CELL.y - CELL.h / 2) * fly;
+  const punch = locked ? 1 + 0.12 * Math.max(0, 1 - (f - LOCK) / 10) : 1;
+  const flash = interpolate(f, [LOCK - 1, LOCK, LOCK + 8], [0, 0.5, 0], clamp);
+  const glow = 0.33 + 0.1 * Math.sin(f / 12) + 0.3 * Math.max(0, 1 - Math.abs(f - LOCK - 6) / 20);
+  const cta = sp(f, CHS.CTA, 10, 240), bob = f > CHS.CTA + 20 ? Math.sin((f - CHS.CTA) / 5) * 10 : 0;
+  const lp = locked ? interpolate(f, [LOCK, LOCK + 22], [0, 1], clamp) : 0;
+  return (
+    <AbsoluteFill style={{ background: B.ink, overflow: "hidden" }}>
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 58%, rgba(91,78,229,${glow}), transparent 62%)` }} />
+      <AbsoluteFill style={{ backgroundImage: "linear-gradient(rgba(139,128,255,.08) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(139,128,255,.08) 1.5px, transparent 1.5px)", backgroundSize: "60px 60px", backgroundPosition: `0 ${-f * 0.5}px` }} />
+      {locked && <svg width="1080" height="1920" style={{ position: "absolute", inset: 0, opacity: 0.16 * Math.min(1, (f - LOCK) / 10) }}>
+        {Array.from({ length: 24 }, (_, i) => { const a = (i / 24) * Math.PI * 2 + f / 120; return <path key={i} d={`M${ZOOM.cx},${ZOOM.cy} L${ZOOM.cx + Math.cos(a) * 1500},${ZOOM.cy + Math.sin(a) * 1500} L${ZOOM.cx + Math.cos(a + 0.09) * 1500},${ZOOM.cy + Math.sin(a + 0.09) * 1500} Z`} fill={GOLD} />; })}
+      </svg>}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 252, textAlign: "center", ...D, fontSize: 60, color: B.xlo, letterSpacing: "0.12em", ...rise(sp(f, 0)) }}>We just hit <span style={{ color: GOLD }}>#4</span> on the App Store</div>
+      {/* the real store page */}
+      <div style={{ position: "absolute", left: CARD.x, top: CARD.y, width: CARD.w + CARD.pad * 2, padding: CARD.pad, boxSizing: "border-box", borderRadius: 40, background: "#000", border: "2px solid rgba(255,255,255,.14)",
+        boxShadow: "0 40px 100px rgba(0,0,0,.6), 0 0 80px rgba(91,78,229,.35)", opacity: Math.min(1, card * 2), transform: `translateY(${(1 - Math.min(1, card)) * 120}px) scale(${0.94 + 0.06 * Math.min(1, card)})` }}>
+        <Img src={staticFile("proof/store-top.png")} style={{ display: "block", width: CARD.w, height: 394 * SC }} />
+        <div style={{ height: 4 }} />
+        <Img src={staticFile("proof/store-stats.png")} style={{ display: "block", width: CARD.w, height: 287 * SC, filter: f > BOX ? "brightness(.7)" : "none" }} />
+      </div>
+      {/* the chart cell, lit, with a gold box drawing round it */}
+      {f > BOX - 2 && <Img src={staticFile("proof/store-chart.png")} style={{ position: "absolute", left: CELL.x, top: CELL.y, width: CELL.w, height: CELL.h, opacity: Math.min(1, box * 2) }} />}
+      <svg width="1080" height="1920" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+        <rect x={CELL.x - 8} y={CELL.y - 8} width={CELL.w + 16} height={CELL.h + 16} rx="18" fill="none" stroke={GOLD} strokeWidth={6 + 3 * boxPulse} strokeDasharray="1000" strokeDashoffset={1000 * (1 - box)}
+          style={{ filter: `drop-shadow(0 0 ${10 + 14 * boxPulse}px rgba(255,201,74,.9))` }} />
+      </svg>
+      {/* the zoomed proof in a gold frame, laurels around it once it lands */}
+      <div style={{ position: "absolute", left: ZOOM.cx - 320, top: ZOOM.cy - 320, width: 640, height: 640, opacity: lockP, transform: `scale(${(0.6 + 0.4 * Math.min(1, lockP)) * 1.12}, ${(0.6 + 0.4 * Math.min(1, lockP)) * 0.9})` }}>
+        <Laurel p={lp} /><Laurel p={lp} flip />
+      </div>
+      {f >= FLY && (
+        <div style={{ position: "absolute", left: zx - zw / 2, top: zy - zh / 2, width: zw, height: zh, borderRadius: 24 * fly, overflow: "hidden", background: "#000",
+          border: `${3 + 5 * fly}px solid ${GOLD}`, boxShadow: `0 30px 80px rgba(0,0,0,.6), 0 0 ${40 + 40 * fly}px rgba(255,201,74,.55)`, transform: `scale(${punch}) rotate(${(1 - Math.min(1, fly)) * -6}deg)` }}>
+          <Img src={staticFile("proof/store-chart.png")} style={{ width: "100%", height: "100%" }} />
+        </div>
+      )}
+      {/* the country, as a tilted badge on the zoomed proof's corner */}
+      <div style={{ position: "absolute", left: ZOOM.cx + ZOOM.w / 2 - 150, top: ZOOM.cy - (ZOOM.w * 238) / 336 / 2 - 36, transform: `rotate(8deg) scale(${interpolate(sp(f, CHS.CHIPS, 9, 300), [0, 1], [2, 1])})`, opacity: Math.min(1, sp(f, CHS.CHIPS, 9, 300) * 3),
+        padding: "8px 18px", borderRadius: 14, background: B.primary, border: `4px solid ${B.ink}`, boxShadow: "0 10px 30px rgba(0,0,0,.5)", ...D, fontSize: 36, color: B.cream, whiteSpace: "nowrap" }}>App Store · Lebanon</div>
+      <div style={{ position: "absolute", left: 60, right: 60, top: 1478, textAlign: "center" }}>
+        <div style={{ ...UI, fontSize: 40, color: B.cream, ...rise(sp(f, CHS.THANKS)) }}>Thank you for getting us here</div>
+        <div style={{ ...D, fontSize: 80, color: GRN, marginTop: 4, ...pop(sp(f, CHS.NEXT, 9, 300), 1.6) }}>Next stop: #1</div>
+      </div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1620, display: "flex", flexDirection: "column", alignItems: "center", opacity: Math.min(1, cta * 2), transform: `translateY(${(1 - Math.min(1, cta)) * 30 + bob}px)` }}>
+        <div style={{ ...D, fontSize: 36, color: B.xlo, letterSpacing: "0.1em" }}>Start your free week</div>
+        <svg width="50" height="56" viewBox="0 0 60 70" style={{ marginTop: 4 }}><path d="M30 4 V58 M10 40 L30 62 L50 40" fill="none" stroke={B.xlo} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </div>
+      <Confetti f={f} at={LOCK} />
+      <AbsoluteFill style={{ background: "#fff", opacity: flash, pointerEvents: "none" }} />
+      <Grain f={f} opacity={0.03} />
+      {sound && <Audio src={staticFile("chartstory.wav")} />}
+    </AbsoluteFill>
+  );
+};
