@@ -1,0 +1,147 @@
+{
+  "id": "glutes-01",
+  "title": "Glutes \u00b7 Build the shelf",
+  "focus": "Glutes: hip extension, unilateral work and abduction",
+  "split": "Glutes",
+  "level": "Intermediate",
+  "environment": "gym",
+  "estimatedMinutes": 60,
+  "totalSets": 23,
+  "warmup": "5 min incline walk, then banded glute bridges and lateral band walks, 2 x 15 each.",
+  "finisher": "Reverse hyper, 1 set to failure.",
+  "exercises": [
+    {
+      "exerciseId": "1409",
+      "name": "Barbell Glute Bridge",
+      "libraryName": "barbell glute bridge",
+      "superset": "",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "Rest 2 min",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/1409.gif",
+      "instructions": [
+        "Roll out a mat to cushion your body.",
+        "Lay flat on your back.",
+        "Roll a barbell over your legs and let it rest where your hips bend."
+      ]
+    },
+    {
+      "exerciseId": "0085",
+      "name": "Romanian Deadlift",
+      "libraryName": "barbell romanian deadlift",
+      "superset": "",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "barbell",
+      "sets": 4,
+      "reps": "8-10",
+      "rest": "Rest 2 min",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0085.gif",
+      "instructions": [
+        "Stand up tall with your feet shoulder-width apart and hold a dumbbell in each hand.",
+        "Push your hips back and lower the dumbbells, while keeping your legs straight or only slightly bent.",
+        "Return to the starting position and repeat."
+      ]
+    },
+    {
+      "exerciseId": "0410",
+      "name": "Bulgarian Split Squat",
+      "libraryName": "dumbbell single leg split squat",
+      "superset": "",
+      "target": "quads",
+      "bodyPart": "upper legs",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "10 each",
+      "rest": "Rest 90 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0410.gif",
+      "instructions": [
+        "Balance on one leg with opposite leg extended forward off of ground",
+        "Squat down as far as possible while keeping leg elevated off of floor",
+        "Keep supporting knee pointed same direction as foot supporting"
+      ]
+    },
+    {
+      "exerciseId": "0196",
+      "name": "Cable Pull-Through",
+      "libraryName": "cable pull through (with rope)",
+      "superset": "A1",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "12-15",
+      "rest": "No rest",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0196.gif",
+      "instructions": [
+        "Grab the rope attachment in between your legs and face away from the cable machine.",
+        "Walk forward to remove the slack.",
+        "Drive your hips up and forward, straightening your legs. Pause and squeeze your glutes tightly, then return to the starting position."
+      ]
+    },
+    {
+      "exerciseId": "0228",
+      "name": "Cable Kickback",
+      "libraryName": "cable standing hip extension",
+      "superset": "A2",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "cable",
+      "sets": 3,
+      "reps": "12 each",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0228.gif",
+      "instructions": [
+        "Set both pulleys directly at (or slightly above) shoulder height and select the desired weight.",
+        "Grasp both handles with a neutral grip and take a step forward to split the stance.",
+        "Press the handles to lockout while flexing the pecs and extending the elbows."
+      ]
+    },
+    {
+      "exerciseId": "0597",
+      "name": "Hip Abduction",
+      "libraryName": "lever seated hip abduction",
+      "superset": "B1",
+      "target": "abductors",
+      "bodyPart": "upper legs",
+      "equipment": "leverage machine",
+      "sets": 3,
+      "reps": "15-20",
+      "rest": "No rest",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0597.gif",
+      "instructions": [
+        "Sit on machine with legs inside of side pads",
+        "If available, place heels on foot bars",
+        "Release and pull lever brace to position legs together"
+      ]
+    },
+    {
+      "exerciseId": "0431",
+      "name": "Dumbbell Step-Up",
+      "libraryName": "dumbbell step-up",
+      "superset": "B2",
+      "target": "glutes",
+      "bodyPart": "upper legs",
+      "equipment": "dumbbell",
+      "sets": 3,
+      "reps": "10 each",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0431.gif",
+      "instructions": [
+        "Instructions",
+        "Hold a pair of dumbbells at your sides and place one foot on a bench or box, your knee bent to 90 degrees",
+        "Keeping the other leg straight and firmly planted on the ground, push your  back and chest out"
+      ]
+    }
+  ]
+}

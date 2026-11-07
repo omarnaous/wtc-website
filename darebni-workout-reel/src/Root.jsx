@@ -8,6 +8,7 @@ import { ChestBack } from "./ChestBack.jsx";
 import { DeltsArms } from "./DeltsArms.jsx";
 import { DeltsArmsThumb } from "./DeltsArmsThumb.jsx";
 import { DeltsArmsPage, DP } from "./DeltsArmsPage.jsx";
+import { GlutesPage, GP } from "./GlutesPage.jsx";
 import { ChestBackThumb } from "./ChestBackThumb.jsx";
 import { LegThumb } from "./LegThumb.jsx";
 import { LatPulldown, LP } from "./LatPulldown.jsx";
@@ -48,6 +49,8 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="GlutesPage" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="GlutesPage-NoMusic" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="DeltsArmsPage" component={DeltsArmsPage} durationInFrames={DP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="DeltsArmsPage-NoMusic" component={DeltsArmsPage} durationInFrames={DP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="DeltsArms" component={DeltsArms} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
