@@ -60,14 +60,16 @@ function Tile({ f, i, e }) {
 function Page({ f, photo, aspect }) {
   // the figure (or photo) + title open big, then shrink into the header
   const k = interpolate(sp(f, SHRINK, 15, 120), [0, 1], [0, 1]);
-  const pw = photo ? lerp(1000, 450, k) : lerp(820, 400, k), ph = pw * (photo ? aspect : 248 / 332);
-  const px = photo ? lerp(40, 580, k) : lerp(130, 610, k), py = photo ? lerp(700, 300, k) : lerp(820, 300, k);
+  // with a (portrait, cut-out) photo: she opens full height in the centre, then stands top right with the grid's first
+  // row in front of her thighs; without one, the glute-bridge figure sits in the header
+  const pw = photo ? lerp(1250 / aspect, 640 / aspect, k) : lerp(820, 400, k), ph = pw * (photo ? aspect : 248 / 332);
+  const px = photo ? lerp((1080 - 1250 / aspect) / 2, 1080 - 50 - 640 / aspect, k) : lerp(130, 610, k), py = photo ? lerp(710, 190, k) : lerp(820, 300, k);
   const tSize = lerp(170, 112, k);
   const intro = sp(f, 2, 14, 140), breathe = f > SHRINK + 30 ? 1 + 0.015 * Math.sin((f - SHRINK) / 12) : 1;
   const stats = [`${W.estimatedMinutes} min`, `${W.totalSets + 1} sets`, "Glute focus"];
   return (
     <>
-      <Header f={f} right="Today's workout" />
+      <Header f={f} right={photo ? "" : "Today's workout"} />
       <div style={{ position: "absolute", left: px + pw * 0.05, top: py + ph * 0.1, width: pw * 0.9, height: ph * 0.9, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,78,229,.6), transparent 64%)" }} />
       <Img src={staticFile(photo || "glutes-hero-b.png")} style={{ position: "absolute", left: px, top: py, width: pw, height: ph, opacity: Math.min(1, intro * 1.5), transform: `translateY(${(1 - Math.min(1, intro)) * 200}px) scale(${breathe})`,
         filter: "drop-shadow(0 0 2px rgba(184,176,255,.9)) drop-shadow(0 0 26px rgba(91,78,229,.7)) contrast(1.06)" }} />

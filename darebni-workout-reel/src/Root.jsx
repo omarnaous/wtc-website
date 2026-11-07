@@ -49,8 +49,8 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
-    <Composition id="GlutesPage" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
-    <Composition id="GlutesPage-NoMusic" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="GlutesPage" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true, photo: "ambassador-glutes.png", aspect: 2124 / 890 }} />
+    <Composition id="GlutesPage-NoMusic" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false, photo: "ambassador-glutes.png", aspect: 2124 / 890 }} />
     <Composition id="DeltsArmsPage" component={DeltsArmsPage} durationInFrames={DP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="DeltsArmsPage-NoMusic" component={DeltsArmsPage} durationInFrames={DP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="DeltsArms" component={DeltsArms} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
