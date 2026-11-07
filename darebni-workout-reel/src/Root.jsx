@@ -13,6 +13,8 @@ import { ChestBackThumb } from "./ChestBackThumb.jsx";
 import { LegThumb } from "./LegThumb.jsx";
 import { LatPulldown, LP } from "./LatPulldown.jsx";
 import { LegPress, LPR } from "./LegPress.jsx";
+import { LungeFix, LF } from "./LungeFix.jsx";
+import { LungeFixThumb } from "./LungeFixThumb.jsx";
 import { DbRow, DR } from "./DbRow.jsx";
 import { HowItWorks, HowItWorksThumb, HW } from "./HowItWorks.jsx";
 import { DbRowThumb } from "./DbRowThumb.jsx";
@@ -92,6 +94,9 @@ export const Root = () => (
     <Composition id="DbRow-Thumb" component={DbRowThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="DbRow" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="DbRow-NoMusic" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="LungeFix-Thumb" component={LungeFixThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="LungeFix" component={LungeFix} durationInFrames={LF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="LungeFix-NoMusic" component={LungeFix} durationInFrames={LF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="LegPress-Thumb" component={LegPressThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="LegPress" component={LegPress} durationInFrames={LPR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="LegPress-NoMusic" component={LegPress} durationInFrames={LPR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
