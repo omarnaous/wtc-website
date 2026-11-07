@@ -31,7 +31,7 @@ const num = (v, d = 1) => v.toFixed(d);
 
 // ---- the bottle: a glass outline, a wavy water surface, rising bubbles, a "WATER" label ----------------------------
 const BODY = "M80,40 L120,40 L120,82 C120,104 170,112 170,152 L170,440 Q170,476 134,476 L66,476 Q30,476 30,440 L30,152 C30,112 80,104 80,82 Z";
-function Bottle({ f, cx, top, h, level, tilt = 0, glow = 0, id = "b" }) {
+export function Bottle({ f, cx, top, h, level, tilt = 0, glow = 0, id = "b" }) {
   const w = h * (200 / 480), y = 476 - level * (476 - 70), amp = 5 + 3 * Math.sin(f / 9);
   let d = `M0,${y}`;
   for (let x = 0; x <= 200; x += 8) d += ` L${x},${y + amp * Math.sin(x / 22 + f / 5) + 2 * Math.sin(x / 9 - f / 3)}`;
