@@ -1,0 +1,188 @@
+{
+ "scenes": {
+  "hook": {
+   "start": 0,
+   "end": 105
+  },
+  "drop": {
+   "start": 105,
+   "end": 330
+  },
+  "stats": {
+   "start": 330,
+   "end": 570
+  },
+  "bench": {
+   "start": 570,
+   "end": 735
+  },
+  "daily": {
+   "start": 735,
+   "end": 960
+  },
+  "tips": {
+   "start": 960,
+   "end": 1395
+  },
+  "bridge": {
+   "start": 1395,
+   "end": 1500
+  },
+  "outro": {
+   "start": 1500,
+   "end": 1755
+  }
+ },
+ "marks": {
+  "T1": 4,
+  "T2": 12,
+  "LAND": 38,
+  "PCT": 140,
+  "BODY": 159,
+  "HIT": 188,
+  "CHIP": 225,
+  "R0": 419,
+  "R1": 487,
+  "R2": 534,
+  "B100": 581,
+  "B945": 637,
+  "BSAME": 676,
+  "Q": 746,
+  "MEN": 774,
+  "WOMEN": 838,
+  "FOOD": 883,
+  "SWEAT": 929,
+  "FIX": 966,
+  "TIP0": 1009,
+  "HOURS": 1094,
+  "TIP1": 1130,
+  "PALE": 1172,
+  "DARK": 1224,
+  "TIP2": 1260,
+  "DRINK": 1329,
+  "BR1": 1399,
+  "BR2": 1461
+ },
+ "lines": [
+  {
+   "id": "h1",
+   "scene": "hook",
+   "start": 2,
+   "len": 33,
+   "text": "The cheapest pre-workout?"
+  },
+  {
+   "id": "h2",
+   "scene": "hook",
+   "start": 38,
+   "len": 12,
+   "text": "Water."
+  },
+  {
+   "id": "d1",
+   "scene": "drop",
+   "start": 119,
+   "len": 96,
+   "text": "Sweat off just two percent of your body weight, and your lifts start to drop."
+  },
+  {
+   "id": "d2",
+   "scene": "drop",
+   "start": 218,
+   "len": 101,
+   "text": "For an eighty kilo lifter, that's just one point six kilos."
+  },
+  {
+   "id": "s1",
+   "scene": "stats",
+   "start": 340,
+   "len": 225,
+   "text": "A meta-analysis found dehydrated lifters lose five and a half percent strength, eight percent of their reps, and almost six percent power."
+  },
+  {
+   "id": "b1",
+   "scene": "bench",
+   "start": 576,
+   "len": 97,
+   "text": "That's a hundred kilo bench turning into ninety-four and a half."
+  },
+  {
+   "id": "b2",
+   "scene": "bench",
+   "start": 676,
+   "len": 52,
+   "text": "Same effort. Just less water."
+  },
+  {
+   "id": "y1",
+   "scene": "daily",
+   "start": 743,
+   "len": 24,
+   "text": "So how much do you need?"
+  },
+  {
+   "id": "y2",
+   "scene": "daily",
+   "start": 770,
+   "len": 139,
+   "text": "About three point seven liters a day for men, and two point seven for women, from drinks and food."
+  },
+  {
+   "id": "y3",
+   "scene": "daily",
+   "start": 912,
+   "len": 41,
+   "text": "Plus whatever you sweat out in training."
+  },
+  {
+   "id": "t0",
+   "scene": "tips",
+   "start": 966,
+   "len": 40,
+   "text": "Fix it in three steps."
+  },
+  {
+   "id": "t1",
+   "scene": "tips",
+   "start": 1009,
+   "len": 118,
+   "text": "One. Five to seven milliliters per kilo, four hours before you train."
+  },
+  {
+   "id": "t2",
+   "scene": "tips",
+   "start": 1130,
+   "len": 127,
+   "text": "Two. Check your pee. Pale yellow, you're ready. Dark? Drink more."
+  },
+  {
+   "id": "t3",
+   "scene": "tips",
+   "start": 1260,
+   "len": 130,
+   "text": "Three. Weigh in before and after, and drink one and a half liters per kilo lost."
+  },
+  {
+   "id": "e1",
+   "scene": "bridge",
+   "start": 1399,
+   "len": 37,
+   "text": "Water fuels the set."
+  },
+  {
+   "id": "e2",
+   "scene": "bridge",
+   "start": 1439,
+   "len": 45,
+   "text": "Darreb-nee AI plans it."
+  },
+  {
+   "id": "o1",
+   "scene": "outro",
+   "start": 1514,
+   "len": 132,
+   "text": "Want a plan built for you? Try Darreb-nee AI, free for seven days."
+  }
+ ],
+ "duration": 1755
+}

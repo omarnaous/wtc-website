@@ -6,16 +6,21 @@
 //   Savoie et al., Sports Medicine 2015, meta-analysis of hypohydration: strength -5.5%, muscle endurance -8.3%,
 //     anaerobic power -5.8%
 //   Shirreffs & Maughan, Am J Physiol 1998 (drink about 1.5 L for each kg lost, to rehydrate fully)
-// The 80 kg / 100 kg examples are plain arithmetic on those numbers.
+//   Institute of Medicine (National Academies), DRI for water 2004: adequate intake of total water (drinks + food, about
+//     20% from food) 3.7 L/day for men, 2.7 L/day for women; more with sweat losses
+// The 80 kg / 100 kg examples are plain arithmetic on those numbers. A voice-over reads it all; every scene and keyword
+// timing comes from src/water_vo.json (sound/build_water_vo.py), so the type lands on the spoken word.
 import { AbsoluteFill, Audio, Img, interpolate, random, spring, staticFile, useCurrentFrame } from "remotion";
 import { useFonts, clamp, Grain, shake } from "./fx.jsx";
 import { B, D, UI, UIR, Outro } from "./Main.jsx";
-import { END_LEN } from "./timing.js";
+import V from "./water_vo.json";
 
-export const WT = { HOOK: 0, BOTTLE: 40, DROP: 105, DRAIN: 180, STATS: 255, ROW0: 285, ROW_STEP: 45, BENCH: 450,
-  TIPS: 555, TIP_LEN: 105, BRIDGE: 870, OUTRO: 945 };
-WT.DURATION = WT.OUTRO + END_LEN;   // 1200 = 40 s
-const { HOOK, BOTTLE, DROP, DRAIN, STATS, ROW0, ROW_STEP, BENCH, TIPS, TIP_LEN, BRIDGE, OUTRO } = WT;
+const S = V.scenes, M = V.marks, LINE = Object.fromEntries(V.lines.map((l) => [l.id, l.start]));
+export const WT = { DROP: S.drop.start, STATS: S.stats.start, BENCH: S.bench.start, DAILY: S.daily.start, TIPS: S.tips.start,
+  BRIDGE: S.bridge.start, OUTRO: S.outro.start, DURATION: V.duration };
+const { DROP, STATS, BENCH, DAILY, TIPS, BRIDGE, OUTRO } = WT;
+const BOTTLE = M.LAND - 14, DRAIN = M.HIT - 6;                     // the bottle lands on "water"; drains on "lifts"
+const ROWAT = [M.R0, M.R1, M.R2], TIPAT = [M.TIP0, M.TIP1, M.TIP2];
 const AQUA = "#38BDF8", AQUA2 = "#7DD3FC", RED = "#FF4D6A", GRN = "#3DDC97", GOLD = "#FFC94A", PAPER = B.cream;
 const sp = (f, at, d = 12, s = 220) => spring({ frame: f - at, fps: 30, config: { damping: d, stiffness: s } });
 const rise = (p, d = 40) => ({ opacity: Math.min(1, p * 2), transform: `translateY(${(1 - Math.min(1, p)) * d}px)` });
@@ -69,12 +74,12 @@ const Src = ({ f, at, children, top = 1520 }) => (
 function Hook({ f }) {
   if (f > DROP + 10) return null;
   const out = interpolate(f, [DROP - 4, DROP + 8], [0, 1], clamp);
-  const k = shake(f, BOTTLE + 14, 14, 4);
+  const k = shake(f, M.LAND, 14, 4);
   return (
     <div style={{ position: "absolute", inset: 0, transform: `translateY(${-out * 260}px)`, opacity: 1 - out }}>
       <div style={{ position: "absolute", left: 0, right: 0, top: 300, textAlign: "center", transform: `translate(${k[0]}px, ${k[1]}px)` }}>
-        <div style={{ ...D, fontSize: 120, color: PAPER, ...pop(sp(f, 2, 10, 280), 1.8) }}>The cheapest</div>
-        <div style={{ ...D, fontSize: 168, color: B.lo, marginTop: 6, ...pop(sp(f, 15, 10, 280), 1.8) }}>pre-workout?</div>
+        <div style={{ ...D, fontSize: 120, color: PAPER, ...pop(sp(f, M.T1 - 3, 10, 280), 1.8) }}>The cheapest</div>
+        <div style={{ ...D, fontSize: 168, color: B.lo, marginTop: 6, ...pop(sp(f, M.T2 - 2, 10, 280), 1.8) }}>pre-workout?</div>
       </div>
     </div>
   );
@@ -84,7 +89,7 @@ function BottleTrack({ f }) {
   // hook: falls in and fills; drop scene: moves left and drains; then it leaves; bridge: back in the middle, refills
   if (f < BOTTLE - 2 || (f > STATS + 10 && f < BRIDGE - 4) || f > OUTRO + 4) return null;
   if (f >= BRIDGE - 4) {
-    const p = sp(f, BRIDGE - 4, 13, 170), lvl = interpolate(f, [BRIDGE + 6, BRIDGE + 50], [0.15, 0.96], clamp);
+    const p = sp(f, BRIDGE - 4, 13, 170), lvl = interpolate(f, [BRIDGE + 6, BRIDGE + 46], [0.15, 0.96], clamp);
     return <Bottle id="end" f={f} cx={540} top={lerp(1950, 760, p)} h={760} level={lvl} glow={interpolate(f, [BRIDGE + 40, BRIDGE + 56], [0, 1], clamp)} />;
   }
   const fall = sp(f, BOTTLE, 11, 200), move = sp(f, DROP, 14, 150), leave = interpolate(f, [STATS - 6, STATS + 8], [0, 1], clamp);
@@ -106,17 +111,17 @@ function Drops({ f }) {
 
 function DropScene({ f }) {
   if (f < DROP || f > STATS + 6) return null;
-  const o = fadeOut(f, STATS + 2), pct = interpolate(f, [DROP + 30, DROP + 48], [0, 2], clamp);
-  const hit = shake(f, DRAIN + 12, 16, 4);
+  const o = fadeOut(f, STATS + 2), pct = interpolate(f, [M.PCT - 3, M.PCT + 12], [0, 2], clamp);
+  const hit = shake(f, M.HIT, 16, 4);
   return (
     <div style={{ position: "absolute", left: 470, right: 60, top: 560, opacity: o }}>
-      <div style={{ ...UI, fontSize: 52, color: PAPER, ...rise(sp(f, DROP + 18)) }}>Sweat off just</div>
-      <div style={{ ...D, fontSize: 300, color: AQUA, lineHeight: 0.86, textShadow: "0 0 60px rgba(56,189,248,.4)", ...pop(sp(f, DROP + 30, 10, 260), 1.5, "0% 60%") }}>{num(pct, 0)}%</div>
-      <div style={{ ...D, fontSize: 70, color: PAPER, ...rise(sp(f, DROP + 44)) }}>of your<br />body weight</div>
-      <div style={{ ...D, fontSize: 76, color: RED, marginTop: 36, transform: `translate(${hit[0]}px, ${hit[1]}px)`, ...pop(sp(f, DRAIN + 12, 10, 280), 1.5, "0% 50%") }}>and your<br />lifts drop.</div>
-      <div style={{ display: "inline-block", marginTop: 30, padding: "10px 18px", borderRadius: 14, background: "rgba(56,189,248,.14)", border: `2px solid ${AQUA}`, ...D, fontSize: 40, color: AQUA2, ...rise(sp(f, DRAIN + 34)) }}>80 kg lifter = 1.6 kg of sweat</div>
+      <div style={{ ...UI, fontSize: 52, color: PAPER, ...rise(sp(f, DROP + 8)) }}>Sweat off just</div>
+      <div style={{ ...D, fontSize: 300, color: AQUA, lineHeight: 0.86, textShadow: "0 0 60px rgba(56,189,248,.4)", ...pop(sp(f, M.PCT - 3, 10, 260), 1.5, "0% 60%") }}>{num(pct, 0)}%</div>
+      <div style={{ ...D, fontSize: 70, color: PAPER, ...rise(sp(f, M.BODY - 4)) }}>of your<br />body weight</div>
+      <div style={{ ...D, fontSize: 76, color: RED, marginTop: 36, transform: `translate(${hit[0]}px, ${hit[1]}px)`, ...pop(sp(f, M.HIT - 2, 10, 280), 1.5, "0% 50%") }}>and your<br />lifts drop.</div>
+      <div style={{ display: "inline-block", marginTop: 30, padding: "10px 18px", borderRadius: 14, background: "rgba(56,189,248,.14)", border: `2px solid ${AQUA}`, ...D, fontSize: 40, color: AQUA2, ...rise(sp(f, M.CHIP - 3)) }}>80 kg lifter = 1.6 kg of sweat</div>
       <div style={{ position: "absolute", left: -400, right: 0, top: 960, display: "flex", justifyContent: "center" }}>
-        <div style={{ padding: "10px 22px", borderRadius: 14, background: "rgba(17,17,43,.9)", border: "2px solid rgba(139,128,255,.4)", ...UIR, fontSize: 30, color: B.xlo, ...rise(sp(f, DRAIN + 44), 20) }}>ACSM position stand · Med Sci Sports Exerc, 2007</div>
+        <div style={{ padding: "10px 22px", borderRadius: 14, background: "rgba(17,17,43,.9)", border: "2px solid rgba(139,128,255,.4)", ...UIR, fontSize: 30, color: B.xlo, ...rise(sp(f, M.CHIP + 16), 20) }}>ACSM position stand · Med Sci Sports Exerc, 2007</div>
       </div>
     </div>
   );
@@ -132,7 +137,7 @@ function Stats({ f }) {
         <div style={{ ...UI, fontSize: 46, color: B.xlo, ...rise(sp(f, STATS + 2)) }}>A meta-analysis found dehydrated lifters lose:</div>
       </div>
       {ROWS.map(([label, v], i) => {
-        const at = ROW0 + i * ROW_STEP, p = sp(f, at, 10, 260), cnt = interpolate(f, [at, at + 14], [0, v], clamp);
+        const at = ROWAT[i] - 3, p = sp(f, at, 10, 260), cnt = interpolate(f, [at, at + 14], [0, v], clamp);
         const bar = interpolate(f, [at + 6, at + 22], [1, 1 - v / 100], clamp), y = 470 + i * 350, W = 940;
         const k = shake(f, at + 2, 12, 4), lost = interpolate(f, [at + 6, at + 22], [0, 1], clamp);
         if (f < at - 2) return null;
@@ -149,15 +154,15 @@ function Stats({ f }) {
           </div>
         );
       })}
-      <Src f={f} at={ROW0 + 2 * ROW_STEP + 20} top={1500}>Savoie et al. · Sports Medicine, 2015 · meta-analysis</Src>
+      <Src f={f} at={ROWAT[2] + 16} top={1500}>Savoie et al. · Sports Medicine, 2015 · meta-analysis</Src>
     </div>
   );
 }
 
 function Bench({ f }) {
-  if (f < BENCH || f > TIPS + 6) return null;
-  const o = fadeOut(f, TIPS + 2), kg = interpolate(f, [BENCH + 40, BENCH + 58], [100, 94.5], clamp), red = interpolate(f, [BENCH + 40, BENCH + 50], [0, 1], clamp);
-  const strike = interpolate(f, [BENCH + 30, BENCH + 40], [0, 1], clamp), k = shake(f, BENCH + 40, 18, 4);
+  if (f < BENCH || f > DAILY + 6) return null;
+  const o = fadeOut(f, DAILY + 2), kg = interpolate(f, [M.B945 - 4, M.B945 + 14], [100, 94.5], clamp), red = interpolate(f, [M.B945 - 4, M.B945 + 6], [0, 1], clamp);
+  const strike = interpolate(f, [M.B945 + 4, M.B945 + 14], [0, 1], clamp), k = shake(f, M.B945 - 4, 18, 4);
   return (
     <div style={{ position: "absolute", left: 70, right: 70, top: 440, textAlign: "center", opacity: o }}>
       <Barbell f={f} />
@@ -166,14 +171,14 @@ function Bench({ f }) {
         <div style={{ ...D, fontSize: 330, lineHeight: 0.85, color: red > 0.5 ? RED : AQUA, textShadow: `0 0 70px ${red > 0.5 ? "rgba(255,77,106,.4)" : "rgba(56,189,248,.4)"}`, ...pop(sp(f, BENCH + 12, 10, 260), 1.6) }}>{num(kg, kg % 1 ? 1 : 0)}<span style={{ fontSize: 140 }}> kg</span></div>
       </div>
       <div style={{ ...D, fontSize: 64, color: PAPER, marginTop: 30, opacity: strike, transform: `translateY(${(1 - strike) * 20}px)` }}>−5.5% strength</div>
-      <div style={{ ...UI, fontSize: 48, color: B.xlo, marginTop: 18, ...rise(sp(f, BENCH + 62)) }}>Same effort. Just less water.</div>
+      <div style={{ ...UI, fontSize: 48, color: B.xlo, marginTop: 18, ...rise(sp(f, M.BSAME - 3)) }}>Same effort. Just less water.</div>
     </div>
   );
 }
 
 // a loaded barbell under the number; when the strength drops, a small plate flies off each side
 function Barbell({ f }) {
-  const p = sp(f, BENCH + 6, 12, 200), t = f - (BENCH + 42);
+  const p = sp(f, BENCH + 6, 12, 200), t = f - (M.B945 - 2);
   const Plate = ({ x, h, w, c, flyDir = 0 }) => {
     const fly = flyDir && t > 0 ? { transform: `translate(${flyDir * t * 9}px, ${t * t * 1.1 - t * 10}px) rotate(${flyDir * t * 14}deg)`, opacity: interpolate(t, [0, 26, 34], [1, 1, 0], clamp) } : {};
     return <div style={{ position: "absolute", left: x - w / 2, top: 120 - h / 2, width: w, height: h, borderRadius: 10, background: c, border: "3px solid rgba(7,7,26,.6)", ...fly }} />;
@@ -194,9 +199,40 @@ function Barbell({ f }) {
   );
 }
 
+// how much a day: two bottles fill to the adequate intakes, men 3.7 L and women 2.7 L (to scale), on the spoken numbers
+function Daily({ f }) {
+  if (f < DAILY || f > TIPS + 6) return null;
+  const o = fadeOut(f, TIPS + 2);
+  const men = interpolate(f, [M.MEN - 4, M.MEN + 26], [0.04, 0.95], clamp), women = interpolate(f, [M.WOMEN - 4, M.WOMEN + 22], [0.04, 0.95 * 2.7 / 3.7], clamp);
+  const Col = ({ cx, lvl, at, v, label, id }) => (
+    <>
+      <Bottle id={id} f={f} cx={cx} top={lerp(1950, 600, sp(f, DAILY + 4, 13, 170))} h={560} level={lvl} glow={interpolate(f, [at, at + 20], [0, 0.6], clamp)} />
+      <div style={{ position: "absolute", left: cx - 220, width: 440, top: 1180, textAlign: "center" }}>
+        <div style={{ ...D, fontSize: 130, color: AQUA, lineHeight: 0.85, textShadow: "0 0 50px rgba(56,189,248,.35)", ...pop(sp(f, at - 2, 10, 260), 1.6) }}>{num(interpolate(f, [at - 2, at + 16], [0, v], clamp))} L</div>
+        <div style={{ ...D, fontSize: 50, color: PAPER, marginTop: 6, ...rise(sp(f, at + 4)) }}>{label}</div>
+      </div>
+    </>
+  );
+  return (
+    <div style={{ position: "absolute", inset: 0, opacity: o }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 300, textAlign: "center" }}>
+        <span style={{ ...D, fontSize: 120, color: PAPER, display: "inline-block", marginRight: 28, ...pop(sp(f, M.Q - 3, 10, 260), 1.6) }}>How much</span>
+        <span style={{ ...D, fontSize: 120, color: AQUA, display: "inline-block", ...pop(sp(f, M.Q + 8, 10, 260), 1.6) }}>a day?</span>
+      </div>
+      <Col id="men" cx={290} lvl={men} at={M.MEN} v={3.7} label="Men" />
+      <Col id="women" cx={790} lvl={women} at={M.WOMEN} v={2.7} label="Women" />
+      <div style={{ position: "absolute", left: 70, right: 70, top: 1390, textAlign: "center", ...UI, fontSize: 36, color: B.xlo, ...rise(sp(f, M.FOOD - 3)) }}>total water, drinks + food (about 20% is from food)</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 1460, display: "flex", justifyContent: "center", ...pop(sp(f, M.SWEAT - 4, 10, 260), 1.4) }}>
+        <div style={{ padding: "12px 24px", borderRadius: 16, background: "rgba(56,189,248,.14)", border: `2px solid ${AQUA}`, ...D, fontSize: 50, color: AQUA2 }}>+ whatever you sweat out training</div>
+      </div>
+      <Src f={f} at={M.SWEAT + 14} top={1560}>Adequate intake, adults · National Academies (IOM), 2004</Src>
+    </div>
+  );
+}
+
 const SWATCH = ["#F8F4C4", "#F3E58A", "#E8CB55", "#D6A23A", "#B07824"];
 function Tip({ f, i }) {
-  const at = TIPS + 20 + i * TIP_LEN, end = at + TIP_LEN - 12;
+  const at = TIPAT[i] - 6, end = (i < 2 ? TIPAT[i + 1] - 6 : BRIDGE) - 12;
   if (f < at - 4 || f > end + 14) return null;
   const inn = sp(f, at, 14, 170), out = interpolate(f, [end, end + 12], [0, 1], clamp);
   const x = (1 - Math.min(1, inn)) * 700 - out * 900;
@@ -208,8 +244,8 @@ function Tip({ f, i }) {
       {i === 0 && (<>
         <div style={{ ...D, fontSize: 150, color: PAPER, marginTop: 40, ...rise(sp(f, at + 8)) }}>5–7 mL</div>
         <div style={{ ...D, fontSize: 78, color: AQUA2, ...rise(sp(f, at + 12)) }}>per kg of body weight</div>
-        <div style={{ ...UI, fontSize: 50, color: PAPER, marginTop: 26, ...rise(sp(f, at + 18)) }}>about 4 hours before you train</div>
-        <div style={{ display: "inline-block", marginTop: 50, padding: "14px 24px", borderRadius: 16, background: "rgba(56,189,248,.14)", border: `2px solid ${AQUA}`, ...D, fontSize: 52, color: AQUA2, ...pop(sp(f, at + 30, 10, 260), 1.4, "0% 50%") }}>80 kg → 400–560 mL</div>
+        <div style={{ ...UI, fontSize: 50, color: PAPER, marginTop: 26, ...rise(sp(f, M.HOURS - 8)) }}>about 4 hours before you train</div>
+        <div style={{ display: "inline-block", marginTop: 50, padding: "14px 24px", borderRadius: 16, background: "rgba(56,189,248,.14)", border: `2px solid ${AQUA}`, ...D, fontSize: 52, color: AQUA2, ...pop(sp(f, M.HOURS + 16, 10, 260), 1.4, "0% 50%") }}>80 kg → 400–560 mL</div>
         <div style={{ position: "absolute", left: 60, bottom: 50, ...UIR, fontSize: 30, color: B.xlo }}>ACSM position stand, 2007</div>
       </>)}
       {i === 1 && (<>
@@ -221,8 +257,8 @@ function Tip({ f, i }) {
           })}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 26 }}>
-          <div style={{ ...D, fontSize: 52, color: GRN, ...rise(sp(f, at + 40)) }}>✓ Pale yellow<br /><span style={{ fontSize: 40, color: PAPER }}>ready to train</span></div>
-          <div style={{ ...D, fontSize: 52, color: RED, textAlign: "right", ...rise(sp(f, at + 50)) }}>✕ Dark<br /><span style={{ fontSize: 40, color: PAPER }}>drink more first</span></div>
+          <div style={{ ...D, fontSize: 52, color: GRN, ...rise(sp(f, M.PALE - 3)) }}>✓ Pale yellow<br /><span style={{ fontSize: 40, color: PAPER }}>ready to train</span></div>
+          <div style={{ ...D, fontSize: 52, color: RED, textAlign: "right", ...rise(sp(f, M.DARK - 3)) }}>✕ Dark<br /><span style={{ fontSize: 40, color: PAPER }}>drink more first</span></div>
         </div>
         <div style={{ position: "absolute", left: 60, bottom: 50, ...UIR, fontSize: 30, color: B.xlo }}>ACSM position stand, 2007</div>
       </>)}
@@ -231,10 +267,10 @@ function Tip({ f, i }) {
         <div style={{ display: "flex", alignItems: "center", gap: 24, marginTop: 24, ...rise(sp(f, at + 14)) }}>
           <div style={{ ...D, fontSize: 100, color: PAPER }}>80.0</div>
           <svg width="70" height="40" viewBox="0 0 70 40"><path d="M2 20 H60 M44 4 L64 20 L44 36" fill="none" stroke={B.lo} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          <div style={{ ...D, fontSize: 100, color: RED }}>{num(interpolate(f, [at + 18, at + 34], [80, 79], clamp))}<span style={{ fontSize: 50 }}> kg</span></div>
+          <div style={{ ...D, fontSize: 100, color: RED }}>{num(interpolate(f, [at + 24, at + 40], [80, 79], clamp))}<span style={{ fontSize: 50 }}> kg</span></div>
         </div>
-        <div style={{ ...D, fontSize: 130, color: AQUA, marginTop: 40, lineHeight: 0.9, ...pop(sp(f, at + 40, 10, 260), 1.4, "0% 50%") }}>Drink 1.5 L</div>
-        <div style={{ ...D, fontSize: 78, color: PAPER, ...rise(sp(f, at + 46)) }}>for every kg lost</div>
+        <div style={{ ...D, fontSize: 130, color: AQUA, marginTop: 40, lineHeight: 0.9, ...pop(sp(f, M.DRINK - 3, 10, 260), 1.4, "0% 50%") }}>Drink 1.5 L</div>
+        <div style={{ ...D, fontSize: 78, color: PAPER, ...rise(sp(f, M.DRINK + 6)) }}>for every kg lost</div>
         <div style={{ position: "absolute", left: 60, bottom: 50, ...UIR, fontSize: 30, color: B.xlo }}>Shirreffs & Maughan, Am J Physiol, 1998</div>
       </>)}
     </div>
@@ -247,12 +283,12 @@ function Tips({ f }) {
   return (
     <div style={{ position: "absolute", inset: 0, opacity: o }}>
       <div style={{ position: "absolute", left: 70, top: 300, display: "flex", alignItems: "flex-end", gap: 22 }}>
-        <div style={{ ...D, fontSize: 130, color: PAPER, ...pop(sp(f, TIPS, 10, 260), 1.6, "0% 80%") }}>Fix it</div>
-        <div style={{ ...D, fontSize: 130, color: AQUA, ...pop(sp(f, TIPS + 6, 10, 260), 1.6, "0% 80%") }}>in 3 steps</div>
+        <div style={{ ...D, fontSize: 130, color: PAPER, ...pop(sp(f, M.FIX - 3, 10, 260), 1.6, "0% 80%") }}>Fix it</div>
+        <div style={{ ...D, fontSize: 130, color: AQUA, ...pop(sp(f, M.FIX + 9, 10, 260), 1.6, "0% 80%") }}>in 3 steps</div>
       </div>
       {[0, 1, 2].map((i) => <Tip key={i} f={f} i={i} />)}
       <div style={{ position: "absolute", left: 0, right: 0, top: 1400, display: "flex", justifyContent: "center", gap: 14 }}>
-        {[0, 1, 2].map((i) => { const on = f >= TIPS + 20 + i * TIP_LEN; return <div key={i} style={{ width: on ? 60 : 18, height: 18, borderRadius: 9, background: on ? AQUA : "rgba(242,240,234,.25)" }} />; })}
+        {[0, 1, 2].map((i) => { const on = f >= TIPAT[i] - 6; return <div key={i} style={{ width: on ? 60 : 18, height: 18, borderRadius: 9, background: on ? AQUA : "rgba(242,240,234,.25)" }} />; })}
       </div>
     </div>
   );
@@ -263,8 +299,8 @@ function Bridge({ f }) {
   const o = fadeOut(f, OUTRO + 2);
   return (
     <div style={{ position: "absolute", left: 0, right: 0, top: 330, textAlign: "center", opacity: o }}>
-      <div style={{ ...D, fontSize: 116, color: PAPER, ...pop(sp(f, BRIDGE + 4, 10, 260), 1.6) }}>Water fuels the set.</div>
-      <div style={{ ...D, fontSize: 116, color: B.lo, marginTop: 8, ...pop(sp(f, BRIDGE + 34, 10, 260), 1.6) }}>Darebni AI plans it.</div>
+      <div style={{ ...D, fontSize: 116, color: PAPER, ...pop(sp(f, M.BR1 - 3, 10, 260), 1.6) }}>Water fuels the set.</div>
+      <div style={{ ...D, fontSize: 116, color: B.lo, marginTop: 8, ...pop(sp(f, LINE.e2 - 2, 10, 260), 1.6) }}>Darebni AI plans it.</div>
     </div>
   );
 }
@@ -290,6 +326,7 @@ export const WaterTips = ({ music = true }) => {
       <DropScene f={f} />
       <Stats f={f} />
       <Bench f={f} />
+      <Daily f={f} />
       <Tips f={f} />
       <Bridge f={f} />
       {f >= OUTRO - 2 && <Outro f={f} start={OUTRO} />}
