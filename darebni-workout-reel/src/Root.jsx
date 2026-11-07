@@ -9,6 +9,7 @@ import { DeltsArms } from "./DeltsArms.jsx";
 import { DeltsArmsThumb } from "./DeltsArmsThumb.jsx";
 import { DeltsArmsPage, DP } from "./DeltsArmsPage.jsx";
 import { GlutesPage, GP } from "./GlutesPage.jsx";
+import { WaterTips, WT } from "./WaterTips.jsx";
 import { ChestBackThumb } from "./ChestBackThumb.jsx";
 import { LegThumb } from "./LegThumb.jsx";
 import { LatPulldown, LP } from "./LatPulldown.jsx";
@@ -51,6 +52,8 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="WaterTips" component={WaterTips} durationInFrames={WT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="WaterTips-NoMusic" component={WaterTips} durationInFrames={WT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="GlutesPage" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true, photo: "ambassador-glutes.png", aspect: 2124 / 890 }} />
     <Composition id="GlutesPage-NoMusic" component={GlutesPage} durationInFrames={GP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false, photo: "ambassador-glutes.png", aspect: 2124 / 890 }} />
     <Composition id="DeltsArmsPage" component={DeltsArmsPage} durationInFrames={DP.DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
