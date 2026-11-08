@@ -1,0 +1,65 @@
+{
+ "fps": 30,
+ "duration": 29.6,
+ "seed": 11,
+ "fade_out": 1.2,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/plankfix-bed.wav",
+   "frame": 0,
+   "gain": 0.85,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+   "frame": 158,
+   "gain": 0.32,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1491.mp3",
+   "frame": 246,
+   "gain": 0.32,
+   "pan": 0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1489.mp3",
+   "frame": 313,
+   "gain": 0.32,
+   "pan": 0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1493.mp3",
+   "frame": 392,
+   "gain": 0.32,
+   "pan": -0.15
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+   "frame": 497,
+   "gain": 0.32,
+   "pan": -0.3
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s3220.mp3",
+   "frame": 626,
+   "gain": 0.32,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1465.mp3",
+   "frame": 736,
+   "gain": 0.3,
+   "pan": 0.0
+  }
+ ]
+}
