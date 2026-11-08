@@ -1,0 +1,191 @@
+{
+ "scenes": {
+  "hook": {
+   "start": 0,
+   "end": 105
+  },
+  "origin": {
+   "start": 105,
+   "end": 255
+  },
+  "science": {
+   "start": 255,
+   "end": 690
+  },
+  "age": {
+   "start": 690,
+   "end": 840
+  },
+  "tips": {
+   "start": 840,
+   "end": 1245
+  },
+  "verdict": {
+   "start": 1245,
+   "end": 1395
+  },
+  "bridge": {
+   "start": 1395,
+   "end": 1500
+  },
+  "outro": {
+   "start": 1500,
+   "end": 1755
+  }
+ },
+ "marks": {
+  "T1": 2,
+  "CHASE": 41,
+  "HYPE": 93,
+  "YEAR": 133,
+  "AD": 193,
+  "MKT": 208,
+  "SEVEN": 290,
+  "DEATH": 384,
+  "TWO": 417,
+  "DEM": 462,
+  "DEP": 524,
+  "LEVEL": 653,
+  "UNDER": 696,
+  "OVER": 791,
+  "FIX": 846,
+  "TIP0": 879,
+  "TIP1": 961,
+  "SUGAR": 1086,
+  "TIP2": 1143,
+  "YES": 1274,
+  "MAGIC": 1296,
+  "HIT": 1338,
+  "BR1": 1401,
+  "BR2": 1450
+ },
+ "lines": [
+  {
+   "id": "h1",
+   "scene": "hook",
+   "start": 2,
+   "len": 36,
+   "text": "Ten thousand steps a day."
+  },
+  {
+   "id": "h2",
+   "scene": "hook",
+   "start": 41,
+   "len": 60,
+   "text": "Everyone's chasing it. But is it worth the hype?"
+  },
+  {
+   "id": "o1",
+   "scene": "origin",
+   "start": 113,
+   "len": 92,
+   "text": "The number came from a 1965 Japanese pedometer ad."
+  },
+  {
+   "id": "o2",
+   "scene": "origin",
+   "start": 208,
+   "len": 37,
+   "text": "Marketing, not science."
+  },
+  {
+   "id": "s1",
+   "scene": "science",
+   "start": 263,
+   "len": 196,
+   "text": "The science? Seven thousand steps a day cut the risk of early death by 47 percent, versus two thousand."
+  },
+  {
+   "id": "s2",
+   "scene": "science",
+   "start": 462,
+   "len": 133,
+   "text": "Dementia risk, down 38 percent. Depression symptoms, down 22."
+  },
+  {
+   "id": "s3",
+   "scene": "science",
+   "start": 598,
+   "len": 79,
+   "text": "Past seven thousand, most benefits level off."
+  },
+  {
+   "id": "a1",
+   "scene": "age",
+   "start": 696,
+   "len": 92,
+   "text": "Under 60? The sweet spot is eight to ten thousand."
+  },
+  {
+   "id": "a2",
+   "scene": "age",
+   "start": 791,
+   "len": 44,
+   "text": "Over 60? Six to eight."
+  },
+  {
+   "id": "t0",
+   "scene": "tips",
+   "start": 846,
+   "len": 30,
+   "text": "Make it fit your life."
+  },
+  {
+   "id": "t1",
+   "scene": "tips",
+   "start": 879,
+   "len": 79,
+   "text": "One. Add a thousand steps a day, each week."
+  },
+  {
+   "id": "t2",
+   "scene": "tips",
+   "start": 961,
+   "len": 179,
+   "text": "Two. Desk job? Walk two to five minutes every half hour. It lowers blood sugar after meals."
+  },
+  {
+   "id": "t3",
+   "scene": "tips",
+   "start": 1143,
+   "len": 86,
+   "text": "Three. Take calls on your feet, and use the stairs."
+  },
+  {
+   "id": "v1",
+   "scene": "verdict",
+   "start": 1251,
+   "len": 84,
+   "text": "Worth the hype? Yes. Magic number? No."
+  },
+  {
+   "id": "v2",
+   "scene": "verdict",
+   "start": 1338,
+   "len": 51,
+   "text": "Aim for seven thousand plus."
+  },
+  {
+   "id": "e1",
+   "scene": "bridge",
+   "start": 1399,
+   "len": 24,
+   "text": "You bring the steps."
+  },
+  {
+   "id": "e2",
+   "scene": "bridge",
+   "start": 1426,
+   "len": 64,
+   "text": "Darreb-nee AI plans the training."
+  },
+  {
+   "id": "x1",
+   "scene": "outro",
+   "start": 1514,
+   "len": 132,
+   "text": "Want a plan built for you? Try Darreb-nee AI, free for seven days."
+  }
+ ],
+ "duration": 1755
+}

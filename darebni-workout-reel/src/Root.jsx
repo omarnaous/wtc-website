@@ -12,6 +12,8 @@ import { GlutesPage, GP } from "./GlutesPage.jsx";
 import { AbsPage, ABP } from "./AbsPage.jsx";
 import { AbsThumb } from "./AbsThumb.jsx";
 import { WaterTips, WT } from "./WaterTips.jsx";
+import { StepsTips, SPT } from "./StepsTips.jsx";
+import { StepsTipsThumb } from "./StepsTipsThumb.jsx";
 import { WaterTipsThumb } from "./WaterTipsThumb.jsx";
 import { ChestBackThumb } from "./ChestBackThumb.jsx";
 import { LegThumb } from "./LegThumb.jsx";
@@ -57,6 +59,9 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="StepsTips-Thumb" component={StepsTipsThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="StepsTips" component={StepsTips} durationInFrames={SPT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="StepsTips-NoMusic" component={StepsTips} durationInFrames={SPT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="WaterTips-Thumb" component={WaterTipsThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="WaterTips" component={WaterTips} durationInFrames={WT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="WaterTips-NoMusic" component={WaterTips} durationInFrames={WT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />

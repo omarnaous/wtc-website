@@ -1,0 +1,123 @@
+{
+ "fps": 30,
+ "duration": 58.5,
+ "seed": 31,
+ "fade_out": 1.2,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/stepstips-bed.wav",
+   "frame": 0,
+   "gain": 0.42,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/stepsvo.wav",
+   "frame": 0,
+   "gain": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+   "frame": 100,
+   "gain": 0.22,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1491.mp3",
+   "frame": 250,
+   "gain": 0.22,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1489.mp3",
+   "frame": 685,
+   "gain": 0.22,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s787.mp3",
+   "frame": 835,
+   "gain": 0.22,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1485.mp3",
+   "frame": 938,
+   "gain": 0.22,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1493.mp3",
+   "frame": 1120,
+   "gain": 0.22,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+   "frame": 1240,
+   "gain": 0.22,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1491.mp3",
+   "frame": 1390,
+   "gain": 0.22,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 91,
+   "gain": 0.45
+  },
+  {
+   "type": "thump",
+   "frame": 206,
+   "gain": 0.4
+  },
+  {
+   "type": "thump",
+   "frame": 381,
+   "gain": 0.42
+  },
+  {
+   "type": "thump",
+   "frame": 1272,
+   "gain": 0.32
+  },
+  {
+   "type": "thump",
+   "frame": 1314,
+   "gain": 0.32
+  },
+  {
+   "type": "thump",
+   "frame": 1358,
+   "gain": 0.36
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1489.mp3",
+   "frame": 1491,
+   "gain": 0.28,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1491.mp3",
+   "frame": 1603,
+   "gain": 0.24,
+   "pan": 0.0
+  }
+ ]
+}
