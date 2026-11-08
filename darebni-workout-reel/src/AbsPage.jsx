@@ -1,8 +1,8 @@
-// Darebni AI "Abs day" as ONE page, the same format as GlutesPage.jsx / DeltsArmsPage.jsx: the ambassador photo
+// Darebni AI "7-minute abs" as ONE page, the same format as GlutesPage.jsx / DeltsArmsPage.jsx: the ambassador photo
 // (Ryan Terry style; a black-and-white cut-out, public/ambassador-ryan.png, gitignored) and the title open full size,
 // then shrink to the top right with the grid's first row in front of his waist; a 3 x 3 grid of square tiles pops in
-// one per beat: the 7 exercises and the finisher (big GIF demo flipping pose on the beat, the name, sets x reps · rest
-// · RPE; gold A1/A2/B1/B2 superset tags) and a "Save it" tile; the page holds, then the shared end card.
+// one per beat: the 7 moves of a no-equipment circuit (45 s work, 15 s rest: 7 min), a "how it works" timer tile and a
+// "Save it" tile; the page holds, then the shared end card.
 // Plan: src/abs_workout.json.
 import { AbsoluteFill, Audio, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import W from "./abs_workout.json";
@@ -13,7 +13,7 @@ import { END_LEN } from "./timing.js";
 // 30 fps, 120 BPM (a beat = 15 frames)
 export const ABP = { BEAT: 15, SHRINK: 60, ROW0: 90, HOLD: 240 };
 const SHORT = {};
-const ROWS = [...W.exercises.map((e) => ({ ...e, name: SHORT[e.name] || e.name })), { exerciseId: "2135", name: "Weighted Plank", superset: "", sets: 1, reps: "failure", rest: "", rpe: "", fin: true }, { save: true }];
+const ROWS = [...W.exercises.map((e) => ({ ...e, name: SHORT[e.name] || e.name })), { how: true }, { save: true }];
 ABP.BUILT = ABP.ROW0 + ROWS.length * ABP.BEAT;          // 225: the ninth tile lands
 ABP.OUTRO = ABP.BUILT + ABP.HOLD;                       // 450: the page has held for 8 s
 ABP.DURATION = ABP.OUTRO + END_LEN;                    // 720 = 24 s
@@ -40,7 +40,15 @@ function Tile({ f, i, e }) {
       <div style={{ ...D, fontSize: 40, color: B.ink, opacity: 0.75 }}>for abs day</div>
     </div>
   );
-  const meta = e.fin ? "Hold to failure" : `${e.sets} × ${e.reps} · ${e.rest.startsWith("No rest") ? "no rest" : e.rest.replace("Rest ", "")} · ${e.rpe}`;
+  if (e.how) return (
+    <div style={{ ...box, background: "linear-gradient(160deg, #5B4EE5, #2B2380)", border: `3px solid ${B.lo}`, display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 24px" }}>
+      <div style={{ ...D, fontSize: 34, color: B.xlo, letterSpacing: "0.08em" }}>How it works</div>
+      <div style={{ ...D, fontSize: 110, color: B.cream, lineHeight: 0.9, marginTop: 6 }}>7:00</div>
+      <div style={{ ...D, fontSize: 34, color: B.cream, marginTop: 10 }}>45 s on · 15 s off</div>
+      <div style={{ ...UIR, fontSize: 24, color: B.xlo, marginTop: 8, whiteSpace: "nowrap" }}>2 rounds = 14 min</div>
+    </div>
+  );
+  const meta = e.work ? `${e.work} s on · ${e.restSec} s rest` : e.fin ? "Hold to failure" : `${e.sets} × ${e.reps} · ${e.rest.startsWith("No rest") ? "no rest" : e.rest.replace("Rest ", "")} · ${e.rpe}`;
   return (
     <div style={{ ...box, background: "rgba(17,17,43,.95)", border: `2px solid ${e.fin ? "rgba(251,113,133,.7)" : `rgba(139,128,255,${0.35 + 0.6 * glow})`}` }}>
       <div style={{ position: "absolute", left: 0, top: 0, width: TS, height: GIF, background: "#fff" }}>
@@ -64,7 +72,7 @@ function Page({ f, photo, aspect }) {
   const pw = lerp(900, 430, k), ph = pw * aspect, px = lerp(90, 1080 - 40 - 430, k), py = lerp(760, 168, k);
   const tSize = lerp(170, 112, k);
   const intro = sp(f, 2, 14, 140), breathe = f > SHRINK + 30 ? 1 + 0.015 * Math.sin((f - SHRINK) / 12) : 1;
-  const stats = [`${W.estimatedMinutes} min`, `${W.totalSets + 1} sets`, "Ryan Terry style"];
+  const stats = ["7 min", "No equipment", "Ryan Terry style"];
   return (
     <>
       <Header f={f} right="" />
@@ -72,7 +80,7 @@ function Page({ f, photo, aspect }) {
       <Img src={staticFile(photo)} style={{ position: "absolute", left: px, top: py, width: pw, height: ph, opacity: Math.min(1, intro * 1.5), transform: `translateY(${(1 - Math.min(1, intro)) * 200}px) scale(${breathe})`,
         filter: "drop-shadow(0 0 2px rgba(184,176,255,.9)) drop-shadow(0 0 26px rgba(91,78,229,.7)) contrast(1.06)" }} />
       <div style={{ position: "absolute", left: 70, top: 330 }}>
-        <div style={{ ...D, fontSize: tSize, color: B.cream, lineHeight: 0.88, opacity: Math.min(1, sp(f, 4, 10, 260) * 3) }}>Abs<br /><span style={{ color: B.lo }}>day</span></div>
+        <div style={{ ...D, fontSize: tSize, color: B.cream, lineHeight: 0.88, opacity: Math.min(1, sp(f, 4, 10, 260) * 3) }}>7-min<br /><span style={{ color: B.lo }}>abs</span></div>
         <div style={{ display: "flex", gap: 10, marginTop: 14, opacity: Math.min(1, sp(f, 14) * 2) }}>
           {stats.map((s, i) => <div key={s} style={{ padding: "6px 14px", borderRadius: 12, background: i === 0 ? B.primary : "rgba(139,128,255,.14)", border: `2px solid ${i === 0 ? B.lo : "rgba(139,128,255,.35)"}`, ...D, fontSize: 30, color: B.cream }}>{s}</div>)}
         </div>
