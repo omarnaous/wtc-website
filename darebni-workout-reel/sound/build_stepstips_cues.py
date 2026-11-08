@@ -1,5 +1,5 @@
 """Sound for StepsTips.jsx: a real music bed ("House 02", Mixkit, House, 123 BPM, unused by other projects) from its loudest
-bar, held low under the voice-over (public/stepsvo.wav, sound/build_steps_vo.py); whooshes on every scene change and tip
+bar, ducked to ~6% whenever the voice-over talks (30% in the gaps) (public/stepsvo.wav, sound/build_steps_vo.py); whooshes on every scene change and tip
 card; a low thump (synthesised) under the "Hype?" and "Marketing" stamps, the -47% and the verdict. Timings from
 src/steps_vo.json. Writes public/stepstips-bed.wav (gitignored), sound/stepstips.json, sound/stepstips-sfx.json.
   python3 sound/build_stepstips_cues.py && python3 <motion-graphics>/scripts/sound.py sound/stepstips.json public/stepstips.wav"""
@@ -26,7 +26,23 @@ print("bed:", m["title"], f"from {at:.2f} s, {DUR} frames")
 smp = lambda f, frame, g, pan=0.0: {"type": "sample", "file": f, "frame": round(frame), "gain": g, "pan": pan}
 sfx = lambda i: f"{LIB}/sfx/{i}.mp3"
 thump = lambda frame, g=0.5: {"type": "thump", "frame": round(frame), "gain": g}
-music = [smp(os.path.abspath("public/stepstips-bed.wav"), 0, 0.42)]
+# duck the bed under the voice: follow the voice track's loudness (smoothed, with a little look-ahead) so the music sits at
+# about 6% while someone is talking and comes back up to 30% in the gaps
+import scipy.io.wavfile as wf
+def duck_bed(bed, voice, lo=0.06, hi=0.3):
+    sr, b = wf.read(bed); b = b.astype(np.float32) / 32768
+    vsr, v = wf.read(voice); v = v.astype(np.float32) / 32768
+    if v.ndim > 1: v = v.mean(1)
+    hop = vsr // 100; n = len(v) // hop
+    e = np.sqrt((v[:n * hop].reshape(n, hop) ** 2).mean(1))
+    act = (e > 0.02).astype(np.float32)
+    act = np.convolve(act, np.ones(40), "same") > 0                     # hold 0.2 s either side of each word
+    g = np.where(act, lo, hi).astype(np.float32)
+    g = np.convolve(g, np.ones(15) / 15, "same")                        # 150 ms fades
+    t = np.arange(len(b)) / sr; gi = np.interp(t, np.arange(n) / 100, g, right=hi)
+    wf.write(bed, sr, (np.clip(b * (gi[:, None] if b.ndim > 1 else gi), -1, 1) * 32767).astype(np.int16))
+duck_bed("public/stepstips-bed.wav", "public/stepsvo.wav")
+music = [smp(os.path.abspath("public/stepstips-bed.wav"), 0, 1.0)]
 voice = [smp(os.path.abspath("public/stepsvo.wav"), 0, 1.0)]
 moves = [S["origin"]["start"], S["science"]["start"], S["age"]["start"], S["tips"]["start"], M["TIP1"] - 18, M["TIP2"] - 18, S["verdict"]["start"], S["bridge"]["start"]]
 fx = [smp(sfx(WH[k % len(WH)]), a - 5, 0.22, (-0.25, 0.25)[k % 2]) for k, a in enumerate(moves)]
