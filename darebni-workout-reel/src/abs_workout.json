@@ -1,0 +1,139 @@
+{
+  "id": "abs-01",
+  "title": "Abs \u00b7 Shredded core",
+  "focus": "Lower abs, upper abs and obliques",
+  "split": "Abs",
+  "level": "Intermediate",
+  "environment": "gym",
+  "estimatedMinutes": 40,
+  "totalSets": 23,
+  "warmup": "3 min dead bugs and cat-cow, then 1 light set of cable crunches.",
+  "finisher": "Weighted plank, 1 hold to failure.",
+  "exercises": [
+    {
+      "exerciseId": "0472",
+      "name": "Hanging Leg Raise",
+      "libraryName": "hanging leg raise",
+      "superset": "",
+      "target": "abs",
+      "bodyPart": "waist",
+      "equipment": "body weight",
+      "sets": 4,
+      "reps": "10-12",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0472.gif",
+      "instructions": [
+        "Start by hanging on a bar with arms straight and  by your ears; squeeze your legs straight and together with toes pointed",
+        "Using your lats, lower abs, and hip flexors, lift your legs until they're parallel with the ground",
+        "Then, if you're able, lift your legs as close to the bar as possible."
+      ]
+    },
+    {
+      "exerciseId": "0175",
+      "name": "Cable Kneeling Crunch",
+      "libraryName": "cable kneeling crunch",
+      "superset": "",
+      "target": "abs",
+      "bodyPart": "waist",
+      "equipment": "cable",
+      "sets": 4,
+      "reps": "12-15",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0175.gif",
+      "instructions": [
+        "Flex your hips slightly to take the weight and to hyperextend your lower back.",
+        "Keeping your hips stationary, bend at the waist so that your elbows travel down towards the middle of your thighs.",
+        "Hold for a count of one."
+      ]
+    },
+    {
+      "exerciseId": "0857",
+      "name": "Ab Wheel Rollout",
+      "libraryName": "wheel rollerout",
+      "superset": "",
+      "target": "abs",
+      "bodyPart": "waist",
+      "equipment": "wheel roller",
+      "sets": 3,
+      "reps": "10",
+      "rest": "Rest 60 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0857.gif",
+      "instructions": []
+    },
+    {
+      "exerciseId": "0277",
+      "name": "Decline Crunch",
+      "libraryName": "decline crunch",
+      "superset": "A1",
+      "target": "abs",
+      "bodyPart": "waist",
+      "equipment": "body weight",
+      "sets": 3,
+      "reps": "15",
+      "rest": "No rest",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0277.gif",
+      "instructions": [
+        " Put a bench in a decline position. Start at around 30 degrees to see how it feels and go from there.",
+        "Lie on the bench and secure your legs on the knee and ankle pads.",
+        "With your back against the bench, bring your hands to the sides of your head and take a breath."
+      ]
+    },
+    {
+      "exerciseId": "0687",
+      "name": "Russian Twist",
+      "libraryName": "russian twist",
+      "superset": "A2",
+      "target": "abs",
+      "bodyPart": "waist",
+      "equipment": "body weight",
+      "sets": 3,
+      "reps": "20 total",
+      "rest": "Rest 45 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0687.gif",
+      "instructions": []
+    },
+    {
+      "exerciseId": "0872",
+      "name": "Reverse Crunch",
+      "libraryName": "reverse crunch",
+      "superset": "B1",
+      "target": "abs",
+      "bodyPart": "waist",
+      "equipment": "body weight",
+      "sets": 3,
+      "reps": "15",
+      "rest": "No rest",
+      "rpe": "RPE 9",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0872.gif",
+      "instructions": [
+        "Lie on your back with your hands by your sides",
+        "Lift your hips and bring your knees, as far as you can, toward the chest.",
+        "Hold and then slowly return to the starting position."
+      ]
+    },
+    {
+      "exerciseId": "0635",
+      "name": "Oblique Crunch",
+      "libraryName": "oblique crunches floor",
+      "superset": "B2",
+      "target": "abs",
+      "bodyPart": "waist",
+      "equipment": "body weight",
+      "sets": 3,
+      "reps": "15 each",
+      "rest": "Rest 45 s",
+      "rpe": "RPE 8",
+      "gifUrl": "https://raw.githubusercontent.com/omarnaous/GIFURLSOM/main/0635.gif",
+      "instructions": [
+        "Bend your knees toward you and place your right ankle on your left knee",
+        "Lift your shoulder blades off the floor and curl the right side of your body toward your left knee",
+        "Complete a full set of oblique crunches before repeating the exercise on your opposite side, this time placing your left ankle on your right knee."
+      ]
+    }
+  ]
+}
