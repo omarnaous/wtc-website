@@ -21,6 +21,8 @@ import { LatPulldown, LP } from "./LatPulldown.jsx";
 import { LegPress, LPR } from "./LegPress.jsx";
 import { LungeFix, LF } from "./LungeFix.jsx";
 import { PlankFix, PF } from "./PlankFix.jsx";
+import { LatRaiseFix, LRF } from "./LatRaiseFix.jsx";
+import { LatRaiseFixThumb } from "./LatRaiseFixThumb.jsx";
 import { PlankFixThumb } from "./PlankFixThumb.jsx";
 import { LungeFixThumb } from "./LungeFixThumb.jsx";
 import { DbRow, DR } from "./DbRow.jsx";
@@ -111,6 +113,9 @@ export const Root = () => (
     <Composition id="DbRow-Thumb" component={DbRowThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="DbRow" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="DbRow-NoMusic" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="LatRaiseFix-Thumb" component={LatRaiseFixThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="LatRaiseFix" component={LatRaiseFix} durationInFrames={LRF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="LatRaiseFix-NoMusic" component={LatRaiseFix} durationInFrames={LRF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="PlankFix-Thumb" component={PlankFixThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="PlankFix" component={PlankFix} durationInFrames={PF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PlankFix-NoMusic" component={PlankFix} durationInFrames={PF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
