@@ -13,6 +13,8 @@ import { AbsPage, ABP } from "./AbsPage.jsx";
 import { AbsThumb } from "./AbsThumb.jsx";
 import { WaterTips, WT } from "./WaterTips.jsx";
 import { StepsTips, SPT } from "./StepsTips.jsx";
+import { CaffeineTips, CFT } from "./CaffeineTips.jsx";
+import { CaffeineTipsThumb } from "./CaffeineTipsThumb.jsx";
 import { StepsTipsThumb } from "./StepsTipsThumb.jsx";
 import { WaterTipsThumb } from "./WaterTipsThumb.jsx";
 import { ChestBackThumb } from "./ChestBackThumb.jsx";
@@ -63,6 +65,9 @@ export const Root = () => (
   <>
     <Composition id="PushDay" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushDay-NoMusic" component={Main} durationInFrames={DURATION} fps={FPS} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="CaffeineTips-Thumb" component={CaffeineTipsThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="CaffeineTips" component={CaffeineTips} durationInFrames={CFT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="CaffeineTips-NoMusic" component={CaffeineTips} durationInFrames={CFT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="StepsTips-Thumb" component={StepsTipsThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="StepsTips" component={StepsTips} durationInFrames={SPT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="StepsTips-NoMusic" component={StepsTips} durationInFrames={SPT.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />

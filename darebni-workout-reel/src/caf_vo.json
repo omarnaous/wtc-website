@@ -1,0 +1,161 @@
+{
+ "scenes": {
+  "hook": {
+   "start": 0,
+   "end": 135
+  },
+  "works": {
+   "start": 135,
+   "end": 315
+  },
+  "dose": {
+   "start": 315,
+   "end": 735
+  },
+  "limit": {
+   "start": 735,
+   "end": 885
+  },
+  "sleep": {
+   "start": 885,
+   "end": 1065
+  },
+  "health": {
+   "start": 1065,
+   "end": 1230
+  },
+  "bridge": {
+   "start": 1230,
+   "end": 1350
+  },
+  "outro": {
+   "start": 1350,
+   "end": 1605
+  }
+ },
+ "marks": {
+  "T1": 2,
+  "ONE": 47,
+  "CAF": 70,
+  "YES": 200,
+  "STR": 270,
+  "POW": 285,
+  "MGKG": 361,
+  "MIN": 426,
+  "KG80": 478,
+  "CUPS": 549,
+  "MORE": 583,
+  "NINE": 618,
+  "L400": 808,
+  "PREG": 835,
+  "CATCH": 895,
+  "COFFEE9": 953,
+  "PRE13": 1037,
+  "CUPS34": 1096,
+  "RISK": 1144,
+  "LINKED": 1191,
+  "BR1": 1252,
+  "BR2": 1313
+ },
+ "lines": [
+  {
+   "id": "h1",
+   "scene": "hook",
+   "start": 2,
+   "len": 65,
+   "text": "Your pre-workout is mostly one thing."
+  },
+  {
+   "id": "h2",
+   "scene": "hook",
+   "start": 70,
+   "len": 48,
+   "text": "Caffeine. Here's how to use it right."
+  },
+  {
+   "id": "w1",
+   "scene": "works",
+   "start": 143,
+   "len": 157,
+   "text": "Does it work? A meta-analysis says yes. A small but real boost in strength and power."
+  },
+  {
+   "id": "d1",
+   "scene": "dose",
+   "start": 323,
+   "len": 146,
+   "text": "The research dose: three to six milligrams per kilo, about sixty minutes before you train."
+  },
+  {
+   "id": "d2",
+   "scene": "dose",
+   "start": 472,
+   "len": 105,
+   "text": "For an eighty kilo lifter, the low end is about two coffees."
+  },
+  {
+   "id": "d3",
+   "scene": "dose",
+   "start": 580,
+   "len": 150,
+   "text": "And more isn't better. Around nine milligrams per kilo brings side effects, with no extra gains."
+  },
+  {
+   "id": "l1",
+   "scene": "limit",
+   "start": 743,
+   "len": 137,
+   "text": "Daily ceiling for healthy adults: four hundred milligrams. Pregnant? Two hundred."
+  },
+  {
+   "id": "z1",
+   "scene": "sleep",
+   "start": 893,
+   "len": 100,
+   "text": "The catch is sleep. Have your coffee at least nine hours before bed."
+  },
+  {
+   "id": "z2",
+   "scene": "sleep",
+   "start": 996,
+   "len": 64,
+   "text": "A pre-workout scoop? About thirteen."
+  },
+  {
+   "id": "x1",
+   "scene": "health",
+   "start": 1073,
+   "len": 115,
+   "text": "The good news: three to four cups a day is linked to a lower risk of early death."
+  },
+  {
+   "id": "x2",
+   "scene": "health",
+   "start": 1191,
+   "len": 29,
+   "text": "Linked, not proven."
+  },
+  {
+   "id": "e1",
+   "scene": "bridge",
+   "start": 1234,
+   "len": 54,
+   "text": "Caffeine fuels the session."
+  },
+  {
+   "id": "e2",
+   "scene": "bridge",
+   "start": 1291,
+   "len": 45,
+   "text": "Darreb-nee AI plans it."
+  },
+  {
+   "id": "o1",
+   "scene": "outro",
+   "start": 1364,
+   "len": 132,
+   "text": "Want a plan built for you? Try Darreb-nee AI, free for seven days."
+  }
+ ],
+ "duration": 1605
+}
