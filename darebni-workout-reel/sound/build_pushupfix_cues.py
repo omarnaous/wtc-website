@@ -9,8 +9,8 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 LIBTOOL = f"{ROOT}/.claude/skills/appify-content/assets/tools/sound_library.py"
 LIB = f"{ROOT}/sound-library"
 src = open("src/PushUpFix.jsx").read()
-CLIP = 809;                                                          # PUF.CLIP = the clip length (PLAYED)
- DEMO = int(re.search(r"DEMO: (\d+)", src).group(1))
+CLIP = 809                                                           # PUF.CLIP = the clip length (PLAYED)
+DEMO = int(re.search(r"DEMO: (\d+)", src).group(1))
 MOVES = [int(x) for x in re.search(r"MOVES: \[([^\]]+)\]", src).group(1).split(",")]
 END_LEN = int(re.search(r"END_LEN = (\d+)", open("src/timing.js").read()).group(1))
 SWAP = int(re.search(r"OUTRO_SWAP = (\d+)", open("src/Main.jsx").read()).group(1))
