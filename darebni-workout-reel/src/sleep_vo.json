@@ -1,0 +1,149 @@
+{
+ "scenes": {
+  "hook": {
+   "start": 0,
+   "end": 105
+  },
+  "night": {
+   "start": 105,
+   "end": 405
+  },
+  "cut": {
+   "start": 405,
+   "end": 705
+  },
+  "tips": {
+   "start": 705,
+   "end": 1005
+  },
+  "bridge": {
+   "start": 1005,
+   "end": 1140
+  },
+  "outro": {
+   "start": 1140,
+   "end": 1395
+  }
+ },
+ "marks": {
+  "T1": 2,
+  "FIVE": 39,
+  "ONE": 159,
+  "MPS": 193,
+  "P18": 236,
+  "CORT": 275,
+  "TEST": 326,
+  "CUT": 418,
+  "H55": 482,
+  "FAT": 556,
+  "MUS": 645,
+  "FIX": 715,
+  "TIP0": 747,
+  "TIP1": 822,
+  "TIP2": 900,
+  "BR1": 1011,
+  "BR2": 1044,
+  "BR3": 1092
+ },
+ "lines": [
+  {
+   "id": "h1",
+   "scene": "hook",
+   "start": 2,
+   "len": 26,
+   "text": "You trained hard today."
+  },
+  {
+   "id": "h2",
+   "scene": "hook",
+   "start": 31,
+   "len": 36,
+   "text": "Then you slept five hours."
+  },
+  {
+   "id": "n1",
+   "scene": "night",
+   "start": 113,
+   "len": 63,
+   "text": "One study kept people awake for a single night."
+  },
+  {
+   "id": "n2",
+   "scene": "night",
+   "start": 179,
+   "len": 93,
+   "text": "The next day, muscle protein synthesis dropped eighteen percent."
+  },
+  {
+   "id": "n3",
+   "scene": "night",
+   "start": 275,
+   "len": 116,
+   "text": "Cortisol went up twenty one percent. Testosterone, down twenty four."
+  },
+  {
+   "id": "c1",
+   "scene": "cut",
+   "start": 413,
+   "len": 127,
+   "text": "On a diet? Another study put dieters on five and a half hours of sleep."
+  },
+  {
+   "id": "c2",
+   "scene": "cut",
+   "start": 543,
+   "len": 151,
+   "text": "Their share of fat lost fell fifty five percent, and they lost sixty percent more muscle."
+  },
+  {
+   "id": "t0",
+   "scene": "tips",
+   "start": 711,
+   "len": 33,
+   "text": "So, protect your gains."
+  },
+  {
+   "id": "t1",
+   "scene": "tips",
+   "start": 747,
+   "len": 72,
+   "text": "One. Seven hours minimum, every night."
+  },
+  {
+   "id": "t2",
+   "scene": "tips",
+   "start": 822,
+   "len": 75,
+   "text": "Two. Same bedtime, even on weekends."
+  },
+  {
+   "id": "t3",
+   "scene": "tips",
+   "start": 900,
+   "len": 71,
+   "text": "Three. Last coffee nine hours before bed."
+  },
+  {
+   "id": "e1",
+   "scene": "bridge",
+   "start": 1009,
+   "len": 56,
+   "text": "You train it in the gym. You build it in bed."
+  },
+  {
+   "id": "e2",
+   "scene": "bridge",
+   "start": 1068,
+   "len": 64,
+   "text": "Darreb-nee AI plans the training."
+  },
+  {
+   "id": "o1",
+   "scene": "outro",
+   "start": 1154,
+   "len": 132,
+   "text": "Want a plan built for you? Try Darreb-nee AI, free for seven days."
+  }
+ ],
+ "duration": 1395
+}

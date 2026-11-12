@@ -1,0 +1,109 @@
+{
+ "fps": 30,
+ "duration": 46.5,
+ "seed": 31,
+ "fade_out": 1.2,
+ "peak_db": -2,
+ "cues": [
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/sleeptips-bed.wav",
+   "frame": 0,
+   "gain": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/darebni-workout-reel/public/sleepvo.wav",
+   "frame": 0,
+   "gain": 1.0,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1492.mp3",
+   "frame": 100,
+   "gain": 0.22,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1491.mp3",
+   "frame": 400,
+   "gain": 0.22,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1489.mp3",
+   "frame": 700,
+   "gain": 0.22,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s787.mp3",
+   "frame": 799,
+   "gain": 0.22,
+   "pan": 0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1485.mp3",
+   "frame": 877,
+   "gain": 0.22,
+   "pan": -0.25
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1493.mp3",
+   "frame": 1000,
+   "gain": 0.22,
+   "pan": 0.25
+  },
+  {
+   "type": "thump",
+   "frame": 43,
+   "gain": 0.4
+  },
+  {
+   "type": "thump",
+   "frame": 233,
+   "gain": 0.42
+  },
+  {
+   "type": "thump",
+   "frame": 272,
+   "gain": 0.3
+  },
+  {
+   "type": "thump",
+   "frame": 323,
+   "gain": 0.3
+  },
+  {
+   "type": "thump",
+   "frame": 553,
+   "gain": 0.32
+  },
+  {
+   "type": "thump",
+   "frame": 642,
+   "gain": 0.32
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1489.mp3",
+   "frame": 1131,
+   "gain": 0.28,
+   "pan": 0.0
+  },
+  {
+   "type": "sample",
+   "file": "/home/user/wtc-website/sound-library/sfx/s1491.mp3",
+   "frame": 1243,
+   "gain": 0.24,
+   "pan": 0.0
+  }
+ ]
+}
