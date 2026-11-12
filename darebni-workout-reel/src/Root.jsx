@@ -25,6 +25,8 @@ import { LungeFix, LF } from "./LungeFix.jsx";
 import { PlankFix, PF } from "./PlankFix.jsx";
 import { LatRaiseFix, LRF } from "./LatRaiseFix.jsx";
 import { PushUpFix, PUF } from "./PushUpFix.jsx";
+import { DeadliftFix, DLF } from "./DeadliftFix.jsx";
+import { DeadliftFixThumb } from "./DeadliftFixThumb.jsx";
 import { PushUpFixThumb } from "./PushUpFixThumb.jsx";
 import { LatRaiseFixThumb } from "./LatRaiseFixThumb.jsx";
 import { PlankFixThumb } from "./PlankFixThumb.jsx";
@@ -120,6 +122,9 @@ export const Root = () => (
     <Composition id="DbRow-Thumb" component={DbRowThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="DbRow" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="DbRow-NoMusic" component={DbRow} durationInFrames={DR.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
+    <Composition id="DeadliftFix-Thumb" component={DeadliftFixThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
+    <Composition id="DeadliftFix" component={DeadliftFix} durationInFrames={DLF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
+    <Composition id="DeadliftFix-NoMusic" component={DeadliftFix} durationInFrames={DLF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
     <Composition id="PushUpFix-Thumb" component={PushUpFixThumb} durationInFrames={1} fps={30} width={1080} height={1920} />
     <Composition id="PushUpFix" component={PushUpFix} durationInFrames={PUF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: true }} />
     <Composition id="PushUpFix-NoMusic" component={PushUpFix} durationInFrames={PUF.DURATION} fps={30} width={1080} height={1920} defaultProps={{ music: false }} />
